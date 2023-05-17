@@ -1,0 +1,4 @@
+.copyright { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:14px }
+.copyright::before {
+  content: '信裹居士自然版權所有。無限制使用、更改、轉發。若有改動並且公布，請自註明，文責自負。';
+}

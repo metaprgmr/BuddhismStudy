@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>淨空法師開示</title>
+<style>
+body { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:120%; }
+td   { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:120%; font-size:20px }
+a { text-decoration:none }
+em { font-style:normal; color:red; background-color:lightyellow }
+em.edu { background-color:eef }
+.toc { font-size:15px }
+.ytid { font-family:Courier New; font-size:12px }
+.critical { background-color:yellow }
+.good { background-color:#ffb}
+</style>
+<script src="JK-teachings.js"></script>
+<script>
+function get(name) {
+  if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+    return decodeURIComponent(name[1]);
+}
+function w() {
+  for (var i in arguments) { var a = arguments[i]; a && document.write(a) }
+}
+</script>
+</head>
+<body style="margin:20px; background:#dfd">
+<center>
+
+<script>
+var lsn, idx = get('i'), isOrig = (idx === 'orig');
+if (!isOrig) sortJKPSTeachings();
+if (idx && !isOrig) {
+  lsn = JKPSTeachingsDict[idx];
+  w('<table width="100%"><tr><td align="center"><h2>', lsn.title, '</h2></td></tr>',
+    '<tr><td>');
+  for (var i in lsn.text) {
+    var txt = lsn.text[i];
+    if (!txt.startsWith('　　')) txt = '　　' + txt;
+    w('<p>', txt, '</p>');
+  }
+  w('</td></tr>',
+    '<tr><td align="center"><hr>', lsn.source, ' ', lsn.srcVol, '</td></tr></table>');
+} else {
+  const len = JKPSTeachings.length;
+  const aTag = isOrig ? '<a href="?" title="分類">' : '<a href="?i=orig" title="原序">';
+  w('<h2>', aTag, '淨空法師開示', isOrig ? len : '百', '篇</a></h2>',
+    '<table cellpadding="0" cellspacing="0">');
+  var lastType = '???';
+  for (var i in JKPSTeachings) {
+    lsn = JKPSTeachings[i];
+    var cls = "toc";
+    if (lsn.level) cls += ' ' + lsn.level;
+    var type = TYPES[lsn.type] || (isOrig ? '' : '[未定]');
+    if (!isOrig) { if (type !== lastType) lastType = type; else type = ''; }
+    w('<tr>',
+      '<td class="ytid" nowrap>', type || '', '</td>',
+      '<td align="right" class="toc">', parseInt(i)+1, '.&nbsp;</td>',
+      '<td class="', cls, '"><a href="?i=', lsn.id, '">', lsn.title, '</a></td>',
+      '<td class="toc" width="20">&nbsp;</td>',
+      '<td class="ytid" align="right">', lsn.ziCount(), '字&nbsp;&nbsp;</td>');
+    if (isOrig)
+      w('<td class="toc">', lsn.source, ' ', lsn.srcVol, '&nbsp;</td>');
+//    w('<td class="ytid">', lsn.ytid || '&nbsp;', '</td>');
+    w('</tr>');
+  }
+  w('</table>');
+}
+</script>
+
+</center></body></html>

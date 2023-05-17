@@ -1,0 +1,20 @@
+body { background-color:#eef8bb; font-family: "KaiTi", "楷体", STKaiti, "华文楷体" }
+a { text-decoration:none }
+a:link   { color:blue }
+a:visited{ color:blue }
+a:hover  { color:blue }
+a:focus  { color:blue }
+a:active { color:blue }
+
+.content { border:0px red solid; width:600px; text-align:left }
+.gatha   { text-align:center }
+
+.zKaiTi      { font-family: "KaiTi", "楷体", STKaiti, "华文楷体" }
+.zFangSongTi { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋" }
+.zSongTi     { font-family: "SimSong", "宋体", STSong, "华文宋体" }
+.zHeiTi      { font-family: "SimHei", "黑体", STHeiti, "华文黑体" }
+
+.copyright { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:14px }
+.copyright::before {
+  content: '信裹居士自然版權所有。無限制使用、更改、轉發。若有改動並且公布，請自註明，文責自負。';
+}

@@ -1,0 +1,156 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>印光大師文鈔菁華錄</title>
+<style>
+body { font-family: KaiTi, 楷体, STKaiti, 华文楷体; font-size:20px; line-height:120%; }
+td { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:120%; font-size:20px }
+sectionTitle { font-size:20px; font-weight:bold; line-height:300% }
+td.toc { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:90%; font-size:22px }
+td.anno { font-size:16px; padding-top:5px }
+.synopsis { font-size:16px; padding-top:5px }
+a { text-decoration:none }
+em { font-style:normal; color:red; background-color:lightyellow }
+comment { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:16px }
+anno { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:14px }
+</style>
+<script src="印光大師文鈔菁華錄.js"></script>
+<script>
+function get(name) {
+  if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+    return decodeURIComponent(name[1]);
+}
+function w() {
+  for (var i in arguments) { var a = arguments[i]; a && document.write(a) }
+}
+
+var is333 = get('m') !== 'a';
+function displayEntry(id) {
+  var el, e, last = TheBook.curFullTextId;
+  if (last) {
+    e = TheBook.entryById(last);
+    el = document.getElementById('_' + last);
+    if (el) el.innerHTML = e.getSynopsis();
+  }
+
+  e = TheBook.entryById(id);
+  el = document.getElementById('_' + e.id);
+  console.log(el);
+  if (el) {
+    el.innerHTML = e.getFullText();
+    TheBook.curFullTextId = e.id;
+  }
+}
+
+</script>
+</head>
+<body style="margin:20px; background:#dfd">
+<center>
+<h2>印光大師文鈔菁華錄</h2>
+
+<script>
+// TOC
+
+w('<table border="0" style="background-color:white" cellspacing="10">',
+  '<tr height="30"><td nowrap valign="top" class="toc" style="font-weight:bold">目錄</td>',
+  '<td valign="top" align="right" class="toc">【',
+   is333 ? '<a href="?m=a">完整全文</a>' : '<a href="?m=">333條總覽</a>',
+  '】</td></tr>',
+  '<tr><td valign="top"><table border="0" width="320">');
+
+for (var i=0; i<TheBook.content.length; ++i) {
+  var x = TheBook.content[i], sinfo;
+  if (x.title) {
+    var num = '　&EmptySmallSquare;', t = x.title;
+    if (x.sectionId) {
+      sinfo = x.getSectionInfo();
+      num = zNumber(x.sectionId) + '、';
+      t = '<a href="#' + x.sectionId + '">' + t + '</a>　<anno>（共' + sinfo.numEntries + '條）</anno>';
+    }
+    else {
+      if (t.startsWith('附錄')) { num = '附錄'; t = t.substring(2).trim(); }
+      if (is333)
+        t = '<span style="opacity:0.5">' + t + '</span>';
+      else
+        t = '<a href="#' + x.passageId + '">' + t + '</a>';
+    }
+
+    if (i === 7) w('</table></td><td valign="top" align="right"><table border="0" width="320">');
+
+    w('<tr><td class="toc" valign="top">', num, '</td><td class="toc">', t);
+
+    if (x.titleAnno)
+      w('<br><anno>', x.titleAnno, '</anno>');
+    else if (x.sectionId) {
+      var subs = sinfo.subs;
+      if (subs && subs.length) {
+        for (var j in subs)
+          w('<br><anno><a href="#' + subs[j].subsecId + '">', subs[j].title,
+            '</a></anno>　<anno>（' + subs[j].numEntries + '條）</anno>');
+      }
+    }
+    w('</td></tr>');
+  }
+}
+w('</table></td></tr></table>');
+
+// Main text
+function writeText(txt) {
+  var a = txt.split('\n');
+  for (var i in a) w('<br>　　', a[i]);
+}
+
+if (is333) {
+  w('<table border="0" width="900">');
+  for (var i in TheBook.content) {
+    var p = TheBook.content[i];
+    if (p.sectionId) { // section
+      w('<tr><td colspan="4"><br><a name="', p.sectionId, '"></a><h3>', p.getTitleDisplay(),
+        '&nbsp;<anno>', p.titleAnno || '', '</anno>', '</h3></td></tr>');
+      var entries = p.entries;
+      for (var k in entries) {
+        var e = entries[k];
+        if (e.text && e.id)
+          w('<tr><td class="anno" align="right" valign="top"><a name="_', e.id, '">', e.id, '</a>.</td>',
+            '<td id="_', e.id, '">', e.getSynopsis(), '</td>',
+            '<td nowrap class="anno" valign="top" align="right">', e.ziCnt, '字</td>',
+            '<td nowrap valign="top"><anno>', e.src || '', '</anno></td></tr>');
+        else
+          w('<tr><td colspan="4" class="sectionTitle"><a name="', e.subsecId, '"></a>', e.title, '</td></tr>');
+      }
+    }
+  }
+  w('<tr><td colspan="4"><hr></td></tr>');
+} else {
+  w('<table border="0" width="700">');
+  for (var i in TheBook.content) {
+    var p = TheBook.content[i];
+    if (p.sectionId) { // section
+      w('<tr><td colspan="2"><br><a name="', p.sectionId, '"></a><h3>', p.getTitleDisplay(),
+        '&nbsp;<anno>', p.titleAnno || '', '</anno>', '</h3></td></tr>');
+      var entries = p.entries;
+      for (var k in entries) {
+        var e = entries[k];
+        if (e.text && e.id)
+          w('<tr><td class="anno" align="right" valign="top"><a name="_', e.id, '">', e.id, '</a>.</td>',
+            '<td>', e.getFullText(), '</td></tr>');
+        else
+          w('<tr><td colspan="2" class="sectionTitle"><a name="', e.subsecId, '"></a>', e.title, '</td></tr>');
+      }
+    } else {
+      w('<tr><td colspan="2"><br><a name="', p.passageId, '"></a>');
+      if (p.title) w('<sectionTitle>', p.title, '</sectionTitle>');
+      writeText(p.text);
+      w('</td></tr>');
+      if (p.ending)
+        w('<tr><td colspan="2" align="right">', p.ending, '</td></tr>');
+    }
+  }
+  w('<tr><td colspan="2"><hr></td></tr>');
+}
+w('</table>');
+</script>
+
+</td></tr></table>
+
+</center></body></html>

@@ -1,0 +1,619 @@
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../util/copyright.css">
+<title>《楞嚴咒》梵中對照練習</title>
+<style>
+  a     { color:yellow; text-decoration:none }
+  pre   { display:inline }
+  .lcol { border-left:1px solid red; border-right:1px solid red; background-color:#ffe; padding: 0px 5px 0px 5px }
+  .scol { border-left:1px solid red; border-right:1px solid red; background-color:#ffe; padding: 0px 5px 0px 5px }
+  .rcol { border-bottom:1px dotted white; background-color:#eee; padding: 0px 5px 0px 5px }
+  .rcol1 { background-color:#eee; padding: 0px 5px 0px 5px }
+  .rend { border-left:1px solid red; padding: 0px }
+  .end  { border-bottom:1px solid red }
+  .unk  { background-color:#ccf }
+  .hard { background-color:#fcc }
+  .num  { opacity:0.4 }
+  .py   { color:#9b9 }
+  .drni { color:yellow; background-color:red }
+  .hilite  { color:red }
+  .medlite { color:blue }
+  .anno { opacity:0.5 }
+  .part  { background-color:#ff6; color:red }
+  .part1 { color:#227 }
+  .part2 { color:#272 }
+  .part3 { color:#722 }
+  .part4 { color:#277 }
+  .part5 { color:#727 }
+  .extra { font-style:italic }
+</style>
+<script>
+// Śūraṅgama Mantra
+
+const sanskrit_roman =
+      // should be kept in sync with "Shurangama-mantra-信裹-梵文.txt" and "-意譯.txt"
+`=                        MAHĀ-CAKRA-VAJRA DHĀRAṆĪ
+                  namas trya-dhvikānāṃ sarva tathāgatāṇāṃ
+                    ॐ  viraji viraji mahā-cakra vajri
+                    sata sata sārate sārate trayī trayī
+                 vidhamani saṃbhañjani tramati siddāhgriya
+                                traṃ svāhā
+
+
+
+=      STATHĀGATOṢÑĪṢAM SITĀTAPATRAṂ APARĀJITAṂ PRATYAÑGIRAṂ DHĀRAṆĪ
+
+[       ]  　　妙湛總持不動尊 首楞嚴王世稀有　　南無常住十方佛　　爾時世尊 從肉髻中 湧百寶光
+[       ]  　　銷我億劫顛倒想 不歷僧祇獲法身　　南無常住十方法　　光中湧出 千葉寶蓮 有化如來
+[       ]  　　願今得果成寶王 還度如是恆沙眾　　南無常住十方僧　　坐寶華中 頂放十道 百寶光明
+[       ]  　　將此身心奉塵剎 是則名為報佛恩　　南無釋迦牟尼佛　　一一光明 皆遍示現 十恆河沙
+[       ]  　　伏請世尊為證明 五濁惡世誓先入　　南無佛頂首楞嚴　　金剛密跡 擎山持杵 遍虛空界
+[       ]  　　如一眾生未成佛 終不於此取泥洹　　南無觀世音菩薩　　大眾仰觀 畏愛兼抱 求佛哀祐
+[       ]  　　大雄大力大慈悲 希更審除微細惑　　南無金剛藏菩薩　　一心聽佛 無見頂相 放光如來
+[       ]  　　令我早登無上覺 於十方界坐道場　　　　　　　　　　　宣說神咒
+[       ]  　　舜若多性可銷亡 爍迦羅心無動轉　　　　　　　　　　　　　　　 
+[       ]  　　　　　　　　　 　　　　　　　　　　　　　　　　　　　　　　 
+[       ]     ----------------------------（第一會）---------------------(Part I)
+[      1]           <span class="extra">namaḥ stathāgatāya sugatāyārhate samyaksaṃbuddhāya.</span>
+[       ]
+[      3]  1  namaḥ sarva buddha bodhisatve bhyaḥ.
+[      5]  2  namaḥ saptānāṃ samyaksaṃbuddha koṭīnāṃ sa-śrāvaka saṃghānāṃ.
+[      7]  3  namo  loka-yarhatānāṃ.                            <span class="anno">[loke arhatānāṃ]</span>
+[      8]  4  namaḥ srotā-pannānāṃ.
+[      9]  5  namaḥ sakṛdā-gāmināṃ.
+[       ]  6  namā  ’nāgāmināṃ.                               <span class="anno">[namaḥ anāgāmināṃ]</span>
+[     10]  7  namo  loke samyag-gatānāṃ samyak-prati-pannānāṃ.
+
+[     12]  8  namo  devarṣiṇāṃ.
+[     13]  9  namaḥ siddha-vidyā-dhārarṣiṇāṃ śāpānu-graha samarthānāṃ.
+[     16] 10  namo  brahmaṇe.
+[       ] 11  namaḥ indrāya.
+[     17] 12  namo  bhagavate rudrāya umāpati-sahīyāya.
+[     20] 13  namo  bhagavate nārāyaṇāya
+[       ]           lakṣmi pañca mahā-mudrā namas-kṛtvāya.
+[     23] 14  namo  bhagavate mahā-kālāya tripura-nagara-vidrāvaṇa-kārāya
+[       ]           adhi-muktaka śmaśāna-vāsine mātṛ-gaṇa namas-kṛtvāya.
+
+[     30] 15  namo bhagavate <span class="medlite">tathāgata</span>-kulāya.
+[     31] 16  namo bhagavate <span class="medlite">    padma</span>-kulāya.
+[     32] 17  namo bhagavate <span class="medlite">    vajra</span>-kulāya.
+[     33] 18  namo bhagavate <span class="medlite">     maṇi</span>-kulāya.
+[     34] 19  namo bhagavate <span class="medlite">     gaja</span>-kulāya.
+
+[     35] 20  namo bhagavate <span class="hilite">dṛḍha-śūra-sena-praharaṇa-rājāya</span>
+[       ]                                tathāgatāyārhate samyaksaṃbuddhāya.
+[     36] 21  namo bhagavata-y<span class="hilite">amitābhāya</span> tathāgatāyārhate samyaksaṃbuddhāya.
+[     42] 22  namo bhagavata-y<span class="hilite">akṣobhyāya</span> tathāgatāyārhate samyaksaṃbuddhāya.
+[     46] 23  namo bhagavate <span class="hilite">bhaiṣajya-guru-vaiḍūrya-prabhā-rājāya</span>
+[       ]                                tathāgatāyārhate samyaksaṃbuddhāya.
+[     50] 24  namo bhagavate <span class="hilite">saṃ-puṣpita-sālendra-rājāya</span>
+[       ]                                tathāgatāyārhate samyaksaṃbuddhāya.
+[     55] 25  namo bhagavate <span class="hilite">śākyamunaye</span> tathāgatāyārhate samyaksaṃbuddhāya.
+[     59] 26  namo bhagavate <span class="hilite">ratna-kusuma-ketu-rājāya</span>
+[       ]                                tathāgatāyārhate samyaksaṃbuddhāya.
+[     63] 27  teṣāṃ namas-kṛtvā.
+
+[     64] 28  imāṃ bhagavata stathāgatoṣñīṣaṃ sitātapatraṃ namā'parājitaṃ
+[       ]     pratyañgiraṃ.
+[     69] 29  <span class="medlite">                    sarva bhūta-graha nigraha</span>-karaṇīṃ.
+[     71] 30  <span class="medlite">                                 pāra-vidyā ccheda</span>nīṃ.
+[     72] 31  <span class="medlite">                         akālaṃ-mṛtyu paritrāṇa</span>-karīṃ.
+[     74] 32  <span class="medlite">                              sarva bandhana mokṣa</span>ṇīṃ.
+[     75] 33  <span class="medlite">                     sarva duṣṭa duḥ-svapna nivāra</span>ṇīṃ.
+[     77] 34  <span class="medlite">    caturaśītīnāṃ graha sahasrāṇāṃ vi-dhvaṃsana</span>-karīṃ.
+[     80] 35  <span class="medlite">          aṣṭā-viṃśatīnāṃ nakṣatrāṇāṃ prasādana</span>-karīṃ.
+[     83] 36  <span class="medlite">             aṣṭānāṃ mahā-grahāṇāṃ vi-dhvaṃsana</span>-karīṃ.
+[     86] 37  <span class="medlite">                                sarva śatrū nivāra</span>ṇīṃ.
+[     87] 38  <span class="medlite">                      ghorāṃ duḥ-svapnānāṃ ca nāśa</span>nīṃ.
+[     88] 39  <span class="medlite">                           viṣa śastra agni uttara</span>ṇīṃ.
+
+[     90] 40  aparājitaṃ-mahā-ghorāṃ!    mahā-balāṃ   mahā-caṇḍāṃ  mahā-dīptaṃ
+[     93]       mahā-tejaṃ  mahā-śvetāṃ  mahā-jvalāṃ  mahā-māla pāṇḍara-vāsinī
+[     96] 41  ārya-tārā!  bhṛkuṭīṃ ceva vijaya vajra-maleti-viśrutāṃ
+[    101] 42    padmaṃkāṃ vajra-jihva ca mālā ceva aparājita vajra-daṇḍīṃ-viśālā
+[    106]       ca śantā-vaideha-pūjitāṃ
+[    107] 43    saumya-rūpaṃ mahā-śvetāṃ
+[    109] 44  ārya-tārā!  mahā-bala aparā-vajra-śañkalā ceva            ⌈ mālikā
+[    112] 45    vajra-kaumāri-kulaṃ-dharī vajra-hastā ca mahā-vidyā kāñcana    ⌋
+[    116] 46    kusumbhā ratna ceva vairocanā kulathadāṃ uṣñīṣa vi-jṛmbhamāṇā ca
+[    120] 47    sa-vajra-kanaka-prabhā-locana vajra-tuṇḍī ca śvetā ca
+[    123]       kamalākṣī śaśī-prabhā.
+[    125] 48  ityete mudrā-gaṇā sarve rakṣāṃ kurvantu mama sarva satvānāṃ ca.
+
+
+[       ]     ----------------------------（第二會）--------------------(Part II)
+[    129]  1       ॐ  ṛṣi-gaṇa praśastāya sarva tathāgatoṣñīṣāya. hūṃ trūṃ.
+[    132]  2  <span class="medlite">                                      jambhana</span>-kara. hūṃ trūṃ.
+[    133]  3  <span class="medlite">                                     stambhana</span>-kara. hūṃ trūṃ.
+[     ? ]  4  <span class="medlite">                                        mohana</span>-kara. hūṃ trūṃ.
+[     ? ]  5  <span class="medlite">                                       mathana</span>-kara. hūṃ trūṃ.
+[    134]  6  <span class="medlite">                       pāra-vidyā saṃ-bhakṣaṇa</span>-kara. hūṃ trūṃ.
+[     ? ]  7  <span class="medlite">                      sarva duṣṭānāṃ stambhana</span>-kara. hūṃ trūṃ.
+[    136]  8  <span class="medlite">     sarva yakṣa rākṣasa grahāṇāṃ vi-dhvaṃsana</span>-kara. hūṃ trūṃ.
+[    140]  9  <span class="medlite">   caturaśītīnāṃ graha sahasrāṇāṃ vi-dhvaṃsana</span>-kara. hūṃ trūṃ.
+[     ? ] 10  <span class="medlite">         aṣṭā-viṃśatīnāṃ nakṣatrānāṃ prasādana</span>-kara. hūṃ trūṃ.
+[     ? ] 11  <span class="medlite">                aṣṭānāṃ mahā-grahāṇāṃ utsādana</span>-kara. hūṃ trūṃ.
+[    144] 12                                                rakṣa rakṣa māṃ.
+[       ]
+[    145] 13                bhagavan stathāgatoṣñīṣa sitātapatra
+[    147]                     mahā-vajroṣṇīṣa mahā-pratyañgire
+[       ]         mahā-sahasra-bhuje sahasra-śīrṣe koṭī-śata sahasra-netre
+[    150] 14               abhedya jvalita-taṭaka mahā-vajrodāra
+[    153]                           tṛ-bhuvana maṇḍala
+[    155] 15                   ॐ  svastir-bhavatu māṃ mama.
+
+
+[       ]     ----------------------------（第三會）-------------------(Part III)
+[    157]  1        rāja-bhayā    cora-bhayā       udaka-bhayā       agni-bhayā
+[ ?? 158]   b       viṣa-bhayā  śastra-bhayā  para-cakra-bhayā dur-bhikṣa-bhayā
+[ ?? 160]   c      aśani-b~  akālaṃ-mṛtyu-b~ dharaṇī-bhūmikampa-b~ ulkā-pāta-b~
+[ ?? 161]   d rāja-daṇḍa-bhayā suparṇa-bhayā        nāga-bhayā     vidyut-bhayā
+
+[ ?? 165]  2       deva-graha        nāga-graha    yakṣa-graha    rakṣasa-graha
+[ ?? 166]   b     preta-graha      piśāca-graha    bhūta-graha  kumbhaṇḍa-graha
+[ ?? 167]   c    pūtana-graha kaṭa-pūtana-graha   skanda-graha   apasmāra-graha
+[ ?? 169]   d    unmāda-graha      cchāya-graha   revati-graha     jamika-graha
+[ ?? 171]   e  kaṇṭha-kamini-graha
+
+[ ?? 173]  3      ojā-hāriṇyā    garbhā-hāriṇyā   jāta-hāriṇyā   jīvitā-hāriṇyā
+[ ?? 174]   b rudhirā-hāriṇyā      vasā-hāriṇyā  maṃsā-hāriṇyā     medā-hāriṇyā
+[ ?? 175]   c   majjā-hāriṇyā     vantā-hāriṇyā aśucyā-hāriṇyā    ciccā-hāriṇyā
+
+[    179]  4         teṣāṃ sarveṣāṃ sarva grahāṇāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    181]  5  <span class="medlite">                  pari-brajāka</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    183]  6  <span class="medlite">                   ḍāka-ḍākinī</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    185]  7 <span class="medlite">            mahā-paśupati-rudra</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    188]  8 <span class="medlite">      nārāyaṇā pañca-mahā-mudrā</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    190]  9 <span class="medlite">          tatva-garuḍa-sahīyāya</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    192] 10 <span class="medlite">   mahā-kāla mātṛ-gaṇa-sahīyāya</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    194] 11 <span class="medlite">                       kāpālika</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    196] 12 <span class="medlite"> jayakarā-madhukara sarvartha-sādhaka</span>
+[       ]                                    kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    199] 13 <span class="medlite"> catur-bhaginī bhrātṛ-pañcama-sahīyāya</span>
+[       ]                                    kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    201] 14 <span class="medlite"> bhṛñgi-riṭika nandikeśvara gaṇapati-sahīyāya</span>
+[       ]                                    kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    205] 15 <span class="medlite">                  nagna-śramaṇa</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    207] 16 <span class="medlite">                        arhanta</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    209] 17 <span class="medlite">                      vīta-rāga</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    211] 18 <span class="medlite">      vajra-pāṇi guhyakādhipati</span> kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    214] 19                                                   rakṣa rakṣa māṃ.
+
+
+[       ]     ----------------------------（第四會）--------------------(Part IV)
+[    216]  1               bhagavata stathāgatoṣnīṣaṃ sitātapatraṃ
+[    219]  2      namo-stute asitā-nalārka prabhā-sphuṭa vika-sitātapatre
+[       ]
+[    222]  3                              jvala jvala
+[    223]  4                     dhaka dhaka vi-dhaka vi-dhaka
+[       ]  5                       dara dara vi-dara vi-dara
+[       ]  6                     cchinda cchinda bhinda bhinda
+[    224]  7                              hūṃ hūṃ phaṭ
+[    226]                         phaṭ ~ ~ ~ phaṭ ~ ~ ~ svāhā
+
+ā    227]  8  <span class="medlite">                     he-he</span> phaṭ.  |36 <span class="medlite">sarva</span>
+y    228]  9  <span class="medlite">                  amoghaya</span> phaṭ.       <span class="medlite">vidyā-rājācārye-bhyaḥ</span> phaṭ.
+[    229] 10  <span class="medlite">                apratihata</span> phaṭ.  |37 <span class="medlite">jayakarā-madhukara</span>
+[    230] 11  <span class="medlite">                vara-prada</span> phaṭ.     <span class="medlite">sarvartha sādhake-bhyaḥ</span> phaṭ.
+[    231] 12  <span class="medlite">           asura vidrāvaka</span> phaṭ.  |38 <span class="medlite">sarva vidyā-cārye-bhyaḥ</span> phaṭ.
+[232  ? ] 13  <span class="medlite">          sarva deve-bhyaḥ</span> phaṭ.  |39 <span class="medlite">    catur bhaginī-bhyaḥ</span> phaṭ.
+[233    ] 14  <span class="medlite">          sarva nāge-bhyaḥ</span> phaṭ.  |40 <span class="medlite">vajra kaumārī-kulaṃ-dharī</span>
+[234 250] 15  <span class="medlite">         sarva yakṣe-bhyaḥ</span> phaṭ.     <span class="medlite">  mahā-vidyā-rāje-bhyaḥ</span> phaṭ.
+[ ?  251] 16  <span class="medlite">       sarva rākṣase-bhyaḥ</span> phaṭ.  |41 <span class="medlite"> mahā-pratyañgire-bhyaḥ</span> phaṭ.
+[ ?  252] 17  <span class="medlite">        sarva garuḍe-bhyaḥ</span> phaṭ.
+[235    ] 18  <span class="medlite">     sarva gandharve-bhyaḥ</span> phaṭ.  |42 <span class="medlite">        vajra śañkalāya</span> phaṭ.
+[ ?  254] 19  <span class="medlite">         sarva asure-bhyaḥ</span> phaṭ.  |43 <span class="medlite">mahā-pratyañgira-rājāya</span> phaṭ.
+[ ?  255] 20  <span class="medlite">       sarva kiṃnare-bhyaḥ</span> phaṭ.  |44 <span class="medlite">mahā-kālāya mahā-mātṛ-gaṇa</span>
+[ ?   ? ] 21  <span class="medlite">      sarva mahorage-bhyaḥ</span> phaṭ.     <span class="medlite">          namas-kṛtvāya</span> phaṭ.
+[ ?  257] 22  <span class="medlite">        sarva manuṣe-bhyaḥ</span> phaṭ.  |45 <span class="medlite">              veṣṇuvīye</span> phaṭ.
+[ ?  259] 23  <span class="medlite">       sarva amanuṣe-bhyaḥ</span> phaṭ.  |46 <span class="medlite">             brahminīye</span> phaṭ.
+[ ?     ] 24  <span class="medlite">         sarva bhūte-bhyaḥ</span> phaṭ.  |47 <span class="medlite">                 agnīye</span> phaṭ.
+[ ?  260] 25  <span class="medlite">        sarva piśāce-bhyaḥ</span> phaṭ.  |48 <span class="medlite">            mahā-kālīye</span> phaṭ.
+[ ?  261] 26  <span class="medlite">     sarva kumbhaṇḍe-bhyaḥ</span> phaṭ.  |49 <span class="medlite">           kāla-daṇḍīye</span> phaṭ.
+[236 262] 27  <span class="medlite">        sarva pūtane-bhyaḥ</span> phaṭ.  |50 <span class="medlite">                indrīye</span> phat.
+[237 263] 28  <span class="medlite">   sarva kaṭa-pūtane-bhyaḥ</span> phaṭ.  |51 <span class="medlite">               raudrīye</span> phaṭ.
+[238 264] 29  <span class="medlite"> sarva dur-lañghiṃte-bhyaḥ</span> phaṭ.  |52 <span class="medlite">              cāmuṇḍīye</span> phaṭ.
+[239 265] 30  <span class="medlite">  sarva duṣ-prekṣite-bhyaḥ</span> phaṭ.  |53 <span class="medlite">           kāla-rātrīye</span> phaṭ.
+[241 266] 31  <span class="medlite">         sarva jvare-bhyaḥ</span> phaṭ.  |54 <span class="medlite">               kāpālīye</span> phaṭ.
+[242 267] 32  <span class="medlite">      sarva apasmāre-bhyaḥ</span> phaṭ.  |55 <span class="medlite">    adhi-muktaka</span>
+[243 268] 33  <span class="medlite">       sarva śramaṇe-bhyaḥ</span> phaṭ.      <span class="medlite">     śmaśāna vāsinīye</span>  phaṭ.
+[244 269] 34  <span class="medlite">      sarva tirthike-bhyaḥ</span> phaṭ.
+[ ?  270] 35  <span class="medlite">        sarva unmāde-bhyaḥ</span> phaṭ.  |56        yeke-cittā satvā mama.
+
+
+[       ]     ----------------------------（第五會）---------------------(Part V)
+[    275]  1  duṣṭa-citta pāpa-citta raudra-citta vi-dveṣa amaitra-citta:
+[       ]  2  utpāda-yanti kīla-yanti mantra-yanti japanti juhvanti
+[       ]
+[    276]  3           ojā-hārā    garbhā-hārā    rudhirā-hārā       vasā-hārā
+[    278]   b        majjā-hārā      jāta-hārā     jīvitā-hārā      malyā-hārā
+[    280]   c       gandhā-hārā     puṣpā-hārā      phalā-hārā      sasyā-hārā
+[       ]
+[    282]  4  pāpa-citta duṣṭa-citta raudra-citta: yakṣa-graha   rakṣasa-graha
+[    284]   b       preta-graha   piśāca-graha     bhūta-graha kumbhaṇḍa-graha
+[    286]   c      skanda-graha   unmāda-graha    cchāya-graha  apasmāra-graha
+[    289]   d ḍāka-ḍākinī-graha   revati-graha    jamika-graha    śakuni-graha
+[    291]   e mantra-nandika-graha    lamvika-graha     hanu-kaṇtha-pāni-graha
+[       ]
+[    293]  5  jvara:   ekā-hikā    dvai-tīyakā      strai-tīyakā   catur-thakā
+[    295]           nitya-jvarā   viṣama-jvarā
+[    296]  6             vātikā       paittikā          śleṣmikā   sāṃnipātikā
+[    298]  7  sarva-jvarā:             śirorti  ardhava'bhedhakā       arocakā
+[    299]   b        akṣi-rogaṃ     nasa-rogaṃ       mukha-rogaṃ     hṛd-rogaṃ
+[    301]   c       gala-grahaṃ    karṇa-śūlaṃ       danta-śūlaṃ  hṛdaya-śūlaṃ
+[    303]   d       marma-śūlaṃ   parśva-śūlaṃ      pṛṣṭha-śūlaṃ   udara-śūlaṃ
+[    305]   e       kaṇṭī-śūlaṃ    vasti-śūlaṃ         ūru-śūlaṃ  jañgha-śūlaṃ
+[    307]   f       hasta-sūlaṃ     pāda-śūlaṃ        sarvañga-pratyañga-śūlaṃ
+
+[    309]  8  bhūta     vetāḍa    ḍāka-ḍākinī jvara
+[    310]  9  dadruḥ    kaṇḍu     kiṭibha     lota     vaisarpa     lohā-liñga
+
+[    312] 10  śoṣa      trasa     gara        viṣa     yoga
+[ ?? 314]     agni      udaka     māra        vaira    kantāra    akālaṃ-mṛtyu
+[ ?? 314] 11  traibuka  trailaṭa  vṛścika     sarpa    nakula
+[ ?? 318]     siṃha     vyāghra   ṛkṣa        tarakṣa  <span class="medlite">mṛgāś ca mara-jīva</span>
+
+[    319] 12  teṣāṃ sarveṣām sitātapatraṃ mahā-vajroṣñīṣaṃ mahā-pratyañgiraṃ
+[    323]     yāvad-dvādaśa-yojanā-bhyantareṇa.
+[     ? ] 13          <span class="medlite">              sīma</span>-bandhaṃ karomi.
+[     ? ] 14          <span class="medlite">              diśā</span>-bandhaṃ karomi.
+[    324] 15          <span class="medlite">        pāra-vidyā</span>-bandhaṃ karomi.
+[    325] 16          <span class="medlite">              tejo</span>-bandhaṃ karomi.
+[     ? ] 17          <span class="medlite">             hasta</span>-bandhaṃ karomi.
+[     ? ] 18          <span class="medlite">              pāda</span>-bandhaṃ karomi.
+[     ? ] 19          <span class="medlite">sarvañga-pratyañga</span>-bandhaṃ karomi.
+
+[    327] 20  tadyathā:       <span class="hilite">ॐ  anale anale viśade viśade</span>
+[    328] 21                  <span class="hilite">        vīra vajra-dhare</span>
+[    330] 22                  <span class="hilite">bandha bandhani vajra-pāṇi phaṭ</span>
+[    331] 23                  <span class="hilite">      hūṃ trūṃ phaṭ svāhā</span>
+
+[       ]           <span class="extra">namaḥ stathāgatāya sugatāyārhate samyaksaṃbuddhāya.</span>
+[       ]                    <span class="extra">ॐ siddhyaṃtu mantra-padāya svāhā.</span>`;
+
+const zhongwen =
+`=                               大輪金剛陀羅尼
+                               歸命 三世 一切如來
+                        ॐ  無垢極淨 無垢極淨 大輪金剛
+                        勇猛 勇猛  橫越 橫越  峰頂 峰頂
+                     破滅/熄滅  完全粉碎  三慧  成就最高境界
+                               (種子)  圓滿成就
+
+
+
+=            一切如來頂髻白傘蓋無有能及甚能調伏大總持  意譯        【<a href="?l=s">關閉中文</a>】
+
+ 　　妙湛總持不動尊 首楞嚴王世稀有　　南無常住十方佛　　爾時世尊 從肉髻中 湧百寶光
+ 　　銷我億劫顛倒想 不歷僧祇獲法身　　南無常住十方法　　光中湧出 千葉寶蓮 有化如來
+ 　　願今得果成寶王 還度如是恆沙眾　　南無常住十方僧　　坐寶華中 頂放十道 百寶光明
+ 　　將此身心奉塵剎 是則名為報佛恩　　南無釋迦牟尼佛　　一一光明 皆遍示現 十恆河沙
+ 　　伏請世尊為證明 五濁惡世誓先入　　南無佛頂首楞嚴　　金剛密跡 擎山持杵 遍虛空界
+ 　　如一眾生未成佛 終不於此取泥洹　　南無觀世音菩薩　　大眾仰觀 畏愛兼抱 求佛哀祐
+ 　　大雄大力大慈悲 希更審除微細惑　　南無金剛藏菩薩　　一心聽佛 無見頂相 放光如來
+ 　　令我早登無上覺 於十方界坐道場　　　　　　　　　　　宣說神咒
+ 　　舜若多性可銷亡 爍迦羅心無動轉
+
+    ----------------------------（第一會）-----------------------------
+    禮敬 如來 善逝 應 正等正覺！
+
+ 1  敬禮　一切　佛、菩薩　眾。
+ 2  敬禮　七俱胝正等覺　及　聲聞僧伽眾。
+ 3  敬禮　世間 阿羅漢眾。
+ 4  敬禮　須陀洹。（預流眾）
+ 5  敬禮　斯陀含。（一來眾）
+ 6  敬禮　阿那含。（不還眾）
+ 7  敬禮　世間　正至、正行　眾。
+
+ 8  敬禮　天仙眾。
+ 9  敬禮　持成就　明咒　仙眾，堪能降伏惡咒眾。
+10  敬禮　梵天。
+11  敬禮　因陀羅。（帝釋天）
+12  敬禮　世主嚕捺羅天、烏摩天後、及眷屬眾。（大自在天/濕婆/śiva/śaṃkara/
+13  敬禮　世主那羅延天、（毗濕奴/viṣṇu）                       iśana）
+    　　　大吉祥天女、五大印女，敬禮啊。
+14  敬禮　世主大黑天--能摧三重城，
+    　　　及樂住墓塚鬼母眾，敬禮啊。
+
+15  敬禮　世尊　如來　部。
+16  敬禮　世尊　蓮華　部。
+17  敬禮　世尊　金剛　部。
+18  敬禮　世尊　寶　部。
+19  敬禮　世尊　象　部。
+
+20  敬禮　世尊　勇猛軍隊鬥戰王　如來、應、正等覺。
+
+21  敬禮　世尊　阿彌陀佛　如來、應、正等覺。（無量光）
+22  敬禮　世尊　阿閦　如來、應、正等覺。（不動）
+23  敬禮　世尊　藥師琉璃光　如來、應、正等覺。
+
+24  敬禮　世尊　開敷蓮華娑羅樹王　如來、應、正等覺。
+
+25  敬禮　世尊　釋迦牟尼　如來、應、正等覺。
+26  敬禮　世尊　寶華幢王　如來、應、正等覺。
+
+27  如是　敬禮已。
+
+28  此　諸世尊如來頂髻白傘蓋　名為無有能及、甚能調伏
+
+29  　　能令　降伏　一切鬼魅惡星。
+30  　　能令　斷滅　仇敵惡咒。
+31  　　能自　我救　護夭折橫死。
+32  　　能令　解脫　一切煩惱縛結。
+33  　　能令　止息　一切極惡惡夢。
+34  　　能令　敗壞　八萬四千惡星邪魔。
+35  　　能令　清淨　二十八星宿。
+36  　　能令　摧伏　八大執曜。
+37  　　能令　遮止　一切怨敵。
+38  　　能令　消滅　諸恐怖、惡夢。
+39  　　能令　躲避　毒藥、刀兵、火災。
+
+40  無有能勝大暴惡母！　大力母　大可畏母　大熾燃母
+    　　大威力母　大白輝母　大光焰母　大花鬘白衣母
+41  聖救度母！　忿怒母　及如是　最勝盛名金剛鬘母
+42  　　蓮花金剛舌母　及　花鬘無能勝碩大金剛杵母
+    　　及　安詳勝身供拜母
+43  　　大白光月光相母。
+44  聖救度母！　大力母　及如是　不歿金剛鎖母
+45  　　金剛童女　持部女　金剛手　及　大明金花鬘女
+46  　　紅寶珠母　及如是　遍照種族福祉母　及　細眉開展頂髻母
+47  　　所有　金剛金光照耀母　金剛葫蘆母　及
+    　　白色　蓮花眼　月光母。
+48  如是　印母眾　及　諸有情　願悉皆守護於我等。
+
+
+    ----------------------------（第二會）-----------------------------
+ 1  　　　　　ॐ　仙眾　讚歎　一切如來頂髻。 hūṃ trūṃ.
+ 2  　　　　　　　　　　　　　令　破碎　啊！ hūṃ trūṃ.
+ 3  　　　　　　　　　　　　　令　降伏　啊！ hūṃ trūṃ.
+ 4  　　　　　　　　　　　　　令　昏迷　啊！ hūṃ trūṃ.
+ 5  　　　　　　　　　　　　　令　破壞　啊！ hūṃ trūṃ.
+ 6  　　齊令　殘害（其他外道）最勝咒術　啊！ hūṃ trūṃ.
+ 7  　　　　　　　　　令　降伏一切瞋恚　啊！ hūṃ trūṃ.
+ 8  　　　令　敗壞一切夜叉、羅剎、惡星　啊！ hūṃ trūṃ.
+ 9  　　　　　令　降伏八萬四千惡星鬼魅　啊！ hūṃ trūṃ.
+10  　　　　　　　能令　清淨二十八星宿　啊！ hūṃ trūṃ.
+11  　　　　　　　　能令　斷滅八大執曜　啊！ hūṃ trūṃ.
+12  　　　　　　　　　　　　守護 守護 我等。
+
+13  　　　　　　　　　　世尊　如來頂髻　白傘蓋
+    　　　　　　　    　大金剛頂髻　大甚能調伏
+   　　　　　　　　　　大千臂、千頭、百千萬億諸眼
+14　　　　　　　　　　不毀光輝　無邊岸　大金剛殊妙
+　　　　　　　　　　　　　　　三界壇場
+15　　　　　　　　　　　　ॐ　請福祐於我及我之。
+
+
+    ----------------------------（第三會）-----------------------------
+ 1  　　　　　諸王難　　　　　　　諸賊難　　　　　　諸水難　　　　　　　諸火難
+  b 　　　　　諸毒難　　　　　　諸刀兵難　　　　　諸怨敵難　　　　　　諸飢饉難
+  c 　　　　諸雷電難　　　　諸夭折橫死難　　　　　諸地震難　　　　諸流星崩落難
+  d 　　　諸王刀仗難　　　　　諸大猛禽難　　　　　　諸龍難　　　　　　諸電光難
+
+ 2  　　　　諸天所持　　　　　　諸龍所持　　　　諸夜叉所持　　　　　諸羅剎所持
+  b 　　　諸餓鬼所持　　　　諸毗舍遮所持　　　　諸部多所魅　　　　諸鳩槃荼所魅
+  c 　　諸富單那所魅　　諸迦吒富單那所魅　　　　諸騫陀所魅　　諸阿波悉魔羅所魅
+  d 　　　諸瘋鬼所魅　　　　　諸陰鬼所魅　　　諸黎婆坻所魅　　　　諸閻彌迦所魅
+  e 　　諸迦彌尼所魅
+
+ 3  　　　諸食精氣鬼　　　　　　諸食胎鬼　　　　　諸食生鬼　　　　　　諸食命鬼
+  b 　　　　諸食血鬼　　　　　　諸食膏鬼　　　　　諸食肉鬼　　　　　　諸食脂鬼
+  c 　　　　諸食髓鬼　　　　　　諸食吐鬼　　　諸食不淨物鬼　　　　　　諸食心鬼
+
+ 4  　　　　　如是等　一切　及　一切諸鬼魅眾　之　　咒術　我今悉使斷除、釘住！
+ 5  　　　　　　　　　　　　　　　波立婆外道　所造　咒術　我今悉使斷除、釘住！
+ 6  　　　　　　　　　　　　　　荼加荼枳尼鬼　所造　咒術　我今悉使斷除、釘住！
+ 7  　　　　　　　　　　　　大獸主　嚕捺羅天　所造　咒術　我今悉使斷除、釘住！
+ 8  　　　　　　　　　　　那羅延天　五大印女　所造　咒術　我今悉使斷除、釘住！
+ 9  　　　　　　　　　　　真實　迦樓羅　眷屬　所造　咒術　我今悉使斷除、釘住！
+10  　　　　　　　　　　大黑天　鬼母眾　眷屬　所造　咒術　我今悉使斷除、釘住！
+11  　　　　　　　　　　　　　　　　骷髏外道　所造　咒術　我今悉使斷除、釘住！
+12  　　　　　　　　作勝　作蜜　成辦諸事業者　所造　咒術　我今悉使斷除、釘住！
+
+13　　　　　　　  　　　四姊妹、五兄弟　眷屬　所造　咒術　我今悉使斷除、釘住！
+
+14  　大自在天隨從　歡喜自在天　象頭神　眷屬　所造　咒術　我今悉使斷除、釘住！
+
+15  　　　　　　　　　　　裸形無衣　苦行外道　所造　咒術　我今悉使斷除、釘住！
+16  　　　　　　　　　　　　　　　外道阿羅漢　所造　咒術　我今悉使斷除、釘住！
+17  　　　　　　　　　　　　　　　　外道離欲　所造　咒術　我今悉使斷除、釘住！
+18  　　　　　　　　　　外道執金剛神　秘密主　所造　咒術　我今悉使斷除、釘住！
+19  　　　　　　　　　　　　　　　　　　　　　　　　　　　願　守護　守護　我！
+
+
+    ----------------------------（第四會）-----------------------------
+ 1  　　　　　　　　　世尊　一切如來　頂髻　白傘蓋
+ 2  　　　敬禮稱讚　火　甘露火　日光　放光　普照　開展　白傘蓋
+
+ 3  　　　　　　　　　　　　　光明　熾盛
+ 4  　　　　　　　　　　摧壞　破壞　摧壞　破壞
+ 5  　　　　　　　　　　摧破　裂開　摧破　裂開
+ 6  　　　　　　　　　　切斷　斷裂　斷壞　破裂
+ 7  　　　　　　  　　     hūṃ hūṃ phaṭ
+                phaṭ ~ ~ ~ phaṭ ~ ~ ~ svāhā
+
+ 8　　　　　　　　嘿、嘿　啪！　　　　<font class="num">36</font>　一切
+ 9　　　　　　　　　不空　啪！　　　　  　　　　諸咒師眾　啪！　
+10　　　　　　　　　無礙　啪！　　　　<font class="num">37</font>　作勝　作蜜
+11　　　　　　　　　與願　啪！　　　　  　成辦諸事業者眾　啪！
+12　　　　　阿修羅　切裂　啪！　　　　<font class="num">38</font>　一切　諸咒師眾　啪！
+13　　　　　一切　諸天眾　啪！　　　　<font class="num">39</font>　四姐妹　女天眾　啪！
+14　　　　　一切　諸龍眾　啪！　　　　<font class="num">40</font>　金剛嬌魔哩部持女
+15　　　　一切　諸夜叉眾　啪！　　　　  　　　　大咒王眾　啪！
+16　　　　一切　諸羅剎眾　啪！　　　　<font class="num">41</font>　　大甚能調伏眾　啪！
+17　　　一切　諸金翅鳥眾　啪！
+18　　　一切　諸乾闥婆眾　啪！　　　　<font class="num">42</font>　　　　　金剛鎖　啪！
+19　　　一切　諸阿修羅眾　啪！　　　　<font class="num">43</font>　　大甚能調伏王　啪！
+20　　　一切　諸緊那羅眾　啪！　　　　<font class="num">44</font>　大黑天　大鬼母眾
+21　　一切　諸摩睺羅伽眾　啪！　　　　  　　眷屬　作禮敬　啪！
+22　　　　一切　諸　人眾　啪！　　　　<font class="num">45</font>　　　　吠紐天妃　啪！
+23　　　　一切　諸非人眾　啪！　　　　<font class="num">46</font>　　　　　梵天妃　啪！
+24　　　　一切　諸部多眾　啪！　　　　<font class="num">47</font>　　　　　火天妃　啪！
+25　　　一切　諸毗舍遮眾　啪！　　　　<font class="num">48</font>　　　　大黑天妃　啪！
+26　　　一切　諸鳩槃荼眾　啪！　　　　<font class="num">49</font>　　　　　死天妃　啪！
+27　　　一切　諸富單那眾　啪！　　　　<font class="num">50</font>　　　　帝釋天妃　啪！
+28　一切　諸迦吒富單那眾　啪！　　　　<font class="num">51</font>　　　　咾捺哩妃　啪！
+29　　　一切　諸誤想過眾　啪！　　　　<font class="num">52</font>　　　左悶拏天妃　啪！
+30　　　一切　諸懊見過眾　啪！　　　　<font class="num">53</font>　　　　黑夜天妃　啪！
+31　　　　一切　諸瘟疫眾　啪！　　　　<font class="num">54</font>　　　骷髏外道女　啪！
+32　一切　諸阿波悉魔羅眾　啪！　　　　<font class="num">55</font>　　樂於墓塚居住
+33　　　　一切　諸苦行眾　啪！　　　　  　　　　　鬼母眾　啪！
+34　　　一切　諸外道師眾　啪！
+35　　　　一切　諸醉鬼眾　啪！　　　　<font class="num">56</font>　願眾生　守護　於我！
+
+
+    ----------------------------（第五會）-----------------------------
+ 1  有惡心、不善心、兇暴心、瞋恨 無慈心，
+ 2  令（惡心）顯現之、 使釘住之、 忠告（惡心者）、今誦（咒）之。
+
+ 3  　　　　　食精氣鬼眾　　　　　食胎鬼眾　　　　食血鬼眾　　　　　　食腦鬼眾
+  b 　　　　　　食髓鬼眾　　　　　食生鬼眾　　　　食命鬼眾　　　　　　食鬘鬼眾
+  c 　　　　　　食香鬼眾　　　　　食花鬼眾　　　　食果鬼眾　　　　　食苗稼鬼眾
+
+ 4  不善心、有惡心、兇暴心：　　　　　　　　　　諸夜叉所持　　　　　諸羅剎所持
+  b 　　　　　諸餓鬼所持　　　諸毗舍遮所持　　　諸部多所魅　　　　諸鳩槃荼所魅
+  c 　　　　　諸騫陀所魅　　　　諸瘋鬼所魅　　　諸陰鬼所魅　　諸阿波悉魔羅所魅
+  d 　　荼加荼枳尼鬼所魅　　　諸黎婆坻所魅　　諸閻彌迦所魅　　　　諸舍究尼所魅
+  e 　　　諸曼多難提所魅　　　　諸藍婆所魅　　　　　　　　　諸賀弩乾吒婆尼所魅
+
+ 5  諸熱病：　一日病　　　二日病　　　三日病　　　四日病
+    　　　　　常熱病　　不盡熱病
+ 6  　　　　　　風病　　　　黃病　　　　痰病　　　三集病 
+ 7  一切病苦：　　　　　　　頭痛　　　　半痛　　飲食不消
+  b 　　　　　　眼病　　　　鼻病　　　　口病　　　　心病
+  c 　　　　　咽喉痛　　　　耳痛　　　牙齒痛　　　　心痛
+  d 　　　　　關節痛　　　　脅痛　　　　背痛　　　　肚痛
+  e 　　　　　　腰痛　　隱密處痛　　　　髀痛　　　　脛痛
+  f 　　　　　　手痛　　　　腳痛　　遍身疼痛
+ 
+ 8  部多鬼病　起屍鬼病　荼加荼枳尼鬼病
+ 9  癬癩　　　疥瘡　　　痘疹　　　蜘蛛瘡　火瘡　　疔瘡
+
+10  乾消　　　驚怖　　　毒病　　　毒藥　　厭禱
+    火災　　　水災　　　仇敵　　　怨敵　　險難　　夭折橫死
+11  土蜂　　　馬蜂　　　蠍　　　　蛇　　　黃鼠
+    獅子　　　虎　　　　熊　　　　豺　　　狼　　　等猛獸及害命者
+
+12  彼等　一切　白傘蓋　大金剛頂髻　大甚能調伏
+    界限　十二由旬　禁縛莫入。
+13　　　　　　　　　　我今結界！
+14　　　　　　　　　　我今結方隅界！
+15　　　　　　　　　　我今結最勝明咒界！
+16　　　　　　　　　　我今結威神界！
+17　　　　　　　　　　我今結手界！
+18　　　　　　　　　　我今結足界！
+19　　　　　　　　　　我今結遍身界！
+
+20  故說：　　ॐ　甘露火　甘露火　光明輝耀　上妙清淨
+21  　　　　　　　　　　　勇猛　金剛持
+22  　　　　　　　　禁縛　結界　金剛手　phaṭ!
+23  　　　　　　   hūṃ　trūṃ　phaṭ　svāhā
+
+    禮敬 如來 善逝 應 正等正覺。
+    ॐ  令成就 秘密真言 微妙章句 福智圓滿。`;
+
+// 中文早課一小時七遍；似逐遍加快。(第一遍近10分鐘；後六遍平均8分20秒。）
+// 第一遍時間：
+//   0:00  (1) 3:50
+//   3:50  (2) 0:41
+//   4:31  (3) 2:07
+//   6:38  (4) 1:20
+//   7:58  (5) 1:48
+//   9:46
+</script>
+</head>
+
+
+<body><center>
+
+
+<table border=0 cellspacing=0 cellpadding=0>
+<script>
+function get(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+}
+
+console.log('?l=s    saṃskrit-only');
+console.log('?l=z    zhongwen-only');
+console.log('?h=1    hard-only');
+console.log('?py=1   中文早課對應');
+
+const lang = get('lang') || get('l');
+const isHardOnly = !!get('h');
+const showPY = !!get('py');
+const lefty = showPY ? '<td></td>' : '';
+
+const PREFIX_HARD = '?', PREFIX_UNK  = '@'; // put at the very beginning of the whole line of sanskrit.
+
+const hasZ = !lang || lang.startsWith('z');
+const hasS = !lang || lang.startsWith('s') || !hasZ;
+const sa = hasS ? sanskrit_roman.split('\n') : [];
+const za = hasZ ? zhongwen.split('\n') : [];
+const len = sa && sa.length || za && za.length;
+const redge = '<td class="rend" width="0"></td>';
+let partNum = 0;
+
+// start from "STATHĀGATOṢÑĪṢAM SITĀTAPATRAṂ APARĀJITAṂ PRATYAṄGIRAṂ DHĀRAṆĪ"
+for (var i=9; i<len; ++i)
+  document.write('<tr>', sCol(sa[i], hasS, hasZ), zCol(za[i], hasS, hasZ), '</tr>');
+if (hasS && hasZ) document.write('<tr>', lefty, '<td class="lcol end">&nbsp;</td><td class="rcol end">&nbsp;</td>', redge, '</tr>');
+else if (hasS) document.write('<tr>', lefty, '<td class="lcol end">&nbsp;</td></tr>');
+else if (hasZ) document.write('<tr>', redge, '<td class="rcol end">&nbsp;</td>', redge, '</tr>');
+
+function sCol(s, has, hasZ) {
+  if (!has) return '';
+  var clz = hasZ ? 'lcol' : 'scol', isUnk = s.startsWith(PREFIX_UNK), isHard = s.startsWith(PREFIX_HARD);
+  if (isUnk)  { s = s.substring(1); if (s.length > 0) clz += ' unk'; }
+  if (isHard) { s = s.substring(1); if (s.length > 0) clz += ' hard'; }
+  if (s.trim().length === 0)
+    return lefty + '<td class="' + clz + '">&nbsp;</td>';
+  if (s.startsWith('='))
+    return lefty + '<td class="' + clz + ' drni" nowrap><pre>' + s.replace('=','') + '</pre></td>';
+  s0 = s.substring(0,10);
+  s0 = !showPY ? '' : s0.replace('[', ' ').replace(']', ' ');
+  s = s.substring(10);
+  var left = !showPY ? lefty : ('<td class="py" align="right"><pre>' + s0 + '</pre></td>');
+  if (s.startsWith('    -----')) {
+    ++partNum;
+    return lefty + '<td class="' + clz + ' part" nowrap><pre>' + s + '</pre></td>';
+  }
+  clz += ' part' + partNum;
+  if (!isHardOnly || isHard || isUnk) {
+    var spref = '<span class="num">' + s.substring(0,3) + '</span>';
+    s = s.substring(3);
+    const idx = s.indexOf('|');
+    if (idx > 0)
+      s = s.substring(0, idx) + '<span class="num">' + s.substring(idx+1,idx+3) + '</span>' + s.substring(idx+3);
+    return left + '<td class="' + clz + '" nowrap><pre>' + spref + s + '</pre></td>';
+  }
+  return '';
+}
+
+function zCol(z, hasS, hasZ) {
+  if (!hasZ) return '';
+  const ledge = hasS ? '' : redge;
+  var clz = 'rcol';
+  if (!z) z = '';
+  if (z.trim().length === 0)
+    return ledge + '<td class="' + clz + '1">&nbsp;</td>' + redge;
+  if (z.startsWith('='))
+    return ledge + '<td class="' + clz + '1 drni" nowrap><pre>' + z.replace('=','') + '</pre></td>' + redge;
+  if (z.startsWith('    -----'))
+    return ledge + '<td class="' + clz + '1 part" nowrap><pre>' + z + '</pre></td>' + redge;
+  if (!isHardOnly || isHard || isUnk) {
+    var zpref = '<span class="num">' + z.substring(0,3) + '</span>';
+    z = z.substring(3);
+    const idx = z.indexOf('|');
+    if (idx > 0)
+      z = z.substring(0, idx) + '<span class="num">' + z.substring(idx+1,idx+3) + '</span>' + z.substring(idx+3);
+    return ledge + '<td class="' + clz + '" nowrap><pre>' + zpref + z + '</pre></td>' + redge;
+  }
+  return '';
+}
+</script>
+
+</table>
+
+<p class="copyright"></p>
+</center></body></html>

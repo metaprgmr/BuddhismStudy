@@ -1,0 +1,228 @@
+<printPages html>
+<head>
+<metacharset="utf-8">
+<title>佛說大乘無量壽莊嚴清淨平等覺經</title>
+<style>
+body { margin:20px }
+.reading  { writing-mode:vertical-rl; font-size:24px; font-family:KaiTi,楷体,STKaiti,华文楷体; line-height:125%; letter-spacing:5px }
+.opening  { font-size:20px; font-family: FangSong, 仿宋, STFangsong, 华文仿宋; line-height:125%; letter-spacing:5px }
+.printing { font-size:18px; line-height:125%; letter-spacing:3px }
+h2 { letter-spacing:2px }
+@media print {
+  .pagebreak { page-break-before: always; } /* page-break-after works, as well */
+}
+</style>
+<script src="01-plain.js"></script>
+<script>
+function get(name) {
+  if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+    return decodeURIComponent(name[1]);
+}
+function w() { for(var i in arguments)document.write(arguments[i]) }
+
+function countLines(txt, pageLen) {
+  var x = Math.floor(txt.length / pageLen);
+  if (x * pageLen < txt.length) ++x;
+  return x;
+}
+
+const chapters = [];
+const PAGELEN  = 32;
+const LINELEN  = 24;
+
+(function() {
+
+  // pre-partition the chapters to group smaller chapters onto one page
+  var i, cumulen = 0;
+  for (i=0; i<LeJing.length; i+=2) {
+    var c = { chapter:chapters.length+1, title:LeJing[i], text:LeJing[i+1], bp:false };
+    var cl = countLines(c.text, LINELEN) + 1; // +1: the title
+    if (cl >= PAGELEN) {
+      if (chapters.length > 0) chapters[chapters.length-1].bp = true;
+      c.bp = true;
+      cumulen = 0;
+    }
+    else {
+      if (cumulen > 0) ++cumulen; // the divider
+      cumulen += cl;
+      if (cumulen >= PAGELEN) {
+        chapters[chapters.length-1].bp = true;
+        cumulen = cl;
+      }
+    }
+    chapters.push(c);
+  }
+  chapters[ 0].pageNum = 1;
+  chapters[ 1].pageNum = 2;
+  chapters[ 2].pageNum = 3;
+  chapters[ 3].pageNum = 4;
+  chapters[ 4].pageNum = 5;
+  chapters[ 5].pageNum = 6;
+  chapters[ 6].pageNum = 8;
+  chapters[ 7].pageNum = 9;
+  chapters[ 8].pageNum = 9;
+  chapters[ 9].pageNum = 10;
+  chapters[10].pageNum = 10;
+  chapters[11].pageNum = 11;
+  chapters[12].pageNum = 11;
+  chapters[13].pageNum = 12;
+  chapters[14].pageNum = 12;
+  chapters[15].pageNum = 12;
+  chapters[16].pageNum = 13;
+  chapters[17].pageNum = 13;
+  chapters[18].pageNum = 14;
+  chapters[19].pageNum = 14;
+  chapters[20].pageNum = 14;
+  chapters[21].pageNum = 15;
+  chapters[22].pageNum = 15;
+  chapters[23].pageNum = 16;
+  chapters[24].pageNum = 17;
+  chapters[25].pageNum = 18;
+  chapters[26].pageNum = 19;
+  chapters[27].pageNum = 19;
+  chapters[28].pageNum = 20;
+  chapters[29].pageNum = 20;
+  chapters[30].pageNum = 21;
+  chapters[31].pageNum = 22;
+  chapters[32].pageNum = 23;
+  chapters[33].pageNum = 24;
+  chapters[34].pageNum = 25;
+  chapters[35].pageNum = 27;
+  chapters[36].pageNum = 27;
+  chapters[37].pageNum = 28;
+  chapters[38].pageNum = 39;
+  chapters[39].pageNum = 39;
+  chapters[40].pageNum = 30;
+  chapters[41].pageNum = 31;
+  chapters[42].pageNum = 31;
+  chapters[43].pageNum = 32;
+  chapters[44].pageNum = 32;
+  chapters[45].pageNum = 33;
+  chapters[46].pageNum = 33;
+  chapters[47].pageNum = 34;
+})();
+
+function toZiNum(n, zeroEmpty) {
+  switch(n) {
+  case 0:  return zeroEmpty ? '' : '〇';
+  case 1:  return '一';
+  case 2:  return '二';
+  case 3:  return '三';
+  case 4:  return '四';
+  case 5:  return '五';
+  case 6:  return '六';
+  case 7:  return '七';
+  case 8:  return '八';
+  case 9:  return '九';
+  case 10: return '十';
+  default:
+    var t = Math.floor(n / 10), d = toZiNum(n-t*10, true);
+    switch (t) {
+    case 1:  return '十' + d;
+    case 2:  return '廿' + d;
+    case 3:  return '卅' + d;
+    default: return toZiNum(t) + '十' + d;
+    }
+  }
+}
+
+function forTOC() {
+  document.body.style.writingMode = 'vertical-rl';
+  const HELP = '打印宜用chrome；其他瀏覽器的直排漢字打印恐不佳。\n打印參數：landscape; margin l/r 0.5, t/b 0.31 inches';
+
+  w('<div class="reading printing" title="', HELP, '">',
+    '<h3>佛說大乘無量壽莊嚴清淨平等覺經<br><br>目錄</h3>');
+
+  for (var i=0; i<24; ++i) {
+    var t1 = chapters[i].title;    while (t1.length < 8) t1 += '　';
+    var t2 = chapters[i+24].title; while (t2.length < 8) t2 += '　';
+    var n1 = toZiNum(chapters[i].pageNum);    while (n1.length < 2) n1 += '　';
+    var n2 = toZiNum(chapters[i+24].pageNum); while (n2.length < 2) n2 += '　';
+    w(t1, '　', n1, '　　', t2, '　', n2, '<br>');
+  }
+
+  w('</div>');
+}
+
+function forPrint(ch) { // ch: 1-based
+  const PAGEBREAK = '<div class="pagebreak"></div>';
+  const HELP = '打印宜用chrome；其他瀏覽器的直排漢字打印恐不佳。\n打印參數：landscape; margin l/r 0.5, t/b 0.31 inches';
+
+  document.body.style.writingMode = 'vertical-rl';
+
+  if (!ch)
+    w('<div class="opening"><blockquote>　<br>',
+      '無上甚深微妙法<br>百千萬劫難遭遇<br>我今見聞得受持<br>願解如來真實義',
+      '<br>　<br>　<br>　<br>　</blockquote></div>');
+  w('<div class="reading printing" title="', HELP, '">');
+  if (!ch)
+    w('<p>　　夏蓮居居士 會集</p>',
+      '<h2>佛說大乘無量壽莊嚴清淨平等覺經</h2>',
+      '<p>&nbsp;</p>');
+
+  for (i=0; i<chapters.length; i++) {
+    if (!!ch && (i !== ch-1)) continue; // print only that chapter
+    c = chapters[i];
+
+    w('　　', c.title, '<br>');
+    var ln = c.text;
+    var part = 0;
+    for (var j=0; j<ln.length; ++j) {
+      if (j % LINELEN === 0 && j > 0) w('<br>'); // cut in 20s
+      w(ln[j]);
+    }
+
+    if (i < chapters.length-1) w(c.bp ? PAGEBREAK : '<br>　<br>');
+  }
+  w('</div>');
+
+  if (!ch)
+    w('<div class="opening"><blockquote><br>　<br>　<br>　<br>　',
+      '<br>願以此功德 莊嚴佛淨土',
+      '<br>上報四重恩 下濟三塗苦',
+      '<br>若有見聞者 悉發菩提心',
+      '<br>盡此一報身 同生極樂國',
+      '<br>　<br>　<br>　<br></blockquote></div>');
+}
+
+function forRead(ch) { // ch: 1-based
+  document.body.style.backgroundColor = 'black';
+  document.body.style.color = 'lightyellow';
+  const HELP = '打印宜用chrome；其他瀏覽器的直排漢字打印恐不佳。\n打印參數：landscape; margin l/r 0.5, t/b 0.31 inches';
+
+  var leadsp = '&nbsp;';
+  w('<center><div id="reader" style="width:1000px; overflow:auto; left:9000px" title="', HELP, '">',
+    '<table cellpadding="0" cellspacing="0"><tr><td nowrap class="reading">',
+    '<h3>', leadsp, '佛說大乘無量壽莊嚴清淨平等覺經</h3>');
+
+  for (var i=0; i<chapters.length; i++) {
+    if (!!ch && (i !== (ch-1)*2)) continue; // show only that chapter
+    if (i > 0) w('<br>　<br>');
+    var c = chapters[i];
+
+    w('　　', c.title, '<br>', leadsp);
+    var ln = c.text;
+    for (var j=0; j<ln.length; ++j) {
+      if (j % LINELEN === 0 && j > 0) w(leadsp, '<br>', leadsp); // cut in 20s
+      w(ln[j]);
+    }
+  }
+  w('</td></tr></table>',
+    '</div></center>');
+
+  document.getElementById('reader').scrollLeft = 30000;
+}
+</script>
+
+</head>
+<body>
+<script>
+  var p = get('p');
+  if (p === 'toc')
+    forTOC()
+  else if (!!window.chrome || !!p)
+    forPrint(p);
+  else
+    forRead();
+</script>
+</body></html>

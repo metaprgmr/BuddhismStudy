@@ -1,0 +1,191 @@
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../util/copyright.css">
+<style>
+body  { font-size:14px }
+td    { font-size:14px }
+a     { text-decoration:none }
+a.seg { color:red }
+invis { display:none }
+</style>
+<script>
+const lst = [
+  '1法會聖眾第一      94', '德遵普賢第二     580', '大教緣起第三    369',  '法藏因地第四     460', '至心精進第五      473',
+  '發大誓願第六    1451', '必成正覺第七     282', '積功累德第八    418',  '1圓滿成就第九     190', '1皆願作佛第十      136',
+  '1國界嚴淨第十一   261', '1光明徧照第十二   293', '1壽眾無量第十三   213', '1寶樹徧國第十四   173', '1菩提道場第十五    267',
+  '1堂舍樓觀第十六   136', '1泉池功德第十七   372', '1超世希有第十八   205', '1受用具足第十九   230', '1德風華雨第二十    156',
+  '1寶蓮佛光第二十一 144', '1決證極果第二十二 115', '1十方佛讚第二十三 141', '1三輩往生第二十四 436', '1往生正因第二十五  440',
+  '1禮供聽法第二十六 414', '1歌嘆佛德第二十七 294', '1大士神光第二十八 197', '1願力宏深第二十九 267', '1菩薩修持第三十    288',
+  '1真實功德第三十一 330', '1壽樂無極第三十二 344', '1勸諭策進第三十三 498', '1心得開明第三十四 275', '1濁世惡苦第三十五 1091',
+  '重重誨勉第三十六 270', '如貧得寶第三十七 355', '禮佛現光第三十八 600', '慈氏述見第三十九 232', '邊地疑城第四十    378',
+  '惑盡見佛第四十一 541', '菩薩往生第四十二 330', '非是小乘第四十三 237', '受菩提記第四十四 281', '1獨留此經第四十五  200',
+  '1勤修堅持第四十六 175', '福慧始聞第四十七 232', '聞經獲益第四十八 307',
+];
+const cnts = {};
+
+for (var i in lst) {
+  var txt = lst[i];
+  var idx = txt.indexOf(' '), cnt = parseInt(txt.substring(idx+1).trim());
+  if (idx <= 0) continue;
+  txt = txt.substring(0, idx);
+  cnts[txt] = cnt;
+  lst[i] = txt;
+}
+</script>
+</head>
+<body><center>
+<h2>《佛說大乘無量壽莊嚴清淨平等覺經》夏蓮居居士會集本</h2>
+
+<p>自漢迄宋，同經異譯可考見者，凡十有二，近代流通唯此五本。<br>
+菩薩戒弟子鄆城夏蓮居法名慈濟會集各譯 敬分章次。</p>
+
+<table border="0" cellspacing="0" cellpadding="2px">
+<tr><td>一、</td><td>《無量清淨平等覺經》</td>
+    <td align="right">&nbsp;&nbsp;&nbsp;後漢　支婁迦讖　譯</td></tr>
+<tr><td>二、</td><td title="一名《無量壽經》，一名《阿彌陀經》">《佛說諸佛阿彌陀三耶三佛薩樓佛檀過度人道經》*</td>
+    <td align="right">&nbsp;&nbsp;&nbsp;　吳　支謙　　　譯</td></tr>
+<tr><td>三、</td><td>《無量壽經》</td>
+    <td align="right">&nbsp;&nbsp;&nbsp;曹魏　康僧鎧　　譯</td></tr>
+<tr><td>四、</td><td>《無量壽如來會》</td>
+    <td align="right">&nbsp;&nbsp;&nbsp;　唐　菩提流志　譯</td></tr>
+<tr><td>五、</td><td>《佛說大乘無量壽莊嚴經》</td>
+    <td align="right">&nbsp;&nbsp;&nbsp;趙宋　法賢　　　譯</td></tr>
+</table>
+<br>
+
+<table border="0" cellspacing="0" cellpadding="0px">
+
+<script>
+function w() { for (var i in arguments) document.write(arguments[i]) }
+function el(id, html) { document.getElementById(id).innerHTML = html }
+
+var chNum = 1, i, cumu = 0, cumuGood = 0;
+function td(txt, id) {
+  const url = '../../util/reader.html?s=../淨土宗/《無量壽經》&b=01';
+  if (!txt) { w('<td></td>'); return }
+  var c = cnts[txt];
+  cumu += c;
+  var bgc = '';
+  if (txt.startsWith('1')) {
+    txt = txt.substring(1);
+    //bgc = ' bgcolor="#ddf"';
+    cumuGood += c;
+  }
+  var cumudisp = (cumu == c) ? '' : cumu;
+  var style = 'color:';
+    if (c < 450) style += 'green';
+    else if (c < 1000) style += 'red';
+    else style += 'yellow';
+  style += '; background-color:';
+    if (c < 450) style += '';
+    else if (c < 1000) style += 'yellow';
+    else style += '#d00';
+
+  var suffix = '<sup title="' + cumudisp + '" style="' + style + '">&nbsp;' + c + '字</sup>&nbsp;';
+  w('<td align="left"', bgc, '><a href="' + url + '&c=' + chNum + '#' + (chNum+1) + '">' + txt + '</a>' + suffix + '</td>');
+  ++chNum;
+}
+
+function myClassifyRow() {
+  function pinUrl(id, pad) {
+    var txt = lst[id];
+    if (txt.startsWith('1')) txt = txt.substring(1);
+    if (pad) while (txt.length < 9) txt += '　';
+    ++id;
+    w('<a href="../../util/reader.html?s=../淨土宗/《無量壽經》&b=01&c=', id, '">', txt, '</a>');
+  }
+
+  var ret = '', len = arguments.length, i=0;
+  var x = arguments[0];
+  if (x.startsWith('<tr')) {
+    w(x);
+    x = arguments[++i];
+    if (x.startsWith('!')) x = x.substring(1);
+    ++i;
+  } else {
+    x = arguments[i++];
+    if (x.startsWith('!')) { w('<tr>'); x = x.substring(1); }
+    else w('<tr bgcolor="#eee">');
+  }
+  w('<td>', x, '</td><td>');
+  for (; i<len; ++i) {
+    var a = arguments[i];
+    if (a === '|') {
+      w('<br>');
+    } else {
+      pinUrl(parseInt(a)-1, i<(len-1) && arguments[i+1] !== '|');
+    }
+  }
+  w('</td></tr>');
+}
+
+function fen(name, startIdx, endIdx) {
+  if (!endIdx) endIdx = lst.length-1;
+  for (i=startIdx; i<=endIdx; ) {
+    if (i > startIdx) name = '&nbsp;';
+    w('<tr><td align="right"><b>' + name + '</b>&nbsp;</td>');
+    for (var j=0; j<5 && i<=endIdx; ++j)
+      td(lst[i++], i);
+    w('</tr>');
+  }
+}
+
+const divider = '&nbsp;/&nbsp;';
+const divider1 = '||&nbsp;&nbsp;';
+const divider2 = '&nbsp;&nbsp;||&nbsp;&nbsp;';
+w('<tr><td colspan=6" align="center"><hr>', divider1,
+  '<b>經文</b><sup style="color:red">共<span id="zicnt"></span>字</sup>：',
+  '<a href="../../util/viewer.html?s=../淨土宗/《無量壽經》&b=01">單頁版</a>', divider,
+  '<a href="../../util/reader.html?s=../淨土宗/《無量壽經》&b=01">學習版</a>', divider,
+  '<a href="cards.html">卡片版</a>', divider,
+  '<a href="sutra_as_mantra.html">咒誦版</a>（<a href="sutra_as_mantra.html?p=toc">目錄</a>）', divider1,
+  '<a href="48.html" title="法藏菩薩四十八大誓願（取自《發大誓願第六》品）"><b>四十八願</b></a>', divider2,
+  '<a href="Jie.html">黃念祖<b>《大經解》</b><invis>HTML版</invis></a>',
+  '<invis>、<a href="T025E_01.pdf" target="pdf" title="黃念祖《佛說大乘無量壽莊嚴清淨平等覺經解》">PDF版</a></invis>',
+  divider1, '<hr></td></tr>');
+
+fen('序分',   0, 2);
+fen('正宗分', 3, 41);
+fen('流通分', 42);
+el('zicnt', cumu);
+//console.log('good count/all:', cumuGood, '/', cumu);
+w('<tr><td colspan=6" align="center"><hr></td></tr>');
+</script>
+</div>
+
+</table>
+
+<table border="1" cellpadding="3px" cellspacing="0px"><caption>我對全經諸品之歸類</caption>
+<script>
+    myClassifyRow('<tr bgcolor="#eee"><td rowspan="2" bgcolor="lightgray" align="center">序分</td>',
+                  '一、法會聖眾', 1, 2);
+    myClassifyRow('二、大教緣起', 3);
+
+    myClassifyRow('<tr><td rowspan="5" align="center" bgcolor="#eee">正宗分一<br><br>極樂世界<br>功德莊嚴</td>',
+                  '!一、彌陀成就', 4, 5, 6, '|',
+                                   7, 8, 9, 10);
+    myClassifyRow('!二、國土莊嚴', 11, 12, 13, '|',
+                                   14, 15, 16, 17, '|',
+                                   18, 19, 20, 21, 22);
+    myClassifyRow('!三、菩薩功德', 27, 28, 29, '|',
+                                   30, 31, 32);
+    myClassifyRow('!四、彌陀示現', 38);
+    myClassifyRow('!五、邊地疑城', 39, 40, 41);
+
+    myClassifyRow('<tr><td rowspan="3" bgcolor="#eee" align="center">正宗分二<br><br>往生極樂</td>',
+                  '!一、往生極樂', 24, 25);
+    myClassifyRow('!二、勸諭策進', 33, 34, 35, 36, 37);
+    myClassifyRow('!三、他方往讚', 23, 26, 42);
+
+    myClassifyRow('<tr bgcolor="#eee"><td rowspan="3" bgcolor="lightgray" align="center">流通分</td>',
+                  '一、大乘修行', 43, 44, 46, 47);
+    myClassifyRow('二、獨留此經', 45);
+    myClassifyRow('三、圓滿畢會', 48);
+</script>
+</table>
+
+<br>
+<hr width="800">
+<span class="copyright"></span>
+</center></body></html>

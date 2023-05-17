@@ -1,0 +1,24 @@
+body { writing-mode:vertical-rl }
+.content {
+   font-size:25px; font-family:KaiTi, 楷体, STKaiti, 华文楷体; line-height:180%; writing-mode:vertical-rl;
+ }
+.readercontent {
+   font-size:25px; font-family:KaiTi, 楷体, STKaiti, 华文楷体; line-height:180%; writing-mode:vertical-rl;
+   background-color:#f3ebe3;
+   position:absolute;
+   width:100%; height:200;
+ }
+.atpunc   { text-decoration:none; text-decoration-color:lightgray; }
+.verseNum { color:red; font-size:11px; margin-bottom:0px; margin-left:0px; text-orientation:upright; }
+.inlineChapter { text-decoration:none; color:#bbb }
+rt { color:red; font-size:20px; margin-bottom:-30px; margin-left:-15px; }
+em { font-style:normal; color:red; background-color:lightyellow; }
+em.utter { font-style:normal; color:yellow; background-color:red; }
+u  { text-decoration-color:#f99; color:#00b }
+
+titledesc { font-size:20px;  font-family:FangSongTi, 仿宋体, STFangSongti, 华文仿宋体 }
+booktitle { font-size:32px; font-family:KaiTi, 楷体, STKaiti, 华文楷体; }
+chaptertitle { font-size:28px; font-family:KaiTi, 楷体, STKaiti, 华文楷体; color:#8b0000; _color:#5C4033 }
+anno   { color:#909 }
+pinyin { color:#900 }
+punc1  { color:#e00 }

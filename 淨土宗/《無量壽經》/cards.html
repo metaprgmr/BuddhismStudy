@@ -1,0 +1,322 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+function w() { for(var i in arguments) { var a = arguments[i]; a && document.write(a) } }
+function get(name) {
+ if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+   return decodeURIComponent(name[1]);
+}
+function vert(t, padLen) {
+  var i, curLen = 0;
+  if (t && t.length > 0) {
+    curLen = t.length;
+    var ret = '';
+    for (i=0; i<t.length; ++i) {
+      var x = t[i];
+      if (x === ' ') x = '<font style="font-size:10px">&nbsp;</font>';
+      if (i>0) ret += '<br>';
+      ret += x;
+    }
+  }
+  if (padLen > 0)
+    for (i=curLen; i<padLen; ++i)
+      ret += '<br>　';
+  return ret;
+}
+
+const PRINT_HINT = '通常每頁容量2x5張卡。\n調整Scale以適之，例如Landscape，94%。\n抑或?w=10，Portrait，55%';
+const DEFAULT_COLS = 5;
+const COVER_TEXT_COLOR = '#FFD700';
+const CARDS = [];
+
+class ChapterCards {
+  constructor(titleLine, chNum) {
+    this.chNum = chNum;
+    this.cards = [ [] ];
+    const tl = titleLine;
+    this.chTitle = tl.substring(tl.indexOf(')')+1).trim();
+    this.chNumZh = tl.substring(tl.indexOf('第')+1);
+    this.PI      = tl.substring(tl.indexOf('[')+1, tl.indexOf(']'));
+
+    switch(this.PI) {
+      case 'a': // for TOC display
+        this.PIbgcolor = 'yellow';
+        break;
+      case 'x': // for TOC display, working
+        this.PIbgcolor = '#fdd';
+        break;
+    }
+  }
+
+  numCards() { return this.cards.length }
+  lastCard() { return this.cards[this.cards.length-1] }
+
+  renderCard(num) { // num: 0-based; first one carries the title
+    var lines = [ '', '', '', '', '', '', '', '' ]; // [0] is the lead/title line
+    var hasTitle = num === 0;
+    lines[7] = hasTitle ? this.chTitle : '　';
+    var i, cardlns = this.cards[num];
+    if (!cardlns) return '';
+
+    if (cardlns.length === 8) { // use the lead line as regular (to accomodate long content)
+      for (i=0; i<8; ++i)
+        lines[7-i] = cardlns[i] || '　';
+    } else {
+      for (i=0; i<7; ++i)
+        lines[6-i] = cardlns[i] || '　';
+    }
+
+    return '<a name="_' + this.chNum + '"></a>' +
+           '<table bgcolor="#f8f8e3" cellspacing="0" class="content shadow"><tr>' +
+             '<td class="tdA tdL">' + vert(lines[0], 16) + '</td>' +
+             '<td class="tdA">'     + vert(lines[1]) + '</td>' +
+             '<td class="tdA">'     + vert(lines[2]) + '</td>' +
+             '<td class="tdA">'     + vert(lines[3]) + '</td>' +
+             '<td class="tdA">'     + vert(lines[4]) + '</td>' +
+             '<td class="tdA">'     + vert(lines[5]) + '</td>' +
+             '<td class="tdA">'     + vert(lines[6]) + '</td>' +
+             this.renderLeadLine(lines[7], hasTitle && (cardlns.length < 8), num+1) +
+           '</tr></table>';
+  }
+
+  renderLeadLine(txt, isTitle, num0) {
+    if (!num0) num0 = '';
+    if (isTitle)
+      txt = vert('　' + txt);
+    else {
+      var znum = this.chNumZh;
+      for (var i=13-txt.length-znum.length; i>=0; --i)
+        txt += '　';
+      txt = vert(txt) + '<br><font style="opacity:0.3">' + vert(znum + '　');
+    }
+    if (!isTitle)
+      return '<td class="tdA tdX">' + txt + '<br><font size="-1">' + num0 + '</font></font></td>';
+    var style = '';
+    if (this.PIbgcolor) style = ' style="background-color:' + this.PIbgcolor + '"';
+    return '<td class="tdA tdR"' + style + '>' + txt + '</td>';
+  }
+
+  displayAllAsTRs(cols) {
+    var fulltrs = Math.floor(this.cards.length / cols);
+    if ((this.cards.length - fulltrs * cols) > 0) ++fulltrs;
+    for (var i=0; i<fulltrs; ++i) {
+      w('<tr>');
+      for (var j=0; j<cols; ++j)
+        w('<td valign="top">', this.renderCard(i * cols + cols - j - 1), '</td>');
+      w('</tr>');
+    }
+  }
+
+  displayTopRow(cols) {
+    // display the cover to the right, and this card (first chapter) to the left
+    // if enough space, display a TOC in the middle, next to the cover
+    w('<tr><td valign="top">', this.renderCard(0), '</td>');
+    this.displayTOCCard(cols, '四十八品卡片目錄');
+    this.displayCover();
+    w('</tr>');
+  }
+
+  getTOCLink(chnum) {
+    var c = DOC.chapterCards[chnum-1];
+    var t = c.chTitle;
+    var i = t.indexOf('第');
+    var style = '';
+    if (c.PIbgcolor) style = ' style="background-color:' + c.PIbgcolor + '"';
+    c = t.substring(i);
+    t = '<a href="#_' + chnum + '"' + style + '>' + vert(t.substring(0,i)) +
+        '<br><font size="-1">' + vert(c) + '</a>';
+    for (i=4-c.length; i>0; --i) t += '<br>　';
+    return t + '</font>';
+  }
+
+  displayTOCCard(cols, TOCTitle) {
+    w('<td valign="top" align="right", colspan="', cols-2, '">');
+    if (cols < 5) {
+      w('&nbsp;');
+    } else {
+      var i;
+      w('<table bgcolor="white" cellspacing="0" class="content shadow">',
+        '<tr><td class="tdA tdL" width="12px">&nbsp;</td>');
+      for (i=0; i<24; i++) {
+        //w('<td class="tdA">　<br>',
+        var cards1 = DOC.chapterCards[23-i].cards;
+        var cards2 = DOC.chapterCards[47-i].cards;
+        w('<td class="tdA">',
+          this.getTOCLink(24-i), '<br><font style="opacity:0.4" size="-1">', cards1.length, '</font><br>　<br>',
+          this.getTOCLink(48-i), '<br><font style="opacity:0.4" size="-1">', cards2.length, '</font></td>');
+      }
+      w('<td class="tdA">　</td>',
+        '<td class="tdA tdR" style="color:black">',
+          vert('四十八品卡片目錄　　　　'),
+          '<font style="writing-mode:vertical-rl; font-size:16px">',
+          '【<a href="?print=1" title="', PRINT_HINT, '">打印版</a>】</font>',
+        '</td></tr></table>');
+    }
+    w('</td>');
+  }
+
+  // this is global, not for any particular card
+  displayCover() {
+    w(`<td valign="top">
+        <table border=0 bordercolor=red bgcolor="black" cellspacing="0" class="content shadow">
+        <tr>
+        <td style="border-left:1px solid black">　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td style="border-left:1px solid black; border-right:1px solid black; padding-right:6px">　</td>
+        </tr>
+        <tr style="color:${COVER_TEXT_COLOR}"><td>　</td>
+          <td colspan="6" rowspan="13" align="center" style="font-size:30px">經莊佛<br>　嚴說<br>　清大<br>　淨乘<br>　平無<br>　等量<br>　覺壽</td>
+          <td rowspan="13" align="center" style="padding-right:6px">夏<br>蓮<br>居<br>居<br>士<br><br>會<br>集</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr><td>　</td></tr>
+        <tr>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        <td>　</td>
+        </table>
+       </td>`);
+  }
+
+} // end of class ChapterCard.
+
+class ChapterDoc {
+  constructor(title, txt) {
+    this.title = title;
+    this._parseCards(txt);
+  }
+
+  setShortTitle(st) { this.title_s = st; return this }
+
+  _parseCards(txt) {
+    this.chapterCards = [];
+    const a = txt.split('\n');
+    var ch, card;
+    for (var i in a) {
+      var ln = a[i];
+      if (ln.trim().length === 0) continue;
+      if (ln.length === 1) ln = '';
+      if (ln === '<>')
+        ch.cards.push( card = [] );
+      else if (ln.startsWith('>>>'))
+        this.chapterCards.push( ch = new ChapterCards(ln, this.chapterCards.length+1) );
+      else
+        ch.lastCard().push(ln);
+    }
+  }
+
+  printStats() {
+    var cntCards = 0, cntPIa = 0, cntTODO = 0;
+    for (var i in this.chapterCards) {
+      var cc = this.chapterCards[i];
+      cntCards += cc.cards.length;
+      switch (cc.PI) {
+      case 'a': cntPIa  += cc.cards.length; break;
+      case 'x': cntTODO += cc.cards.length; break;
+      }
+    }
+    function to3(n) {
+      if (n < 10) return '  ' + n;
+      if (n < 100) return ' ' + n;
+      return n;
+    }
+    console.log(' Has-Copied:', to3(cntPIa), 'cards');
+    console.log('Yet-To-Copy:', to3(cntCards - cntPIa), 'cards');
+    console.log('      Total:', to3(cntCards), 'cards.');
+    console.log(' Working-On:', to3(cntTODO), 'cards.');
+  }
+
+  displayPrintingVersion(cols) {
+    const all = []; // each is [ chapCards, i ]
+    for (var i in this.chapterCards) {
+      var cc = this.chapterCards[i], n = cc.numCards();
+      for (var j=0; j<n; ++j) all.push([cc,j]);
+    }
+
+    var fulltrs = Math.floor(all.length / cols);
+    if ((all.length - fulltrs * cols) > 0) ++fulltrs;
+    for (var i=0; i<fulltrs; ++i) {
+      w('<tr>');
+      for (var j=0; j<cols; ++j) {
+        var x = all[i*cols + cols-j-1];
+        if (x)
+          w('<td valign="top">', x[0].renderCard(x[1]), '</td>');
+        else
+          w('<td></td>');
+      }
+      w('</tr>');
+    }
+  }
+
+} // end of class ChapterDoc.
+
+</script>
+
+<script src="01-cards.js"></script>
+
+<style>
+@media screen {
+  .shadow { box-shadow: -10px 10px 4px #d4ac0d }
+}
+@media print {
+  .shadow { }
+  table { page-break-inside:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto }
+}
+
+a { text-decoration:none }
+.tdA { text-align:center; vertical-align:top; border-top:1px solid blue; border-bottom:1px solid blue; padding-top:3px; padding-bottom:5px }
+.tdL { border-left:1px solid blue; padding-left:3px }
+.tdR { border-right:1px solid blue; border-left:1px solid #fbb; padding-left:3px; padding-right:3px; color:red }
+.tdX { text-align:center; border-right:1px solid blue; border-left:1px solid #fbb; padding-right:6px }
+.content { font-family:KaiTi, 楷体, STKaiti, 华文楷体; font-size:20px }
+</style>
+</head>
+
+<body bgcolor="#f9e79f"><center>
+
+<script>
+const isPrinting = get('print');
+document.title = DOC.title_s;
+
+// the hack is only because of the presence of the TOC cards (in FF, at least)
+w('<table cellpadding="8px" border=0 bordercolor=pink width="1%"',
+  isPrinting ? (' title="' + PRINT_HINT + '"') : '', '>');
+
+var COLS = Math.max(3, parseInt(get('w') || (isPrinting ? '5' : '6')));
+           // For viewing, best default would be 7, for more chapters,
+           // but that would probably be too wide
+           // hence 6, which is not too bad.
+if (isPrinting) {
+  DOC.displayPrintingVersion(COLS);
+} else { // viewing
+  for (var i in DOC.chapterCards) {
+    if (i <= 0) DOC.chapterCards[0].displayTopRow(COLS);
+    else        DOC.chapterCards[i].displayAllAsTRs(COLS);
+  }
+}
+
+w('</table>');
+</script>
+
+</center></body></html>
