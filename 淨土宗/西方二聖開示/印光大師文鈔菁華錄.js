@@ -44,7 +44,14 @@ class Entry {
   analyze() {
     if (this.text1) return;
     this.ziCnt = 0;
-    var t, a = this.text.split('{');
+    var t, a = this.text;
+    if (a.startsWith('{')) { // get rid of/handle the leading anno.
+      var idx = a.indexOf('}');
+      if (idx === 6 && a.startsWith('{以下論'))
+        this.以下論 = a.substring(1, 6);
+      a = a.substring(idx+1);
+    }
+    a = a.split('{');
     if (a.length > 1) {
       t = a[a.length-1];
       if (t.endsWith('}')) {
@@ -59,7 +66,8 @@ class Entry {
     var text12 = '', len12 = TEXT1_LEN + TEXT2_LEN;
     for (var i=0; i<a.length; i++) {
       t = a[i];
-      if (t.endsWith('}')) continue;
+      var idx = t.indexOf('}');
+      if (idx > 0) t = t.substring(idx+1);
       this.ziCnt += ziCount(t);
       if (text12.length < len12) text12 += t;
     }
@@ -76,7 +84,8 @@ class Entry {
 
   getSynopsis() {
     this.analyze();
-    var ret = '<span class="synopsis">' + this.text1;
+    var ret = this.以下論 ? ('<anno>' + this.以下論 + '</anno><br>') : '';
+    ret += '<span class="synopsis">' + this.text1;
     if (this.text2)
       ret += '&nbsp;<a href="javascript:displayEntry(\'' + this.id + '\')" title="' +
              this.text2 + ((e.text2.length >= TEXT2_LEN) ? '……' : '') + '">……</a>';

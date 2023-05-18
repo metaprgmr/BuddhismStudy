@@ -35,9 +35,10 @@ function displayEntry(id) {
 
   e = TheBook.entryById(id);
   el = document.getElementById('_' + e.id);
-  console.log(el);
   if (el) {
     el.innerHTML = e.getFullText();
+    el.innerHTML = '<div style="border:1px solid blue; padding:5px" onclick="displayEntry()">' +
+                   e.getFullText() + '</div>';
     TheBook.curFullTextId = e.id;
   }
 }
@@ -105,16 +106,16 @@ if (is333) {
   for (var i in TheBook.content) {
     var p = TheBook.content[i];
     if (p.sectionId) { // section
-      w('<tr><td colspan="4"><br><a name="', p.sectionId, '"></a><h3>', p.getTitleDisplay(),
-        '&nbsp;<anno>', p.titleAnno || '', '</anno>', '</h3></td></tr>');
+      w('<tr><td colspan="2"><br><a name="', p.sectionId, '"></a><h3>', p.getTitleDisplay(),
+        '&nbsp;<anno>', p.titleAnno || '', '</anno>', '</h3></td><td colspan="2"></td></tr>');
       var entries = p.entries;
       for (var k in entries) {
         var e = entries[k];
         if (e.text && e.id)
-          w('<tr><td class="anno" align="right" valign="top"><a name="_', e.id, '">', e.id, '</a>.</td>',
+          w('<tr><td class="anno" align="right" valign="bottom"><a name="_', e.id, '">', e.id, '</a>.</td>',
             '<td id="_', e.id, '">', e.getSynopsis(), '</td>',
-            '<td nowrap class="anno" valign="top" align="right">', e.ziCnt, '字</td>',
-            '<td nowrap valign="top"><anno>', e.src || '', '</anno></td></tr>');
+            '<td nowrap class="anno" valign="bottom" align="right">', e.ziCnt, '字</td>',
+            '<td nowrap valign="bottom"><anno>', e.src || '', '</anno></td></tr>');
         else
           w('<tr><td colspan="4" class="sectionTitle"><a name="', e.subsecId, '"></a>', e.title, '</td></tr>');
       }
