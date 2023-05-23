@@ -114,10 +114,10 @@ const sanskrit_roman =
 
 
 [       ]     ----------------------------（第三會）-------------------(Part III)
-[    157]  1        {rāja}-bhayā    {cora}-bhayā        {agni}-bhayā      <span title="《房山石刻》版此在 agni-bhayā 之前">{udaka}-bhayā</span>
+[    157]  1        {rāja}-bhayā    {cora}-bhayā        {agni}-bhayā     <fangshan title="《房山石刻》版此在 agni-bhayā 之前"> {udaka}-bhayā </fangshan>
 [ ?? 158]   b       {viṣa}-bhayā  {śastra}-bhayā  {para-cakra}-bhayā {dur-bhikṣa}-bhayā
 [ ?? 160]   c      {aśani}-b~  {akālaṃ-mṛtyu}-b~ {dharaṇī-bhūmikampa}-b~ {ulkā-pāta}-b~
-[ ?? 161]   d {rāja-daṇḍa}-bhayā    {nāga}-bhayā      {vidyut}-bhayā    <span title="《房山石刻》版此在 nāga-bhayā 之前">{suparṇa}-bhayā</span>
+[ ?? 161]   d {rāja-daṇḍa}-bhayā    {nāga}-bhayā      {vidyut}-bhayā   <fangshan title="《房山石刻》版此在 nāga-bhayā 之前"> {suparṇa}-bhayā </fangshan>
 
 [ ?? 165]  2     {  deva}-graha  {       nāga}-graha  { yakṣa}-graha  {  rakṣasa}-graha
 [ ?? 166]   b    { preta}-graha  {     piśāca}-graha  { bhūta}-graha  {kumbhaṇḍa}-graha
@@ -126,8 +126,8 @@ const sanskrit_roman =
 [ ?? 171]   e                {kaṇṭha-kamini}-graha
 
 [ ?? 173]  3    {   ojā}-hāriṇyā   {garbhā}-hāriṇyā  {rudhirā}-hāriṇyā  { vasā}-hāriṇyā
-[ ?? 173]   b   { maṃsā}-hāriṇyā   {  medā}-hāriṇyā  {  majjā}-hāriṇyā  { jāta}-hāriṇyā
-[ ?? 173]   c   {jīvitā}-hāriṇyā   { vantā}-hāriṇyā  { aśucyā}-hāriṇyā  {ciccā}-hāriṇyā
+[ ?? 173]   b   { maṃsā}-hāriṇyā   {  medā}-hāriṇyā  {  majjā}-hāriṇyā  <fangshan title="《房山石刻》版此在 rudhirā-hāriṇyā 之前">{ jāta}-hāriṇyā </fangshan>
+[ ?? 173]   c  <fangshan title="《房山石刻》版此在 rudhirā-hāriṇyā 之前"> {jīvitā}-hāriṇyā </fangshan>  { vantā}-hāriṇyā  { aśucyā}-hāriṇyā  {ciccā}-hāriṇyā
 
 [    179]  4         teṣāṃ sarveṣāṃ sarva grahāṇāṃ vidyāṃ cchindayāmi kīlayāmi.
 [    181]  5 {                   pari-brajāka} kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
@@ -251,7 +251,7 @@ const zhongwen =
 
 
 
-=            一切如來頂髻白傘蓋無有能及甚能調伏大總持  註解  【<a href="?l=t">考古</a>】【<a href="?l=s">關閉右側</a>】
+=            一切如來頂髻白傘蓋無有能及甚能調伏大總持  註解  【<a href="?l=t">考古</a>】【<a href="?l=s">關閉右側</a>】<a name="_top"></a>
 
  　　妙湛總持不動尊 首楞嚴王世稀有　　南無常住十方佛　　爾時世尊 從肉髻中 湧百寶光
  　　銷我億劫顛倒想 不歷僧祇獲法身　　南無常住十方法　　光中湧出 千葉寶蓮 有化如來
@@ -263,12 +263,12 @@ const zhongwen =
  　　令我早登無上覺 於十方界坐道場　　　　　　　　　　　　　　　 宣說神咒
  　　舜若多性可銷亡 爍迦羅心無動轉
 
-    ----------------------------（第一會）-----------------------------
+    ----------------------------（第一會）-----------------------------<a name="part1"></a>
     禮敬 如來 善逝 應 正等正覺！
-
- 1  敬禮　一切　佛、菩薩　眾。
- 2  敬禮　七俱胝正等覺　及　聲聞僧伽眾。
- 3  敬禮　世間 阿羅漢眾。
+    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part2">第二會</a>】
+ 1  敬禮　一切　佛、菩薩　眾。　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part3">第三會</a>】
+ 2  敬禮　七俱胝正等覺　及　聲聞僧伽眾。　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part4">第四會</a>】
+ 3  敬禮　世間　阿羅漢眾。　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part5">第五會</a>】
  4  敬禮　須陀洹。　　　　　　　　　　　　　　<anno>（預流眾）</anno>
  5  敬禮　斯陀含。　　　　　　　　　　　　　　<anno>（一來眾）</anno>
  6  敬禮　阿那含。　　　　　　　　　　　　　　<anno>（不還眾）</anno>
@@ -329,9 +329,9 @@ const zhongwen =
 47  　　所有　金剛金光照耀母　金剛口母　及
     　　白色　蓮花眼　月光母。
 48  如是　印母眾　及　諸有情　願悉皆守護於我等。
+    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#_top">返回頁頂</a>】
 
-
-    ----------------------------（第二會）-----------------------------
+    ----------------------------（第二會）-----------------------------<a name="part2"></a>
  1  　　　　　ॐ　仙眾　讚歎　一切如來頂髻。 hūṃ trūṃ.
  2  　　　　　　　　　　　　　令　破碎　啊！ hūṃ trūṃ.
  3  　　　　　　　　　　　　　令　降伏　啊！ hūṃ trūṃ.
@@ -351,9 +351,9 @@ const zhongwen =
 14　　　　　　　　　　不毀光輝　無邊岸　大金剛殊妙
 　　　　　　　　　　　　　　　三界壇場
 15　　　　　　　　　　　　ॐ　請福祐於我及我之。
+    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#_top">返回頁頂</a>】
 
-
-    ----------------------------（第三會）-----------------------------
+    ----------------------------（第三會）-----------------------------<a name="part3"></a>
  1  　　　　　諸王難　　　　　　　諸賊難　　　　　　諸火難　　　　　　　諸水難
   b 　　　　　諸毒難　　　　　　諸刀兵難　　　　　諸怨敵難　　　　　　諸飢饉難
   c 　　　　諸雷電難　　　　諸夭折橫死難　　　　　諸地震難　　　　諸流星崩落難
@@ -388,9 +388,9 @@ const zhongwen =
 17  　　　　　　　　　　　　　　　　外道離欲　所造　咒術　我今悉使斷除、釘住！
 18  　　　　　　　　　　外道執金剛神　秘密主　所造　咒術　我今悉使斷除、釘住！
 19  　　　　　　　　　　　　　　　　　　　　　　　　　　　願　守護　守護　我！
+    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#_top">返回頁頂</a>】
 
-
-    ----------------------------（第四會）-----------------------------
+    ----------------------------（第四會）-----------------------------<a name="part4"></a>
  1  　　　　　　　　　世尊　一切如來　頂髻　白傘蓋
  2  　　　敬禮稱讚　火　甘露火　日光　放光　普照　開展　白傘蓋
 
@@ -429,13 +429,13 @@ const zhongwen =
 33　　　　一切　諸苦行眾　啪！　　　　  　　　　　鬼母眾　啪！
 34　　　一切　諸外道師眾　啪！
 35　　　　一切　諸醉鬼眾　啪！　　　|56　願眾生　守護　於我！
+    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#_top">返回頁頂</a>】
 
-
-    ----------------------------（第五會）-----------------------------
+    ----------------------------（第五會）-----------------------------<a name="part5"></a>
  1  有惡心、不善心、兇暴心、瞋恨 無慈心，
  2  令（惡心）顯現之、 使釘住之、 忠告（惡心者）、今誦（咒）之。
 
- 3  　　　　　食精氣鬼眾　　　　　食胎鬼眾　　　　食血鬼眾　　　　　　食腦鬼眾
+ 3  　　　　　食精氣鬼眾　　　　　食胎鬼眾　　　　食血鬼眾　　　　　　食膏鬼眾
   b 　　　　　　食髓鬼眾　　　　　食生鬼眾　　　　食命鬼眾　　　　　　食鬘鬼眾
   c 　　　　　　食香鬼眾　　　　　食花鬼眾　　　　食果鬼眾　　　　　食苗稼鬼眾
 
@@ -479,7 +479,8 @@ const zhongwen =
 23  　　　　　　   hūṃ　trūṃ　phaṭ　svāhā
 
     禮敬 如來 善逝 應 正等正覺。
-    ॐ  令成就 秘密真言 微妙章句 福智圓滿。`;
+    ॐ  令成就 秘密真言 微妙章句 福智圓滿。　　　　　　　　　　　　　【<a style="color:blue" href="#_top">返回頁頂</a>】
+`;
 
 const translit =
 `=                               大輪金剛陀羅尼
@@ -609,8 +610,8 @@ const translit =
   b 忙娑、訶唎南　　　　　謎陀、訶唎南　　　　摩闍、訶唎南　　　　　闍多、訶唎女
   c 視比多、訶唎南　　　　<anno>毗多、訶唎南<span class="flipH">「</span></anno>　　阿輸遮、訶唎女　　　　　質多、訶唎女
     　　　　　　　　　　<anno><span class="flipH">」</span>婆多、訶唎南</anno>
- 4  　　　　　　　　　帝釤、薩鞞釤　薩婆、揭囉訶南毗陀、夜闍　瞋陀夜彌　雞囉夜彌
- 5  　　　　　　　　　　波唎、跋囉、者迦　訖唎擔　毗陀、夜闍　瞋陀夜彌　雞囉夜彌
+ 4  　　　　　　　　　帝釤、薩鞞釤　薩婆、揭囉訶南　毗陀夜闍　瞋陀夜彌　雞囉夜彌
+ 5  　　　　　　　　　　　波唎、跋囉、者迦　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
  6  　　　　　　　　　　　　　　　　茶演尼　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
  7  　　　　　　　摩訶般輸、般怛夜　嚧陀囉　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
  8  　　　　　　　　　　　　　　　那囉夜拏　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
@@ -619,7 +620,7 @@ const translit =
 11  　　　　　　　　　　　　　　　　迦波唎迦訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
 12  闍耶羯囉　摩度、羯囉　薩婆、囉他、娑達那
     　　　　　　　　　　　　　　　　　　　　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-13  　　　　　　　　　　　　　赭咄囉　婆耆你　訖唎擔　毗陀夜闍瞋陀夜彌　雞囉夜彌
+13  　　　　　　　　　　　　赭咄囉　婆耆你　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
 
 14  毗唎羊、訖唎知　難陀、雞沙囉　伽拏、般帝　索醯夜
     　　　　　　　　　　　　　　　　　　　　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
