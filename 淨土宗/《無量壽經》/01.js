@@ -23,6 +23,7 @@ const wishes = [
   '獲陀羅尼願', '聞名得忍願', '現證不退願' ];
 
 const this_book = new MyBookInfo('佛說大乘無量壽莊嚴清淨平等覺經', '夏蓮居居士會集')
+.setReaderReady(true)
 .setTOC({ itemsPerLine:4, itemLen:8 })
 .set('paraPrefix', '')
 .addContent(

@@ -1,6 +1,9 @@
-var DEBUG = 'border:0px solid red;';
+var DEBUG = ''; // 'border:1px solid red;';
 const HILITE_COLOR = '#ff8';
 const KAI_TI = "'KaiTi', '楷体', STKaiti, '华文楷体'";
+const READER_HELP =
+  '為了用Reader，將每一行都限定在一定字數，然後設置ReaderReady標識。\n' +
+  '字數與readerHeight相關，以字高約27點估算。';
 
 const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999
@@ -379,6 +382,7 @@ class MyBookInfo {
     this.content = [];
     this.chapterNum = 0;
     this.paraPrefix = '　　';
+    this.isReaderReady = false;
 
     // for reader rendition
     this.readerHeight = 700;  // settable by individual books
@@ -398,6 +402,8 @@ class MyBookInfo {
     };
     this.chapters = [];
   }
+
+  setReaderReady(yes) { this.isReaderReady = yes; return this }
 
   setTOC(attrs) {
     // TODO
@@ -577,6 +583,10 @@ class MyBookInfo {
   }
 
   renderReader(dir) {
+    if (!this.isReaderReady) {
+      alert('本書不能用Reader閱讀。\n' + READER_HELP);
+      return;
+    }
     if (!this.readingStarted) {
       curBook = this;
       document.addEventListener("keydown", (e) => curBook.nav(e), false);
