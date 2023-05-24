@@ -114,7 +114,8 @@ function sCol(s, has, hasZ) {
     s = s.replaceAll('{', '<medlite>')
          .replaceAll('}', '</medlite>')
          .replaceAll('-b~', '<span title="-bhayā">-b~</span>')
-         .replaceAll('a-y', 'a-<sub>y</sub>');
+         .replaceAll('loka-y', 'loka-<sub>y</sub>')
+         .replaceAll('bhagavata-y', 'bhagavata-<sub>y</sub>');
     return left + '<td class="' + clz + '" nowrap><pre>' + spref + s + '</pre></td>';
   }
   return '';

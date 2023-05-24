@@ -145,7 +145,7 @@ const sanskrit_roman =
 [       ]                                    kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
 [    205] 15 {                  nagna-śramaṇa} kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
 [    207] 16 {                        arhanta} kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
-[    209] 17 {                      vīta-rāga} kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
+[    209] 17 {                       vītarāga} kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
 [    211] 18 {     vajra-pāṇi guhyakā-dhipati} kṛtāṃ vidyāṃ cchindayāmi kīlayāmi.
 [    214] 19                                                   rakṣa rakṣa māṃ.
 
@@ -157,7 +157,7 @@ const sanskrit_roman =
 [    222]  3                              jvala jvala
 [    223]  4                     dhaka dhaka vi-dhaka vi-dhaka
 [       ]  5                       dara dara vi-dara vi-dara
-[       ]  6                     bhinda bhinda cchinda cchinda
+[       ]  6                     bhinda bhinda<fangshan title="《房山石刻》版此在 bhinda 之前"> cchinda cchinda </fangshan>
 [    224]  7                              hūṃ hūṃ phaṭ
 [    226]                         phaṭ ~ ~ ~ phaṭ ~ ~ ~ svāhā
 
@@ -264,12 +264,12 @@ const zhongwen =
  　　舜若多性可銷亡 爍迦羅心無動轉
 
     ----------------------------（第一會）-----------------------------<a name="part1"></a>
-    禮敬 如來 善逝 應 正等正覺！
-    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part2">第二會</a>】
- 1  敬禮　一切　佛、菩薩　眾。　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part3">第三會</a>】
- 2  敬禮　七俱胝正等覺　及　聲聞僧伽眾。　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part4">第四會</a>】
- 3  敬禮　世間　阿羅漢眾。　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part5">第五會</a>】
- 4  敬禮　須陀洹。　　　　　　　　　　　　　　<anno>（預流眾）</anno>
+    禮敬　如來　善逝　應　正等正覺！　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="index.html">總介紹</a>】
+    　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+ 1  敬禮　一切　佛、菩薩　眾。　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part2">第二會</a>】
+ 2  敬禮　七俱胝正等覺　及　聲聞僧伽眾。　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part3">第三會</a>】
+ 3  敬禮　世間　阿羅漢眾。　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#part4">第四會</a>】
+ 4  敬禮　須陀洹。　　　　　　　　　　　　　　<anno>（預流眾）</anno>　　　　　　　　【<a style="color:blue" href="#part5">第五會</a>】
  5  敬禮　斯陀含。　　　　　　　　　　　　　　<anno>（一來眾）</anno>
  6  敬禮　阿那含。　　　　　　　　　　　　　　<anno>（不還眾）</anno>
  7  敬禮　世間　正至、正行　眾。
@@ -402,7 +402,7 @@ const zhongwen =
                 phaṭ ~ ~ ~ phaṭ ~ ~ ~ svāhā
 
  8　　　　　　　　嘿、嘿　啪！　　　|36　一切
- 9　　　　　　　　　不空　啪！　　　　  　　　　諸咒師眾　啪！　
+ 9　　　　　　　　　不空　啪！　　　　  　　　　諸咒王眾　啪！　
 10　　　　　　　　　無礙　啪！　　　|37　作勝　作蜜
 11　　　　　　　　　與願　啪！　　　　  　成辦諸事業者眾　啪！
 12　　　　　阿修羅　切裂　啪！　　　|38　一切　諸咒師眾　啪！
@@ -428,7 +428,7 @@ const zhongwen =
 32　一切　諸阿波悉魔羅眾　啪！　　　|55　　樂於墓塚居住
 33　　　　一切　諸苦行眾　啪！　　　　  　　　　　鬼母眾　啪！
 34　　　一切　諸外道師眾　啪！
-35　　　　一切　諸醉鬼眾　啪！　　　|56　願眾生　守護　於我！
+35　　　　一切　諸瘋鬼眾　啪！　　　|56　願眾生　守護　於我！
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a style="color:blue" href="#_top">返回頁頂</a>】
 
     ----------------------------（第五會）-----------------------------<a name="part5"></a>
