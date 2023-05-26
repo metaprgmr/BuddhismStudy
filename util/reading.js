@@ -2,7 +2,7 @@ var DEBUG = ''; // 'border:1px solid red;';
 const HILITE_COLOR = '#ff8';
 const KAI_TI = "'KaiTi', '楷体', STKaiti, '华文楷体'";
 const READER_HELP =
-  '為了用Reader，將每一行都限定在一定字數，然後設置ReaderReady標識。\n' +
+  '為了用Reader，將每一行都限定在一定字數，然後設置 book.setReaderReady(true)。\n' +
   '字數與readerHeight相關，以字高約27點估算。';
 
 const zdigits = '〇一二三四五六七八九';
@@ -206,7 +206,7 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
         var txt = '<' + tag;
         var tooltip = '';
         if (ln.annotations) tooltip = ln.annotations.join('\n');
-        if (ln.ziCount) tooltip += (tooltip === '' ? '' : '\n') + ln.ziCount + '字"';
+        if (ln.ziCount) tooltip += (tooltip === '' ? '' : '\n') + ln.ziCount + '字';
         if (tooltip != '') txt += ' title="' + tooltip + '"';
         txt += (inSession ? '>' : ' class="inlineChapter">') + processText(ln.display);
         if (!inSession) {
@@ -386,6 +386,7 @@ class MyBookInfo {
 
     // for reader rendition
     this.readerHeight = 700;  // settable by individual books
+    this.chapterTitleStyle = 'chaptertitle';
     this.margin = 20;
     this.titleGap = 45;
     this.textW = 40;
@@ -397,6 +398,7 @@ class MyBookInfo {
       h4: 40,
       h5: this.textW,
       chaptertitle: 80,
+      chaptertitlesmall: 50,
       booktitle: 42,
       titledesc: 28
     };
@@ -470,7 +472,7 @@ class MyBookInfo {
     if (idx > 0)
       txt = txt.substring(0, idx) + ' <span style="color:gray">' + txt.substring(idx) + '</span> ';
     var chNum = ++this.chapterNum;
-    var c = { caption, display:txt, id:chNum, chapterNum:chNum, tag:'chaptertitle', ziCount:0 };
+    var c = { caption, display:txt, id:chNum, chapterNum:chNum, tag:this.chapterTitleStyle, ziCount:0 };
     if (arr.length > 0) c.annotations = arr;
     this.chapters.push(c);
     return c;

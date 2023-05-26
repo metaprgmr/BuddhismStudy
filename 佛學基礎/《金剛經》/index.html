@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>金剛般若波羅蜜經</title>
+<style>
+a { text-decoration:none }
+em { font-style:normal; color:red; background-color:lightyellow; }
+td { padding-left:10px }
+</style>
+<script src="../../util/reading.js"></script>
+<script>
+const lst = [
+  { title:'法會因由分第一' },
+  { title:'善現啟請分第二' },
+  { title:'大乘正宗分第三' },
+  { title:'妙行無住分第四' },
+  { title:'如理實見分第五', isEm:true },
+  { title:'正信稀有分第六' },
+  { title:'無得無說分第七' },
+  { title:'依法出生分第八' },
+  { title:'一相無相分第九' },
+  { title:'莊嚴淨土分第十' },
+  { title:'無為福勝分第十一' },
+  { title:'尊重正教分第十二' },
+  { title:'如法受持分第十三' },
+  { title:'離相寂滅分第十四', isEm:true },
+  { title:'持經功德分第十五' },
+  { title:'能淨業障分第十六' },
+  { title:'究竟無我分第十七' },
+  { title:'一體同觀分第十八' },
+  { title:'法界通化分第十九' },
+  { title:'離色離相分第二十' },
+  { title:'非說所說分第二十一' },
+  { title:'無法可得分第二十二' },
+  { title:'淨心行善分第二十三' },
+  { title:'福智無比分第二十四' },
+  { title:'化無所化分第二十五' },
+  { title:'法身非相分第二十六' },
+  { title:'無斷無滅分第二十七' },
+  { title:'不受不貪分第二十八' },
+  { title:'威儀寂靜分第二十九' },
+  { title:'一合理相分第三十' },
+  { title:'知見不生分第三十一' },
+  { title:'應化非真分第三十二' }
+];
+</script>
+</head>
+<body><center>
+<h2><a href="../../util/viewer.html?s=../佛學基礎/《金剛經》/" title="5287字">金剛般若波羅蜜經</a></h2>
+<h4>姚秦 三藏法師 鳩摩羅什 譯<br>梁昭明王子 斷分<br>
+<a href="https://book.bfnn.org/books2/1736.htm">民國 黃昆山居士 分段注解</a></h4>
+
+<div class="content">
+
+<table border="0" cellspacing="0" cellpadding="8px">
+<script>
+  const aurl = '<a href="../../util/viewer.html?s=../佛學基礎/《金剛經》/&c=';
+  function show(i, r) {
+    var txt = r.title;
+    var idx = txt.indexOf(' ');
+//    txt = txt.substring(0, idx);
+    const t = r.isEm ? ('<em>' + txt + '</em>') : txt;
+    //return aurl + i + '">' + t + '</a>';
+    return t;
+  }
+
+  for (var i=0; i<lst.length; ) {
+    document.write('<tr>');
+    var r = lst[i++]; document.write('<td>' + show(i,r) + '</a></td>');
+    r = lst[i++];     document.write('<td>' + show(i,r) + '</a></td>');
+    r = lst[i++];     document.write('<td>' + show(i,r) + '</a></td>');
+    r = lst[i++];     document.write('<td>' + show(i,r) + '</a></td>');
+    document.write('</tr>');
+  }
+</script>
+</table>
+</div>
+
+</center></body></html>
