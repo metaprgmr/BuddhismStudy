@@ -165,6 +165,8 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
   var result = [], title = bookInfo.title;
   var desc  = bookInfo.desc;
   var lines = bookInfo.content;
+  const noChapterTitles = chapterNum === 'none';
+  if (noChapterTitles) chapterNum = null;
 
   var chNumS, chNumE;
   if (chapterNum) {
@@ -199,6 +201,8 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
 //    if (ln.id != null) { txt += '<a name="' + ln.id + '"></a>'; lastName = parseInt(ln.id) + 1; }
       if (ln.tag) {
         var tag = ln.tag;
+        if (noChapterTitles && tag.startsWith('chaptertitle'))
+          continue;
         if (tag === 'chaptertitle')
           if (forView) tag = 'h3'; // use h3 for viewing
         else
