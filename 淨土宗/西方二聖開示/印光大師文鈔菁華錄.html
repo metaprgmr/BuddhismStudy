@@ -76,9 +76,11 @@ for (var i=0; i<TheBook.content.length; ++i) {
         t = '<a href="#' + x.passageId + '">' + t + '</a>';
     }
 
-    if (i === 7) w('</table></td><td valign="top" align="right"><table border="0" width="320">');
+    if (i === 7)
+      w('</table></td><td valign="top" align="right"><table border="0" width="320"><tr><td colspan=2 class="toc">　</td></tr><tr><td colspan=2>　</td></tr>');
 
-    w('<tr><td class="toc" valign="top">', num, '</td><td class="toc">', t);
+    var style = (is333 && !num.endsWith('、') ? ' style="opacity:0.5"' : '');
+    w('<tr><td class="toc" valign="top"', style, '>', num, '</td><td class="toc">', t);
 
     if (x.titleAnno)
       w('<br><anno>', x.titleAnno, '</anno>');

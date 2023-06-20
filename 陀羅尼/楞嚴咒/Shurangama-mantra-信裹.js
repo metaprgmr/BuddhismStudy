@@ -78,7 +78,7 @@ const sanskrit_roman =
 [     88] 39  {                           viṣa śastra agni uttara}ṇīṃ.
 
 [     90] 40  aparājitaṃ-mahā-ghorāṃ!    mahā-balāṃ   mahā-caṇḍāṃ  mahā-dīptaṃ
-[     93]       mahā-tejaṃ  mahā-śvetāṃ  mahā-jvalāṃ  mahā-māla pāṇḍara-vāsinī
+[     93]       mahā-tejaṃ  mahā-śvetāṃ  mahā-jvalāṃ  mahā-māla paṇḍara-vāsinī
 [     96] 41  ārya-tārā!  bhṛkuṭīṃ ceva vijaya vajra-maleti-viśrutāṃ
 [    101] 42    padmaṃkāṃ vajra-jihva ca mālā ceva aparājita vajra-daṇḍīṃ-viśālā
 [    106]       ca śantā-vaideha-pūjitāṃ
@@ -86,8 +86,8 @@ const sanskrit_roman =
 [    109] 44  ārya-tārā!  mahā-bala aparā-vajra-śañkalā ceva            ⌈ mālikā
 [    112] 45    vajra-kaumāri-kulaṃ-dharī vajra-hastā ca mahā-vidyā kāñcana    ⌋
 [    116] 46    kusumbhā ratna ceva vairocanā kulathadāṃ uṣṇīṣa vi-jṛmbhamāṇā ca
-[    120] 47    sa-vajra-kanaka-prabhā-locana vajra-tuṇḍī ca
-[    123]       śvetā ca kamalākṣī śaśī-prabhā.
+[    120] 47    sa-vajra-kanaka-prabhā-locana vajra-tuṇḍī ca śvetā ca
+[    123]       kamalākṣī śaśī-prabhā.
 [    125] 48  ityete mudrā-gaṇā sarve rakṣāṃ kurvantu mama sarva satvānāṃ ca.
 
 
@@ -307,7 +307,7 @@ const zhongwen =
 
 29  　　能令　降伏　一切鬼魅惡星。
 30  　　能令　斷滅　仇敵惡咒。
-31  　　能自　我救　護夭折橫死。
+31  　　能自我救護　夭折橫死。
 32  　　能令　解脫　一切煩惱縛結。
 33  　　能令　止息　一切極惡惡夢。
 34  　　能令　敗壞　八萬四千惡星邪魔。
@@ -326,8 +326,8 @@ const zhongwen =
 44  聖救度母！　大力　不歿金剛鎖母　及如是
 45  　　金剛童女　持部女　金剛手　及　大明金花鬘女
 46  　　紅寶珠母　及如是　遍照種族福祉母　及　細眉開展頂髻母
-47  　　所有　金剛金光照耀母　金剛口母　及
-    　　白色　蓮花眼　月光母。
+47  　　所有　金剛金光照耀母　金剛口與白光母　及
+    　　蓮花眼　月光母。
 48  如是　印母眾　及　諸有情　願悉皆守護於我等。
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#_top">回頁頂</a>】
 

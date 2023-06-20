@@ -46,10 +46,17 @@ const lst = [
   { title:'應化非真分第三十二' }
 ];
 const BOOK_BFNN = window['BOOK_BFNN'] || 'https://book.bfnn.org';
-function writeBookLink(uri, title, ending) {
-  if (BOOK_BFNN.startsWith('file:')) document.write('&cir;&nbsp;&nbsp;');
+function writeBookLink(uri, title, ending, ignoreCirc) {
+  if (!ignoreCirc && BOOK_BFNN.startsWith('file:')) document.write('&cir;&nbsp;&nbsp;');
   document.write('<a href="' + BOOK_BFNN + uri + '">' + title + '</a>');
   if (ending) document.write(ending);
+}
+function writeJiangWeiNongLinks() {
+  if (BOOK_BFNN.startsWith('file:')) document.write('&cir;&nbsp;&nbsp;');
+  document.write('江味農居士《金剛般若波羅密經講義》');
+  writeBookLink('/books2/1108.htm', '上', null, true);
+  writeBookLink('/books2/1109.htm', '中', null, true);
+  writeBookLink('/books2/1110.htm', '下', '<br>', true);
 }
 </script>
 </head>
@@ -88,13 +95,13 @@ function writeBookLink(uri, title, ending) {
 
 <hr width="700px">
 <script>
-writeBookLink('/books2/1227.htm', '圓瑛大師著《金剛般若波羅密經講義》',   '　　<br>');
-writeBookLink('/books2/1889.htm', '文珠法師述《金剛般若波羅密經講義》',   '　　<br>');
-writeBookLink('/books2/1814.htm', '吳潤江居士《金剛般若波羅密經講義》',   '　　<br>');
-writeBookLink('/books/0229.htm',  '智諭法師述《金剛般若波羅密經講義》',   '　　<br>');
-writeBookLink('/books3/2142.htm', '倓虛大師述《金剛般若波羅密經親聞記》', '　<br>');
-writeBookLink('/books2/1108.htm', '江味農居士《金剛般若波羅密經講義》',   '　　<br>');
-writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》',       '　　　　');
+writeBookLink('/books2/1227.htm', '圓瑛大師著《金剛般若波羅密經講義》',   '　　　<br>');
+writeBookLink('/books2/1889.htm', '文珠法師述《金剛般若波羅密經講義》',   '　　　<br>');
+writeBookLink('/books2/1814.htm', '吳潤江居士《金剛般若波羅密經講義》',   '　　　<br>');
+writeBookLink('/books/0229.htm',  '智諭法師述《金剛般若波羅密經講義》',   '　　　<br>');
+writeBookLink('/books3/2142.htm', '倓虛大師述《金剛般若波羅密經親聞記》', '　　<br>');
+writeJiangWeiNongLinks();
+writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》',       '　　　　　');
 </script>
 <hr width="700px">
 
