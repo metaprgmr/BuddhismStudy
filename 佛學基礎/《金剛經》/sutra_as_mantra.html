@@ -1,0 +1,32 @@
+<printPages html>
+<head>
+<meta charset="utf-8">
+<title>金剛般若波羅蜜經</title>
+<style>
+body { margin:20px }
+.reading  { writing-mode:vertical-rl; font-size:24px; font-family:KaiTi,楷体,STKaiti,华文楷体; line-height:125%; letter-spacing:5px }
+.printing { font-size:18px; line-height:125%; letter-spacing:3px }
+h2 { letter-spacing:2px }
+</style>
+<script src="01-plain.js"></script>
+<script>
+function w() { for(var i in arguments)document.write(arguments[i]) }
+
+function write() {
+  const HELP = '打印宜用chrome；其他瀏覽器的直排漢字打印恐不佳。\n打印參數：landscape; margin l/r 0.5, t/b 0.31 inches';
+  document.body.style.writingMode = 'vertical-rl';
+
+  var cls = 'reading';
+  if (!!window.chrome) cls += ' printing';
+
+  w('<div class="', cls, '" title="', HELP, '">',
+    '<h2>金剛般若波羅蜜經</h2>');
+  for (var j in LeJing)
+    w('<p>', LeJing[j], '</p>');
+  w('</div>');
+}
+</script>
+</head>
+<body>
+<script> write() </script>
+</body></html>
