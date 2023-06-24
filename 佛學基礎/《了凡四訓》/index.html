@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>了凡四訓</title>
+<style>
+a { text-decoration:none }
+em { font-style:normal; color:red; background-color:lightyellow; }
+td { padding-left:10px }
+</style>
+<script src="../include/reading.js"></script>
+<script>
+const lst = [
+  { title:'第一篇　立命之學' },
+  { title:'第二篇　改過之法' },
+  { title:'第三篇　積善之方' },
+  { title:'第四篇　謙德之效' }
+];
+</script>
+</head>
+<body><center>
+<h2>了凡四訓</h2>
+
+<div class="content">
+
+<table border="0"><tr><td align="center">
+<script>
+  const aurl = '<a href="../../util/viewer.html?s=../佛學基礎/《了凡四訓》&c=';
+  function show(i, r) {
+    var txt = r.title;
+    if (r.isEm) txt = '<em>' + txt + '</em>';
+    return aurl + (i+1) + '">' + txt + '</a>';
+  }
+
+  for (var i=0; i<lst.length; ) document.write(show(i, lst[i++]) + '<br>');
+</script>
+<br>&nbsp;<br>
+<a href="../../util/viewer.html?s=../佛學基礎/《了凡四訓》">（全文）</a>
+</td></tr></table>
+</div>
+
+</center></body></html>
