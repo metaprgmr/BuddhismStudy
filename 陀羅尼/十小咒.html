@@ -102,7 +102,7 @@ const mantras = [
             "tadyathā oṃ bhaiṣajye bhaiṣajye bhaiṣajya-samudgate svāhā"
   },
   { title:  "觀音靈感真言",
-    titleS: "lokêśvara-dhāraṇī",
+    titleS: "lokeśvara-dhāraṇī",
     from:   "元代譯，無經本，觀音法門之一。",
     text:   [ "oṃ maṇi padme hūṃ",
               "mahā-jñāna cittotpāda     | 大智發於心",
@@ -184,7 +184,7 @@ function get(name) {
 function showAll(onlyOne, isSimple) { // 0-based, 0-9
   if (onlyOne != null) onlyOne = parseInt(onlyOne);
   const isOnlyOne = (onlyOne >= 0);
-  var i, m, id, indent = '&nbsp;&nbsp;';
+  var i, k, m, id, indent = '&nbsp;&nbsp;';
 
   if (!isOnlyOne && !isSimple) {
     w('<h2>十小咒</h2>',
@@ -193,9 +193,13 @@ function showAll(onlyOne, isSimple) { // 0-based, 0-9
       m = mantras[i];
       id = i+1;
       w('<tr><td align="right">', id, '.&nbsp;</td>',
-        '<td title="', m.titleS, '"><a href="#', id, '">', m.title, '</a></td></tr>');
+        '<td title="', m.titleS, '"><a href="#', id, '">', m.title, '</a>');
+      for (k=m.title.length; k<10; ++k) w('　');
+      w('　【<a href="?i=', i, '">單此咒</a>】</td></tr>');
     }
-    w('</table>');
+    w('<tr><td>&nbsp;</td><td>');
+    for (k=0; k<=10; ++k) w('　');
+    w('<a href="?simple=1">【緊縮版】</a></table>');
   }
 
   w('<table border="0">');
