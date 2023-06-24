@@ -510,7 +510,7 @@ const translit =
  1  南無 薩婆 勃陀 勃地薩跢鞞 弊  　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part2">第二會</a>】
  2  南無 薩多南 三藐三菩陀 俱知喃 娑舍囉、婆迦 僧伽喃 　　　　　　　　　【<a class="nav" href="#part3">第三會</a>】
  3  南無 盧雞、阿羅漢、跢喃     　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part4">第四會</a>】
- 4  南無 蘇盧多、波那喃     　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part4">第五會</a>】
+ 4  南無 蘇盧多、波那喃     　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part5">第五會</a>】
  5  南無 娑羯唎陀、伽彌喃
  6  
  7  南無 盧雞、三藐、伽跢喃 三藐、伽波囉 底波、多那喃
