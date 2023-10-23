@@ -1,18 +1,26 @@
-function extractCaption(part) {
+function getPartInfo(part) {
+  var ret = { caption:null, firstVerseID: null }
   part = parts[part];
   if (!part) return null;
   var a = part.split('\n');
   for (var i in a) {
     var ln = a[i];
     if (ln.startsWith('//')) continue;
-    var idx = ln.indexOf('，');
-    if (idx > 0) {
-      ln = ln.substring(idx+1).trim();
-      if (ln.endsWith('*')) ln = ln.substring(0, ln.length-1);
-      return ln;
+    if (!ret.caption) {
+      var idx = ln.indexOf('，');
+      if (idx > 0) {
+        var x = ln.substring(idx+1).trim();
+        if (x.endsWith('*')) x = x.substring(0, x.length-1);
+        ret.caption = x;
+      }
     }
+    if (!ret.firstVerseID) {
+      var vv = ln.substring(2,6);
+      if (vv != '    ') ret.firstVerseID = vv;
+    }
+    if (ret.caption && ret.firstVerseID) break;
   }
-  return null;
+  return ret;
 }
 
 var lastDivId;
@@ -34,13 +42,13 @@ function write楞嚴經科判(divId, part, terse) {
   buf.w('<h2>海仁法師《楞嚴經講義》');
   if (part > 0) buf.w('<a href="?part=&terse=', terse, '">科判</a>'); else buf.w('科判');
   buf.w('</h2>');
-  var caption = extractCaption(part);
-  if (caption && (caption != '序分'))
-    buf.w('<h4>正宗分六之', partNum, '：', caption, '</h4>');
+  var partInfo = getPartInfo(part);
+  if (partInfo.caption && (partInfo.caption != '序分'))
+    buf.w('<h4>正宗分六之第', partNum, '：', partInfo.caption, '</h4>');
 
-  buf.w('<table border="0" cellspacing="0px" cellpadding="0">');
+  buf.w('<table border="0" cellspacing="0px" cellpadding="0" style="min-width:500px">');
   buf.w('<caption><a href="javascript:write楞嚴經科判(null,', part || '\'\'', ',', terse ? '0' : '1', ')">', terse ? '詳細版' : '精簡版', '</a>');
-  if (!terse) buf.w('&nbsp;&nbsp;<a href="HaiReng科判Verses.html">經文參考</a>');
+  if (!terse) buf.w('&nbsp;&nbsp;<a href="HaiReng科判Verses.html?vid=', partInfo.firstVerseID, '">經文參考</a>');
   buf.w('</caption>');
   var kepan = parts[part];
   var i, ln, a = kepan.split('\n'), maxlen = 50;

@@ -6,12 +6,11 @@
 <script src="../../../util/reading.js"></script>
 <script src="verses.js"></script>
 <script>
-function toZNum(i) {
-  return (i === 10) ? '十' : zNumber(i);
-}
+function toZNum(i) { return (i === 10) ? '十' : zNumber(i) }
 
-function selectVol(volNum) {
+function selectVol(volNum, verseNum) {
   if (!volNum) volNum = 1;
+  if (typeof volNum === 'string') volNum = parseInt(volNum);
   var buf = new Buffer('《楞嚴經》卷&nbsp;');
   for (var i=1; i<=10; ++i) {
     if (i > 1) buf.w('&nbsp;&nbsp;');
@@ -22,10 +21,13 @@ function selectVol(volNum) {
   }
   buf.render('volumeNums');
 
-  listVol(volNum);
+  showText(volNum, verseNum);
 }
 
-function listVol(volNum) {
+function showText(volNum, verseNum) {
+  if (!volNum) volNum = 1;
+  if (!verseNum) verseNum = 1;
+  if (typeof verseNum === 'string') verseNum = parseInt(verseNum);
   var buf = new Buffer();
   buf.w('<table border=0><tr><td>');
   if (volNum < 1 || volNum > 10) {
@@ -39,16 +41,16 @@ function listVol(volNum) {
     var num = digit3(i);
     var v = HaiRengVerses[prefix + num];
     if (!v) break;
-    buf.w('<a href="javascript:showText(', volNum, ',', i, ')">', num, '</a> ');
+    if (i >= verseNum && i < verseNum+10)
+      buf.w('<i style="color:red">', num, '</i> ');
+    else
+      buf.w('<a href="javascript:showText(', volNum, ',', i, ')">', num, '</a> ');
     if (i % width === 0) buf.w('<br>');
   }
   buf.w('</td></tr></table>');
   buf.render('verseNums');
-  showText(volNum, 1);
-}
 
-function showText(volNum, verseNum) {
-  var buf = new Buffer();
+  // show the selected text
   buf.w('<table width="900">');
   var prefix = ' ABCDEFGHIJ'[volNum];
   for (var i=0; i<10; ++i) {
@@ -70,7 +72,23 @@ function showText(volNum, verseNum) {
 <tr><td style="border-bottom:1px solid black"><div id="verseStage"></div></td></tr>
 </table>
 <script>
-  selectVol();
+  var vid = get('vid'), v, n;
+  if (vid) {
+    switch(vid[0]) {
+    case 'A': v = 1; break;
+    case 'B': v = 2; break;
+    case 'C': v = 3; break;
+    case 'D': v = 4; break;
+    case 'E': v = 5; break;
+    case 'F': v = 6; break;
+    case 'G': v = 7; break;
+    case 'H': v = 8; break;
+    case 'I': v = 9; break;
+    case 'J': v = 10; break;
+    }
+  }
+  if (v > 0) n = vid.substring(1);
+  selectVol(v, n);
 </script>
 </center></body></html>
 
