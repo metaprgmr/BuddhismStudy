@@ -1,5 +1,5 @@
 const this_book = new MyBookInfo('大勢至菩薩念佛圓通章', '唐天竺沙門般剌密帝譯')
-.setReaderReady(true)
+.setImage(window['IMAGE_AMITABHA'])
 .addContent(
 
 '大勢至法王子，與其同倫五十二菩薩，' +
@@ -24,5 +24,4 @@ const this_book = new MyBookInfo('大勢至菩薩念佛圓通章', '唐天竺沙
 '|今於此界，攝念佛人，歸於淨土。' +
 '|佛問圓通，我無選擇；' +
 '|<em>都攝六根，淨念相繼，</em>得三摩地，斯為第一。」'
-
-).set('readerHeight', 530);
+);

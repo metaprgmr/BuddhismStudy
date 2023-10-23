@@ -1,9 +1,7 @@
 var DEBUG = ''; // 'border:1px solid red;';
 const HILITE_COLOR = '#ff8';
 const KAI_TI = "'KaiTi', '楷体', STKaiti, '华文楷体'";
-const READER_HELP =
-  '為了用Reader，將每一行都限定在一定字數，然後設置 book.setReaderReady(true)。\n' +
-  '字數與readerHeight相關，以字高約27點估算。';
+// 特殊符号大全 https://www.jiuwa.net/fuhao/agg/
 
 const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999
@@ -24,6 +22,7 @@ function get(name) {
 
 function addjs(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
 function e(id) { return document.getElementById(id) }
+function w() { for(var i in arguments) { var x = arguments[i]; x && document.write(x) } }
 
 function digit2(i, increment) {
   if (!i) i = 0;
@@ -68,7 +67,7 @@ class Buffer {
     for (var i in arguments) { var x = arguments[i]; this.buf += x }
   }
 
-  w() { for (var i in arguments) { var x = arguments[i]; this.buf += x } }
+  w() { for (var i in arguments) { var x = arguments[i]; x && (this.buf += x) } }
 
   prepend() {
     var pre = '';
@@ -90,12 +89,17 @@ class Buffer {
 } // end of Buffer.
 
 const zpuncs = '，、；：。？！';
-const zpuncs1 = '「」『』《》（）—─…　';
+const zpuncs1L = '「『《（';
+const zpuncs1R = '」』》）—─…　';
+const zpuncs1 = zpuncs1L + zpuncs1R;
 const zpuncsAll = zpuncs + zpuncs1;
 const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u20000-\u2a6df]|[\u2a700-\u2b73f]|[\u2b740-\u2b81f]|[\u2b820-\u2ceaf]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u2f800-\u2fa1f]/;
-function isPunc(z) { return zpuncs.indexOf(z) >= 0; }
+function isPunc(z)  { return zpuncs.indexOf(z) >= 0; }
+function isPunc1L(z) { return zpuncs1L.indexOf(z) >= 0; }
+function isPunc1R(z) { return zpuncs1R.indexOf(z) >= 0; }
 function isPunc1(z) { return zpuncs1.indexOf(z) >= 0; }
-function isHanZi(x) { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncsAll.indexOf(x) < 0); }
+function isHanZi(x)       { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncsAll.indexOf(x) < 0); }
+function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncs.indexOf(x) < 0); }
 function isASCII(str) { return /^[\x00-\xFF]*$/.test(str) }
 
 function countHanZi(txt) {
@@ -158,24 +162,30 @@ function ruby(zi, punc, cssCls) {
      }
    }
    var rt = cssCls ? ('<rt class="' + cssCls + '">') : '<rt>';
+   if (isPunc1R(zi)) zi = '<punc1>' + zi + '</punc1>';
    return before + '<ruby>' + zi + rt + punc + '</rt></ruby>' + after;
 }
 
 function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
   var result = [], title = bookInfo.title;
-  var desc  = bookInfo.desc;
   var lines = bookInfo.content;
-  const noChapterTitles = chapterNum === 'none';
-  if (noChapterTitles) chapterNum = null;
+  if (chapterNum) bookInfo.noChapterTitles = chapterNum === 'none';
+  if (bookInfo.noChapterTitles) chapterNum = null;
+  var desc = bookInfo.noChapterTitles ? bookInfo.descNoChapterTitles : bookInfo.desc;
 
   var chNumS, chNumE;
   if (chapterNum) {
     var idx = chapterNum.indexOf('-');
     if (idx <= 0) {
-      chNumS = chNumE = parseInt(chapterNum);
+      chNumS = chNumE = parseInt(chapterNum);  if (isNaN(chNumS)) chNumS = chNumE = null;
     } else {
-      chNumS = parseInt(chapterNum.substring(0, idx));
-      chNumE = parseInt(chapterNum.substring(idx+1));
+      chNumS = parseInt(chapterNum.substring(0, idx)); if (isNaN(chNumS)) chNumS = null;
+      chNumE = parseInt(chapterNum.substring(idx+1));  if (isNaN(chNumE)) chNumE = null;
+    }
+    if (!chNumS) { // check if it is a chapter name
+      for (var k=0; k<bookInfo.chapters.length; ++k)
+        if (chapterNum === bookInfo.chapters[k].caption) { chNumS = chNumE = k+1; break; }
+      if (!chNumS) chapterNum = null;
     }
   }
   if (!Array.isArray(lines)) {
@@ -201,7 +211,7 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
 //    if (ln.id != null) { txt += '<a name="' + ln.id + '"></a>'; lastName = parseInt(ln.id) + 1; }
       if (ln.tag) {
         var tag = ln.tag;
-        if (noChapterTitles && tag.startsWith('chaptertitle'))
+        if (bookInfo.noChapterTitles && tag.startsWith('chaptertitle'))
           continue;
         if (tag === 'chaptertitle')
           if (forView) tag = 'h3'; // use h3 for viewing
@@ -227,6 +237,7 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
         anno = ln[1];
         ln = ln[0];
       }
+
       var nexteol = ln.endsWith('/');
       if (nexteol) ln = ln.substring(0, ln.length-1);
       var isGatha = ln.startsWith('#');
@@ -254,20 +265,66 @@ function processPara(result, verseNum, ln, isGatha, lasteol, cureol, forView) {
   if (isGatha)  start += INDENT;
   if (anno) { start += '<anno>'; startLast = '<anno title="' + anno + '">'; }
   else startLast = start;
-  if (anno) end   += '</anno>';
-
+  if (anno) end += '</anno>';
   if (lasteol) result.push('<p>');
+  var lastHtmlTag = null;
+  var emLast = { tagLast:false, tag:'em' };
+  var uLast  = { tagLast:false, tag:'u' };
   for (var s=0; s<segs.length; ++s) {
-    if (s === segs.length-1) {
-      ln = startLast + processText(segs[s], s, verseNum) + end;
-    } else {
-      ln = start + processText(segs[s], s, verseNum) + end;
-    }
+    ln = segs[s];
+    ln = processLineHtmlTags(ln, emLast);
+    ln = processLineHtmlTags(ln, uLast);
+    if (s === segs.length-1)
+      ln = startLast + processText(ln, s, verseNum) + end;
+    else
+      ln = start + processText(ln, s, verseNum) + end;
     if (forView && s < segs.length-1) ln += '<br>';
     result.push(ln);
   }
   if (cureol) result.push('</p>');
   else if (forView) result.push('<br>');
+}
+
+function processLineHtmlTags(ln, tagLast) {
+  var _tag = tagLast.tag + '>';
+  var _endtag = '/' + _tag;
+  var a = ln.split('<');
+
+  var x, i, hasLeadEndTag = false, hasLastTag = false;
+  for (i=0; i<a.length; ++i) {
+    x = a[i];
+    if (x.startsWith(_tag)) break;
+    if (x.startsWith(_endtag)) { hasLeadEndTag = true; break; }
+  }
+  for (i=a.length-1; i>=0; --i) {
+    x = a[i];
+    if (x.startsWith(_endtag)) break;
+    if (x.startsWith(_tag)) { hasLastTag = true; break; }
+  }
+
+  if (!hasLastTag && !hasLeadEndTag) {
+    if (tagLast.tagLast) {
+      if (ln.endsWith('\n'))
+        ln = '<' + _tag + ln.substring(0, ln.length-1) + '<' + _endtag + '\n';
+      else
+        ln = '<' + _tag + ln + '<' + _endtag;
+    }
+  } else {
+    if (hasLeadEndTag) {
+      if (tagLast.tagLast) {
+        ln = '<' + _tag + ln;
+        tagLast.tagLast = false;
+      }
+    }
+    if (hasLastTag) {
+      tagLast.tagLast = true;
+      if (ln.endsWith('\n'))
+        ln = ln.substring(0, ln.length-1) + '<' + _endtag + '\n';
+      else
+        ln = ln + '<' + _endtag;
+    }
+  }
+  return ln;
 }
 
 function processText(seg, segNum, verseNum) {
@@ -276,14 +333,15 @@ function processText(seg, segNum, verseNum) {
 
     var len = seg.length, len1 = len-1;
     for (i=0; i<len1; ++i) {
-      var idelta = -1, cur = seg[i], nxt = seg[i+1];
+      var idelta = -1, cur = seg[i], nxt = seg[i+1], p1;
 
       if (cur === '[') { // annotation for term, e.g. [普賢]               (look up)
                          //                           [普賢=samantabhadra] (verbatim)
                          //           or pinyin, e.g. [妷@zhi3]            (verbatim)
                          //                           [妷@] [妷@-]         (look up)
+                         //
         var term = nxt;
-        for (var p1=i+2; p1<len; ++p1) {
+        for (p1=i+2; p1<len; ++p1) {
           nxt = seg[p1];
           if (nxt === ']') { idelta = p1 - i; nxt = seg[p1+1]; break }
           else term += nxt;
@@ -368,7 +426,7 @@ function renderReading(id, bookInfo, chapterNum, chBaseUrl) {
 // MyBookInfo
 //
 
-var curBook;
+var LIVRE;
 
 const KNOWN_PREFICES = {
   'gatha':      true, // shorthanded as ''
@@ -378,15 +436,17 @@ const KNOWN_PREFICES = {
 };
 
 class MyBookInfo {
-  constructor(title, desc) {
+  constructor(title, desc, descNoChapterTitles) {
+    this.noimg = noimg; // global
     this._className = 'MyBookInfo';
     this.title = title;
     this.desc = desc;
+    this.descNoChapterTitles = descNoChapterTitles || desc;
     this.ziCount = 0;
     this.content = [];
     this.chapterNum = 0;
     this.paraPrefix = '　　';
-    this.isReaderReady = false;
+    this.breakLen = 25;
 
     // for reader rendition
     this.readerHeight = 700;  // settable by individual books
@@ -409,7 +469,20 @@ class MyBookInfo {
     this.chapters = [];
   }
 
-  setReaderReady(yes) { this.isReaderReady = yes; return this }
+  setImage(uri, width, height) {
+    if (!this.noimg && uri) {
+      if (typeof uri === 'object') {
+        this.imageUri    = uri.uri;
+        this.imageWidth  = uri.width;
+        this.imageHeight = uri.height;
+      } else {
+        this.imageUri    = uri;
+        this.imageWidth  = width;
+        this.imageHeight = height;
+      }
+    }
+    return this;
+  }
 
   setTOC(attrs) {
     // TODO
@@ -418,19 +491,20 @@ class MyBookInfo {
 
   set(k,v) { this[k] = v; return this }
 
+  // addContent(array) or addContent(``), or first parameter is the number of Zis to break the line.
   addContent() {
     var lines = arguments, curChpt;
 
-    if (arguments.length == 1) {
-      const arg = arguments[0];
+    if (arguments.length <= 2) {
+      var arg = arguments[0];
       if (Array.isArray(arg))
         lines = arg;
       else if (typeof arg === 'string')
-        lines = this.parseContent(arg);
+        lines = this.parseContent(arg, this.breakLen);
     }
 
     for (var i in lines) {
-      var ln = lines[i];
+      var ln = this.processMarks( this.preprocessAnnos(lines[i]) );
       if ((typeof ln === 'string') && ln.startsWith('chapter#')) {
         curChpt = this.addedChapter(ln.substring(8).trim());
         this.content.push(curChpt);
@@ -445,7 +519,7 @@ class MyBookInfo {
         }
         this.ziCount += cnt;
         if (curChpt) curChpt.ziCount += cnt;
-        this.content.push(ln);
+        this.content.push(this.breakLine(ln));
       }
     }
 
@@ -454,7 +528,11 @@ class MyBookInfo {
 
   fixPrefix(ln) {
     var idx = ln.indexOf('#');
-    if (idx < 0) return this.paraPrefix + ln;
+    if (idx < 0) {
+      if (isPunc1(ln[0]) && (this.paraPrefix.length > 0))
+        return this.paraPrefix.substring(0, this.paraPrefix.length-1) + ln;
+      return this.paraPrefix + ln;
+    }
     return ln;
   }
 
@@ -462,10 +540,116 @@ class MyBookInfo {
     const lines = raw_content.split('\n');
     const ret = [];
     for (var i=0; i<lines.length; ++i) {
-      const ln = lines[i].trim();
+      var ln = lines[i];
+      var cnt;
+      for (cnt=0; ln[cnt] === '　'; ++cnt);
+      ln = ln.trim();
+      for (; cnt > 0; --cnt) ln = '　' + ln;
       if (ln.length > 0) ret.push(ln);
     }
     return ret;
+  }
+
+  // Turn, say, "[涅槃=涅槃有三種]", into "[涅=涅槃有三種][槃=涅槃有三種]".
+  preprocessAnnos(ln) {
+    var result = '';
+    if (ln.indexOf('[') < 0) return ln;
+    for (var i=0; i<ln.length; ++i) {
+      var c = ln[i];
+      if (c != '[') { result += c; continue; }
+      var idxStart = ++i, idxDiv = -1;
+      for (; i<ln.length; ++i) {
+        c = ln[i];
+        if (c === ']') {
+          var term, anno, divr;
+          if (idxDiv < 0) {
+            term = ln.substring(idxStart, i);
+            anno = term;
+          } else {
+            term = ln.substring(idxStart, idxDiv);
+            anno = ln.substring(idxDiv+1, i);
+            divr = ln[idxDiv];
+          }
+          if (!divr)
+            result = ln;
+          else if (term.length <= 1)
+            result += '[' + term + divr + anno + ']';
+          else {
+            for (var j=0; j<term.length; ++j)
+              result += '[' + term[j] + divr + anno + ']';
+          }
+          break;
+        } else if ((idxDiv < 0) && isASCII(c)) {
+          idxDiv = i++;
+        }
+      }
+    }
+    return result;
+  }
+
+  processMarks(ln) { // for now, just skip them. need to redesign the whole thing for marks
+    var orig = ln, re = /\[\$[0-9a-zA-Z_]*]/g;
+    if (Array.isArray(ln)) ln = ln[0];
+    var marks = ln.match(re);
+    if (!marks) return orig;
+//    console.log('marks:', marks);
+    ln = ln.replace(re, '');
+    if (Array.isArray(orig)) {
+      orig[0] = ln;
+      return orig;
+    }
+    return ln;
+  }
+
+  breakLine(ln) {
+    if (!this.breakLen) return ln;
+    // pre-insert "\n|" to break the lines. Mind the <>'s!
+    var result = '', cnt = this.breakLen+1;
+    for (var i=0; i<ln.length; ++i) {
+      var c = ln[i];
+      switch (c) {
+      case '[': // [...] is treated as a single zi.
+        c = '[';
+        for (++i; ; ++i) {
+          var x = ln[i];
+          c += x;
+          if (x === ']')
+            break;
+        }
+        break;
+      case '|':
+        result += '|';
+        cnt = this.breakLen;
+        continue;
+      case '<': // skip the tag
+        result += '<';
+        while ((c = ln[++i]) !== '>') result += c;
+        result += '>'; // skip '>'
+        c = ln[++i];
+        break;
+      }
+      if (!c) continue;
+      if (isHanZi(c) || c.endsWith(']') || isPunc1(c)) {
+        switch (--cnt) {
+        case 0:
+          if (i === ln.length-1 && isPunc1(c))
+            result += c;
+          else
+            result += '\n|' + c;
+          cnt = this.breakLen;
+          continue;
+        case 1:
+          if (isPunc1L(c)) {
+            result += '\n|' + c;
+            cnt = this.breakLen;
+            continue;
+          }
+          break;
+        }
+      }
+      result += c;
+    }
+    return result;
   }
 
   addedChapter(txt) {
@@ -538,7 +722,7 @@ class MyBookInfo {
 
   _computePages() {
     var el = e(this.elemId),
-        W = el.clientWidth,
+        W = this._clientWidth(el),
         len = this.displayLines.length,
         readWidth = W - this.margin * 2 - this.titleGap,
         lastTitle = true,
@@ -567,7 +751,7 @@ class MyBookInfo {
         curPg.end = i-1;
         curPg.lastW = lastW;
         curPg = { start:i, end:len-1, chapter:curChapterIdx };
-        if (this.chapters.length > 0 && !lastTitle)
+        if (this.chapters.length > 0 && !lastTitle && this.chapters[curPg.chapter])
           curPg.chapterTitle = this.chapters[curPg.chapter].caption;
         this.pages.push(curPg);
         curW = 0;
@@ -588,17 +772,27 @@ class MyBookInfo {
     }
   }
 
+  _clientWidth(el) {
+    var W = el.clientWidth, H = this.readerHeight;
+    if (!this.noimg && this.imageUri) W -= this.imageWidth * (H / this.imageHeight);
+    return W;
+  }
+
   renderReader(dir) {
-    if (!this.isReaderReady) {
-      alert('本書不能用Reader閱讀。\n' + READER_HELP);
-      return;
-    }
     if (!this.readingStarted) {
-      curBook = this;
-      document.addEventListener("keydown", (e) => curBook.nav(e), false);
-      window.addEventListener("resize", () => { curBook._computePages(); curBook.renderReader() }, false);
+      LIVRE = this;
+      document.addEventListener("keydown",   (e) => LIVRE.nav(e), false);
+      document.addEventListener("mousedown", (e) => LIVRE.nav(e), false);
+      document.addEventListener("mousemove", (e) => LIVRE.nav(e), false);
+      window.addEventListener("resize", () => { LIVRE._computePages(); LIVRE.renderReader() }, false);
       this.readingStarted = true;
 
+      this._computePages();
+      this.curPage   = 0;  // 0-based
+      this.curHilite = -1; // 0-based
+    }
+    else if (dir === 'noimg') {
+      this.noimg = true;
       this._computePages();
       this.curPage   = 0;  // 0-based
       this.curHilite = -1; // 0-based
@@ -623,15 +817,15 @@ class MyBookInfo {
 
     var el = e(this.elemId);
     if (!el) { alert('Element [id=' + this.elemId + '] is not found.'); return; }
-    const W = el.clientWidth,
-          H = this.readerHeight,
-          origR = W - this.margin;
+
+    var W = this._clientWidth(el),
+        H = this.readerHeight,
+        origR = W - this.margin;
     el.style.height = H + 'px';
 
-    var buf = new Buffer(),
-        lastX = origR;
+    var buf = new Buffer(), lastX = origR;
 
-    var desc  = this.desc, pageOffset = 0;
+    var desc  = this.noChapterTitles ? this.descNoChapterTitles :  this.desc, pageOffset = 0;
     if (desc) {
       pageOffset = this._renderReadLine(buf, '<titledesc>' + desc + '</titledesc>', false, lastX, H);
       lastX -= pageOffset;
@@ -647,7 +841,6 @@ class MyBookInfo {
       if (startsWith(ln, '</p>')) continue; // flat ignored
       if (startsWith(ln, '<p>') && lastTitle) continue; // ignored in front of a chapter (or any?) title
       lastTitle = ln.startsWith('<chaptertitle');
-
       lastX -= this._renderReadLine(buf, ln, lastTitle, lastX, H, this.curHilite === i);
     }
 
@@ -660,6 +853,14 @@ class MyBookInfo {
             div_, origR - pageW   - pageOffset/2, 'px">第', zNumber(this.curPage+1), '頁　</div>');
       if (curPg.chapterTitle)
         buf.w(div_, origR - pageW*3/2 - pageOffset, 'px">', curPg.chapterTitle, '　</div>');
+    }
+    if (!this.noimg && this.imageUri) {
+      var scale = (H - 2 * this.margin) / this.imageHeight;
+      const imgW = !this.imageWidth  ? '' : (' width="'  + (this.imageWidth  * scale) + '"');
+      const imgH = !this.imageHeight ? '' : (' height="' + (this.imageHeight * scale) + '"');
+      buf.w('<div style="position:absolute; top:', this.margin, 'px; left:', W, 'px">',
+            '<a href="javascript:LIVRE.renderReader(\'noimg\')">',
+            '<img border="0" src="', this.imageUri, '"', imgW, imgH, ' title="Click to turn off the image. (Reload the page to get the image back.)"></a></div>');
     }
     buf.render(this.elemId);
   }
@@ -700,17 +901,38 @@ class MyBookInfo {
   }
 
   nav(event) {
-    var isShift = event.shiftKey; // altKey, ctrlKey
-    switch (event.keyCode) {
-    case 40: /* down  */
-    case 37: /* left  */ this.renderReader('nextHilite'); break;
-    case 38: /* up    */
-    case 39: /* right */ this.renderReader('prevHilite'); break;
-    case 32: /* space */
-    case 34: /* pgdn  */ this.renderReader(isShift ? 'next5Pages' : 'nextPage'); break;
-    case 33: /* pgup  */ this.renderReader(isShift ? 'prev5Pages' : 'prevPage'); break;
-    case 36: /* home  */ this.renderReader('start');      break;
-    case 35: /* end   */ this.renderReader('end');        break;
+    var el, w, clickMargin, isMouseDown = false;
+    switch (event.type) {
+    case 'keydown':
+      var isShift = event.shiftKey; // altKey, ctrlKey
+      switch (event.keyCode) {
+      case 40: /* down  */
+      case 37: /* left  */ this.renderReader('nextHilite'); break;
+      case 38: /* up    */
+      case 39: /* right */ this.renderReader('prevHilite'); break;
+      case 32: /* space */ this.renderReader(event.shiftKey || event.altKey ? 'prevPage' : 'nextPage'); break;
+      case 34: /* pgdn  */ this.renderReader(isShift ? 'next5Pages' : 'nextPage'); break;
+      case 33: /* pgup  */ this.renderReader(isShift ? 'prev5Pages' : 'prevPage'); break;
+      case 36: /* home  */ this.renderReader('start');      break;
+      case 35: /* end   */ this.renderReader('end');        break;
+      }
+      break;
+    case 'mousedown':
+      isMouseDown = true;
+    case 'mousemove':
+      el = e(this.elemId);
+      w = el.clientWidth;
+//      clickMargin = w / 10;
+      clickMargin = 10;
+      if (isMouseDown) {
+        if (event.x > w - clickMargin)  this.renderReader('prevPage');
+        else if (event.x < clickMargin) this.renderReader('nextPage');
+      } else {
+        if (event.x > w - clickMargin)  el.style.cursor = 'pointer';
+        else if (event.x < clickMargin) el.style.cursor = 'pointer';
+        else                            el.style.cursor = 'auto';
+      }
+      break;
     }
   }
 
@@ -723,6 +945,7 @@ var s = get('s'),          // subject
     b = get('b') || '01',  // book (number, with a volume)
     chapterNum = get('c'), // chapter (number, with a book)
     t = get('t'), // single text
+    noimg = get('noimg'),
     chBaseUrl;
 if (t) {
   addjs(t);

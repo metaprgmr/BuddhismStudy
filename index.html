@@ -3,12 +3,13 @@
 <meta charset="utf-8">
 <title>信裹居士學佛</title>
 <link rel="stylesheet" href="util/article.css">
+<script src="env.js"></script>
 </head>
 <body><center>
 
 <h1>信裹居士學佛</h1>
 
-<h3 style="font-family:FangSong,仿宋,STFangsong,华文仿宋">　學佛是人生最高的享受！<span title="何以故？世味哪有法味濃啊！">*</span><br>
+<h3 style="font-family:FangSong,仿宋,STFangsong,华文仿宋">　學佛是人生最高的享受！<span title="Pour l'amour de Buddhas et Bodhisattvas" style="color:#FFD700">*</span><br>
 　　　　　　<font style="font-size:15px">&mdash;方東美先生</font></h3>
 
 <table border="0" width="600">
@@ -31,7 +32,20 @@
 &nbsp;&nbsp;&nbsp;【<a href="佛學基礎/index.html">佛學基礎</a>】　　　　【<a href="https://github.com/metaprgmr/BuddhismStudy" style='font-family:"SimHei", "黑体", STHeiti, "华文黑体"; font-size:16px'>下載全部內容</a>】<br>
 &nbsp;&nbsp;&nbsp;【<a href="淨土宗/index.html">淨土宗</a>　】<br>
 &nbsp;&nbsp;&nbsp;【<a href="陀羅尼/index.html">陀羅尼</a>　】<br>
-&nbsp;&nbsp;&nbsp;【<a href="個人文集/index.html">個人文集</a>】<br>&nbsp;
+&nbsp;&nbsp;&nbsp;【<a href="個人文集/index.html">個人文集</a>】
+<script>
+if (window['OTHERS']) {
+  var a = window.OTHERS;
+  for (var i=0; i<a.length; i+=2) {
+    var n = a[i], l = a[i+1];
+    if (n.startsWith('$'))
+      document.write('<a href="' + l + '" style="background-color:#ffffdd" title="個人內容，未發表">' + n.substring(1).trim() + '</a>');
+    else
+      document.write('<br>&nbsp;&nbsp;&nbsp;<a href="' + l + '" style="background-color:#ffffdd" title="個人內容，未發表">' + n + '</a>');
+  }
+}
+</script>
+<br>&nbsp;
 </td></tr>
 
 <tr>

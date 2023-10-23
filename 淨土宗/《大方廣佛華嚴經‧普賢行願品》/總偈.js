@@ -1,5 +1,4 @@
 const this_book = new MyBookInfo('普賢行願品‧總偈', '唐罽賓國三藏般若奉詔譯')
-.setReaderReady(true)
 .addContent(
 
 '爾時，[普賢]菩薩摩訶薩，稱讚如來勝功德已，' +

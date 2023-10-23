@@ -1,0 +1,160 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>禮佛懺悔</title>
+<link rel="stylesheet" href="../../util/article.css">
+<style>
+.foName { font-size:128px; color:red }
+.solute { font-size:128px; color:blue }
+.prayerText { font-size:24px; color:blue }
+.info { font-family:font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:24px }
+.foNameFadeout {
+  opacity: 1;
+  animation-name: fadeOutOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-delay:    8s;
+  animation-duration: 2s;
+}
+</style>
+<script src="buddha_names.js"></script>
+<script>
+function w() { for(var i in arguments)document.write(arguments[i]) }
+function e(id) { return document.getElementById(id) }
+</script>
+</head>
+<body><center>
+<div id="display" class="content" style="text-align:center; border:1px none blue; width:100%">
+<img src="../../images/釋迦牟尼佛.jpg" title="按Home去前言；按End去後語；按空格條前進至念佛區。
+念佛時，空格條司暫停、繼續之職。">
+
+<script>
+var dur = 9650; // ms
+var pretext =
+`<h1>禮佛懺悔</h1>
+
+大慈大悲湣眾生，大喜大舍濟含識。<br>
+相好光明以自嚴，眾等至心皈命禮。<br>
+<br>
+南無皈依十方盡虛空界一切諸　佛。<br>
+南無皈依十方盡虛空界一切尊　法。<br>
+南無皈依十方盡虛空界一切賢聖僧。<br>
+南無如來、應供、正遍知、明行足、善逝、<br>
+世間解、無上士、調禦丈夫、天人師、佛、世尊。<br>
+<br>
+　嚴持香華，如法供養。　<br>
+願此香華雲，徧滿十方界。<br>
+供養一切佛，尊法諸賢聖。<br>
+無邊佛土中，受用作佛事。<br>
+<br>
+我今發心不為自求人天福報、聲聞緣覺、<br>
+乃至權乘諸位菩薩；唯依最上，乘發菩提心。<br>
+願與法界眾生，一時同得阿耨多羅三藐三菩提。<br>
+<br>
+十方三世一切諸佛體同。<br>
+僅以此有限數佛代表盡虛空無量無邊諸佛如來。<br>
+至心奉請十方三世一切諸佛如來。`;
+
+var posttext =
+`<br>
+如是等一切世界諸佛世尊，常住在世。<br>
+是諸世尊當慈念我。<br>
+<br>
+若我此生、若我前生，<br>
+從無始生死以來所作眾罪，若自作、若教他作、見作隨喜；<br>
+若塔、若僧、若四方僧物，若自取、若教他取、見取隨喜；<br>
+　　　　　　　五無間罪，若自作、若教他作、見作隨喜；<br>
+　　　　　　　十不善道，若自作、若教他作、見作隨喜；<br>
+所作罪障，或有覆藏、或不覆藏；<br>
+應墮地獄餓鬼畜生、諸余惡趣、邊地下賤、及蔑戾車，如是等處；<br>
+所作罪障，今皆懺悔。<br>
+<br>
+今諸佛世尊當證知我。當憶念我。<br>
+我復於諸佛世尊前作如是言。<br>
+<br>
+若我此生、若我余生，<br>
+曾行布施、或守淨戒、乃至施與畜生一摶之食；<br>
+或修淨行，所有善根；成就眾生，所有善根；<br>
+修行菩提，所有善根；及無上智，所有善根；<br>
+一切合集校計籌量，皆悉回向阿耨多羅三藐三菩提。<br>
+如過去未來現在諸佛所作回向，我亦如是回向！<br>
+<br>
+眾罪皆懺悔，諸福盡隨喜。及請佛功德，願成無上智。<br>
+去來現在佛，於眾生最勝　無量功德海，我今皈命禮！`;
+
+var allNames = getAllBuddhaNames(), ptr = -1, elem = e('display');
+
+function expand(n, filler) {
+  var ret = n[0];
+  for (var i=1; i<n.length; ++i) ret += filler + n[i];
+  return ret;
+}
+
+function showName() {
+  var n = allNames[ptr];
+  if (n.length <= 5) n = expand(n, n.length <= 3 ? '　' : '&nbsp;');
+  elem.innerHTML = '<div class="zKaiTi foName foNameFadeout" style="padding-top:200px">' + n + '</div>';
+  if (++ptr % allNames.length === 0) ptr = 0;
+}
+
+var intvl;
+
+function showText(text) {
+  elem.innerHTML = '<div class="zKaiTi prayerText">' + text + '</div>';
+  intvl && clearInterval(intvl);
+  intvl = null;
+}
+
+function showBuddhaRotationStart() {
+  elem.innerHTML = '<div class="zKaiTi solute foNameFadeout" style="padding-top:200px">' +
+  '一心敬禮<br><span class="info"><br>&nbsp;<br>（共九十五尊佛。每尊約十秒鐘。總長十五分鐘。）</span></div>';
+  ptr = 0;
+  if (intvl) clearInterval(intvl);
+  intvl = setInterval(showName, dur);
+}
+
+function startBuddhaRotation() {
+  if (intvl) return;
+  elem.innerHTML = '<div class="zKaiTi solute foNameFadeout" style="padding-top:180px">' +
+  '<span class="solute" style="font-size:72px">' +
+  '　我聞徧知海，真實德無邊。<br>' +
+  '　度脫諸有情，心歡喜敬禮。<br>' +
+  '　曾脩無量福，今得禮尊足。<br>' +
+  '　願無量劫中，常脩多供養。</span></div>';
+  ptr = 0;
+  intvl = setInterval(showBuddhaRotationStart, dur);
+}
+
+function flipBuddhaRotation() {
+  if (ptr < 0) { showText(pretext); ptr = 0; return; }
+  if (intvl) {
+    clearInterval(intvl); intvl = null;
+  } else if (ptr ===0) {
+    startBuddhaRotation();
+  } else {
+    ptr = (ptr + allNames.length - 1) % allNames.length;
+    if (++ptr % allNames.length === 0) ptr = 0;
+    showName();
+    intvl = setInterval(showName, dur);
+  }
+}
+
+
+document.addEventListener('keydown', (e) => {
+  switch(e.key) {
+  case '1': showText(pretext); ptr = 0; return;
+  case '2': startBuddhaRotation(); return;
+  case '3': showText(posttext);    return;
+  case ' ': flipBuddhaRotation();  return;
+  }
+  switch(e.keyCode) {
+  case 36:  showText(pretext);     return;
+  case 35:  showText(posttext);    return;
+  }
+});
+
+//showText(pretext);
+</script>
+
+</div>
+</center></body></html>

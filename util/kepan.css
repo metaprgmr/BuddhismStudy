@@ -1,0 +1,12 @@
+body { margin:20px }
+.keyLine { background-color:lightyellow }
+.printing { font-family:KaiTi,楷体,STKaiti,华文楷体; font-size:16px; line-height:125%; letter-spacing:3px }
+.printing1 { font-size:16px; line-height:125%; letter-spacing:3px }
+h2 { letter-spacing:2px }
+
+a { text-decoration:none }
+a:link   { color:blue }
+a:visited{ color:blue }
+a:hover  { color:blue }
+a:focus  { color:blue }
+a:active { color:blue }

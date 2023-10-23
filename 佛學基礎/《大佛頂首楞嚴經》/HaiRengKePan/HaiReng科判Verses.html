@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>海仁法師《楞嚴經講義》科判</title>
+<link rel="stylesheet" href="../../../util/kepan.css">
+<script src="../../../util/reading.js"></script>
+<script src="verses.js"></script>
+<script>
+function toZNum(i) {
+  return (i === 10) ? '十' : zNumber(i);
+}
+
+function selectVol(volNum) {
+  if (!volNum) volNum = 1;
+  var buf = new Buffer('《楞嚴經》卷&nbsp;');
+  for (var i=1; i<=10; ++i) {
+    if (i > 1) buf.w('&nbsp;&nbsp;');
+    if (i == volNum)
+      buf.w('<font style="color:red; background-color:yellow">', toZNum(i), '</font>');
+    else
+      buf.w('<a href="javascript:selectVol(', i, ')">', toZNum(i), '</a>');
+  }
+  buf.render('volumeNums');
+
+  listVol(volNum);
+}
+
+function listVol(volNum) {
+  var buf = new Buffer();
+  buf.w('<table border=0><tr><td>');
+  if (volNum < 1 || volNum > 10) {
+    buf.render('verseNums');
+    return;
+  }
+  var prefix = ' ABCDEFGHIJ'[volNum];
+  var zPref = toZNum(volNum);
+  var width = 20;
+  for (var i=1; ; i++) {
+    var num = digit3(i);
+    var v = HaiRengVerses[prefix + num];
+    if (!v) break;
+    buf.w('<a href="javascript:showText(', volNum, ',', i, ')">', num, '</a> ');
+    if (i % width === 0) buf.w('<br>');
+  }
+  buf.w('</td></tr></table>');
+  buf.render('verseNums');
+  showText(volNum, 1);
+}
+
+function showText(volNum, verseNum) {
+  var buf = new Buffer();
+  buf.w('<table width="900">');
+  var prefix = ' ABCDEFGHIJ'[volNum];
+  for (var i=0; i<10; ++i) {
+    var id = digit3(verseNum+i);
+    var v = HaiRengVerses[prefix + id];
+    if (!v) break;
+    buf.w('<tr><td valign="top" style="font-family:fixed width">', id, '&nbsp;</td><td style="color:teal">', v, '</td></tr>');
+  }
+  buf.w('</table>');
+  buf.render('verseStage');
+}
+</script>
+</head>
+<body>
+<center>
+<table border="0">
+<tr><td align="center" id="volumeNums" style="border-bottom:1px solid black"></td></tr>
+<tr><td align="center" nowrap style="border-bottom:1px solid black"><div id="verseNums" style="font-family:fixed width"></div></td></tr>
+<tr><td style="border-bottom:1px solid black"><div id="verseStage"></div></td></tr>
+</table>
+<script>
+  selectVol();
+</script>
+</center></body></html>
+

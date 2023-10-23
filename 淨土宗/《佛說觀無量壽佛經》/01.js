@@ -1,4 +1,6 @@
-const this_book = new MyBookInfo('佛說觀無量壽佛經', '劉宋西域三藏法師彊良耶舍 譯').addContent(
+const this_book = new MyBookInfo('佛說觀無量壽佛經', '劉宋西域三藏法師彊良耶舍 譯')
+.setImage(window['IMAGE_AMITABHA'])
+.addContent(
 
 '如是我聞，一時，佛在王舍城耆闍崛山中，與大比丘眾，千二百五十人俱。菩薩三萬二千，文殊師利法王子而為上首。',
 

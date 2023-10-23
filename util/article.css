@@ -7,6 +7,7 @@ a:focus  { color:blue }
 a:active { color:blue }
 
 .content { border:0px red solid; width:600px; text-align:left }
+.contentW { border:0px red solid; width:900px; text-align:left }
 .gatha   { text-align:center }
 
 .zKaiTi      { font-family: "KaiTi", "楷体", STKaiti, "华文楷体" }
@@ -17,4 +18,28 @@ a:active { color:blue }
 .copyright { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:14px }
 .copyright::before {
   content: '信裹居士自然版權所有。無限制使用、更改、轉發。若有改動並且公布，請自註明，文責自負。';
+}
+
+.fadein {
+  opacity: 0;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 2s;
+}
+@keyframes fadeInOpacity {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.fadeout {
+  opacity: 1;
+  animation-name: fadeOutOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-delay: 4s;
+  animation-duration: 2s;
+}
+@keyframes fadeOutOpacity {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
