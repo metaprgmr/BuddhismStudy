@@ -496,227 +496,227 @@ const translit =
 
  　　　　
  　　　　
- 　　　　
- 　　　　
- 　　　　
- 　　　　
- 　　　　
- 　　　　
- 　　　　　　　唐天竺‧沙門般剌密帝所譯《楞嚴經》內之咒文，對照考古
+
+
+
+
+
+ 　　　　　　　唐天竺‧沙門般剌密帝所譯《楞嚴經》內之咒文，對照考古。
+ 　　　　　　　咒文編號來自海仁法師《講義》。略有不完備者。其解宜作參考。
 
     ----------------------------（第一會）-----------------------------<a name="part1"></a>
-    南無 薩怛他 蘇伽多耶 阿羅訶帝 三藐三菩陀寫 薩怛他 佛陀俱胝、瑟尼釤　【<a class="nav" href="index.html">總介紹</a>】
+    南無薩怛他蘇伽多耶阿羅訶帝三藐三菩陀寫<digits>1</digits> 薩怛他佛陀俱胝瑟尼釤<digits>2</digits>     　<span style="display:none">【<a class="nav" href="index.html">總介紹</a>】</span>
 
- 1  南無 薩婆 勃陀 勃地薩跢鞞 弊  　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part2">第二會</a>】
- 2  南無 薩多南 三藐三菩陀 俱知喃 娑舍囉、婆迦 僧伽喃 　　　　　　　　　【<a class="nav" href="#part3">第三會</a>】
- 3  南無 盧雞、阿羅漢、跢喃     　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part4">第四會</a>】
- 4  南無 蘇盧多、波那喃     　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part5">第五會</a>】
- 5  南無 娑羯唎陀、伽彌喃
+ 1  南無薩婆勃陀勃地薩跢鞞弊<digits>3</digits>     　　　　　　　　　　　　　　　　　　　<span style="display:none">【<a class="nav" href="#part2">第二會</a>】</span>
+ 2  南無薩多南三藐三菩陀俱知喃<digits>4</digits> 娑舍囉婆迦僧伽喃<digits>5</digits>     　　　　　　　　　<span style="display:none">【<a class="nav" href="#part3">第三會</a>】</span>
+ 3  南無盧雞阿羅漢跢喃<digits>6</digits>         　　　　　　　　　　　　　　　　　　　　<span style="display:none">【<a class="nav" href="#part4">第四會</a>】</span>
+ 4  南無蘇盧多波那喃<digits>7</digits>       　　　　　　　　　　　　　　　　　　　　　　<span style="display:none">【<a class="nav" href="#part5">第五會</a>】</span>
+ 5  南無娑羯唎陀伽彌喃<digits>8</digits>
  6  
- 7  南無 盧雞、三藐、伽跢喃 三藐、伽波囉 底波、多那喃
+ 7  南無盧雞三藐伽跢喃<digits>9</digits> 三藐伽波囉底波多那喃<digits>10</digits>
 
- 8  南無 提婆、離瑟赧
- 9  南無 悉陀耶 毗地耶 陀囉離瑟赧 舍波奴 揭囉訶 娑訶娑囉、摩他喃
-10  南無 跋囉訶、摩泥
-11  南無 因陀囉耶
-12  南無 婆伽婆帝 嚧陀囉耶 烏摩般帝 娑醯夜耶
-13  南無 婆伽婆帝 那囉野 拏耶
-    　　 槃遮摩訶、三慕陀囉 南無悉羯唎多耶
-14  南無 婆伽婆帝 摩訶迦羅耶 地唎、般剌那 伽囉毗陀囉 波拏、迦囉耶
-    　　 阿地目帝 尸摩舍那泥 婆悉泥 摩怛唎伽拏 南無悉羯唎多耶
+ 8  南無提婆離瑟赧<digits>11</digits>
+ 9  南無悉陀耶毗地耶陀囉離瑟赧<digits>12</digits> 舍波奴揭囉訶娑訶娑囉摩他喃<digits>13</digits>
+10  南無跋囉訶摩泥<digits>14</digits>
+11  南無因陀囉耶<digits>15</digits>
+12  南無婆伽婆帝<digits>16</digits> 嚧陀囉耶<digits>17</digits> 烏摩般帝<digits>18</digits> 娑醯夜耶<digits>19</digits>
+13  南無婆伽婆帝<digits>20</digits> 那囉野拏耶<digits>21</digits>
+    　　槃遮摩訶三慕陀囉<digits>22</digits> 南無悉羯唎多耶<digits>23</digits>
+14  南無婆伽婆帝<digits>24</digits> 摩訶迦羅耶<digits>25</digits> 地唎般剌那伽囉<digits>26</digits> 毗陀囉波拏迦囉耶<digits>27</digits>
+    　　阿地目帝<digits>28</digits> 尸摩舍那泥婆悉泥<digits>29</digits> 摩怛唎伽拏<digits>30</digits> 南無悉羯唎多耶<digits>31</digits>
 
-15  南無 婆伽婆帝 多他伽跢、俱囉耶
-16  南無 　　　　 　般頭摩、俱囉耶
-17  南無 　　　　 　跋闍囉、俱囉耶
-18  南無 　　　　 　　摩尼、俱囉耶
-19  南無 　　　　 　　伽闍、俱囉耶
+15  南無婆伽婆帝<digits>32</digits> 多他伽跢俱囉耶<digits>33</digits>
+16  南無　　　　 　般頭摩俱囉耶<digits>34</digits>
+17  南無　　　　 　跋闍囉俱囉耶<digits>35</digits>
+18  南無　　　　 　摩尼俱囉耶<digits>36</digits>
+19  南無　　　　 　伽闍俱囉耶<digits>37</digits>
 
-20  南無 婆伽婆帝 帝唎茶 輸囉西那 波囉訶囉、拏囉闍耶
-    　　 　　　　 　　　　　　 　　　跢他伽多耶
-21  南無 婆伽婆帝 <anno>南無</anno> 阿彌、多婆耶　跢他伽多耶 阿囉訶帝 三藐三菩陀耶
-22  南無 婆伽婆帝 阿芻鞞耶 　　　　　跢他伽多耶 阿囉訶帝 三藐三菩陀耶
-23  南無 婆伽婆帝 鞞沙闍耶 俱盧、吠柱唎耶 般囉婆、囉闍耶
-    　　 　　　　 　　　　　　 　　　跢他伽多耶
-24  南無 婆伽婆帝 三補師、毖多 薩憐捺囉剌闍耶
-    　　 　　　　 　　　　　　 　　　跢他伽多耶 阿囉訶帝 三藐三菩陀耶
-25  南無 婆伽婆帝 舍雞野、母那曳　　 跢他伽多耶 阿囉訶帝 三藐三菩陀耶
-26  南無 婆伽婆帝 剌怛那、雞都、囉闍耶
-    　　 　　　　 　　　　　　 　　　跢他伽多耶 阿囉訶帝 三藐三菩陀耶
-27  帝瓢 南無薩羯唎多
+20  南無婆伽婆帝<digits>38</digits> 帝唎茶輸囉西那<digits>39</digits> 波囉訶囉拏囉闍耶<digits>40</digits>
+    　　 　　　　 　　　　　　 　　　跢他伽多耶<digits>41</digits>
+21  南無婆伽婆帝<digits>42</digits> <anno>南無</anno>阿彌多婆耶<digits>43</digits> 跢他伽多耶<digits>44</digits> 阿囉訶帝<digits>45</digits> 三藐三菩陀耶<digits>46</digits>
+22  南無婆伽婆帝<digits>47</digits> 阿芻鞞耶48 跢他伽多耶<digits>49</digits> 阿囉訶帝<digits>50</digits> 三藐三菩陀耶<digits>51</digits>
+23  南無婆伽婆帝<digits>52</digits> 鞞沙闍耶俱盧吠柱唎耶<digits>53</digits> 般囉婆囉闍耶<digits>54</digits>
+    　　　　　　 　　　　　　 　　　 跢他伽多耶<digits>55</digits>
+24  南無婆伽婆帝<digits>56</digits> 三補師毖多<digits>57</digits> 薩憐捺囉剌闍耶<digits>58</digits>
+    　　 　　　　 　　　　　　 　　　跢他伽多耶59 阿囉訶帝60 三藐三菩陀耶<digits>61</digits>
+25  南無婆伽婆帝<digits>62</digits> 舍雞野母那曳<digits>63</digits>　　跢他伽多耶<digits>64</digits> 阿囉訶帝<digits>65</digits> 三藐三菩陀耶<digits>66</digits>
+26  南無婆伽婆帝<digits>67</digits> 剌怛那雞都囉闍耶<digits>68</digits>
+    　　 　　　　 　　　　　　 　　　跢他伽多耶<digits>69</digits> 阿囉訶帝<digits>70</digits> 三藐三菩陀耶<digits>71</digits>
+27  帝瓢南無薩羯唎多<digits>72</digits>
 
-28  翳<doubt>曇</doubt>、婆伽婆多 薩怛他、伽都瑟尼釤 薩怛多、般怛藍 南無 阿婆囉視耽
-    　　般囉帝 揚歧囉
-29  薩囉婆 部多、揭囉訶 尼羯囉訶 羯迦囉訶尼
-30  跋囉、毖地耶 叱陀你
-31  阿迦囉 密唎柱 般唎 怛囉耶 儜揭唎
-32  薩囉婆 槃陀那 目叉尼
-33  薩囉婆 突瑟吒 突悉乏般那 你伐囉尼
-34  赭都囉 失帝南 羯囉訶 娑訶、薩囉、若闍 毗多崩娑那、羯唎
-35  阿瑟吒、冰舍帝南 那叉剎怛囉、若闍 波囉、薩陀那、羯唎
-36  阿瑟吒南 摩訶羯囉訶、若闍 毗多崩、薩那、羯唎
-37  薩婆、舍都嚧 你婆囉、若闍
-38  呼藍、突悉乏難 遮 那舍尼
-39  毖沙 舍悉怛囉 阿吉尼 烏陀迦囉、若闍
+28  翳<doubt>曇</doubt>婆伽婆多<digits>73</digits> 薩怛他伽都瑟尼釤<digits>74</digits> 薩怛多般怛藍<digits>75</digits> 南無阿婆囉視耽<digits>76</digits>
+    　　般囉帝揚歧囉<digits>77</digits>
+29  薩囉婆部多揭囉訶<digits>78</digits> 尼羯囉訶羯迦囉訶尼<digits>79</digits>
+30  跋囉毖地耶叱陀你<digits>80</digits>
+31  阿迦囉密唎柱<digits>81</digits> 般唎怛囉耶儜揭唎<digits>82</digits>
+32  薩囉婆槃陀那目叉尼<digits>83</digits>
+33  薩囉婆突瑟吒<digits>84</digits> 突悉乏般那你伐囉尼<digits>85</digits>
+34  赭都囉失帝南<digits>86</digits> 羯囉訶娑訶薩囉若闍<digits>87</digits> 毗多崩娑那羯唎<digits>88</digits>
+35  阿瑟吒冰舍帝南<digits>89</digits> 那叉剎怛囉若闍<digits>90</digits> 波囉薩陀那羯唎<digits>91</digits>
+36  阿瑟吒南<digits>92</digits> 摩訶羯囉訶若闍<digits>93</digits> 毗多崩薩那羯唎<digits>94</digits>
+37  薩婆舍都嚧你婆囉若闍<digits>95</digits>
+38  呼藍突悉乏難 遮 那舍尼<digits>96</digits>
+39  毖沙舍悉怛囉<digits>97</digits> 阿吉尼烏陀迦囉若闍<digits>98</digits>
 
-40  阿般囉視多、具囉   摩訶般囉、戰持 摩訶疊多
-    　　摩訶帝闍 摩訶稅多、闍婆囉 摩訶跋囉、槃陀囉 婆悉你
-41  阿唎耶、多囉 毗唎俱知 誓婆、毗闍耶 跋闍囉、摩禮底 毗舍嚧多
-42  勃騰罔迦 跋闍囉、制喝那、阿遮 摩囉制婆 般囉質多 跋闍囉、擅持 毗舍囉
-    　　遮 扇多舍 鞞提婆 補視多
-43  蘇摩嚧波 摩訶稅多
-44  阿唎耶、多囉 摩訶婆囉、阿般囉 跋闍囉、商羯囉、制婆
-45  跋闍囉、俱摩唎 俱藍陀唎 跋闍囉、喝薩多 遮 毗地耶 乾遮那 摩唎迦
-46  啒蘇母婆羯 囉跢那 鞞嚧遮那 俱唎耶 夜囉菟 瑟尼釤 毗折藍婆、摩尼 遮
-47  跋闍囉、迦那迦、波囉婆 嚧闍那 跋闍囉、頓稚 遮
-    　　稅多 遮 迦摩囉 剎奢尸 波囉婆
-48  翳帝夷帝 母陀囉 羯拏 娑鞞囉懺 掘梵都 <doubt>印兔那</doubt>、麼麼 寫
+40  阿般囉視多具囉<digits>99</digits> 摩訶般囉戰持<digits>100</digits> 摩訶疊多<digits>101</digits>
+    　　摩訶帝闍<digits>102</digits> 摩訶稅多闍婆囉<digits>103</digits> 摩訶跋囉槃陀囉婆悉你<digits>104</digits>
+41  阿唎耶多囉<digits>105</digits> 毗唎俱知<digits>106</digits> 誓婆毗闍耶<digits>107</digits> 跋闍囉摩禮底<digits>108</digits> 毗舍嚧多<digits>109</digits>
+42  勃騰罔迦<digits>110</digits> 跋闍囉制喝那阿遮<digits>111</digits> 摩囉制婆般囉質多<digits>112</digits> 跋闍囉擅持<digits>113</digits> 毗舍囉 遮<digits>114</digits>
+    　　扇多舍鞞提婆補視多<digits>115</digits>
+43  蘇摩嚧波<digits>116</digits> 摩訶稅多<digits>117</digits>
+44  阿唎耶多囉<digits>118</digits> 摩訶婆囉阿般囉<digits>119</digits> 跋闍囉商羯囉制婆<digits>120</digits>
+45  跋闍囉俱摩唎<digits>121</digits> 俱藍陀唎<digits>122</digits> 跋闍囉喝薩多 遮<digits>123</digits> 毗地耶乾遮那摩唎迦
+46  啒蘇母<digits>124</digits> 婆羯囉跢那<digits>125</digits> 鞞嚧遮那俱唎耶<digits>126</digits> 夜囉菟瑟尼釤<digits>127</digits> 毗折藍婆摩尼 遮<digits>128</digits>
+47  跋闍囉迦那迦波囉婆嚧闍那<digits>129</digits> 跋闍囉頓稚 遮<digits>130</digits>
+    　　稅多 遮 迦摩囉<digits>131</digits> 剎奢尸波囉婆<digits>132</digits>
+48  翳帝夷帝<digits>133</digits> 母陀囉羯拏<digits>134</digits> 娑鞞囉懺<digits>135</digits> 掘梵都<digits>136</digits> <doubt>印兔那</doubt>麼麼寫<digits>137</digits>
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#_top">回頁頂</a>】
 
     ----------------------------（第二會）-----------------------------<a name="part2"></a>
- 1  烏𤙖　唎瑟、揭拏　般剌、舍悉多　薩怛他　伽都瑟尼釤　虎𤙖　都嚧雍
- 2  　　　　　　　　　　　　　　　　　　　　　　瞻婆那　虎𤙖　都嚧雍
- 3  　　　　　　　　　　　　　　　　　　　　　悉眈婆那　虎𤙖　都嚧雍
+ 1  烏𤙖<digits>138</digits>　唎瑟揭拏<digits>139</digits>　般剌舍悉多<digits>140</digits> 薩怛他伽都瑟尼釤<digits>141</digits> 虎𤙖<digits>142</digits> 都嚧雍<digits>143</digits>
+ 2  瞻婆那<digits>144</digits> 虎𤙖<digits>145</digits> 都嚧雍<digits>146</digits>
+ 3  悉眈婆那<digits>147</digits> 虎𤙖<digits>148</digits> 都嚧雍<digits>149</digits>
  4  
  5  
- 6  　　　　　　　　　　　　波囉瑟地耶　三般叉　拏羯囉　虎𤙖　都嚧雍
+ 6  波囉瑟地耶三般叉拏羯囉<digits>150</digits> 虎𤙖<digits>151</digits> 都嚧雍<digits>152</digits>
  7  
- 8  薩婆藥叉　喝囉剎裟　揭囉訶、若闍　毗騰崩、薩那羯囉　虎𤙖　都嚧雍
- 9  者都囉　尸底南　揭囉訶　娑訶薩囉南　毗騰崩、薩那囉　虎𤙖　都嚧雍
+ 8  薩婆藥叉喝囉剎裟<digits>153</digits> 揭囉訶若闍<digits>154</digits> 毗騰崩薩那羯囉<digits>155</digits> 虎𤙖<digits>156</digits> 都嚧雍<digits>157</digits>
+ 9  者都囉尸底南<digits>158</digits> 揭囉訶娑訶薩囉南<digits>159</digits> 毗騰崩薩那囉<digits>160</digits> 虎𤙖<digits>161</digits> 都嚧雍<digits>162</digits>
 10  
 11  
-12  囉叉
+12  囉叉<digits>163</digits>
 
-13  婆伽梵　薩怛他　伽都瑟尼釤
-　　　　波囉點　闍吉唎
-    摩訶、娑訶薩囉　勃樹、娑訶薩囉　室唎沙　俱知、娑訶薩泥　帝隸、
-14  阿弊提視、婆唎多　吒吒甖迦　摩訶、跋闍嚧陀囉
-　  帝唎　菩婆那　曼茶囉
-15  烏𤙖　娑悉帝　薄婆都　麼麼　<doubt>印兔那、麼麼　寫</doubt>
+13  婆伽梵<digits>164</digits> 薩怛他伽都瑟尼釤<digits>165</digits>
+    波囉點闍吉唎<digits>166</digits>
+    摩訶娑訶薩囉<digits>167</digits> 勃樹娑訶薩囉室唎沙<digits>168</digits> 俱知娑訶薩泥帝隸<digits>169</digits>
+14  阿弊提視婆唎多<digits>170</digits> 吒吒甖迦<digits>171</digits> 摩訶跋闍嚧陀囉<digits>172</digits>
+    帝唎菩婆那<digits>173</digits> 曼茶囉<digits>174</digits>
+15  烏𤙖<digits>175</digits> 娑悉帝薄婆都<digits>176</digits>　麼麼<digits>177</digits>　<doubt>印兔那麼麼寫</doubt><digits>178</digits>
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#_top">回頁頂</a>】
 
     ----------------------------（第三會）-----------------------------<a name="part3"></a>
- 1  　　　囉闍婆夜　　　　　　主囉跋夜　　　　阿祇尼、婆夜　　　　　烏陀迦、婆夜
-  b 　　毗沙、婆夜　　　舍薩多囉、婆夜　婆囉、斫羯囉、婆夜　　　　　突瑟叉、婆夜
-  c 　阿舍你、婆夜　阿迦囉密唎柱、婆夜　陀囉尼、部彌劍波伽波陀、婆夜　烏囉迦、婆多、婆夜
-  d 剌闍壇茶、婆夜　　　　　　那伽婆夜　　　　毗條怛、婆夜　　　　蘇波囉拏、婆夜
+ 1  囉闍婆夜<digits>179</digits> 　　主囉跋夜<digits>180</digits> 　　阿祇尼婆夜<digits>181</digits> 　　烏陀迦婆夜<digits>182</digits>
+  b 毗沙婆夜<digits>183</digits> 　　舍薩多囉婆夜<digits>184</digits> 婆囉斫羯囉婆夜<digits>185</digits> 突瑟叉婆夜<digits>186</digits>
+  c 阿舍你婆夜<digits>187</digits> 阿迦囉密唎柱婆夜<digits>188</digits> 陀囉尼部彌劍波伽波陀婆夜<digits>189</digits> 烏囉迦婆多婆夜<digits>190</digits>
+  d 剌闍壇茶婆夜<digits>191</digits> 那伽婆夜<digits>192</digits> 　　毗條怛婆夜<digits>193</digits> 　　蘇波囉拏婆夜<digits>194</digits>
 
- 2  　　　　　　　　　　　　　　　　　　　　　藥叉、揭囉訶　　　　囉叉私、揭囉訶
-  b 畢唎多、揭囉訶　　　毗舍遮、揭囉訶　　　　部多、揭囉訶　　　　鳩槃茶、揭囉訶
-  c 補丹那、揭囉訶　迦吒補丹那、揭囉訶　　　悉乾度、揭囉訶　　阿播悉摩囉、揭囉訶
-  d 烏<doubt>檀</doubt>摩陀、揭囉訶　　　　車夜揭囉訶　　醯唎婆帝、揭囉訶
+ 2  　　　　　　　　　　　　　　　　　　 　　藥叉揭囉訶<digits>195</digits>　　囉叉私揭囉訶<digits>196</digits>
+  b 畢唎多揭囉訶<digits>197</digits>　　毗舍遮揭囉訶<digits>198</digits>　　　部多揭囉訶<digits>199</digits>　　鳩槃茶揭囉訶<digits>200</digits>
+  c 補丹那揭囉訶<digits>201</digits>　　迦吒補丹那揭囉訶<digits>202</digits>　悉乾度揭囉訶<digits>203</digits>　阿播悉摩囉揭囉訶<digits>204</digits>
+  d 烏<doubt>檀</doubt>摩陀揭囉訶<digits>205</digits>　車夜揭囉訶<digits>206</digits>　　　　醯唎婆帝揭囉訶<digits>207</digits>
   e 
 
- 3  <doubt>社多</doubt>、訶唎南　　　　　揭婆、訶唎南　　　嚧地囉、訶唎南
-  b 忙娑、訶唎南　　　　　謎陀、訶唎南　　　　摩闍、訶唎南　　　　　闍多、訶唎女
-  c 視比多、訶唎南　　　　<anno>毗多、訶唎南<span class="flipH">「</span></anno>　　阿輸遮、訶唎女　　　　　質多、訶唎女
-    　　　　　　　　　　<anno><span class="flipH">」</span>婆多、訶唎南</anno>
- 4  　　　　　　　　　帝釤、薩鞞釤　薩婆、揭囉訶南　毗陀夜闍　瞋陀夜彌　雞囉夜彌
- 5  　　　　　　　　　　　波唎、跋囉、者迦　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
- 6  　　　　　　　　　　　　　　　　茶演尼　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
- 7  　　　　　　　摩訶般輸、般怛夜　嚧陀囉　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
- 8  　　　　　　　　　　　　　　　那囉夜拏　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
- 9  　　　　　　　　　　　　怛埵伽嚧、茶西　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-10  　　　　　　　　　摩訶迦囉　摩怛唎伽拏　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-11  　　　　　　　　　　　　　　　　迦波唎迦訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-12  闍耶羯囉　摩度、羯囉　薩婆、囉他、娑達那
-    　　　　　　　　　　　　　　　　　　　　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-13  　　　　　　　　　　　　赭咄囉　婆耆你　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
+ 3  <doubt>社多</doubt>訶唎南<digits>208</digits>　　　揭婆訶唎南<digits>209</digits>　　　　嚧地囉訶唎南<digits>210</digits>
+  b 忙娑訶唎南<digits>211</digits>　　　謎陀訶唎南<digits>212</digits>　　　　摩闍訶唎南<digits>213</digits>　　闍多訶唎女<digits>214</digits>
+  c 視比多訶唎南<digits>215</digits>　　<anno>毗多訶唎南<digits>216</digits><span class="flipH">「</span></anno>　　　阿輸遮訶唎女<digits>218</digits>　質多訶唎女<digits>219</digits>
+    　　　　　　　　　<anno><span class="flipH">」</span>婆多訶唎南<digits>217</digits></anno>
+ 4  帝釤薩鞞釤<digits>220</digits>　薩婆揭囉訶南<digits>221</digits>　毗陀夜闍瞋陀夜彌<digits>222</digits>　雞囉夜彌<digits>223</digits>
+ 5  波唎跋囉者迦訖唎擔<digits>224</digits>　毗陀夜闍瞋陀夜彌<digits>225</digits>　雞囉夜彌<digits>226</digits>
+ 6  茶演尼訖唎擔<digits>227</digits>　毗陀夜闍瞋陀夜彌<digits>228</digits>　雞囉夜彌<digits>229</digits>
+ 7  摩訶般輸般怛夜<digits>230</digits>　嚧陀囉訖唎擔<digits>231</digits>　毗陀夜闍瞋陀夜彌<digits>232</digits>　雞囉夜彌<digits>233</digits>
+ 8  那囉夜拏訖唎擔<digits>234</digits>　毗陀夜闍瞋陀夜彌<digits>235</digits>　雞囉夜彌<digits>236</digits>
+ 9  怛埵伽嚧茶西訖唎擔<digits>237</digits>　毗陀夜闍瞋陀夜彌<digits>238</digits>　雞囉夜彌<digits>239</digits>
+10  摩訶迦囉摩怛唎伽拏訖唎擔<digits>240</digits>　毗陀夜闍瞋陀夜彌<digits>241</digits>　雞囉夜彌<digits>242</digits>
+11  迦波唎迦訖唎擔<digits>243</digits>　毗陀夜闍瞋陀夜彌<digits>244</digits>　雞囉夜彌<digits>245</digits>
+12  闍耶羯囉摩度羯囉<digits>246</digits>　薩婆囉他娑達那訖唎擔<digits>247</digits>
+    　　毗陀夜闍瞋陀夜彌<digits>248</digits>　雞囉夜彌<digits>249</digits>
+13  赭咄囉婆耆你訖唎擔<digits>250</digits>　毗陀夜闍瞋陀夜彌<digits>251</digits>　雞囉夜彌<digits>252</digits>
 
-14  毗唎羊、訖唎知　難陀、雞沙囉　伽拏、般帝　索醯夜
-    　　　　　　　　　　　　　　　　　　　　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-15  　　　　　　　　　　那揭、那舍囉、婆拏　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-16  　　　　　　　　　　　　　　　　阿羅漢　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-17  　　　　　　　　　　　　　　　毗多囉伽　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-18  跋闍囉波你　具醯夜、具醯夜　迦地、般帝　訖唎擔　毗陀夜闍　瞋陀夜彌　雞囉夜彌
-19  囉叉罔　<anno>婆伽梵　印兔那、麼麼　寫</anno>
+14  毗唎羊訖唎知<digits>253</digits> 難陀雞沙囉伽拏般帝<digits>254</digits>　索醯夜訖唎擔<digits>255</digits>
+    　　毗陀夜闍瞋陀夜彌<digits>256</digits>　雞囉夜彌<digits>257</digits>
+15  那揭那舍囉婆拏訖唎擔<digits>258</digits>　毗陀夜闍瞋陀夜彌<digits>259</digits>　雞囉夜彌<digits>260</digits>
+16  　　阿羅漢訖唎擔<digits>???</digits>　毗陀夜闍瞋陀夜彌<digits>261</digits>　雞囉夜彌<digits>262</digits>
+17  　　毗多囉伽訖唎擔<digits>263</digits>　毗陀夜闍瞋陀夜彌<digits>264</digits>　雞囉夜彌<digits>???</digits>
+18  跋闍囉波你<digits>265</digits>　具醯夜具醯夜<digits>266</digits>　迦地般帝訖唎擔<digits>267</digits>　毗陀夜闍瞋陀夜彌<digits>268</digits><span class="flipH">「</span>
+19  囉叉罔<digits>270</digits>　<anno>婆伽梵<digits>271</digits>　印兔那麼麼寫<digits>272</digits></anno>　　　　　　　　　　<span class="flipH">」</span>雞囉夜彌<digits>269</digits>
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#_top">回頁頂</a>】
 
     ----------------------------（第四會）-----------------------------<a name="part4"></a>
- 1  婆伽梵 薩怛多、般怛囉
- 2  南無粹都帝 阿悉多、那囉剌迦 波囉婆 悉普吒 毗迦、薩怛多、砵帝唎
+ 1  婆伽梵<digits>273</digits> 薩怛多般怛囉<digits>274</digits>
+ 2  南無粹都帝<digits>275</digits> 阿悉多那囉剌迦<digits>276</digits> 波囉婆悉普吒<digits>277</digits> 毗迦薩怛多砵帝唎<digits>278</digits>
 
- 3  　　　　　　　　　　　　　什佛囉、什佛囉
+ 3  　　　　　　　　　　　　　什佛囉什佛囉<digits>279</digits>
  4
- 5  　　　　　　　　　　　　　　陀囉 陀囉
- 6  　　　　　　　　　　　頻陀<doubt>囉</doubt>、頻陀<doubt>囉</doubt> 瞋陀 瞋陀
- 7  　　　　　　　　　　　　　虎𤙖 虎𤙖 泮吒
-    　　　　　　　　　　泮吒、泮吒、泮吒、泮吒 娑訶
+ 5  　　　　　　　　　　　　　　陀囉陀囉<digits>280</digits>
+ 6  　　　　　　　　　　　頻陀<doubt>囉</doubt>頻陀<doubt>囉</doubt>瞋陀瞋陀<digits>281</digits>
+ 7  　　　　　　　　　　　　　虎𤙖<digits>282</digits> 虎𤙖<digits>283</digits> 泮吒<digits>284</digits>
+    　　　　　　　　　　泮吒、泮吒、泮吒、泮吒<digits>285</digits> 娑訶<digits>286</digits>
 
- 8　　　　　　　　　　　醯醯泮　　|36 薩婆、
- 9　　　　　　　　　阿牟迦耶泮　　|   　　　毗陀耶　囉誓、遮犁、弊泮　
-10　　　　　　阿波囉、提訶多泮　　|37 闍夜羯囉　摩度羯囉
-11　　　　　　　婆囉、波囉陀泮　　|   　　　　薩婆、囉他娑陀雞、弊泮
-12　　　阿素囉　毗陀囉　波迦泮　　|38 　　　　　　毗地夜　遮唎、弊泮
-13　　　　　　薩婆、提鞞、弊泮　　|39 　　　　　者都囉　縛耆你、弊泮
-14　　　　　　薩婆、那伽、弊泮　　|40 跋闍囉　俱摩唎
-15　　　　　　薩婆、藥叉、弊泮　　|   　　　　　　毗陀夜　囉誓、弊泮
-16　　　　　　　　　　　　　　　　|41 　摩訶波囉、丁羊　叉耆唎、弊泮
-17　　　　　　　　　　　　　　　　|
-18　　　　　薩婆、乾闥婆、弊泮　　|42 　　　　　　跋闍囉、商羯囉夜
-19　　　　　　　　　　　　　　　　|43 　　　　　　波囉丈耆、囉闍耶泮
-20　　　　　　　　　　　　　　　　|44 摩訶迦囉夜　摩訶、末怛唎迦拏
-21　　　　　　　　　　　　　　　　|   　　　　　南無、娑羯唎多、夜泮
-22　　　　　　　　　　　　　　　　|45 　　　　　　　　毖瑟拏婢、曳泮
-23　　　　　　　　　　　　　　　　|46 　　　　　　勃囉訶、牟尼、曳泮
-24　　　　　　　　　　　　　　　　|47 　　　　　　　　　阿耆尼、曳泮
-25　　　　　　　　　　　　　　　　|48 　　　　　　　　摩訶羯唎、曳泮
-26　　　　　　　　　　　　　　　　|49 　　　　　　　　羯囉檀持、曳泮
-27　　　　　薩婆、補丹那、弊泮　　|50 　　　　　　　　　蔑怛唎、曳泮
-28　　　　　　迦吒補丹那、弊泮　　|51 　　　　　　　　　嘮怛唎、曳泮
-29　　　　薩婆、突狼枳帝、弊泮　　|52 　　　　　　　　　遮文茶、曳泮
-30　薩婆、突澀比犁訖瑟帝、弊泮　　|53 　　　　　　　羯邏囉怛唎、曳泮
-31　　　　　薩婆、什婆唎、弊泮　　|54 　　　　　　　　　迦般唎、曳泮
-32　　　薩婆、阿播悉摩犁、弊泮　　|55 阿地目、質多迦
-33　　　薩婆、舍囉、婆拏、弊泮　　|   　　　尸摩、舍那　婆私你、曳泮
-34　　　　　薩婆、地帝雞、弊泮
-35　　　　薩婆、<doubt>怛摩陀繼</doubt>、弊泮　　|56 演吉質　薩埵、婆寫　麼麼
-  　　　　　　　　　　　　　　　　|   　　　　　　　<doubt>印兔那、麼麼　寫</doubt>
+ 8　　　　　　　　　　醯醯泮<digits>287</digits>　　|36 薩婆
+ 9　　　　　　　　阿牟迦耶泮<digits>288</digits>　　|   　　　　　　毗陀耶囉誓遮犁弊泮<digits>305</digits>
+10　　　　　　阿波囉提訶多泮<digits>289</digits>　　|37 闍夜羯囉摩度羯囉<digits>306</digits>
+11　　　　　　　婆囉波囉陀泮<digits>290</digits>　　|   　　　　　　薩婆囉他娑陀雞弊泮<digits>307</digits>
+12　　　　阿素囉毗陀囉波迦泮<digits>291</digits>　　|38 　　　　　　　　毗地夜遮唎弊泮<digits>308</digits>
+13　　　　　　　薩婆提鞞弊泮<digits>292</digits>　　|39 　　　　　　　者都囉縛耆你弊泮<digits>309</digits>
+14　　　　　　　薩婆那伽弊泮<digits>293</digits>　　|40 跋闍囉俱摩唎<digits>310</digits>
+15　　　　　　　薩婆藥叉弊泮<digits>294</digits>　　|   　　　　　　　　毗陀夜囉誓弊泮<digits>311</digits>
+16　　　　　　　　　　　　　　　　　|41 　　　　摩訶波囉丁羊叉耆唎弊泮<digits>312</digits>
+17　　　　　　　　　　　　　　　　　|
+18　　　　　　薩婆乾闥婆弊泮<digits>295</digits>　　|42 　　　　　　　　跋闍囉商羯囉夜<digits>313</digits>
+19　　　　　　　　　　　　　　　　　|43 　　　　　　　波囉丈耆囉闍耶泮<digits>314</digits>
+20　　　　　　　　　　　　　　　　　|44 摩訶迦囉夜<digits>315</digits>　摩訶末怛唎迦拏<digits>316</digits>
+21　　　　　　　　　　　　　　　　　|   　　　　　　　南無娑羯唎多夜泮<digits>317</digits>
+22　　　　　　　　　　　　　　　　　|45 　　　　　　　　　毖瑟拏婢曳泮<digits>318</digits>
+23　　　　　　　　　　　　　　　　　|46 　　　　　　　　勃囉訶牟尼曳泮<digits>319</digits>
+24　　　　　　　　　　　　　　　　　|47 　　　　　　　　　　阿耆尼曳泮<digits>320</digits>
+25　　　　　　　　　　　　　　　　　|48 　　　　　　　　　摩訶羯唎曳泮<digits>321</digits>
+26　　　　　　　　　　　　　　　　　|49 　　　　　　　　　羯囉檀持曳泮<digits>322</digits>
+27　　　　　　薩婆補丹那弊泮<digits>296</digits>　　|50 　　　　　　　　　　蔑怛唎曳泮<digits>323</digits>
+28　　　　　　迦吒補丹那弊泮<digits>297</digits>　　|51 　　　　　　　　　　嘮怛唎曳泮<digits>324</digits>
+29　　　　　薩婆突狼枳帝弊泮<digits>298</digits>　　|52 　　　　　　　　　　遮文茶曳泮<digits>325</digits>
+30　　薩婆突澀比犁訖瑟帝弊泮<digits>299</digits>　　|53 　　　　　　　　羯邏囉怛唎曳泮<digits>326</digits>
+31　　　　　　薩婆什婆唎弊泮<digits>300</digits>　　|54 　　　　　　　　　　迦般唎曳泮<digits>327</digits>
+32　　　　薩婆阿播悉摩犁弊泮<digits>301</digits>　　|55 阿地目質多迦
+33　　　　　薩婆舍囉婆拏弊泮<digits>302</digits>　　|   　　　　尸摩舍那<digits>328</digits> 婆私你曳泮<digits>329</digits>
+34　　　　　　薩婆地帝雞弊泮<digits>303</digits>
+35　　　　　薩婆<doubt>怛摩陀繼</doubt>弊泮<digits>304</digits>　　|56 演吉質<digits>330</digits>　薩埵婆寫<digits>331</digits>　麼麼
+  　　　　　　　　　　　　　　　　|   　　　　　　　　　　<doubt>印兔那麼麼寫<digits>332</digits></doubt>
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#_top">回頁頂</a>】
     ----------------------------（第五會）-----------------------------<a name="part5"></a>
- 1  突瑟吒、質多　　阿末怛唎、質多
+ 1  突瑟吒質多<digits>333</digits>　　阿末怛唎質多<digits>334</digits>
  2  
 
- 3  烏闍、訶囉　　　伽婆、訶囉　　嚧地囉、訶囉　　　婆娑、訶囉
-  b 摩闍、訶囉　　　闍多、訶囉　　視毖多、訶囉　　跋略夜、訶囉
-  c 乾陀、訶囉　　布史波、訶囉　　　頗囉、訶囉　　　婆寫、訶囉
+ 3  烏闍訶囉<digits>335</digits>　　　伽婆訶囉<digits>336</digits>　　嚧地囉訶囉<digits>337</digits>　　　婆娑訶囉<digits>338</digits>
+  b 摩闍訶囉<digits>339</digits>　　　闍多訶囉<digits>340</digits>　　視毖多訶囉<digits>341</digits>　　跋略夜訶囉<digits>342</digits>
+  c 乾陀訶囉<digits>343</digits>　　布史波訶囉<digits>344</digits>　　　頗囉訶囉<digits>345</digits>　　　婆寫訶囉<digits>346</digits>
 
- 4  般波、質多　　突瑟吒、質多　　嘮陀囉、質多：　藥叉、揭囉訶　　　囉剎娑、揭囉訶
-  b　　　　 閉隸多、揭囉訶　　毗舍遮、揭囉訶　　　部多、揭囉訶　　　鳩槃茶、揭囉訶
-  c 　　　　悉乾陀、揭囉訶　烏<doubt>怛</doubt>摩陀、揭囉訶　　　車夜、揭囉訶　阿播薩摩囉、揭囉訶
-  d 宅袪革　茶耆尼、揭囉訶　　唎佛帝、揭囉訶　　闍彌迦、揭囉訶　　　舍俱尼、揭囉訶
-  e 姥陀囉　難地迦、揭囉訶　　阿藍婆、揭囉訶　乾度波尼、揭囉訶
+ 4  般波質多<digits>347</digits> 突瑟吒質多<digits>348</digits> 嘮陀囉質多<digits>349</digits>： 藥叉揭囉訶<digits>350</digits> 囉剎娑揭囉訶<digits>351</digits>
+  b 閉隸多揭囉訶<digits>352</digits>　　　　毗舍遮揭囉訶<digits>353</digits>　　部多揭囉訶<digits>354</digits>　　　鳩槃茶揭囉訶<digits>355</digits>
+  c 悉乾陀揭囉訶<digits>356</digits>　　　　烏<doubt>怛</doubt>摩陀揭囉訶<digits>357</digits>　車夜揭囉訶<digits>358</digits>　阿播薩摩囉揭囉訶<digits>359</digits>
+  d 宅袪革茶耆尼揭囉訶<digits>360</digits>　唎佛帝揭囉訶<digits>361</digits>　　闍彌迦揭囉訶<digits>362</digits>　　舍俱尼揭囉訶<digits>363</digits>
+  e 姥陀囉難地迦揭囉訶<digits>364</digits>　阿藍婆揭囉訶<digits>365</digits>　　乾度波尼揭囉訶<digits>366</digits>
 
- 5  什佛囉：　　堙迦醯迦　　　　　　墜帝藥迦　　　　怛隸帝藥迦　　　　　　者突託迦
-　　　　　　昵提、什伐囉　　　毖釤摩、什伐囉
- 6  　　　　　　　薄底迦　　　　　　　鼻底迦　　　室隸、瑟密迦　　　　娑你、般帝迦
- 7  薩婆、什伐囉：　　　　　　　　　室嚧吉帝　　　　<doubt>末陀、鞞達、　　　　　　嚧制劍</doubt>
-  b 　　　　　　阿綺嚧鉗　　　　　　　　　　　　　　　目佉嚧鉗　　　　　羯唎突嚧鉗
-  c 　　　　　　　揭囉訶　　揭藍、羯拏、輸藍　　　　憚多、輸藍　　　　迄唎夜、輸藍
-  d 　　　　　末麼、輸藍　　　跋唎室婆、輸藍　　毖栗瑟吒、輸藍　　　　烏陀囉、輸藍
-  e 　　　　　　羯知輸藍　　　　　跋悉帝輸藍　　　　　鄔嚧輸藍　　　　　　常伽輸藍
-  f 　　　　　喝悉多輸藍　　　　　　跋陀輸藍　　　　　　娑房盎伽、般囉、丈伽、輸藍
- 
- 8  部多　　　　毖跢茶　　　茶耆尼　　　　什婆囉
- 9  陀突嚧迦　　建咄嚧　　　吉知婆　　　　路多　　　毗薩般　　嚧訶凌伽　
+ 5  什佛囉：　堙迦醯迦<digits>367</digits>　　墜帝藥迦<digits>368</digits>　　　怛隸帝藥迦<digits>369</digits>　　者突託迦<digits>370</digits>
+    　　　　　昵提什伐囉<digits>???</digits>　毖釤摩什伐囉<digits>371</digits>
+ 6  　　　　　薄底迦<digits>372</digits>　　　鼻底迦<digits>373</digits>　　　　室隸瑟密迦<digits>374</digits>　　娑你般帝迦<digits>375</digits>
+ 7  薩婆什伐囉<digits>376</digits>：　　　　　室嚧吉帝<digits>377</digits>　　　<doubt>末陀鞞達嚧制劍<digits>378</digits></doubt>
+  b 　　　　　阿綺嚧鉗<digits>379</digits>　　　　　　　　　　　目佉嚧鉗<digits>380</digits>　　　羯唎突嚧鉗<digits>381</digits>
+  c 　　　　　揭囉訶揭藍<digits>382</digits>　羯拏輸藍<digits>383</digits>　　　憚多輸藍<digits>384</digits>　　　迄唎夜輸藍<digits>385</digits>
+  d 　　　　　末麼輸藍<digits>386</digits>　　跋唎室婆輸藍<digits>387</digits>　毖栗瑟吒輸藍<digits>388</digits>　烏陀囉輸藍<digits>389</digits>
+  e 　　　　　羯知輸藍<digits>390</digits>　　跋悉帝輸藍<digits>391</digits>　　鄔嚧輸藍<digits>392</digits>　　　常伽輸藍<digits>393</digits>
+  f 　　　　　喝悉多輸藍<digits>394</digits>　跋陀輸藍<digits>395</digits>　　　娑房盎伽般囉丈伽輸藍<digits>396</digits>
 
-10  輸沙　　　　怛囉娑那　　羯囉　　　　　毗沙　　　喻迦
-    阿耆尼　　　烏陀迦　　　末囉　　　　　鞞囉　　　建跢囉　　阿迦囉、密唎咄
-11  怛斂部迦　　地栗剌吒　　毖唎瑟質迦　　薩婆　　　那俱囉
-    肆引伽　　　弊揭囉　　　唎藥叉　　　　怛囉芻　　末囉視吠
+ 8  部多　　　　　毖跢茶<digits>397</digits> 　茶耆尼　　什婆囉<digits>398</digits>
+ 9  陀突嚧迦　　　建咄嚧　　　吉知婆　　路多<digits>399</digits>　　毗薩般嚧訶凌伽<digits>400</digits>
 
-12  帝釤　娑鞞釤　悉怛多、砵怛囉　摩訶跋闍嚧　瑟尼釤　摩訶般賴、丈耆藍
-    夜波　突陀舍　喻闍那　辮怛隸拏
-13　　　　<doubt>毗陀耶</doubt>　槃曇迦嚧彌　
-14　　　　　帝殊　槃曇迦嚧彌　
-15　　　般囉毗陀　槃曇迦嚧彌
+10  輸沙　　　　　怛囉娑那　　羯囉<digits>401</digits>　　毗沙　　　　喻迦<digits>402</digits>
+    阿耆尼　　　　烏陀迦<digits>403</digits> 　末囉　　　　鞞囉　　　建跢囉<digits>404</digits>　阿迦囉密唎咄<digits>???</digits>
+11  怛斂部迦<digits>405</digits>　地栗剌吒<digits>406</digits>　毖唎瑟質迦<digits>407</digits>　　薩婆　那俱囉<digits>408</digits>
+    肆引伽　　　　弊揭囉　　　唎藥叉　　　怛囉芻<digits>409</digits>　末囉視吠<digits>???</digits>
+
+12  帝釤　娑鞞釤<digits>410</digits>　悉怛多砵怛囉<digits>411</digits>　摩訶跋闍嚧瑟尼釤<digits>412</digits>　摩訶般賴丈耆藍<digits>413</digits>
+    夜波突陀舍喻闍那<digits>414</digits>　辮怛隸拏<digits>415</digits>
+13　　　　<doubt>毗陀耶</doubt>槃曇迦嚧彌<digits>416</digits>
+14　　　　　帝殊槃曇迦嚧彌<digits>417</digits>
+15　　　般囉毗陀槃曇迦嚧彌<digits>418</digits>
 16
 17　
 18　
 19
 
-20  跢姪他　　唵　阿那隸　毗舍提
-21  　　　　　　　鞞囉　跋闍囉　陀唎
-22 　　　　　　　 槃陀　槃陀你　跋闍囉　謗尼　泮
-23  　　　　　　　虎𤙖　都嚧甕　泮　莎婆訶
+20  跢姪他<digits>419</digits>　　唵<digits>420</digits>　阿那隸<digits>421</digits>　毗舍提<digits>422</digits>
+21  　　　　　　　鞞囉跋闍囉陀唎<digits>423</digits>
+22 　　　　　　　 槃陀槃陀你<digits>424</digits> 跋闍囉謗尼泮<digits>425</digits>
+23  　　　　　　　虎𤙖都嚧甕泮<digits>426</digits>　莎婆訶<digits>427</digits>
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#_top">回頁頂</a>】
 `;

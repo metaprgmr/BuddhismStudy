@@ -43,8 +43,8 @@ const mantras = [
               "kha kha khāhi khāhi             | 虛空",
               "hūṃ hūṃ",
               "jvala jvala pra-jvala pra-jvala | 光焰 大光焰",
-              "tiṣṭha tiṣṭha ṣṭri ṣṭri         | 站住 星星",
-              "sphaṭ sphaṭ",
+              "tiṣṭha tiṣṭha                   | 站住 星星",
+              "ṣṭri ṣṭri sphaṭ sphaṭ",
               "śāntika śriye                   | 息災 吉祥",
               "svāhā"
             ],
@@ -70,8 +70,7 @@ const mantras = [
     from:   "出自《佛說七俱胝佛母准提大明陀羅尼經》。",
     text:   [ "namaḥ saptānāṃ samyak-saṃbuddha-koṭīnāṃ",
               "tadyathā oṃ",
-              "cale cule cunde | 行進 昇起 清淨",
-              "svāhā"
+              "cale cule cunde svāhā | 行進 昇起 清淨",
             ],
     simple: "namaḥ saptānāṃ samyak-saṃbuddha-koṭīnāṃ\n" +
             "tadyathā oṃ cale cule cunde svāhā"
@@ -164,8 +163,7 @@ const mantras = [
               "su-pratipūri ayatna dharmate | 善妙盛滿 不假用功法性",
               "mahā-vikurvite               | 大神變",
               "mahā-maitri upa-saṃhite      | 大慈心 契合",
-              "mahārṣe                      | 大仙尊",
-              "su-saṃgṛhīte                 | 善妙攝受",
+              "mahārṣe su-saṃgṛhīte         | 大仙尊 善妙攝受", 
               "samanta-artha anu-pālane     | 普遍意義 護持",
               "svāhā"
             ],
@@ -188,7 +186,8 @@ function showAll(onlyOne, isSimple) { // 0-based, 0-9
   var i, k, m, id, indent = '&nbsp;&nbsp;';
 
   if (!isOnlyOne && !isSimple) {
-    w('<h2>十小咒</h2>',
+    w('<h2 style="margin-left:95px">十小咒',
+      '<a href="?simple=1" style="margin-left:43px; font-size:14px">【緊縮版】</a></h2>',
       '<table class="toc" border="0">');
     for (i=0; i<mantras.length; i++) {
       m = mantras[i];
@@ -198,9 +197,7 @@ function showAll(onlyOne, isSimple) { // 0-based, 0-9
       for (k=m.title.length; k<10; ++k) w('　');
       w('　【<a href="?i=', i, '">單此咒</a>】</td></tr>');
     }
-    w('<tr><td>&nbsp;</td><td>');
-    for (k=0; k<=10; ++k) w('　');
-    w('<a href="?simple=1">【緊縮版】</a></table>');
+    w('<tr><td>&nbsp;</td></tr></table>');
   }
 
   w('<table border="0">');
@@ -214,12 +211,15 @@ function showAll(onlyOne, isSimple) { // 0-based, 0-9
       if (isSimple)
         w('<tr><td nowrap align="center" colspan="2"><h3>', m.title, '</h3></td></tr>');
       else
-        w('<tr><td nowrap align="center" colspan="2"><h3>', m.titleS, '<br>', m.title, '</h3></td></tr>');
+        w('<tr><td nowrap align="center" colspan="2"><h3>', m.title, '<br>', m.titleS, '</h3></td></tr>');
     } else {
       if (isSimple)
         w('<tr><td nowrap align="center" colspan="2"><a name="', id, '">', id, '.&nbsp;', m.title, '</td></tr>');
       else
-        w('<tr><td nowrap align="center" colspan="2"><a name="', id, '">', HR, id, '.&nbsp;', m.titleS, '<br>', m.title, '</td></tr>');
+        if (m.titleS.length > 40)
+          w('<tr><td nowrap align="center" colspan="2"><a name="', id, '">', HR, id, '.&nbsp;', m.title, '<br>', m.titleS, '</td></tr>');
+        else
+          w('<tr><td nowrap align="center" colspan="2"><a name="', id, '">', HR, id, '.&nbsp;', m.title, '&nbsp;&nbsp;', m.titleS, '</td></tr>');
     }
     if (isSimple) {
       w('<tr><td align="center" nowrap><pre>', m.simple, '</pre></td></tr>');

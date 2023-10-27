@@ -362,8 +362,9 @@ function processText(seg, segNum, verseNum) {
           if (idx1 > 0) { // annotation
             anno = term.substring(idx1+1);
             term = term.substring(0, idx1);
+            anno = lookupTerm(anno) || anno;
           } else {
-            anno = lookupTerm(term) || ('(annotation not available for ' + term + ')');
+            anno = lookupTerm(term) || ('（“' + term + '”的註解未找到）');
           }
           cur = '<anno title="' + anno + '">' + term + '</anno>';
         }
@@ -410,6 +411,7 @@ function processText(seg, segNum, verseNum) {
 }
 
 function render(id, bookInfo, chapterNum, chBaseUrl) {
+  console.log('《' + bookInfo.title + '》共' + bookInfo.ziCount + '字。');
   const el = e(id);
   el.innerHTML = processBookContent(id, bookInfo, chapterNum, chBaseUrl, true).join('');
   if (bookInfo.ziCount)
@@ -417,6 +419,7 @@ function render(id, bookInfo, chapterNum, chBaseUrl) {
 }
 
 function renderReading(id, bookInfo, chapterNum, chBaseUrl) {
+  console.log('《' + bookInfo.title + '》共' + bookInfo.ziCount + '字。');
   processBookContent(id, bookInfo, chapterNum, chBaseUrl);
   bookInfo.elemId = id;
   bookInfo.renderReader();
@@ -570,10 +573,13 @@ class MyBookInfo {
             anno = ln.substring(idxDiv+1, i);
             divr = ln[idxDiv];
           }
-          if (!divr)
-            result = ln;
-          else if (term.length <= 1)
+          if (!divr) {
+            for (var j=0; j<term.length; ++j)
+              result += '[' + term[j] + '='+ term + ']';
+          }
+          else if (term.length <= 1) {
             result += '[' + term + divr + anno + ']';
+          }
           else {
             for (var j=0; j<term.length; ++j)
               result += '[' + term[j] + divr + anno + ']';
@@ -601,7 +607,7 @@ class MyBookInfo {
     return ln;
   }
 
-  breakLine(ln) {
+  breakLine(ln) { // tags like <em> and <u> must be closed within a single line.
     if (!this.breakLen) return ln;
     // pre-insert "\n|" to break the lines. Mind the <>'s!
     var result = '', cnt = this.breakLen+1;
@@ -624,8 +630,8 @@ class MyBookInfo {
       case '<': // skip the tag
         result += '<';
         while ((c = ln[++i]) !== '>') result += c;
-        result += '>'; // skip '>'
-        c = ln[++i];
+//      result += '>';
+//      c = ln[++i];
         break;
       }
       if (!c) continue;
@@ -910,11 +916,11 @@ class MyBookInfo {
       case 37: /* left  */ this.renderReader('nextHilite'); break;
       case 38: /* up    */
       case 39: /* right */ this.renderReader('prevHilite'); break;
-      case 32: /* space */ this.renderReader(event.shiftKey || event.altKey ? 'prevPage' : 'nextPage'); break;
+      case 32: /* space */ this.renderReader((isShift || event.altKey) ? 'prevPage' : 'nextPage'); break;
       case 34: /* pgdn  */ this.renderReader(isShift ? 'next5Pages' : 'nextPage'); break;
       case 33: /* pgup  */ this.renderReader(isShift ? 'prev5Pages' : 'prevPage'); break;
-      case 36: /* home  */ this.renderReader('start');      break;
-      case 35: /* end   */ this.renderReader('end');        break;
+      case 36: /* home  */ this.renderReader('start'); break;
+      case 35: /* end   */ this.renderReader('end'); break;
       }
       break;
     case 'mousedown':
