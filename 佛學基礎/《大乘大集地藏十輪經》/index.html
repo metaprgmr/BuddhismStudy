@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>地藏十輪經</title>
+<style>
+a { text-decoration:none }
+.quote { color:teal }
+.kw    { color:red }
+</style>
+<script src="../../env.js"></script>
+<script src="../../util/reading.js"></script>
+<script>
+var totalZis = 0;
+function writeLink(vol, volName, caption, zis) {
+  totalZis += zis;
+  const uriBase = '../../util/reader.html?s=../佛學基礎/《大乘大集地藏十輪經》/&b=';
+  document.write('<tr><td valign="top"><a href="' + uriBase + vol + '">卷' + volName + '</a></td>' +
+                 '<td>&nbsp;</td><td>' + caption + '</td>' +
+                 '<td>&nbsp;</td><td valign="top" align="right">' + zis + '字</td></tr>');
+}
+</script>
+</head>
+<body><center>
+<h2>大乘大集地藏十輪經</h2>
+<h4>三藏法師玄奘奉詔譯</h4>
+
+<div class="content">
+<table border="0" cellspacing="0" cellpadding="2px">
+<tr><td colspan="5"><hr></td></tr>
+<script>
+writeLink('01', '一', '　　　序品 第一', 9214);
+writeLink('02', '二', '　　十輪品 第二', 9172);
+writeLink('03', '三', '　無依行品 第三之一', 6378);
+writeLink('04', '四', '　　　　　 　　之二', 7195);
+writeLink('05', '五', '　　　　　 　　之三<br>　有依行品 第四之一', 7643);
+writeLink('06', '六', '　　　　　 　　之二', 6962);
+writeLink('07', '七', '　　　　　 　　之三<br>　　懺悔品 第五', 7387);
+writeLink('08', '八', '　善業道品 第六之一', 6743);
+writeLink('09', '九', '　　　　　 　　之二<br>　福田相品 第七之一', 6743);
+writeLink('10', '十', '　　　　　 　　之二<br>獲益囑累品 第八<br>　　　　序&nbsp;', 7294);
+document.write('<tr><td colspan="4"></td><td align="right">共' + totalZis + '字</td></tr>');
+</script>
+<tr><td colspan="5"><hr></td></tr>
+</table>
+</div>
+
+</center></body></html>

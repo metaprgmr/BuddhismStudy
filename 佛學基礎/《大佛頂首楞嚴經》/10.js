@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('大佛頂首楞嚴經•卷十')
+const this_book = new MyBookInfo('大佛頂首楞嚴經•卷十', '唐天竺‧沙門般剌密帝譯')
 .setImage(window['IMAGE_SAKYAMUNI'])
 .addContent(
 
