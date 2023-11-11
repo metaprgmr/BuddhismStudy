@@ -10,6 +10,7 @@ const terms = [
   [ '八苦', '生、老、病、死、愛別離、怨憎會、求不得、五陰熾盛' ],
   [ '八難', '地獄、餓鬼、畜生、北鬱單越、長壽天、盲聾瘖啞、世智辯聰、佛前佛後' ],
   [ '八正道', '正見解，正思惟，正語言，正行為（正業），正生活（正命），正精進，正意念，正禪定' ],
+  [ '瞋恚三發相', '非理瞋相，順理瞋相，諍論瞋相' ],
   [ '帝珠網', '帝釋天以網張空而為莊嚴，網孔有摩尼珠寶，珠珠各攝森羅萬象而互攝互融。' ],
   [ '二死海', '水海，生死海' ],
   [ '二種觀道', '唯心識觀，真如實觀（<a href="《占察善惡業報經》/地藏菩薩二種觀道.html">見文</a>、' +
@@ -23,6 +24,7 @@ const terms = [
   [ '三慧', '聞慧，思慧，脩慧' ],
   [ '三聚戒根', '戒體，持戒的心體' ],
   [ '三苦', '苦是苦苦，樂是壞苦，不苦不樂是行苦' ],
+  [ '三界', '欲界、色界、无色界' ],
   [ '三乘', '聲聞乘，緣覺乘，菩薩乘' ],
   [ '三十七道品', '四念住；四正勤：精進的重點在於行善去惡；四神足：精進的重點在於行善去惡；五根：修習佛法的根本所在；五力：由五根產生的五種力量；七覺支：修習止觀的注意事項和感受；八正道' ],
   [ '三業', '身業，口業，意業' ],
@@ -49,16 +51,26 @@ const terms = [
 ];
 function w() { for(var i in arguments)document.write(arguments[i]) }
 function show() {
-  for (var i=0; i<terms.length; i+=2) {
-    var tm = terms[i];
+  var tm, i, len = terms.length / 2;
+  if (len * 2 < terms.length) ++len;
+  w('<table><tr><td valign="top" width="50%"><table>'); // left side
+
+  for (i=0; i<len; i++) {
+    tm = terms[i];
     w('<tr><td nowrap valign="top"valign="top"  style="font-size:18px; color:red">', tm[0],
       '</td><td>&nbsp;</td><td valign="top">', tm[1], '</td>');
-    tm = terms[i+1];
-    if (tm)
-      w('<td width="10px"></td><td nowrap valign="top" style="font-size:18px; color:red">', tm[0],
-        '</td><td>&nbsp;</td><td valign="top">', tm[1], '</td>');
-    w('</tr>');
   }
+
+  w('</table></td> <td width="20px"></td>',
+    '<td valign="top" width="50%"><table>'); // right side
+
+  for (; i<terms.length; i++) {
+    tm = terms[i];
+    w('<tr><td nowrap valign="top"valign="top"  style="font-size:18px; color:red">', tm[0],
+      '</td><td>&nbsp;</td><td valign="top">', tm[1], '</td>');
+  }
+  w('</table>',
+    '</td></tr></table>'); // end right side
 }
 </script>
 </head>

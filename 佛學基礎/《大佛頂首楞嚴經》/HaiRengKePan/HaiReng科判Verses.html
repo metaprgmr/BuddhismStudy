@@ -7,27 +7,32 @@
 <script src="verses.js"></script>
 <script>
 function toZNum(i) { return (i === 10) ? '十' : zNumber(i) }
+function toAlpha(i) { return ' ABCDEFGHIJKL'[i] }
+function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
 
 function selectVol(volNum, verseNum) {
-  if (!volNum) volNum = 1;
-  if (typeof volNum === 'string') volNum = parseInt(volNum);
-  var buf = new Buffer('《楞嚴經》卷&nbsp;');
-  for (var i=1; i<=10; ++i) {
+  volNum = ensureInt(volNum, 1);
+  if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; sessionStorage.verseNum = null; }
+  var buf = new Buffer('　　　　　　　　　　　　　《楞嚴經》卷&nbsp;');
+  for (var i=1; i<=10; ++i) {　
     if (i > 1) buf.w('&nbsp;&nbsp;');
     if (i == volNum)
       buf.w('<font style="color:red; background-color:yellow">', toZNum(i), '</font>');
     else
-      buf.w('<a href="javascript:selectVol(', i, ')">', toZNum(i), '</a>');
+      buf.w('<a href="?vid=', toAlpha(i), '">', toZNum(i), '</a>');
   }
+  buf.w('&nbsp;（共被分為908段&nbsp;<font style="font-size:12px">1:77; 2:91; 3:119; 4:105; 5:52; 6:115; 7:71; 8:123; 9:79; 10:76</font>）');
   buf.render('volumeNums');
 
   showText(volNum, verseNum);
 }
 
 function showText(volNum, verseNum) {
-  if (!volNum) volNum = 1;
-  if (!verseNum) verseNum = 1;
-  if (typeof verseNum === 'string') verseNum = parseInt(verseNum);
+  var isAll = verseNum === 'all';
+  var numVerses = isAll ? 1000 : 10;
+  if (!verseNum) verseNum = sessionStorage.verseNum;
+  verseNum = ensureInt(verseNum, 1);
+  sessionStorage.verseNum = verseNum;
   var buf = new Buffer();
   buf.w('<table border=0><tr><td>');
   if (volNum < 1 || volNum > 10) {
@@ -38,24 +43,24 @@ function showText(volNum, verseNum) {
   var zPref = toZNum(volNum);
   var width = 20;
   for (var i=1; ; i++) {
-    var num = digit3(i);
-    var v = HaiRengVerses[prefix + num];
+    var num = digit3(i), style = '';
+    var v = HaiRenVerses[prefix + num];
     if (!v) break;
-    if (i >= verseNum && i < verseNum+10)
-      buf.w('<i style="color:red">', num, '</i> ');
-    else
-      buf.w('<a href="javascript:showText(', volNum, ',', i, ')">', num, '</a> ');
+    if (!isAll && (i >= verseNum && i < verseNum+numVerses))
+      style = ' style="background:yellow; font-weight:bold"';
+    buf.w('<a', style, ' href="javascript:showText(', volNum, ',', i, ')">', num, '</a> ');
     if (i % width === 0) buf.w('<br>');
   }
+  if (!isAll) buf.w('<a href="javascript:showText(', volNum, ', \'all\')">（全部）</a> ');
   buf.w('</td></tr></table>');
   buf.render('verseNums');
 
   // show the selected text
-  buf.w('<table width="900">');
+  buf.w('<table width="100%">');
   var prefix = ' ABCDEFGHIJ'[volNum];
-  for (var i=0; i<10; ++i) {
+  for (var i=0; i<numVerses; ++i) {
     var id = digit3(verseNum+i);
-    var v = HaiRengVerses[prefix + id];
+    var v = HaiRenVerses[prefix + id];
     if (!v) break;
     buf.w('<tr><td valign="top" style="font-family:fixed width">', id, '&nbsp;</td><td style="color:teal">', v, '</td></tr>');
   }
@@ -68,8 +73,8 @@ function showText(volNum, verseNum) {
 <center>
 <table border="0">
 <tr><td align="center" id="volumeNums" style="border-bottom:1px solid black"></td></tr>
-<tr><td align="center" nowrap style="border-bottom:1px solid black"><div id="verseNums" style="font-family:fixed width"></div></td></tr>
-<tr><td style="border-bottom:1px solid black"><div id="verseStage"></div></td></tr>
+<tr><td align="center" id="verseNums" style="border-bottom:1px solid black; font-family:fixed width"></td></tr>
+<tr><td style="border-bottom:1px solid black" id="verseStage"></td></tr>
 </table>
 <script>
   var vid = get('vid'), v, n;

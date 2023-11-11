@@ -455,7 +455,7 @@ class MyBookInfo {
     this.readerHeight = 700;  // settable by individual books
     this.chapterTitleStyle = 'chaptertitle';
     this.margin = 20;
-    this.titleGap = 45;
+    this.titleGap = 35;
     this.textW = 40;
     this.pW = 20;
     this.widths = {
@@ -638,11 +638,17 @@ class MyBookInfo {
       if (isHanZi(c) || c.endsWith(']') || isPunc1(c)) {
         switch (--cnt) {
         case 0:
-          if (i === ln.length-1 && isPunc1(c))
+          cnt = this.breakLen;
+          if (isPunc1R(c)) {
+            ++cnt;
+            result += c;
+            if (i < ln.length-1)
+              result += '\n|';
+          }
+          else if (i === ln.length-1 && isPunc1L(c))
             result += c;
           else
             result += '\n|' + c;
-          cnt = this.breakLen;
           continue;
         case 1:
           if (isPunc1L(c)) {
@@ -730,7 +736,7 @@ class MyBookInfo {
     var el = e(this.elemId),
         W = this._clientWidth(el),
         len = this.displayLines.length,
-        readWidth = W - this.margin * 2 - this.titleGap,
+        readWidth = W - this.margin * 0 - this.titleGap,
         lastTitle = true,
         desc = this.desc;
 

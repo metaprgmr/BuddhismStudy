@@ -33,15 +33,17 @@
 &nbsp;&nbsp;&nbsp;【<a href="淨土宗/index.html">淨土宗</a>　】<br>
 &nbsp;&nbsp;&nbsp;【<a href="陀羅尼/index.html">陀羅尼</a>　】<br>
 &nbsp;&nbsp;&nbsp;【<a href="個人文集/index.html">個人文集</a>】
+<br>&nbsp;&nbsp;&nbsp;《<a href="佛學基礎/terminology.html">佛教術語</a>》
 <script>
 if (window['OTHERS']) {
   var a = window.OTHERS;
   for (var i=0; i<a.length; i+=2) {
-    var n = a[i], l = a[i+1];
-    if (n.startsWith('$'))
-      document.write('<a href="' + l + '" style="background-color:#ffffdd" title="個人內容，未發表">' + n.substring(1).trim() + '</a>');
-    else
-      document.write('<br>&nbsp;&nbsp;&nbsp;<a href="' + l + '" style="background-color:#ffffdd" title="個人內容，未發表">' + n + '</a>');
+    var n = a[i], l = a[i+1], pref = '<br>&nbsp;&nbsp;&nbsp;';
+    if (n.startsWith('$')) {
+      n = n.substring(1).trim();
+      pref = '';
+    }
+    document.write(pref + '<a href="' + l + '" style="background-color:#ffffdd" title="個人內容，未發表">' + n + '</a>');
   }
 }
 </script>

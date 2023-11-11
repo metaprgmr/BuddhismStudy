@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <title>大佛頂首楞嚴經</title>
 <style>
+invis { opacity:0 }
 a { text-decoration:none }
 .quote { color:teal }
 .kw    { color:red }
@@ -11,11 +12,23 @@ a { text-decoration:none }
 <script src="../../util/reading.js"></script>
 <script>
 const BFNN_BOOK = window['BOOK_BFNN'] || 'https://book.bfnn.org/book';
+function w() { for (var i in arguments) document.write(arguments[i]) }
 function writeArticalLink(uri, title, ending, ignoreCircle) {
-  if (!ignoreCircle && BFNN_BOOK.startsWith('file:')) document.write('&cir;&nbsp;&nbsp;');
-  document.write('<a href="' + BFNN_BOOK + uri + '">' + title + '</a>');
-  if (ending) document.write(ending);
+  if (!ignoreCircle && BFNN_BOOK.startsWith('file:')) w('&cir;&nbsp;&nbsp;');
+  w('<a href="' + BFNN_BOOK + uri + '">' + title + '</a>');
+  if (ending) w(ending);
 }
+function extLink(file, title, ending, ignoreCircle) {
+  if (title[0] === '#') title = '<font style="opacity:0">0</font>' + title.substring(1);
+  var subdir = '';
+  switch(file[0]) {
+  case '1': subdir = '2'; break;
+  case '2': subdir = '3'; break;
+  }
+  if (window['BOOK_BFNN']) file += 'ext';
+  writeArticalLink('/books' + subdir + '/' + file + '.htm', title, ending, ignoreCircle);
+}
+function WangLink(i) { w('<a href="WangZhiPing/Wang.html?vid=', i, '">', i+1, '</a>', i<9 ? ' ' : ''); }
 </script>
 </head>
 <body><center>
@@ -40,46 +53,71 @@ function writeArticalLink(uri, title, ending, ignoreCircle) {
 　　　　　　　　　　　　　　　　　　　　　　　共<font style="opacity:0">0</font>62306字<br>
 <hr>
 <script>
+writeArticalLink("/article2/1472.htm", "　圓瑛大師《大佛頂首楞嚴經講義》");
+  extLink("1472",  '#1', ' ', true);
+  extLink("1473",  '#2', ' ', true);
+  extLink("1474",  '#3', ' ', true);
+  extLink("1475",  '#4', ' ', true);
+  extLink("1476",  '#5', ' ', true);
+  extLink("1477",  '#6', ' ', true);
+  extLink("1478",  '#7', ' ', true);
+  extLink("1479",  '#8', ' ', true);
+  extLink("1480",  '#9', ' ', true);
+  extLink("1481",  '10', ' ', true);
+  extLink("1482",  '11', ' ', true);
+  extLink("1483",  '12', '<br>　　　　　　　　　　　　　　<a href="YuanYingKePan/YuanYing科判.html">科判</a>' + '　', true);
+  extLink("1484",  '13', ' ', true);
+  extLink("1485",  '14', ' ', true);
+  extLink("1486",  '15', ' ', true);
+  extLink("1487",  '16', ' ', true);
+  extLink("1488",  '17', ' ', true);
+  extLink("1489",  '18', ' ', true);
+  extLink("1490",  '19', ' ', true);
+  extLink("1491",  '20', ' ', true);
+  extLink("1492",  '21', ' ', true);
+  extLink("1493",  '22', ' ', true);
+  extLink("1494",  '23', ' ', true);
+  extLink("1495",  '24', '<br>', true);
 writeArticalLink("/article2/1875.htm", "　海仁法師《大佛頂首楞嚴經講記》");
-  writeArticalLink("/books2/1875.htm",  '1', ' ', true);
-  writeArticalLink("/books2/1876.htm",  '2', ' ', true);
-  writeArticalLink("/books2/1877.htm",  '3', ' ', true);
-  writeArticalLink("/books2/1878.htm",  '4', ' ', true);
-  writeArticalLink("/books2/1879.htm",  '5', ' ', true);
-  writeArticalLink("/books2/1880.htm",  '6', ' ', true);
-  writeArticalLink("/books2/1881.htm",  '7', ' ', true);
-  writeArticalLink("/books2/1882.htm",  '8', ' ', true);
-  writeArticalLink("/books2/1883.htm",  '9', ' ', true);
-  writeArticalLink("/books2/1884.htm",  '10', '　<a href="HaiRengKePan/HaiReng科判.html">科判</a><br>', true);
+  extLink("1875",  '1', ' ', true);
+  extLink("1876",  '2', ' ', true);
+  extLink("1877",  '3', ' ', true);
+  extLink("1878",  '4', ' ', true);
+  extLink("1879",  '5', ' ', true);
+  extLink("1880",  '6', ' ', true);
+  extLink("1881",  '7', ' ', true);
+  extLink("1882",  '8', ' ', true);
+  extLink("1883",  '9', ' ', true);
+  extLink("1884", '10', '　<a href="HaiRengKePan/HaiReng科判.html">科判</a>　', true);
+w('<a href="HaiRengKePan/HaiReng科判Verses.html">經文</a>　<br>');
 writeArticalLink("/article/0145.htm",  "王治平居士《大佛頂首楞嚴經譯解》");
-  writeArticalLink("/books/0145.htm",  '1', ' ', true);
-  writeArticalLink("/books/0146.htm",  '2', ' ', true);
-  writeArticalLink("/books/0147.htm",  '3', ' ', true);
-  writeArticalLink("/books/0148.htm",  '4', ' ', true);
-  writeArticalLink("/books/0149.htm",  '5', ' ', true);
-  writeArticalLink("/books/0150.htm",  '6', ' ', true);
-  writeArticalLink("/books/0151.htm",  '7', ' ', true);
-  writeArticalLink("/books/0152.htm",  '8', ' ', true);
-  writeArticalLink("/books/0153.htm",  '9', ' ', true);
-  writeArticalLink("/books/0154.htm",  '10', '<font style="opacity:0">　科判</font><br>', true);
-writeArticalLink("/article2/1472.htm", "　圓瑛大師《大佛頂首楞嚴經講義》", '<font style="opacity:0">1 2 3 4 5 6 7 8 9 10　科判</font><br>');
-writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　", '<font style="opacity:0">1 2 3 4 5 6 7 8 9 10　科判</font>');
+  WangLink(0);
+  WangLink(1);
+  WangLink(2);
+  WangLink(3);
+  WangLink(4);
+  WangLink(5);
+  WangLink(6);
+  WangLink(7);
+  WangLink(8);
+  WangLink(9);
+  w('　　　　　　　<br>');
+writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　", '<font style="opacity:0">1 2 3 4 5 6 7 8 9 10　科判</font>　　　　');
 </script>
-<hr>
-《<a href="https://www.youtube.com/watch?v=EZw9L-fE_xU">末法破邪顯正的“斬妖劍”&mdash;楞嚴經！為什麼我們非學不可？</a>》
+
 <hr>
 
 <h3>王治平居士解摘要</h3>
 
 <table cellspacing="3px">
-<tr><td style="color:red">卷一</td><td><hr style="color:red"></td></tr>
+<tr><td style="color:red">卷一</td><td><hr style="color:pink"></td></tr>
 
 <tr>
 <td nowrap class="quote" valign="top">則汝今者，識精元明，<br>能生諸緣，緣所遺者。</td>
 <td valign="top">眾生六根所產生的六識，來源於第八<font class="kw">阿賴耶識</font>中。阿賴耶識在眾識中，最為精微，最為光明，朗照十方。就是本文所說的<font class="kw">識精元明</font>。阿賴耶識含藏萬有，無所不包，無所不具。一切功德、一切作用，由它產生。猶如大海，故稱<font class="kw">藏識海</font>。這個識海因受業力的風所鼓動，產生波浪。《楞伽經》上說：「藏識海常住，境界風所動。種種諸識浪，騰躍而轉生。」因此前六識都是這個識海內所生的波浪。這些波浪能夠攀緣一切萬物，唯獨不能攀緣識海；猶如眼能見一切事物，唯獨不能自見。這就是「能生諸緣，緣所遺者」，必須要止息六根的作用，一念不生，默然自證，方能知道它是怎樣一回事。</td>
 </tr>
 
-<tr><td style="color:red">卷二</td><td><hr style="color:red"></td></tr>
+<tr><td style="color:red">卷二</td><td><hr style="color:pink"></td></tr>
 
 <tr>
 <td nowrap class="quote" valign="top">云何汝等，<br>遺失本妙圓妙明心，<br>寶明妙性，認悟中迷？</td>
@@ -106,6 +144,27 @@ writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　�
 <td valign="top">以百千大海來比喻妙明真心的廣大，然而眾生唯認依妄而起的識心，以為這就是自己的本性。識性生滅不停，恰如海上的浮漚。眾生違真逐妄，以妄想的攀緣，為真心的妙用。以為即此就可成佛。</td>
 </tr>
 </table>
+
+<hr>
+<p align=left>　　楞嚴經歷來被認為是諸佛心宗、群經秘藏，其體用並彰、性相並談，不僅為學人揭示宇宙原理、人生真相，說明世界、眾生，因果分明，邪正有別，同時又顯示眾生本來具如來藏性，無法不備，並教人心反妄為真，覺悟成佛的實證方法。由於以上特點，使得本經涵蓋了蟬、淨、律、密諸多法門，歷來性、相各宗各門均將其奉為最上寶典，是如來一代時教的教、理、行、果之精髓所在，實是菩薩修行要門，轉凡成聖的階梯，成佛的真由。</p>
+
+<p align=left>　　本經通過七處徵心、十番顯見的層層論證、剖析，將凡、外、權、小之邪見、愚見一一破除。楞嚴經不僅是一部佛學大典，更是菩提路上的明燈，修行過程中的照妖鏡。本經關於五十陰魔的開示，講述了妖魔鬼怪、旁門左道的種種情形，使得一切外道原形畢露，妖魔無處藏身。經中說凡說聖、說悟說魔，皆是闡明五陰非有，叫我們照破五蘊皆空，最後知有涅槃，不戀三界。指出五陰魔邪，無一不是說五陰。色陰上，淫色是生死根本；殺、盜、淫、妄是地獄根本。五陰照空，即脫生死，不復輪迴。</p>
+
+<p align=left>　　楞嚴經是如來正智慧的代表。人間有楞嚴住世，即代表佛陀正法常住人間。本經又被稱為佛的真身、舍利、塔廟，實不為過。楞嚴咒又稱為佛頂大光明咒，微妙不可思議，能破除一切黑暗，能成就一切功法，究竟成等正覺。楞嚴經內容豐富，但以此咒為核心，故稱楞嚴咒所在之處，即為正法所在，因而漢地各宗寺院皆以此為定課。楞嚴經也是正法的代表，一旦消失，將使佛教徒混淆、真假不分，魔教自然得勢，正法便難以住世。佛說末法時代楞嚴經先滅，正因為末法眾生根性漏劣，認少為多，識淺為深，以乏為足，不肯深入經藏，不思續佛慧命，反侮學文為「雜學不專」，漸令無上大法束之高閣。所謂滅法者，非由外而滅，皆是自滅。所謂魔教，也非時外魔，皆是自生魔。因此，欲令正法重現，必首推楞嚴大經；欲令佛法久住，必首推楞嚴大經。值此時代，邪說流行，禍患頻生，更需弘傳流通此經，以正人心，避邪說，導人於正信。</p>
+
+<p align=left>　　憨山大師：不讀法華，不知如來救世之苦心；不讀楞嚴，不知修心迷悟之關鍵。</p>
+
+<p align=left>　　虛雲老和尚：出家人最好專讀楞嚴；祇要熟讀正文，不必看註解，讀到能背，便能以前文解後文、以後文解前文。</p>
+
+<p align=left>　　園瑛大師，專弘楞嚴。</p>
+
+<p align=left>　　印光大師：楞嚴一經，不知淨土者讀之，則為破淨土之元勳。知淨土者讀之，則為宏淨土之善導。</p>
+
+<p align=left>　　宣化上人：如果你要恭敬佛、法、僧，先要恭敬楞嚴經。</p>
+
+<p align=left><b>　　是故，善男信女、孝子賢孫，不可令楞嚴經、楞嚴咒滅於之手。</b></p>
+
+<p align=right>&mdash;節錄自《<a href="https://www.youtube.com/watch?v=EZw9L-fE_xU">末法破邪顯正的“斬妖劍”&mdash;楞嚴經！為什麼我們非學不可？</a>》</p>
 <hr>
 
 </td></tr>

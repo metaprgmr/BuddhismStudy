@@ -1,0 +1,89 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>圓瑛大師《楞嚴經講義》科判</title>
+<link rel="stylesheet" href="../../../util/kepan.css">
+<script src="../../../util/reading.js"></script>
+<script src="verses.js"></script>
+<script>
+function toZNum(i) {
+  if (i === 20) return '廿';
+  if (i === 10) return '十';
+  if (i > 20) return '廿' + zNumber(i-20);
+  if (i > 10) return '十' + zNumber(i-10);
+  return zNumber(i)
+}
+function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
+function volEndDisp(vol) {
+  ++vol;
+  return '<a name="sutra' + vol + '"></a>《大佛頂首楞嚴經》正文卷第' + toZNum(vol) + '始'
+}
+
+function selectVol(volNum) {
+  volNum = ensureInt(volNum, 1);
+  if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; }
+  var buf = new Buffer();
+
+  buf.w('圓瑛大師《講義》卷&nbsp;');
+  for (var i=1; i<=24; ++i) {　
+    if (i > 1) buf.w('&nbsp;&nbsp;');
+    if (i == volNum)
+      buf.w('<font style="color:red; background-color:yellow">', toZNum(i), '</font>');
+    else
+      buf.w('<a href="?vid=', i, '">', toZNum(i), '</a>');
+  }
+  buf.w('<br>《楞嚴經》正文卷',
+        '&nbsp;<a href="?vid=1">一</a>', 
+        '&nbsp;<a href="?vid=1#sutra2">二</a>', 
+        '&nbsp;<a href="?vid=2#sutra3">三</a>', 
+        '&nbsp;<a href="?vid=3#sutra4">四</a>', 
+        '&nbsp;<a href="?vid=12#sutra5">五</a>', 
+        '&nbsp;<a href="?vid=15#sutra6">六</a>', 
+        '&nbsp;<a href="?vid=17#sutra7">七</a>', 
+        '&nbsp;<a href="?vid=19#sutra8">八</a>', 
+        '&nbsp;<a href="?vid=21#sutra9">九</a>', 
+        '&nbsp;<a href="?vid=23#sutra10">十</a>');
+  buf.render('volumeNums');
+
+  showText(volNum);
+}
+
+function showText(volNum) { // volNum: 1-based
+  var v = VERSES[volNum];
+  var buf = new Buffer();
+  var infoJiangYiVol = '《講義》卷' + toZNum(volNum);
+
+  buf.w('<table width="100%">');
+  if (volNum === 1 || volNum === 15)
+    buf.w('<tr><td>&nbsp;</td><td height="60px" valign="center" align="center" style="color:#333399">',
+          volEndDisp(volNum===15 ? 5 : 0), '</td></tr>');
+  for (var i=0; i<v.length; ++i) {
+    var row = v[i];
+    var id = row[0];
+    if (id === 'VolEnd')
+      buf.w('<tr><td>&nbsp;</td><td height="60px" valign="center" align="center" style="color:#333399">', volEndDisp(row[1]), '</td></tr>');
+    else {
+      var info = infoJiangYiVol + '；《經》正文卷' + toZNum(row[2]);
+      id = id.substring(2);
+      if (!id.endsWith('a')) id = id.substring(id.length-1);
+      buf.w('<tr><td valign="top" align="right" style="color:#333399">', id, '&nbsp;&nbsp;</td>',
+            '<td style="color:teal" title="', info, '">', row[1], '</td></tr>');
+    }
+  }
+  buf.w('</table>');
+  buf.render('verseStage');
+}
+</script>
+</head>
+<body>
+<center>
+<table border="0">
+<tr><td align="center" id="volumeNums" style="border-bottom:1px solid black"></td></tr>
+<tr><td style="border-bottom:1px solid black" id="verseStage"></td></tr>
+</table>
+<script>
+  addSutraVolNums();
+  selectVol(get('vid'));
+</script>
+</center></body></html>
+
