@@ -105,6 +105,7 @@ function writeText(txt) {
 
 if (is333) {
   w('<table border="0" width="900">');
+  var ziCnt = 0;
   for (var i in TheBook.content) {
     var p = TheBook.content[i];
     if (p.sectionId) { // section
@@ -113,17 +114,19 @@ if (is333) {
       var entries = p.entries;
       for (var k in entries) {
         var e = entries[k];
-        if (e.text && e.id)
+        if (e.text && e.id) {
           w('<tr><td class="anno" align="right" valign="bottom"><a name="_', e.id, '">', e.id, '</a>.</td>',
             '<td id="_', e.id, '">', e.getSynopsis(), '</td>',
             '<td nowrap class="anno" valign="bottom" align="right">', e.ziCnt, '字</td>',
             '<td nowrap valign="bottom"><anno>', e.src || '', '</anno></td></tr>');
-        else
+          ziCnt += e.ziCnt;
+        } else
           w('<tr><td colspan="4" class="sectionTitle"><a name="', e.subsecId, '"></a>', e.title, '</td></tr>');
       }
     }
   }
   w('<tr><td colspan="4"><hr></td></tr>');
+  console.log(ziCnt, '字');
 } else {
   w('<table border="0" width="700">');
   for (var i in TheBook.content) {

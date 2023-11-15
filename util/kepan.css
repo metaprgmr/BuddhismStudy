@@ -4,6 +4,8 @@ body { margin:20px }
 .printing1 { font-size:16px; line-height:125%; letter-spacing:3px }
 h2 { letter-spacing:2px }
 
+inv { opacity:0 }
+.VERSE { color:teal; font-weight:bold }
 a { text-decoration:none }
 a:link   { color:blue }
 a:visited{ color:blue }

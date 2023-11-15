@@ -1,3 +1,13 @@
+function flipVisible(eid, eid1) {
+  var el = e(eid);
+  if (el) {
+    if (el.style.display === 'none') el.style.display = 'block';
+    else el.style.display = 'none';
+  }
+
+  if (eid1) flipVisible(eid1);
+}
+
 function getPartInfo(part) {
   var ret = { caption:null, firstVerseID: null }
   part = parts[part];
@@ -27,11 +37,13 @@ function getPartInfo(part) {
 }
 
 class KePanLine {
-  constructor(line) {
+  constructor(line, verseText, plainText) {
     this.rawVerseNum = line.substring(2,6).trim();
     this.volNum = line.substring(2,3).trim();
     this.verseNum = line.substring(3,6).trim();
     this.text = line.substring(6);
+    if (verseText) this.verseText = verseText;
+    if (plainText) this.plainText = plainText;
     var ln = this.text, idx = ln.indexOf('*');
     if (idx < 0) {
       idx = ln.indexOf('+');
@@ -65,6 +77,7 @@ class KePanLine {
     case 'u': case 'U': v = '廿一'; break;  case 'v': case 'V': v = '廿二'; break;
     case 'w': case 'W': v = '廿三'; break;  case 'x': case 'X': v = '廿四'; break;
     case 'y': case 'Y': v = '廿五'; break;  case 'z': case 'Z': v = '廿六'; break;
+    case '_': return '　　<inv>000</inv>';
     }
     return v + '&nbsp;' + n;
   }
@@ -103,7 +116,7 @@ class KePanDoc {
   getVerseIDDisp(lineIdx, force) { // 0-based
     return this.lines[lineIdx].getVerseIDDisp( this.getRawVerseID(lineIdx, force) );
   }
-  writeAsTRs(buf, terseLevel, forceVerseIDs) {
+  writeAsTRs(buf, terseLevel, forceVerseIDs, showVerse) {
     var td1 = '<tr><td valign="top" nowrap style="font-size:12px; background-color:#e8e8e8; border-bottom:1px #fff solid">';
     var td2 = '<td valign="top" align="right" nowrap style="font-size:12px; color:gray">';
     var lastIDDisp = null;
@@ -117,10 +130,51 @@ class KePanDoc {
         lastIDDisp = idDisp;
       else
         idDisp = '';
-      buf.w(td1, '&nbsp;', anchor, ln.text, '&nbsp;</td>', td2, idDisp, '</td></tr>');
+      buf.w(td1, '&nbsp;', anchor, ln.text, '&nbsp;</td>', td2, idDisp, '&nbsp;</td>');
+      if (showVerse) {
+        if (!ln.plainText) {
+          buf.w('<td class=VERSE>', ln.verseText || '', '</td>');
+        } else if (ln.verseText) {
+          var eid = '_' + ln.verseNum;
+          buf.w('<td onclick="flipVisible(\'', eid, '\')" title="click to read"><span class=VERSE>', ln.verseText, '</span>',
+                '<div id="', eid, '" class=PLAIN style="padding-top:5px; padding-bottom:5px; display:none">', ln.plainText, '</div></td>');
+        } else {
+          var eid = '_' + ln.verseNum;
+          buf.w('<td onclick="flipVisible(\'', eid, '\', \'', eid, '_\')" title="click to read"><span id="', eid, '_" style="color:gray">□</span>',
+                '<div id="', eid, '" style="padding-top:5px; padding-bottom:5px; display:none; color:black">', ln.plainText, '</div></td>');
+        }
+      }
+      buf.w('</tr>');
     }
   }
 } // end of KePanDoc.
+
+class KePanItem
+{
+  constructor(kepan) {
+    this.kepan = kepan;
+    this.lines = [];
+  }
+  addText(id, txt) {
+    if (this.lines.length > 0) this.lines[this.lines.length-1][2] = txt;
+    else this.lines.push([ id, '', txt ]);
+  }
+  addVerse(id, txt) {
+    this.lines.push([ id, txt ]);
+  }
+  addToDoc(kepanDoc) {
+    if (this.lines.length === 0)
+      kepanDoc.add(new KePanLine('　　' + '    ' + this.kepan));
+    else {
+      for (var i=0; i<this.lines.length; ++i) {
+        var row = this.lines[i];
+        var kpln = '　　' + row[0];
+        if (i===0) kpln += this.kepan;
+        kepanDoc.add(new KePanLine(kpln, row[1], row[2]));
+      }
+    }
+  }
+}
 
 var lastDivId;
 

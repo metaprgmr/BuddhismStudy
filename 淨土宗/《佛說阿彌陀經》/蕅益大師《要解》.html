@@ -1,0 +1,27 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>蕅益大師《要解》科判</title>
+<link rel="stylesheet" href="../../util/kepan.css">
+<script src="../../util/reading.js"></script>
+<script src="../../util/kepan.js"></script>
+<script src="蕅益大師《要解》科判.js"></script>
+</head>
+<body><center>
+<!--
+  佛說阿彌陀經要解
+  姚秦三藏法師鳩摩羅什譯
+  清西有沙門蕅益智旭解
+-->
+
+<h2>蕅益大師《要解》暨科判</h2>
+<div id="stage"></div>
+</center></body></html>
+
+<script>
+  var buf = new Buffer();
+  buf.w('<table border="0" cellspacing="0px" cellpadding="0" style="min-width:500px">');
+  toDoc().writeAsTRs(buf, 0, true, get('verse') !== '0');
+  buf.w('</table>');
+  buf.render('stage');  
+</script>
