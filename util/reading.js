@@ -1,6 +1,6 @@
 var DEBUG = ''; // 'border:1px solid red;';
 const HILITE_COLOR = '#ff8';
-const KAI_TI = "'KaiTi', '楷体', STKaiti, '华文楷体'";
+const KAI_TI = 'KaiTi, Kaiti TC, 楷体, STKaiti, 华文楷体';
 // 特殊符号大全 https://www.jiuwa.net/fuhao/agg/
 
 const zdigits = '〇一二三四五六七八九';
@@ -61,6 +61,28 @@ function findFirst() {
   return (foundIdx > host.length) ? -1 : foundIdx;
 }
 
+// Aligned lists
+/*
+  // ⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ⊝ ⊞ ⊟ ⊠ ⊡ ⋄ ⋅ ⋆ ⋇ □ ▪ ▫ ▭ ▮ ▱ △ ▴ ▵ ▸ ▹ ◻ ◼ ★ ☆ ♠ ♣ ♥ ♦ ♪ ♭ ♮ ♯ ✓ ✗ ✠ ✶
+  // A a
+  // 𝒜 = &Ascr;  𝒶 = &ascr;
+  // 𝔄 = &Afr;   𝔞 = &afr;
+  // 𝔸 = &Aopf;  𝕒 = &aopf;
+var AlignedListBulletType = ALBulletNumber;
+var AlignedListItemNumber = 1;
+var AlignedListItemBullet = 1;
+function bulletAlignedListStart(, bullet) {
+  AlignedListBulletType = bulletType;
+}
+function numnberAlignedListStart(start) { AlignedListBulletType = bulletType; }
+  AlignedListBulletType = ALBulletNumber;
+  AlignedListItemNumber = (arguments.length > 0) ? arguments[0] : 1;
+}
+function alignedList(subject, content, bullet) {
+}
+*/
+
+// Buffer
 class Buffer {
   constructor() {
     this.buf = '';
@@ -183,8 +205,8 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
       chNumE = parseInt(chapterNum.substring(idx+1));  if (isNaN(chNumE)) chNumE = null;
     }
     if (!chNumS) { // check if it is a chapter name
-      for (var k=0; k<bookInfo.chapters.length; ++k)
-        if (chapterNum === bookInfo.chapters[k].caption) { chNumS = chNumE = k+1; break; }
+      for (var k=0; k<bookInfo.getChapters().length; ++k)
+        if (chapterNum === bookInfo.getChapters()[k].caption) { chNumS = chNumE = k+1; break; }
       if (!chNumS) chapterNum = null;
     }
   }
@@ -271,13 +293,9 @@ function processPara(result, verseNum, ln, isGatha, lasteol, cureol, forView) {
   var emLast = { tagLast:false, tag:'em' };
   var uLast  = { tagLast:false, tag:'u' };
   for (var s=0; s<segs.length; ++s) {
-    ln = segs[s];
-    ln = processLineHtmlTags(ln, emLast);
+    ln = processLineHtmlTags(segs[s], emLast);
     ln = processLineHtmlTags(ln, uLast);
-    if (s === segs.length-1)
-      ln = startLast + processText(ln, s, verseNum) + end;
-    else
-      ln = start + processText(ln, s, verseNum) + end;
+    ln = ((s === segs.length-1) ? startLast : start) + processText(ln, s, verseNum) + end;
     if (forView && s < segs.length-1) ln += '<br>';
     result.push(ln);
   }
@@ -469,7 +487,25 @@ class MyBookInfo {
       booktitle: 42,
       titledesc: 28
     };
-    this.chapters = [];
+    this.chaptersOrig = [];
+  }
+
+//  setSelectedChapters(chNums) {
+//    this.readingStarted = false;
+//    this._selectedChapters = !chNums || chNums.sort();
+//  }
+
+  getChapters() {
+    if (!this._curChapters) {
+      if (!this._selectedChapters) {
+        this._curChapters = this.chaptersOrig;
+      } else { // cherry-pick chapters
+        this._curChapters = [];
+        for (var i in this._selectedChapters)
+          this._curChapters.push(this.chaptersOrig[this._selectedChapters[i]-1]);
+      }
+    }
+    return this._curChapters;
   }
 
   setImage(uri, width, height) {
@@ -625,7 +661,7 @@ class MyBookInfo {
         break;
       case '|':
         result += '|';
-        cnt = this.breakLen;
+        cnt = this.breakLen+1;
         continue;
       case '<': // skip the tag
         result += '<';
@@ -674,7 +710,7 @@ class MyBookInfo {
     var chNum = ++this.chapterNum;
     var c = { caption, display:txt, id:chNum, chapterNum:chNum, tag:this.chapterTitleStyle, ziCount:0 };
     if (arr.length > 0) c.annotations = arr;
-    this.chapters.push(c);
+    this.chaptersOrig.push(c);
     return c;
   }
 
@@ -721,6 +757,7 @@ class MyBookInfo {
       }
       if (tag === 'booktitle') buf.w('border-left:1px solid lightgray');
       else if (ln !== '') buf.w('line-height:', w, 'px;');
+      while (ln.endsWith('\n')) ln = ln.substring(0, ln.length-1);
       buf.w('">', ln, '</div>\n');
       if (annoTxt) {
         var pageW = this.bookTitleW;
@@ -754,8 +791,10 @@ class MyBookInfo {
       if (startsWith(ln, '</p>')) continue; // flat ignored
       if (startsWith(ln, '<p>') && lastTitle) continue; // ignored in front of a chapter (or any?) title
       lastTitle = ln.startsWith('<chaptertitle');
-      if (lastTitle) // set up chapter stuff
-        this.chapters[++curChapterIdx].startPage = this.pages.length-1;
+      if (lastTitle) { // set up chapter stuff
+        var ch = this.getChapters()[++curChapterIdx];
+        if (ch) ch.startPage = this.pages.length-1;
+      }
 
       var lastW = curW;
       curW += this._renderReadLine(null, ln, lastTitle, 0, 0, false);
@@ -763,13 +802,15 @@ class MyBookInfo {
         curPg.end = i-1;
         curPg.lastW = lastW;
         curPg = { start:i, end:len-1, chapter:curChapterIdx };
-        if (this.chapters.length > 0 && !lastTitle && this.chapters[curPg.chapter])
-          curPg.chapterTitle = this.chapters[curPg.chapter].caption;
+        if (this.getChapters().length > 0 && !lastTitle && this.getChapters()[curPg.chapter])
+          curPg.chapterTitle = this.getChapters()[curPg.chapter].caption;
         this.pages.push(curPg);
         curW = 0;
       }
       if (lastTitle) {
-        var t = this.chapters[curChapterIdx].caption;
+        var ch = this.getChapters()[curChapterIdx];
+        if (!ch) continue;
+        var t = ch.caption;
         if (!curPg.chapterTitle) {
           curPg.chapterTitle = t;
         } else {
@@ -790,7 +831,13 @@ class MyBookInfo {
     return W;
   }
 
+  _setCurPage(cp) {
+    cp && sessionStorage.setItem(this.title + '_curPage', cp);
+    this.curPage = cp;
+  }
+
   renderReader(dir) {
+    this.noimg = 'true' === sessionStorage.getItem(this.title + '_noimg');
     if (!this.readingStarted) {
       LIVRE = this;
       document.addEventListener("keydown",   (e) => LIVRE.nav(e), false);
@@ -800,20 +847,26 @@ class MyBookInfo {
       this.readingStarted = true;
 
       this._computePages();
-      this.curPage   = 0;  // 0-based
+      this._setCurPage(0);  // 0-based
       this.curHilite = -1; // 0-based
     }
     else if (dir === 'noimg') {
       this.noimg = true;
+      sessionStorage.setItem(this.title + '_noimg', 'true');
       this._computePages();
-      this.curPage   = 0;  // 0-based
+      this._setCurPage(0);  // 0-based
       this.curHilite = -1; // 0-based
     }
 
     const numPgs = this.pages.length
+    if (!dir) {
+      dir = sessionStorage.getItem(this.title + '_curPage');
+      if (typeof dir === 'string') dir = parseInt(dir);
+    }
+
     if (typeof dir === 'number') {
       if (dir < 0 || dir >= numPgs) return;
-      this.curPage = dir;
+      this._setCurPage(dir);
     } else {
       switch (dir) {
       case 'nextHilite': this._toNextHilite(true); break;
@@ -822,8 +875,8 @@ class MyBookInfo {
       case 'prev5Pages': this._prevPage(5); break;
       case   'nextPage': this._nextPage(); break;
       case   'prevPage': this._prevPage(); break;
-      case      'start': this.curPage = 0; this.curHilite = null; break;
-      case        'end': this.curPage = numPgs-1; this.curHilite = null; break;
+      case      'start': this._setCurPage(0); this.curHilite = null; break;
+      case        'end': this._setCurPage(numPgs-1); this.curHilite = null; break;
       }
     }
 
@@ -879,11 +932,11 @@ class MyBookInfo {
 
   _nextPage(pgs) {
     pgs || (pgs = 1);
-    if (this.curPage < this.pages.length-pgs) this.curPage += pgs
+    if (this.curPage < this.pages.length-pgs) this._setCurPage(this.curPage + pgs);
   }
   _prevPage(pgs) {
     pgs || (pgs = 1);
-    if (this.curPage > pgs-1) this.curPage -= pgs
+    if (this.curPage > pgs-1) this._setCurPage(this.curPage - pgs);
   }
 
   _toNextHilite(forward) {

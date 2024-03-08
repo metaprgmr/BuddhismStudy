@@ -3,7 +3,9 @@
 <meta charset="utf-8">
 <title>圓瑛大師《楞嚴經講義》科判經文</title>
 <link rel="stylesheet" href="../../../util/kepan.css">
+<script src="../../../env.js"></script>
 <script src="../../../util/reading.js"></script>
+<script src="../../../util/kepan.js"></script>
 <script src="verses.js"></script>
 <script>
 function toZNum(i) {
@@ -13,33 +15,41 @@ function toZNum(i) {
   if (i > 10) return '十' + zNumber(i-10);
   return zNumber(i)
 }
-function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
-function volStartDisp(vol) { return '<a name="sutra' + vol + '"></a>《大佛頂首楞嚴經》正文卷第' + toZNum(vol) + '始' }
+function volToBookUri(volNum) {
+  const BFNN_BOOK = window['BOOK_BFNN'] || 'https://book.bfnn.org';
+  var file = 1472 + volNum - 1;
+  if (window['BOOK_BFNN']) file += 'ext';
+  return BFNN_BOOK + '/books2/' + file + '.htm';
+}
+
+function volStartDisp(vol) { return '<a name="sutra' + vol + '"></a>《大佛頂首楞嚴經》卷第' + toZNum(vol) + '始' }
 
 function selectVol(volNum) {
   volNum = ensureInt(volNum, 1);
   if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; }
   var buf = new Buffer();
 
-  buf.w('圓瑛大師《講義》卷&nbsp;');
+  buf.w('對應圓瑛大師《講義》之經文。按<font color=brown>講義</font>卷：&nbsp;');
   for (var i=1; i<=24; ++i) {　
-    if (i > 1) buf.w('&nbsp;&nbsp;');
-    if (i == volNum)
-      buf.w('<font style="color:red; background-color:yellow">', toZNum(i), '</font>');
-    else
-      buf.w('<a href="?vid=', i, '">', toZNum(i), '</a>');
+    if (i > 1) buf.w('&nbsp;');
+    var znum = toZNum(i);
+    if (i == volNum) {
+      buf.w('<a href="', volToBookUri(i), '" style="color:red; background-color:yellow" title="見講義" target="jiangyi">', znum, '</a>');
+      document.title = '《楞嚴經》，講義卷' + znum;
+    } else
+      buf.w('<a style="background-color:#a0f0f0" href="?vid=', i, '">', znum, '</a>');
   }
-  buf.w('<br>《楞嚴經》正文卷',
-        '&nbsp;<a href="?vid=1">一</a>',
-        '&nbsp;<a href="?vid=3#sutra2">二</a>',
-        '&nbsp;<a href="?vid=6#sutra3">三</a>',
-        '&nbsp;<a href="?vid=9#sutra4">四</a>',
-        '&nbsp;<a href="?vid=12#sutra5">五</a>',
-        '&nbsp;<a href="?vid=15#sutra6">六</a>',
-        '&nbsp;<a href="?vid=17#sutra7">七</a>',
-        '&nbsp;<a href="?vid=19#sutra8">八</a>',
-        '&nbsp;<a href="?vid=21#sutra9">九</a>',
-        '&nbsp;<a href="?vid=23#sutra10">十</a>');
+  buf.w('&nbsp;&nbsp;按<font color=brown>經文</font>卷：',
+        '<a style="background-color:#a0f0a0" href="?vid=1">一</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=3#sutra2">二</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=6#sutra3">三</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=9#sutra4">四</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=12#sutra5">五</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=15#sutra6">六</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=17#sutra7">七</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=19#sutra8">八</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=21#sutra9">九</a>&nbsp;',
+        '<a style="background-color:#a0f0a0" href="?vid=23#sutra10">十</a>');
   buf.render('volumeNums');
 
   showText(volNum);

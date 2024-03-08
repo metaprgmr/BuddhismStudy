@@ -1,11 +1,20 @@
 body { margin:20px }
-.keyLine { background-color:lightyellow }
-.printing { font-family:KaiTi,楷体,STKaiti,华文楷体; font-size:16px; line-height:125%; letter-spacing:3px }
+.keyLine { background-color:ffa }
+.keyLine1 { background-color:ffd }
+.printing { font-family:KaiTi,"Kaiti TC",楷体,STKaiti,华文楷体; font-size:16px; line-height:125%; letter-spacing:3px }
 .printing1 { font-size:16px; line-height:125%; letter-spacing:3px }
 h2 { letter-spacing:2px }
 
 inv { opacity:0 }
+chapter { font-weight:bold; color:black; }
 .VERSE { color:teal; font-weight:bold }
+.VERSE a { color:teal; font-weight:bold }
+.PLAIN a { color:black; font-weight:bold }
+.PLAIN a:link   { color:black }
+.PLAIN a:visited{ color:black }
+.PLAIN a:hover  { color:black }
+.PLAIN a:focus  { color:black }
+.PLAIN a:active { color:black }
 a { text-decoration:none }
 a:link   { color:blue }
 a:visited{ color:blue }

@@ -32,7 +32,8 @@ var lsn, idx = get('i'), isOrig = (idx === 'orig');
 if (!isOrig) sortJKPSTeachings();
 if (idx && !isOrig) {
   lsn = JKPSTeachingsDict[idx];
-  w('<table width="100%"><tr><td align="center"><h2>', lsn.title, '</h2></td></tr>',
+  w('<table width="900px">',
+    '<tr><td align="center"><h2>', lsn.title, '</h2></td></tr>',
     '<tr><td>');
   for (var i in lsn.text) {
     var txt = lsn.text[i];

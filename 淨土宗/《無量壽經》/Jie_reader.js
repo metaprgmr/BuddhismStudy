@@ -1,3 +1,5 @@
+// FEATURE: replace tag's content with variable values. E.g. <xg title="$JK033$">
+
 // utilities
 const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999
@@ -62,23 +64,34 @@ const     SONG_TI = "'SimSong', '宋体', STSong, '华文宋体'";
 const      HEI_TI = "'SimHei', '黑体', STHeiti, '华文黑体'";
 const TEXT_COLOR     = 'black';
 const VOW_COLOR      = 'blue';
-const LEFT_BG_COLOR  = '#f3ebe3;';
-const RIGHT_BG_COLOR = '#efe7de;';
+const VOW_BGCOLOR    = '#afa';
+const TOPIC_COLOR    = 'blue';
+const QUOTE_COLOR    = '#d00';
+const PIN_COLOR      = '#900';
+const MOTTO_COLOR    = '#009';
+const lbgc = '#f3ebe3';
+const LEFT_BG_COLOR  = lbgc + ';';
+const rbg4 = ',' + lbgc + ',' + lbgc + ',' + lbgc + ',' + lbgc;
+const RIGHT_BG_COLOR = 'linear-gradient(left,#ccc' + rbg4 + rbg4 + rbg4 + rbg4 + ')';
+//const RIGHT_BG_COLOR = '#ece4db'; // '#efe7de;';
 const BOOK_TITLE     = '佛說大乘無量壽莊嚴清淨平等覺經會集本解';
 const LAST_PAGE_NUM  = 837;
 const FIRST_QUOTE_PAGE_NUM = 90;
 const COVER_TEXT_COLOR = '#FFD700';
-const QUOTE_COLOR    = '#d00';
-const MOTTO_COLOR    = '#009';
 
-// Quote InLine and Vow InLine handling
+// "Quote InLine", "Pin(品名) InLine", "Vow InLine" and "Topic/Terminology InLine"  handling
+// Potential vows in the text are examined for「...願」and「...V」against `vows` below.
 const QIL_START = 'ㄍ'; // replaces {
-const QIL_END   = 'ㄑ'; // replaces }
+const QIL_END   = 'ㄑ'; // replaces }   e.g. {如是我聞}
 const QIL_LINE  = 'ㄇ'; // replaces ^{}
 const VIL_START = 'ㄅ';
 const VIL_END   = 'ㄆ';
 const VIL_START_NO_END = 'ㄇ';
 const VIL_END_NO_START = 'ㄈ';
+const TIL_START = QIL_START + 't'; // replaces {t
+const TIL_END   = 't' + QIL_END;   // replaces t}  e.g. {t八相成道t}
+const PIL_START = QIL_START + 'p'; // replaces {p
+const PIL_END   = 'p' + QIL_END;   // replaces p}  e.g. {p受菩提記p}
 const 念祖      = 'ㄙ祖';
 
 var vows = [
@@ -147,7 +160,7 @@ class JiePage {
       // handle 經文引用
       ln = ln.startsWith('{}')
              ? (QIL_LINE + ln.substring(2))
-             : ln.replaceAll('{', QIL_START).replaceAll('}', QIL_END);
+             : ln.replaceAll('{', QIL_START).replaceAll('}', QIL_END); // also covers TIL_START/END and PIL_START/END
       this.lines[i] = ln;
   
       // handle 「...願」
@@ -293,7 +306,7 @@ class ReaderStyles {
     this.endText              = copy(this.endTextCont, { textAlign:'right', paddingBottom:60 });
     this.authorTextInline     = { fontSize:16, fontFamily:KAI_TI, textAlign:'right', letterSpacing:'0.25em' };
     this.authorText           = copy(this.authorTextInline, { width:30 });
-    this.vowTextInline        = copy(this.noteText, { color:VOW_COLOR });
+    this.vowTextInline        = copy(this.noteText, { color:VOW_COLOR, "background-color":VOW_BGCOLOR });
     this.vowText              = copy(this.vowTextInline, { width:30, paddingRight:-10, paddingLeft:10 });
     this.pageName             = { width:40, fontSize:14, fontFamily:KAI_TI, paddingTop:50 };
     this.pageNum              = copy(this.pageName, { textAlign:'right', paddingTop:0, paddingBottom:100 });
@@ -303,12 +316,16 @@ class ReaderStyles {
 
   // dims: { frameHeight, frameWidth, frameMarginTop, margin: { top, bottom } }
   addCSS(dims) {
-    if (this._isCSSAdded) return;
+    var isXG = get('xg');
+    if (!isXG && this._isCSSAdded) return;
 
     const buf = new Buffer(
+      window['無量壽經xgStyle'] || isXG && 'xg { background-color:#ffd }',
       '.dim { opacity:0.5 }\n',
       '.qil { color:' + QUOTE_COLOR + ' }\n',
-      '.vil { color:' + VOW_COLOR + ' }\n',
+      '.pil { color:' + PIN_COLOR + ' }\n',
+      '.vil { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
+      '.til { color:' + TOPIC_COLOR + ' }\n',
       '.NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:darkblue; }\n',
       'a { text-decoration:none }\n',
       'a.main { background-color:#fdd }\n\n',
@@ -354,7 +371,7 @@ class PageDims {
   constructor(width, height, frameMarginTop) {
     this.frameMarginTop = frameMarginTop || 10;
     this.frameWidth     = width || 1050;
-    this.frameHeight    = height || 710;
+    this.frameHeight    = height || 720;
     this.margin         = { top:30, bottom:10, edge:20, ridge:30 };
 
     if (!this.keyHandlerSet) {
@@ -370,7 +387,7 @@ class PageDims {
     css.addCSS(this);
     if (!pageId) {
       pageId = sessionStorage.getItem('lastPageId');
-      console.log('retrieved pageId', pageId);
+      console.log('Retrieved pageId from sessionStorage:', pageId);
     }
     if (!pageId) pageId = 'cover';
     switch (pageId) {
@@ -385,6 +402,7 @@ class PageDims {
       console.log('saved pageId', pageId);
     }
 
+    //var buf = new Buffer('<table border="0" cellspacing="10px"><tr><td><div class="dualpageframe"');
     var buf = new Buffer('<div class="dualpageframe"');
     if (pageId === 'backcover') buf.w(' style="background-color:black"');
     buf.w('>');
@@ -409,6 +427,14 @@ class PageDims {
     this.curDisp = pageId;
     this._addNavBtns(buf);
     buf.w('</div>');
+/*
+    buf.w('</div></td><td valign="top" style="padding-left:20px">&nbsp;<br>',
+          '<button style="line-height:14px; margin-bottom:10px">封<br>面</button><br>',
+          '<button style="line-height:14px; margin-bottom:10px">目<br>錄</button><br>',
+          '<button style="line-height:14px; margin-bottom:10px">釋<br>經</button><br>',
+          '<button style="line-height:14px; margin-bottom:10px">封<br>底</button>',
+          '</td></tr></table>>');
+*/
 
     document.getElementById(this.elemId).innerHTML = buf.text();
   }
@@ -526,7 +552,7 @@ class PageDims {
 
   // top-bottom-left-right
   _navDiv(buf, tblr) {
-    var help, dest, x = 0, y = 0, thickness = 50, H = this.frameHeight, W = this.frameWidth;
+    var help, dest, x = 0, y = 0, thickness = 28, H = this.frameHeight, W = this.frameWidth;
     switch (tblr) {
     case 'tl': dest = 'toc';   help = '目錄';   break;
     case 'tr': dest = 'cover'; help = '關書';   x = W/2; break;
@@ -543,6 +569,53 @@ class PageDims {
     if (!ln) return;
     ln = ln.replace(念祖, '<span class="NianZu">念祖</span>');
     var idx;
+    // process Topic/Terminology InLine
+    for (idx=0; ; ) {
+      idx = ln.indexOf(TIL_START, idx);
+      if (idx < 0) {
+        idx = ln.indexOf(TIL_END, idx);
+        if (idx < 0) break;
+        if (ln.startsWith('<!xg>'))
+          ln = '<!xg><span class="til">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+TIL_END.length);
+        else
+          ln = '<span class="til">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+TIL_END.length);
+        idx++;
+        continue;
+      }
+      var idx1 = ln.indexOf(TIL_END, idx+1);
+      if (idx1 > 0) {
+        ln = ln.substring(0, idx) + '<span class="til">' + ln.substring(idx+TIL_START.length, idx1) + '</span>' + ln.substring(idx1+TIL_END.length);
+        idx = idx1 + 1;
+      } else {
+        ln = ln.substring(0, idx) + '<span class="til">' + ln.substring(idx+TIL_START.length) + '</span>';
+        idx = 0;
+      }
+    }
+
+    // process 品名 Pin InLine
+    for (idx=0; ; ) {
+      idx = ln.indexOf(PIL_START, idx);
+      if (idx < 0) {
+        idx = ln.indexOf(PIL_END, idx);
+        if (idx < 0) break;
+        if (ln.startsWith('<!xg>'))
+          ln = '<!xg><span class="pil">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+PIL_END.length);
+        else
+          ln = '<span class="pil">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+PIL_END.length);
+        idx++;
+        continue;
+      }
+      var idx1 = ln.indexOf(PIL_END, idx+1);
+      if (idx1 > 0) {
+        ln = ln.substring(0, idx) + '<span class="pil">' + ln.substring(idx+PIL_START.length, idx1) + '</span>' + ln.substring(idx1+PIL_END.length);
+        idx = idx1 + 1;
+      } else {
+        ln = ln.substring(0, idx) + '<span class="pil">' + ln.substring(idx+PIL_START.length) + '</span>';
+        idx = 0;
+      }
+    }
+
+    // process Quote InLine
     if (ln.startsWith(QIL_LINE)) {
       ln = '<span class="qil">' + ln.substring(1) + '</span>';
     } else {
@@ -551,20 +624,28 @@ class PageDims {
         if (idx < 0) {
           idx = ln.indexOf(QIL_END, idx);
           if (idx < 0) break;
-          ln = '<span class="qil">' + ln.substring(0, idx) + '</span>」' + ln.substring(idx+1);
+          if (ln.startsWith('<!xg>'))
+            ln = '<!xg><span class="qil">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+1);
+          else
+            ln = '<span class="qil">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+1);
           idx++;
           continue;
         }
         var idx1 = ln.indexOf(QIL_END, idx+1);
         if (idx1 > 0) {
-          ln = ln.substring(0, idx) + '「<span class="qil">' + ln.substring(idx+1, idx1) + '</span>」' + ln.substring(idx1+1);
+          ln = ln.substring(0, idx) + '<span class="qil">' + ln.substring(idx+1, idx1) + '</span>' + ln.substring(idx1+1);
           idx = idx1 + 1;
         } else {
-          ln = ln.substring(0, idx) + '「<span class="qil">' + ln.substring(idx+1) + '</span>';
+          ln = ln.substring(0, idx) + '<span class="qil">' + ln.substring(idx+1) + '</span>';
           idx = 0;
         }
       }
     }
+
+    // process <!xg> dangling <xg> and </xg>. 'xg' is '信裹'.
+    ln = this.__processSimpleTag(ln, 'xg');
+
+    // process Vow InLine
     ln = ln.replaceAll(VIL_START, '「<span class="vil">').replaceAll(VIL_END, '</span>」');
     idx = ln.lastIndexOf(VIL_START_NO_END);
     if (idx > 0) ln = ln.substring(0, idx) + '「<span class="vil">' + ln.substring(idx+1) + '</span>';
@@ -575,6 +656,35 @@ class PageDims {
     cssCls && buf1.w(' class="', cssCls, '"');
     buf1.w(' style="left:', x, 'px; top:', y, 'px;', styles || '', '">', ln, '</div>');
     buf.w(buf1.render());
+  }
+
+  __processSimpleTag(ln, tag) {
+    var startTag1 = '<' + tag + '>',
+        startTag2 = '<' + tag + ' ',
+        endTag   = '</' + tag + '>';
+    if (ln.startsWith('<!' + tag + '>')) // tag the whole line
+      return startTag1 + ln + endTag;
+
+    // handle dangling start-tag
+    var idx, idx1;
+    idx = ln.indexOf(endTag);
+    if (idx >= 0) {
+      idx1 = ln.indexOf(startTag1);
+      if (idx1 < 0)
+        idx1 = ln.indexOf(startTag2);
+      if (idx1 < 0 || idx1 > idx)
+        ln = startTag1 + ln;
+    }
+    // handle dangling end-tag
+    idx = ln.lastIndexOf(startTag1);
+    if (idx1 < 0)
+      idx1 = ln.indexOf(startTag2);
+    if (idx >= 0) {
+      idx1 = ln.lastIndexOf(endTag);
+      if (idx1 < 0 || idx1 < idx)
+        ln += endTag;
+    }
+    return ln;
   }
 
   _getTOCPage() {
@@ -789,8 +899,10 @@ class PageDims {
 
   _pageBackground(buf, color, isLeft) { // isLeft never works! it's always placed on the right.
     var x = isLeft ? 0 : this.frameWidth/2;
-    buf.w('<div style="position:abstract; background-color:', color,
-          ';left:', x, 'px; top:0px; height:', this.frameHeight,
+    var bg = 'background-color:' + color + ';';
+    if (color.startsWith('linear-gradient'))
+      bg = 'background:-moz-' + color + ';' + bg;
+    buf.w('<div style="', bg, 'left:', x, 'px; top:0px; height:', this.frameHeight,
           'px; width:', this.frameWidth/2, 'px"></div>');
   }
 
@@ -821,7 +933,7 @@ class PageDims {
 
   _renderUsageInstructions(buf) {
     buf.w('<div style="writing-mode:horizontal-tb"><table border="0" width="', this.frameWidth/2,
-          'px" cellpadding="50px"><tr>',
+          'px" cellpadding="48px"><tr>',
           '<td style="color:#777; font-family:', SONG_TI, ';">', ABOUT_THIS, '</td></tr></table></div>');
   }
 
@@ -864,7 +976,7 @@ const ABOUT_THIS = `
 <h4>【簡介】</h4>
 
 <blockquote>
-本專用閱讀器乃對佛陀教育基金會恭印的黃念祖居士著《佛說大乘無量壽莊嚴清淨平等覺經解》之重新排版。排文求與硬拷貝雷同，悉尊原文標點、行啟、字體。稍事調整，及予經文引用等<a href="javascript:showPage(236)" title="例頁">著色</a>，增益屏幕閱讀，不昧文字頁數索引。改進一些標點。<a href="javascript:showPage('toc')">目錄</a>特製，非書原有。
+本專用閱讀器乃對佛陀教育基金會恭印的黃念祖居士著《佛說大乘無量壽莊嚴清淨平等覺經解》之重新排版。排文求與硬拷貝雷同，悉尊原文標點、行啟、字體。稍事調整，及予經文引用等<a href="javascript:showPage(236)" title="例頁">著色</a>，增益屏幕閱讀，不昧文字頁數索引。改進標點、糾錯字（如人/入）。<a href="javascript:showPage('toc')">目錄</a>特製，非書原有。
 </blockquote>
 
 <h4>【使用操作】</h4>

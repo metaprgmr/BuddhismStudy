@@ -19,9 +19,32 @@
 </center></body></html>
 
 <script>
+function write蕅益大師要解(divId, option) {
+  option = ensureInt(option, 2);
+  var kepan0OnlyLink   = '<a href="javascript:write蕅益大師要解(null,0)">僅科判詳</a>&nbsp;&nbsp;',
+      kepan1OnlyLink   = '<a href="javascript:write蕅益大師要解(null,1)">僅科判簡</a>&nbsp;&nbsp;',
+      kepanVerseLink   = '<a href="javascript:write蕅益大師要解(null,2)">科判與經文</a>&nbsp;&nbsp;',
+      verseOnlyLink    = '<a href="javascript:write蕅益大師要解(null,-1)">僅經文</a>',
+      kepan0OnlyActive = '<span style="font-weight:bold; background-color:yellow">僅科判詳</span>&nbsp;&nbsp;',
+      kepan1OnlyActive = '<span style="font-weight:bold; background-color:yellow">僅科判簡</span>&nbsp;&nbsp;',
+      kepanVerseActive = '<span style="font-weight:bold; background-color:yellow">科判與經文</span>&nbsp;&nbsp;',
+      verseOnlyActive  = '<span style="font-weight:bold; background-color:yellow">僅經文</span>';
   var buf = new Buffer();
-  buf.w('<table border="0" cellspacing="0px" cellpadding="0" style="min-width:500px">');
-  toDoc().writeAsTRs(buf, 0, true, get('verse') !== '0');
-  buf.w('</table>');
-  buf.render('stage');  
+  buf.w('<table border="0" cellspacing="0px" cellpadding="0" style="min-width:500px"><caption>');
+  var showVerse = true;
+  switch (option) {
+  case 0:  buf.w(kepan0OnlyActive, kepan1OnlyLink, kepanVerseLink, verseOnlyLink); showVerse = false; break;
+  case 1:  buf.w(kepan0OnlyLink, kepan1OnlyActive, kepanVerseLink, verseOnlyLink); showVerse = false; break;
+  case 2:  buf.w(kepan0OnlyLink, kepan1OnlyLink, kepanVerseActive, verseOnlyLink); break;
+  case -1: buf.w(kepan0OnlyLink, kepan1OnlyLink, kepanVerseLink, verseOnlyActive); break;
+  }
+  buf.w('</caption>');
+  toDoc().writeAsTRs(buf, option, false, showVerse);
+  buf.w('</table>'); 
+
+  if (divId) lastDivId = divId; else divId = lastDivId;
+  buf.render(divId); 
+}
+
+write蕅益大師要解('stage');
 </script>

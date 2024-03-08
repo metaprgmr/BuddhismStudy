@@ -26,7 +26,78 @@ function writeKePan() {
       w('<a href="?verse=none">僅科判</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="?verse=none&terse=1">僅科判（精）</a></p>');
   }
 
-  write金剛經科判(kepan, verses, divisions, verseOnly, noVerse, terse);
+  // write 金剛經科判
+  w('<table border="0" cellspacing="0px" cellpadding="0">');
+  var i, ln, a = kepan.split('\n'), maxlen = 50;
+  for (i in a) {
+    ln = a[i];
+    if (ln.startsWith('//')) continue;
+    if (ln.length > maxlen) maxlen = ln.length;
+  }
+  var bdr, hasAnchor1 = false, verseStarted = false;
+  for (i in a) {
+    ln = a[i];
+    var anchor = '';
+    if (ln.startsWith('十七')) anchor = '<a name="part2"></a>';
+    else if (!hasAnchor1 && (ln.indexOf('（乙）初，序分') >= 0)) { anchor = '<a name="part1"></a>'; hasAnchor1 = true; }
+    if (ln.length === 0 || ln.startsWith('//')) continue;
+    var divNum = ln.substring(0,2);
+    var divTitleLen = 0, divTitle = divisions[divNum] || '　　';
+    if (divTitle !== '　　') divTitleLen = divTitle.length;
+    var verseNum = ln.substring(3,6);
+    var verse = verses[verseNum] || '';
+    if (verseOnly) {
+      if (verse !== '')
+        w('<tr><td valign="top" align="right" nowrap style="color:gray">', verseNum, '.&nbsp;&nbsp;&nbsp;</td>',
+          '<td nowrap valign="top" class="printing">', verse.replaceAll('|', '<br>'), '</td></tr>');
+      continue;
+    }
+    if (verseNum != '   ') verseNum += '.&nbsp;&nbsp;';
+    var kepanHint = '';
+    var idx = ln.lastIndexOf('：');
+//    if (idx > 0) kepanHint = ln.substring(idx+1).trim(); // if kepan font too small, use hint to help
+    var kepanLine = ln.substring(6);
+    idx = kepanLine.indexOf('*');
+    var isKey = idx > 0;
+    if (isKey) {
+      var idx1 = kepanLine.lastIndexOf('　', idx) + 1;
+      ln = kepanLine;
+      kepanLine = ln.substring(0, idx1) + '<font class="keyLine">' + ln.substring(idx1, idx) + '</font>' + ln.substring(idx+1);
+    }
+    else if (terse) continue;
+    if (divTitleLen > 0) {
+      if (divNum === '　一') { divTitle = '法會因由分'; divTitleLen = divTitle.length; }
+      kepanLine = divTitle + kepanLine.substring(divTitleLen-2); // -2 is for the original division title verbiage
+      divTitle = '';
+    }
+    w('<tr><td valign="top" nowrap style="font-size:12px; background-color:#e8e8e8; border-bottom:1px #fff solid">', anchor,
+      divTitle, '<span title="', kepanHint, '">', kepanLine, '</span>',
+      '</td>');
+    if (!verseStarted) {
+      if (kepanLine.indexOf('正文上半部') > 0)
+        verseStarted = true;
+    }
+    if (!terse) {
+      bdr = verseStarted ? ' background-color:#efc; ' : '';
+//    if (verseNum.startsWith('  1.'))
+//      bdr += '; border-top:2px solid lightgray';
+//    else if (verseNum.startsWith('184.'))
+//      bdr += '; border-bottom:2px solid lightgray';
+      w('<td valign="top" align="right" nowrap style="font-size:12px; color:gray; ', bdr, '">', verseNum, '</td>');
+    }
+    if (!noVerse) {
+      bdr = verseStarted ? ' background-color:#efc;' : '';
+//    if (verseStarted)
+//      bdr += 'border-right:2px solid lightgray';
+//    if (verseNum.startsWith('  1.'))
+//      bdr += '; border-top:2px solid lightgray';
+//    else if (verseNum.startsWith('184.'))
+//      bdr += '; border-bottom:2px solid lightgray';
+      w('<td nowrap valign="top" style="color:teal; ', bdr, '">', verse.replaceAll('|', '<br>'), '</td>');
+    }
+    w('</tr>');
+  }
+  w('</table>');
 }
 </script>
 <body><center>

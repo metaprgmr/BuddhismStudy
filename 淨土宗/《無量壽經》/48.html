@@ -9,8 +9,14 @@ h2 { color:red }
 a { text-decoration:none }
 u { color:red; text-decoration:none; text-decoration-color:#0d0 }
 td { font-size:18px; font-family: KaiTi, 楷体, STKaiti, 华文楷体 }
+.cluster { font-size:16px; line-height:21px }
+red { color:red }
+blue { color:blue }
+red1 { color:red; font-family: KaiTi, 楷体, STKaiti, 华文楷体 }
+blue1 { color:blue; font-family: KaiTi, 楷体, STKaiti, 华文楷体 }
 .mynote { font-size:14px; font-family: FangSongTi, 仿宋体, STFangSongti, 华文仿宋体 }
 .聞名 { color:red }
+.forHim { color:blue }
 </style>
 <script>
 function get(name) {
@@ -23,7 +29,7 @@ const withCls = get('c');
 
 const chapters = [
   '_filler_',
-  '法會聖眾第一',
+  '法會聖衆第一',
   '德遵普賢第二',
   '大教緣起第三',
   '法藏因地第四',
@@ -35,7 +41,7 @@ const chapters = [
   '皆願作佛第十',
   '國界嚴淨第十一',
   '光明徧照第十二',
-  '壽眾無量第十三',
+  '壽衆無量第十三',
   '寶樹徧國第十四',
   '菩提道場第十五',
   '堂舍樓觀第十六',
@@ -74,9 +80,9 @@ const chapters = [
 ];
 
 const groups = [
-  { summary: '總論',
+  { summary: '句首',
     paras: [
-      { text:   '<u>我若證得無上菩提，成正覺已，所居佛剎，<br>具足無量不可思議功德莊嚴。</u>'
+      { text:   '法藏白言 唯願世尊大慈聽察<br><br><u title="此句著於每一願之始">我若證得無上菩提，成正覺已，所居佛剎具足無量不可思議功德莊嚴。</u>'
       }
     ]
   },
@@ -84,40 +90,43 @@ const groups = [
     paras: [
       { wishes: [ '國無惡道願', '不墮惡趣願' ],
         pretext:'<u>我若證得無上菩提，成正覺已，<br>所居佛剎，具足無量不可思議功德莊嚴。</u>',
-        text:   '<u>無有地獄、餓鬼、禽獸、蜎飛蠕動之類。所有一切眾生，以及焰摩羅界，三惡道中，來生我剎，受我法化，悉成阿耨多羅三藐三菩提，不復更墮惡趣。</u>得是願，乃作佛，不得是願，不取無上正覺。',
+        text:   '<u>無有地獄、餓鬼、禽獸、蜎飛蠕動之類。所有一切衆生，以及焰摩羅界，三惡道中，來生我剎，受我法化，悉成阿耨多羅三藐三菩提，不復更墮惡趣。</u>得是願，乃作佛，不得是願，不取無上正覺。',
         ref:    22
       }
     ]
   },
-  { summary: '國民利益',
+  { summary: '正報利益',
     paras: [
       { wishes: [ '身悉金色願', '三十二相願', '身無差別願' ],
-        text:   '我作佛時，<u>十方世界，所有眾生，令生我剎，皆具紫磨真金色身，三十二種大丈夫相。端正淨潔，悉同一類。若形貌差別，有好醜者，不</u>取正覺。',
-        ref:    18
+        text:   '我作佛時，<u>十方世界，所有衆生，令生我剎，皆具紫磨真金色身，三十二種大丈夫相。端正淨潔，悉同一類。</u>若<u>形貌差別，有好醜</u>者，不取正覺。',
+        ref:    [ 18 ]
       },
       { wishes: [ '宿命通願', '天眼通願', '天耳通願' ],
-        text:   '我作佛時，<u>所有眾生，生我國者，自知無量劫時宿命所作善惡。皆能洞視徹聽，知十方去來現在之事。</u>不得是願，不取正覺。'
+        text:   '我作佛時，<u>所有衆生，生我國者，自知無量劫時宿命所作善惡。皆能洞視、徹聽，知十方去來現在之事。</u>不得是願，不取正覺。',
+        ref:    [ 28 ]
       },
       { wishes: [ '他心通願' ],
-        text:   '我作佛時，<u>所有眾生，生我國者，皆得他心智通。若不悉知億那由他百千佛剎眾生心念者，不</u>取正覺。'
+        text:   '我作佛時，<u>所有衆生，生我國者，皆得他心智通。</u>若不<u>悉知億那由他百千佛剎衆生心念</u>者，不取正覺。',
+        ref:    [ 28 ]
       },
       { wishes: [ '神足通願', '徧供諸佛願' ],
-        text:   '我作佛時，<u>所有眾生，生我國者，皆得神通自在，波羅密多。於一念頃，不能超過億那由他百千佛剎，周徧巡歷供養諸佛者，不</u>取正覺。'
+        text:   '我作佛時，<u>所有衆生，生我國者，皆得神通自在，波羅密多。於一念頃，</u>不<u>能超過億那由他百千佛剎，周徧巡歷供養諸佛者，不</u>取正覺。',
+        ref:    [ 27, 39 ]
       },
       { wishes: [ '定成正覺願' ],
-        text:   '我作佛時，<u>所有眾生，生我國者，遠離分別，諸根寂靜。若不決定成等正覺，證大涅槃者，不</u>取正覺。',
-        ref:    [ 30, 31 ]
+        text:   '我作佛時，<u>所有衆生，生我國者，遠離分別，諸根寂靜。</u>若不<u>決定成等正覺，證大涅槃</u>者，不取正覺。',
+        ref:    [ 22, 30, 31 ]
       }
     ]
   },
-  { summary: '光壽殊勝', forHim: true,
+  { summary: '教主己願', forHim: true,
     paras: [
       { wishes: [ '光明無量願', '觸光安樂願' ],
-        text:   '我作佛時，<u>光明無量，普照十方，絕勝諸佛，勝于日月之明千萬億倍。若有眾生，見我光明，照觸其身，莫不安樂，慈心作善，來生我國。</u>若不爾者，不取正覺。',
-        ref:    12
+        text:   '我作佛時，<u>光明無量，普照十方，絕勝諸佛，勝於日月之明千萬億倍。若有衆生，見我光明，照觸其身，莫不安樂，慈心作善，來生我國。</u>若不爾者，不取正覺。',
+        ref:    [ 12, 38 ]
       },
       { wishes: [ '壽命無量願', '聲聞無數願' ],
-        text:   '我作佛時，<u>壽命無量，國中聲聞天人無數，壽命亦皆無量。假令三千大千世界眾生，悉成緣覺，於百千劫，悉共計校，若能知其量數者，不</u>取正覺。',
+        text:   '我作佛時，<u>壽命無量，國中聲聞天人無數，壽命亦皆無量。假令三千大千世界衆生悉成緣覺，於百千劫悉共計校，</u>若能<u>知其量數</u>者，不取正覺。',
         ref:    13
       },
       { wishes: [ '諸佛稱嘆願' ],
@@ -127,72 +136,64 @@ const groups = [
       }
     ]
   },
-  { summary: '聞名得生',
+  { summary: '聞名功德',
     is聞名: true,
     paras: [
       { wishes: [ '十念必生願' ],
-        text:   '我作佛時，<u>十方眾生，聞我名號，至心信樂，所有善根，心心迴向，願生我國，乃至十念，若不生者，不</u>取正覺。<u>唯除五逆，誹謗正法。</u>',
+        text:   '我作佛時，<u>十方衆生，聞我名號，至心信樂，所有善根，心心迴向，願生我國，乃至十念，</u>若不<u>生</u>者，不取正覺。<u>唯除五逆，誹謗正法。</u>',
         ref:    24
       },
       { wishes: [ '聞名發心願', '臨終接引願' ],
-        text:   '我作佛時，<u>十方眾生，聞我名號，發菩提心，修諸功德，奉行六波羅密，堅固不退。復以善根迴向，願生我國，一心念我，晝夜不斷。臨壽終時，我與諸菩薩眾，迎現其前，經須臾間，即生我剎，作阿惟越致菩薩。</u>不得是願，不取正覺。',
-        ref:    25
+        text:   '我作佛時，<u>十方衆生，聞我名號，發菩提心，修諸功德，奉行六波羅密，堅固不退。復以善根迴向，願生我國，一心念我，晝夜不斷。臨壽終時，我與諸菩薩衆，迎現其前，經須臾間，即生我剎，作阿惟越致菩薩。</u>不得是願，不取正覺。',
+        ref:    [ 23, 24, 25 ]
       },
       { wishes: [ '悔過得生願' ],
-        text:   '我作佛時，<u>十方眾生，聞我名號，繫念我國，發菩提心，堅固不退。植眾德本，至心迴向，欲生極樂，無不遂者。若有宿惡，聞我名字，即自悔過，為道作善，便持經戒，願生我剎，命終不復更三惡道，即生我國。</u>若不爾者，不取正覺。'
-      }
-    ]
-  },
-  { summary: '國民出生',
-    paras: [
+        text:   '我作佛時，<u>十方衆生，聞我名號，繫念我國，發菩提心，堅固不退。植衆德本，至心迴向，欲生極樂，無不遂者。若有宿惡，聞我名字，即自悔過，為道作善，便持經戒，願生我剎，命終不復更三惡道，即生我國。</u>若不爾者，不取正覺。'
+      },
       { wishes: [ '國無女人願', '厭女轉男願', '蓮華化生願' ],
-        text:   '我作佛時，<u>國無婦女。若有女人，聞我名字，得清淨信，發菩提心，厭患女身，願生我國。命終即化男子，來我剎土。十方世界諸眾生類，生我國者，皆於七寶池蓮華中化生。</u>若不爾者，不取正覺。',
+        text:   '我作佛時，<u>國無婦女。若有女人，聞我名字，得清淨信，發菩提心，厭患女身，願生我國。命終即化男子，來我剎土。十方世界諸衆生類，生我國者，皆於七寶池蓮華中化生。</u>若不爾者，不取正覺。',
         ref:    17
-      }
-    ]
-  },
-  { summary: '聞名得福',
-    is聞名: true,
-    paras: [
+      },
       { wishes: [ '天人禮敬願', '聞名得福願', '修殊勝行願' ],
-        text:   '我作佛時，<u>十方眾生，聞我名字，歡喜信樂，禮拜歸命。以清淨心，修菩薩行，諸天世人，莫不致敬。若聞我名，壽終之後，生尊貴家，諸根無缺，常修殊勝梵行。</u>若不爾者，不取正覺。'
+        text:   '我作佛時，<u>十方衆生，聞我名字，歡喜信樂，禮拜歸命。以清淨心，修菩薩行，諸天世人，莫不致敬。若聞我名，壽終之後，生尊貴家，諸根無缺，常修殊勝梵行。</u>若不爾者，不取正覺。'
       },
     ]
   },
-  { summary: '幸福生活',
+  { summary: '正報莊嚴',
     paras: [
       { wishes: [ '國無不善願', '住正定聚願', '樂如漏盡願', '不貪計身願' ],
-        text:   '我作佛時，<u>國中無不善名。所有眾生，生我國者，皆同一心，住於定聚。永離熱惱，心得清涼，所受快樂，猶如漏盡比丘。若起想念，貪計身者，不</u>取正覺。',
-        ref:    22
+        text:   '我作佛時，<u>國中無不善名。所有衆生，生我國者，皆同一心，住於定聚。永離熱惱，心得清涼，所受快樂，猶如漏盡比丘。</u>若<u>起想念，貪計身</u>者，不取正覺。',
+        ref:    [ 20, 22 ]
       },
       { wishes: [ '那羅延身願', '光明慧辯願', '善談法要願' ],
-        text:   '我作佛時，<u>生我國者，善根無量，皆得金剛那羅延身，堅固之力。身頂皆有光明照耀。成就一切智慧，獲得無邊辯才。善談諸法秘要，說經行道，語如鐘聲。</u>若不爾者，不取正覺。'
+        text:   '我作佛時，<u>生我國者，善根無量，皆得金剛那羅延身，堅固之力。身頂皆有光明照耀。成就一切智慧，獲得無邊辯才。善談諸法秘要，說經行道，語如鐘聲。</u>若不爾者，不取正覺。',
+        ref:    [ 31 ]
       },
       { wishes: [ '一生補處願', '教化隨意願' ],
-        text:   '我作佛時，<u>所有眾生，生我國者，究竟必至一生補處。除其本願為眾生故，被弘誓鎧，教化一切有情，皆發信心，修菩提行，行普賢道。雖生他方世界，永離惡趣。或樂說法，或樂聽法，或現神足，隨意修習，無不圓滿。</u>若不爾者，不取正覺。',
-        ref:    29
+        text:   '我作佛時，<u>所有衆生，生我國者，究竟必至一生補處。除其本願為衆生故，被弘誓鎧，教化一切有情，皆發信心，修菩提行，行普賢道。雖生他方世界，永離惡趣。或樂說法，或樂聽法，或現神足，隨意修習，無不圓滿。</u>若不爾者，不取正覺。',
+        ref:    [ 29 ]
       },
       { wishes: [ '衣食自至願', '應念受供願' ],
-        text:   '我作佛時，<u>生我國者，所須飲食、衣服、種種供具，隨意即至，無不滿願。十方諸佛，應念受其供養。</u>若不爾者，不取正覺。',
+        text:   '我作佛時，<u>生我國者，所須飲食、衣服、種種供具，隨意即至無不滿願。十方諸佛，應念受其供養。</u>若不爾者，不取正覺。',
         ref:    [ 19, 20 ]
       },
     ]
   },
-  { summary: '優美環境',
+  { summary: '依報莊嚴',
     paras: [
       { wishes: [ '莊嚴無盡願' ],
-        text:   '我作佛時，<u>國中萬物，嚴淨光麗，形色殊特，窮微極妙，無能稱量。其諸眾生，雖具天眼，有能辨其形色、光相、名數，及總宣說者，不</u>取正覺。',
-        ref:    11
+        text:   '我作佛時，<u>國中萬物嚴淨光麗，形色殊特，窮微極妙，無能稱量。其諸衆生雖具天眼，</u>有<u>能辨其形色、光相、名數，及總宣說</u>者，不取正覺。',
+        ref:    [ 11, 21 ]
       },
       { wishes: [ '無量色樹願', '樹現佛剎願' ],
-        text:   '我作佛時，<u>國中無量色樹，高或百千由旬。道場樹高，四百萬里。諸菩薩中，雖有善根劣者，亦能了知。欲見諸佛淨國莊嚴，悉於寶樹間見，猶如明鏡，睹其面像。</u>若不爾者，不取正覺。',
-        ref:    [ 14, 15, 21 ]
+        text:   '我作佛時，<u>國中無量色樹，高或百千由旬。道場樹高四百萬里。諸菩薩中雖有善根劣者，亦能了知。欲見諸佛淨國莊嚴，悉於寶樹間見，猶如明鏡覩其面像。</u>若不爾者，不取正覺。',
+        ref:    [ 14, 15 ]
       },
       { wishes: [ '徹照十方願' ],
-        text:   '我作佛時，<u>所居佛剎，廣博嚴淨，光瑩如鏡，徹照十方無量無數不可思議諸佛世界。眾生覩者，生希有心。</u>若不爾者，不取正覺。'
+        text:   '我作佛時，<u>所居佛剎，廣博嚴淨，光瑩如鏡，徹照十方無量無數不可思議諸佛世界。衆生覩者，生希有心。</u>若不爾者，不取正覺。'
       },
       { wishes: [ '寶香普熏願' ],
-        text:   '我作佛時，<u>下從地際，上至虛空，宮殿樓觀，池流華樹，國土所有一切萬物，皆以無量寶香合成。其香普熏十方世界。眾生聞者，皆修佛行。</u>若不爾者，不取正覺。',
+        text:   '我作佛時，<u>下從地際，上至虛空，宮殿樓觀，池流華樹，國土所有一切萬物，皆以無量寶香合成。其香普熏十方世界。衆生聞者，皆修佛行。</u>若不爾者，不取正覺。',
         ref:    [ 16, 17 ]
       }
     ]
@@ -200,25 +201,42 @@ const groups = [
   { summary: '他方菩薩',
     paras: [
       { wishes: [ '普等三昧願', '定中供佛願' ],
-        text:   '我作佛時，<u>十方佛剎諸菩薩眾，聞我名已，皆悉逮得清淨、解脫、普等三昧，諸深總持。住三摩地，至於成佛。定中常供無量無邊一切諸佛，不失定意。</u>若不爾者，不取正覺。'
+        text:   '我作佛時，<u>十方佛剎諸菩薩衆，聞我名已，皆悉逮得清淨、解脫、普等三昧，諸深總持。住三摩地，至於成佛。定中常供無量無邊一切諸佛，不失定意。</u>若不爾者，不取正覺。',
+        ref:    [ 26 ]
       },
       { wishes: [ '獲陀羅尼願', '聞名得忍願', '現證不退願' ],
-        text:   '我作佛時，<u>他方世界諸菩薩眾，聞我名者，證離生法，獲陀羅尼。清淨歡喜，得平等住。修菩薩行，具足德本。應時不獲一二三忍，於諸佛法，不能現證不退轉者，不</u>取正覺。',
+        text:   '我作佛時，<u>他方世界諸菩薩衆，聞我名者，證離生法，獲陀羅尼。清淨歡喜，得平等住。修菩薩行，具足德本。應時</u>不<u>獲一二三忍，於諸佛法，</u>不<u>能現證不退轉</u>者，不取正覺。',
         ref:    42
       }
     ]
   }
 ];
+
+function getParasText() {
+  var ret = [];
+  for (var g=0; g<groups.length; ++g) {
+    const paras = groups[g].paras, len = paras.length;
+    for (var i=0; i<len; ++i) {
+      ret.push(paras[i].text);
+    }
+  }
+  return ret;
+}
+
+function digit2(n) {
+  if (n >= 10) return n;
+  return '<font style="opacity:0">0</font>' + n;
+}
 </script>
 </head>
 <body><center>
 
 <script>
 w('<h2>法藏菩薩四十八大誓願<br><font size="-1">（',
-  withCls ? '含我的歸類。亦見<a href="?c=">簡潔版</a>' : '簡潔版。亦見<a href="?c=1">我的歸類</a>',
-  '）</font></h2>');
+  withCls ? '含我的歸類。亦見<a href="?c=">簡潔版</a>。<a href="#clustering">聚類</a> |' : '簡潔版。亦見<a href="?c=1">我的歸類</a>。', ' <a href="#chapterIndex">品號索引</a>）</font></h2>');
 if (withCls) {
   w('<table border="0">');
+  var curWish = 1;
   for (var g=0; g<groups.length; ++g) {
     w('<tr>');
     switch (g) {
@@ -226,8 +244,23 @@ if (withCls) {
     case 4: w('<td class="mynote" rowspan="3" valign="top">極樂往生：</td>'); break;
     case 7: w('<td class="mynote" rowspan="3" valign="top">極樂環境：</td>'); break;
     }
-    w('<td class="mynote" align="right">', g+1, '.&nbsp;</td><td class="mynote', groups[g].is聞名 ? ' 聞名' : '', '">', groups[g].summary,
-      '</td><td>', groups[g].forHim ? '（　　<font color="blue">為祂</font>）' : '（為眾　　）</td></tr>');
+    var numWishes = 0, paras = groups[g].paras;
+    for (var k=0; k<paras.length; ++k)
+      if (paras[k].wishes) numWishes += paras[k].wishes.length;
+    if (numWishes) {
+      var filler = (numWishes < 10) ? '<font style="opacity:0">0</font>' : '';
+      var first = curWish;
+      curWish += numWishes;
+      numWishes = '共' + filler + numWishes + '願：' + digit2(first) + '至' + digit2(curWish-1);
+      
+    }
+    if (g === 0)
+      w('<td></td><td class="mynote">', groups[g].summary, '</td></tr>');
+    else
+      w('<td class="mynote" align="right">', g, '.&nbsp;</td><td class="mynote',
+        groups[g].is聞名 ? ' 聞名' : '', groups[g].forHim ? ' forHim' : '',
+        '">', groups[g].summary,
+        '</td><td class="mynote">', groups[g].forHim ? '（　　<blue>為祂</blue>）' : '（為衆　　）', numWishes || '', '</td></tr>');
   }
   w('</table><br>');
 }
@@ -251,8 +284,8 @@ for (var g=0; g<groups.length; ++g) {
     else if (isLast)
       tdstyle += ';border-bottom:2px solid gray';
     var bgc = '', colr = grp.forHim && withCls ? ' style="color:blue"' : '';
-    if (withCls && (g <= 2 || g >= 6)) bgc = '#ffe';
-    if (withCls && (i === 0)) {
+    if ((g <= 2 || g >= 6)) bgc = '#ffe';
+    if ((i === 0)) {
       var sum = '';
       for (var k=0; k<grp.summary.length; ++k) {
         if (k>0) sum += '<br>';
@@ -270,12 +303,12 @@ for (var g=0; g<groups.length; ++g) {
     else
       styl = 'border-bottom:1px solid gray';
     var styl2 = styl + '; border-left:1px solid gray';
-    if (!withCls) styl += '; border-left:2px solid gray';
     if (!p.wishes) {
       w('<td nowrap bgcolor="lightgray" style="', styl, '">&nbsp;</td><td nowrap style="', styl2, '">');
     } else {
       p.num = ++paraNum;
-      w('<td nowrap align="center" class="mynote" bgcolor="lightgray" style="', styl, '">第<br>', p.num, '<br>段</td><td nowrap style="', styl2, '">');
+      w('<td nowrap align="center" class="mynote" bgcolor="lightgray" style="', styl, '">第<br>', p.num,
+        '<br>段</td><td nowrap style="', styl2, '">');
       for (var j=0; j<p.wishes.length; ++j) {
         if (j>0) w('<br>');
         w((num < 10) ? '&nbsp;' : '', num++, '.&nbsp;', p.wishes[j]);
@@ -328,18 +361,249 @@ for (var j=0; j<groups.length; ++j) {
 }
 })();
 
-if (true) {
-  w('<hr width="880"><h3>品號索引</h3>',
-    '<table>');
-  for (var i=1; i<chapterToWishes.length; ++i) {
-    var m = chapterToWishes[i];
-    if (!m) continue;
-    w('<tr><td class="mynote">第', i, '品</td><td width="20px"></td><td class="mynote">涉及大願（第6品）第', m.join('、'), '段</td></tr>');
-  }
-  w('</table>');
+if (withCls) {
+  // 四十八願聚類
+  const diagram = `
+┌─ 1.極樂淨土 (2) ─── 無惡 ── 國無惡道願1   不墮惡趣願2
+│    〇〇〇〇      ┌─ 相好 ── 身悉金色願3   三十二相願4   身無差別願5
+│    〇〇〇〇      ├─ 神通 ── 宿命通〇願6   天眼通願〇7   天耳通〇願8
+├─ 2.正報利益(10) ─┤  〇〇    他心通〇願9
+│    〇〇〇〇      │  〇〇    神足通〇願10  徧供諸佛願11
+│    〇〇〇〇      └─ 成就 ── 定成正覺願12
+│    〇〇〇〇      ┌─ 光明 ── 光明無量願13  觸光安樂願14
+├─ 3.教主己願 (5) ─┼─ 壽命 ── 壽命無量願15  聲聞無數願16
+│    〇〇〇〇      └─ 佛讚 ── 諸佛稱嘆願17
+│    〇〇〇〇      ┌─ 得生 ── 十念必生願18
+│    〇〇〇〇      │  〇〇    聞名發心願19  臨終接引願20
+├─ 4.聞名功德(10) ─┤  〇〇    悔過得生願21
+│    〇〇〇〇      │  〇〇    國無女人願22  厭女轉男願23  蓮華化生願24
+│    〇〇〇〇      └─ 得福 ── 天人禮敬願25  聞名得福願26  修殊勝行願27
+│    〇〇〇〇      ┌─ 極樂 ── 國無不善願28  住正定聚願29  樂如漏盡願30  不貪計身願31
+├─ 5.正報莊嚴(11) ─┼─ 智慧 ── 那羅延身願32  光明慧辯願33  善談法要願34
+│    〇〇〇〇      ├─ 成就 ── 一生補處願35  教化隨意願36
+│    〇〇〇〇      └─ 供養 ── 衣食自至願37  應念受供願38
+│    〇〇〇〇      ┌─ 萬物 ── 莊嚴無盡願39
+│    〇〇〇〇      │  〇〇    無量色樹願40  樹現佛剎願41
+├─ 6.依報莊嚴 (5) ─┼─ 徧照 ── 徹照十方願42
+│    〇〇〇〇      └─ 寶香 ── 寶香普熏願43
+└─ 7.他方菩薩 (5) ─── 聞名 ── 普等三昧願44  定中供佛願45
+     〇〇〇〇         〇〇    獲陀羅尼願46  聞名得忍願47  現證不退願48
+`.replaceAll('〇', '　').trim();
+
+  w('<a name="clustering"></a>',
+    '<h3 onclick="showText(null, \'法藏白言 唯願世尊大慈聽察<br><br><u>我若證得無上菩提，成正覺已，所居佛剎具足無量不可思議功德莊嚴。</u>\')">四十八願聚類</h3>',
+    '<table><tr><td><pre class="cluster">', procDiagram(diagram), '</pre><br>',
+    '<div id="hint" style="width:850px; background-color:white"></div>',
+    '</td></tr></table><p>&nbsp;</p>');
 }
+
+function procDiagram(txt) {
+  var paras = getParasText();
+  var a = txt.replace('聞名功德', '<red>聞名功德</red>')
+             .replace('教主己願', '<blue>教主己願</blue>')
+             .split('\n');
+  txt = '';
+  for (var i=0; i<24; ++i) {
+    var color = (i>=6 && i<=8) ? 'blue' : 'red';
+    var t = a[i];
+    var idx = t.lastIndexOf('─');
+    if (idx < 0) idx = t.lastIndexOf('│');
+    if (idx < 0) idx = t.lastIndexOf('┤');
+    for (idx+=2; t[idx] === ' ' || t[idx] === '　'; ++idx);
+    var n = (i<9) ? (' '+(i+1)) : (i+1);
+    var seg = '第' + n + '段';
+    txt += '<span onclick="showText(\'' + seg + '\', \'' + paras[i+1] + '\')">' + seg + '  ' +
+           t.substring(0, idx) +
+           '<' + color + '1>' + t.substring(idx) + '</' + color + '1></span>\n';
+  }
+  return txt;
+}
+
+
+var lastQuizNum = -1;
+
+function showText(seg, txt) {
+  var el = document.getElementById('hint');
+  if (!el) return;
+  if (!txt && !seg) seg = 'quizX';
+  var quiz1 = -1, quiz2 = -1;
+  if (seg && seg.startsWith && seg.startsWith('quiz')) {
+    switch(seg) {
+    case 'quiz0': quiz1 = 1;  quiz2 = 48; break;
+    case 'quiz1': quiz1 = 1;  quiz2 = 2;  break;
+    case 'quiz2': quiz1 = 3;  quiz2 = 12; break;
+    case 'quiz3': quiz1 = 13; quiz2 = 17; break;
+    case 'quiz4': quiz1 = 18; quiz2 = 27; break;
+    case 'quiz5': quiz1 = 28; quiz2 = 38; break;
+    case 'quiz6': quiz1 = 39; quiz2 = 43; break;
+    case 'quiz7': quiz1 = 44; quiz2 = 48; break;
+    default:      quiz1 = 10000; break;
+    }
+  }
+  if (quiz1 > 0) {
+    txt = '【測驗：' +
+          '<a href="javascript:showText(\'quiz2\')">正報利益願</a>，' +
+          '<a href="javascript:showText(\'quiz3\')">教主己願</a>，' +
+          '<a href="javascript:showText(\'quiz4\')">聞名功德願</a>，' +
+          '<a href="javascript:showText(\'quiz5\')">正報莊嚴願</a>，' +
+          '<a href="javascript:showText(\'quiz6\')">依報莊嚴願</a>，' +
+          '<a href="javascript:showText(\'quiz7\')">他方菩薩願</a>，' +
+          '<a href="javascript:showText(\'quiz0\')">任何願</a>' +
+          '】';
+    if (quiz1 < 48) {
+      var delta = quiz2 - quiz1 + 1;
+      var n = lastQuizNum;
+      while (n === lastQuizNum) {
+        n = quiz1 + Math.floor((Math.random() * (delta+1) * 100) / 100);
+        n = Math.max(quiz1, Math.min(quiz2, n));
+      }
+      lastQuizNum = n;
+      txt += ' 第<u>' + n + '</u>願';
+    }
+  }
+  else if (txt && seg) {
+    seg += ':';
+    txt = '<table border="0"><tr><td nowrap valign="top">' + seg +
+          '&nbsp;&nbsp;</td><td>' + txt + '</td></tr></table>';
+  }
+  else if (!seg && txt)
+    txt += '&nbsp;【<a href="javascript:showText()">測驗</a>】';
+    
+  el.innerHTML = txt || '';
+}
+
+showText();
+
+// 品號索引
+w('<a name="chapterIndex"></a><hr width="880"><h3>品號索引</h3>',
+  '<table>');
+for (var i=1; i<chapterToWishes.length; ++i) {
+  var m = chapterToWishes[i];
+  if (!m) continue;
+  w('<tr><td class="mynote">第', i, '品</td><td width="20px"></td>',
+    '<td class="mynote">涉及大願（第6品）第', m.join('、'), '段</td></tr>');
+}
+w('</table>');
 </script>
+
+<hr width="880">
+<h3>十八至廿一願對比</h3>
+<div style="width:880" align="left">
+<table bgcolor="white" border="1" cellspacing="0" cellpadding="5px">
+<tr bgcolor="lightgray">
+<th nowrap width="33%">第十八願&nbsp;十念必生願</th>
+<th nowrap width="33%">第十九願&nbsp;聞名發心願<br>第二十願&nbsp;臨終接引願</th>
+<th nowrap width="33%">第廿一願&nbsp;悔過得生願</th></tr>
+
+<tr><td colspan="3" align="center">我作佛時，十方衆生，<red>聞我名號，</red></td></tr>
+<tr>
+<td><red><sup>1</sup>至心信樂，<red></td>
+<td></td>
+<td><sup>1</sup>繫念我國，</td></tr>
+<tr>
+<td></td>
+<td><red><sup>2</sup>發菩提心，</red></td>
+<td><sup>2</sup>發菩提心，</td></tr>
+<tr>
+<td></td>
+<td><red><sup>3</sup>修諸功德，奉行六波羅密，</red></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td><red><sup>4</sup>堅固不退。</red></td>
+<td><sup>4</sup>堅固不退。</td></tr>
+<tr>
+<td></td>
+<td></td>
+<td><sup>3</sup>植衆德本，</td></tr>
+<tr>
+<td valign="top"><red><sup>5</sup>所有善根，心心迴向，願生我國，</red></td>
+<td valign="top"><sup>5</sup>復以善根迴向，願生我國，</td>
+<td valign="top"><sup>5</sup>至心迴向，欲生極樂，<br>無不遂者。</td></tr>
+<tr>
+<td valign="top">乃至十念，</td>
+<td valign="top">一心念我，晝夜不斷。</td>
+<td valign="top">若有宿惡，聞我名字，即自悔過，<br><sup>3</sup>為道作善，便持經戒，願生我剎，</td></tr>
+<tr>
+<td valign="top">若不生者，不取正覺。<br>唯除五逆，誹謗正法。</td>
+<td valign="top">臨壽終時，我與諸菩薩衆，迎現其前，經須臾間，即生我剎，作阿惟越致菩薩。不得是願，不取正覺。</td>
+<td valign="top">命終不復更三惡道，即生我國。若不爾者，不取正覺。 </td></tr>
+</table>
+<p>&nbsp;</p>
+</div>
+
+<hr width="880">
+<div style="width:780" align="left">
+<h3>彌勒所問十念</h3>
+
+<p>《彌勒發問經》言：「具足如是念，即得往生安養國土。凡有十念。何等為十？</p>
+<p>
+　一者，於一切衆生，常生慈心。於一切衆生，不毀其行。若毀其行，終不往生。<br>
+　二者，於一切衆生，深起悲心，除殘害意。<br>
+　三者，發護法心，不惜身命。於一切法，不生誹謗。<br>
+　四者，於忍辱中生決定心。<br>
+　五者，身心清淨，不染利養。<br>
+　六者，發一切種智心，日日常念，無有廢忘。<br>
+　七者，於一切衆生，起尊重心，除我慢意，謙下言說。<br>
+　八者，於世談話，不生味著。<br>
+　九者，近於覺意，生起種種善根因緣，遠離憒鬧散亂之心。<br>
+　十者，正念觀佛，除去諸根。」<br>
+</p>
+
+<p>《宗要》曰：「如是十念，既非凡夫（所能）。當知初地以上菩薩，乃能具足十念。」以上諸說咸以此願，專為上品，甚至地上菩薩，乃能具足，則中下凡夫，何由得生？可見以上諸家之議，未契淨宗他力果教之真諦。至於義寂以《觀經》下品下生之十念，注本經第十八願之十念，深有見地。望西云：「宗家（指善導）不爾。今之十念，但是口稱。上盡一形，下至一念，通於三輩，攝於九品，莫不皆往。」</p>
+</div>
 
 <hr width="880">
 <span class="copyright"></span>
 </center></body></html>
+
+<!--
+ 1         國無惡道願
+ 2         不墮惡趣願
+ 3         身悉金色願
+ 4         三十二相願
+ 5         身無差別願
+ 6         宿命通願
+ 7         天眼通願
+ 8         天耳通願
+ 9         他心通願
+10         神足通願
+11         徧供諸佛願
+12         定成正覺願
+13         光明無量願
+14         觸光安樂願
+15         壽命無量願
+16         聲聞無數願
+17         諸佛稱嘆願
+18         十念必生願
+19         聞名發心願
+20         臨終接引願
+21         悔過得生願
+22         國無女人願
+23         厭女轉男願
+24         蓮華化生願
+25         天人禮敬願
+26         聞名得福願
+27         修殊勝行願
+28         國無不善願
+29         住正定聚願
+30         樂如漏盡願
+31         不貪計身願
+32         那羅延身願
+33         光明慧辯願
+34         善談法要願
+35         一生補處願
+36         教化隨意願
+37         衣食自至願
+38         應念受供願
+39         莊嚴無盡願
+40         無量色樹願
+41         樹現佛剎願
+42         徹照十方願
+43         寶香普熏願
+44         普等三昧願
+45         定中供佛願
+46         獲陀羅尼願
+47         聞名得忍願
+48         現證不退願
+-->

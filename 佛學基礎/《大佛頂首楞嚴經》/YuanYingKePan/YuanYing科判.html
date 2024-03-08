@@ -14,5 +14,32 @@
 </center></body></html>
 
 <script>
-  write楞嚴經圓瑛大師科判('stage', get('part'), get('terse'))
+// A global "parts" variable is assumed.
+// terseLevel: 1 - 精簡版
+//             2 - 極簡版
+//             ? - 詳細版
+function write楞嚴經圓瑛大師科判(divId, part, terseLevel) {
+  var verseLink    = '<a href="YuanYing科判Verses.html">經文參考</a>',
+      level0Link   = '<a href="javascript:write楞嚴經圓瑛大師科判(null,' + (part || '\'\'') + ',0)">詳細版</a>&nbsp;&nbsp;',
+      level1Link   = '<a href="javascript:write楞嚴經圓瑛大師科判(null,' + (part || '\'\'') + ',1)">精簡版</a>&nbsp;&nbsp;',
+      level2Link   = '<a href="javascript:write楞嚴經圓瑛大師科判(null,' + (part || '\'\'') + ',2)">極簡版</a>&nbsp;&nbsp;',
+      level0Active = '<span style="font-weight:bold; background-color:yellow">詳細版</span>&nbsp;&nbsp;',
+      level1Active = '<span style="font-weight:bold; background-color:yellow">精簡版</span>&nbsp;&nbsp;',
+      level2Active = '<span style="font-weight:bold; background-color:yellow">極簡版</span>&nbsp;&nbsp;';
+  var buf = new Buffer('<h2>圓瑛大師《楞嚴經講義》</h2>');
+  buf.w('<table border="0" cellspacing="0px" cellpadding="0" style="min-width:500px"><caption>');
+  switch (terseLevel) {
+  default: buf.w(level0Active, level1Link, level2Link, verseLink); break;
+  case 1:  buf.w(level0Link, level1Active, level2Link, verseLink); break;
+  case 2:  buf.w(level0Link, level1Link, level2Active, verseLink); break;
+  }
+  buf.w('</caption>');
+  new KePanDoc(parts[0]).writeAsTRs(buf, terseLevel, true);
+  buf.w('</table>');
+
+  if (divId) lastDivId = divId; else divId = lastDivId;
+  buf.render(divId);
+}
+
+write楞嚴經圓瑛大師科判('stage', get('part'), get('terse'))
 </script>

@@ -1,100 +1,219 @@
 <html>
 <head>
 <meta charset="utf-8">
-<script>
-function w() { for(var i in arguments) { var a = arguments[i]; a && document.write(a) } }
-function get(name) {
- if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-   return decodeURIComponent(name[1]);
+<style>
+@media screen {
+  .shadow { box-shadow: -10px 10px 4px #d4ac0d }
+  .shadow1 { box-shadow: -10px 10px 4px #f6b }
+  .tdA { text-align:center; vertical-align:top; border-top:1px solid blue; border-bottom:1px solid blue; padding-top:3px; padding-bottom:5px }
+  .tdAH { text-align:center; vertical-align:top; border-top:1px solid blue; padding-top:3px; padding-bottom:5px }
+  .tdAL { text-align:center; vertical-align:bottom; border-bottom:1px solid blue; padding-top:3px; padding-bottom:5px }
+  .tdL { border-left:1px solid blue; padding-left:3px }
+  .tdR { border-right:1px solid blue; border-left:1px solid #fbb; padding-left:3px; padding-right:3px; color:red }
+  .tdX { text-align:center; border-right:1px solid blue; border-left:1px solid #fbb; padding-right:6px }
 }
-function vert(t, padLen) {
+@media print {
+  .shadow { }
+  table { page-break-inside:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto }
+  .tdA { text-align:center; vertical-align:top; border-top:2px solid blue; border-bottom:2px solid blue; padding-top:3px; padding-bottom:5px }
+  .tdAH { text-align:center; vertical-align:top; border-top:2px solid blue; padding-top:3px; padding-bottom:5px }
+  .tdAL { text-align:center; vertical-align:bottom; border-bottom:2px solid blue; padding-top:3px; padding-bottom:5px }
+  .tdL { border-left:2px solid blue; padding-left:3px }
+  .tdR { border-right:2px solid blue; border-left:2px solid #fbb; padding-left:3px; padding-right:3px; color:red }
+  .tdX { text-align:center; border-right:2px solid blue; border-left:2px solid #fbb; padding-right:6px }
+}
+
+a { text-decoration:none }
+.leadSeg { color:brown }
+.jiePagesDisp { font-size:12px; color:brown }
+.cardNum { color:darkgray; font-family:SimHei, 黑体, STHeiti, 华文黑体; font-size:14px }
+.content { font-family:KaiTi, 楷体, STKaiti, 华文楷体; font-size:20px }
+.cardNum { }
+.dharaniConnector { color:gray; font-size:10px }
+</style>
+
+<script src="../../util/reading.js"></script>
+<script>
+function vert(t) {
   var i, curLen = 0;
   if (t && t.length > 0) {
     curLen = t.length;
     var ret = '';
     for (i=0; i<t.length; ++i) {
       var x = t[i];
-      if (x === ' ') x = '<font style="font-size:10px">&nbsp;</font>';
+      if (x === ' ') x = '<font class="dharaniConnector">&nbsp;</font>';
       if (i>0) ret += '<br>';
-      ret += x;
+      ret += x.replaceAll('|', '<font class="dharaniConnector">|</font>')
+              .replaceAll('〇', '<font style="color:gray">〇</font>');
     }
   }
-  if (padLen > 0)
-    for (i=curLen; i<padLen; ++i)
-      ret += '<br>　';
   return ret;
 }
+function vert1(t) {
+  var idx = t.indexOf('*');
+  if (idx < 0) return vert(t);
+/*
+  var ret, i, curLen = t.length-1;
+  for (i=1; i<t.length; ++i)
+    if (t[i] != ' ' && t[i] != '　') break;
+  if (i === 1)
+    ret = '<font class="' + leadCls + '">' + t[1] + '</font><br>' + vert(t.substring(2));
+  else
+    ret = vert(t.substring(1, i)) + '<br><font class="' + leadCls + '">' + t[i] + '</font><br>' + vert(t.substring(i+1));
+  return ret;
+*/
+  var leadCls = BOOK_DOC.hasJiePages ? 'leadSeg' : '';
+  return ((idx > 0) ? (vert(t.substring(0, idx)) + '<br>') : '') +
+         '<font class="' + leadCls + '">' + t[idx+1] + '</font><br>' + vert(t.substring(idx+2));
+}
 
-const PRINT_HINT = '通常每頁容量2x5張卡。\n調整Scale以適之，例如Landscape，94%。\n抑或?w=10，Portrait，55%';
+const PRINT_HINT = '每排4張卡';
 const DEFAULT_COLS = 5;
 const COVER_TEXT_COLOR = '#FFD700';
-const CARDS = [];
+const ff_HeiTi = 'font-family:SimHei, 黑体, STHeiti, 华文黑体;';
 
-class ChapterCards {
-  constructor(titleLine, chNum) {
-    this.chNum = chNum;
-    this.cards = [ [] ];
-    const tl = titleLine;
-    this.chTitle = tl.substring(tl.indexOf(')')+1).trim();
-    this.chNumZh = tl.substring(tl.indexOf('第')+1);
-    this.PI      = tl.substring(tl.indexOf('[')+1, tl.indexOf(']'));
+class CardContent {
+  constructor(parent, numInChapter, numInAll, annoLine) {
+    this.parent       = parent;
+    this.numInChapter = numInChapter;
+    this.numInAll     = numInAll;
+    this.lines        = [];
+    this.JiePages     = []; // strings (of number) 對應黃念祖《大經解》分段之起始頁。每卡之多兩個而已。
 
-    switch(this.PI) {
-      case 'a': // for TOC display
-        this.PIbgcolor = 'yellow';
-        break;
-      case 'x': // for TOC display, working
-        this.PIbgcolor = '#fdd';
-        break;
+    var idx = (annoLine || '').indexOf('>');
+    if (idx > 1) {
+      this.anno = annoLine.substring(1, idx).trim();
+      if (this.anno.startsWith('!')) {
+        this.isActive = true;
+        this.anno = this.anno.substring(1).trim();
+      }
     }
   }
 
+  addLine(ln) {
+    var idx = ln.indexOf(']');
+    if (idx > 0) {
+      var idx1 = ln.lastIndexOf('[', idx);
+      if (idx1 >= 0 && idx1 < idx) {
+        this.JiePages.push(ln.substring(idx1+1, idx));
+        ln = ln.substring(0, idx1) + '*' + ln.substring(idx+1);
+      }
+    } else if ((this.lines.length === 0) && (ln.length > 0)) {
+      this.JiePages.push('-1');
+    }
+    this.lines.push(ln);
+    return this
+  }
+
+  getJiePagesDisp(prevCard, prevCard1) {
+    var i, ret = '', pgA, pgB = this.JiePages[1];
+    if ((this.JiePages.length === 0 || this.JiePages[0] === '-1') && prevCard) {
+      pgA = prevCard.JiePages[prevCard.JiePages.length-1];
+      if ((!pgA || pgA === '-1') && prevCard1)
+        pgA = prevCard1.JiePages[prevCard1.JiePages.length-1];
+    } else {
+      pgA = this.JiePages[0];
+    }
+    if (!pgB || (pgB == pgA)) {
+      if (pgA)
+        switch(pgA.length) {
+        case 1:  return '&nbsp;<br>&nbsp;<br>' + pgA;
+        case 2:  return '&nbsp;<br>' + vert(pgA);
+        default: return vert(pgA);
+        }
+    } else {
+      return (            (pgB.length > 2) ? pgB[pgB.length-3] : '&nbsp;') +
+             ('&nbsp;' + ((pgA.length > 2) ? pgA[pgA.length-3] : '&nbsp;')) +
+             ('<br>'   + ((pgB.length > 1) ? pgB[pgB.length-2] : '&nbsp;')) +
+             ('&nbsp;' + ((pgA.length > 1) ? pgA[pgA.length-2] : '&nbsp;')) +
+             ('<br>'   + pgB[pgB.length-1] + '&nbsp;' + pgA[pgA.length-1]);
+    }
+  }
+}
+
+const PI_COLORS = {
+  'A': '#ff0', // yellow hilite
+  'B': '#ffb', // yellow lolite
+  'C': '#afa', //  green hilite
+  'D': '#dfd', //  green lolite
+  'E': '#bbf', //   blue hilite
+  'F': '#ddf', //   blue lolite
+  'G': '#fbb', //    red hilite
+  'H': '#fdd', //    red lolite
+  '?': '#fdd'
+};
+
+class ChapterCards {
+  constructor(titleLine, chNum, numInAll) {
+    const tl = titleLine;
+    this.chNum = chNum;
+    this.firstCardNumInAll = numInAll;
+    this.PI = tl.substring(tl.indexOf('[')+1, tl.indexOf(']'));
+    var firstCardAnno = null;
+    if (this.PI && this.PI.startsWith('!')) {
+      this.PI = this.PI.substring(1);
+      var firstCardAnno = '<!>';
+    }
+    this.PIbgcolor = PI_COLORS[this.PI];
+    this.cards = [ new CardContent(this, 1, numInAll, firstCardAnno) ];
+    this.chTitle   = tl.substring(tl.indexOf(')')+1).trim();
+    this.chNumZh   = tl.substring(tl.indexOf('第')+1);
+  }
+  addCard(numInAll, line) { this.cards.push(new CardContent(this, this.cards.length+1, numInAll, line)) }
   numCards() { return this.cards.length }
   lastCard() { return this.cards[this.cards.length-1] }
 
-  renderCard(num) { // num: 0-based; first one carries the title
+  renderCard(num) { // num: 0-based; first one carries the title;
     var lines = [ '', '', '', '', '', '', '', '' ]; // [0] is the lead/title line
-    var hasTitle = num === 0;
-    lines[7] = hasTitle ? this.chTitle : '　';
-    var i, cardlns = this.cards[num];
-    if (!cardlns) return '';
+    var cardC = this.cards[num];
+    if (!cardC) return '';
+    lines[7] = cardC.parent.chTitle; // + '第' + this.chNumZh;
 
-    if (cardlns.length === 8) { // use the lead line as regular (to accomodate long content)
-      for (i=0; i<8; ++i)
-        lines[7-i] = cardlns[i] || '　';
-    } else {
-      for (i=0; i<7; ++i)
-        lines[6-i] = cardlns[i] || '　';
-    }
+    // if there are 8 lines, use the lead line as regular to accomodate long content.
+    var max = (cardC.lines.length === 8) ? 8 : 7;
+    for (var i=0; i<max; ++i)
+      lines[max-1-i] = cardC.lines[i] || '　';
 
-    return '<a name="_' + this.chNum + '"></a>' +
-           '<table bgcolor="#f8f8e3" cellspacing="0" class="content shadow"><tr>' +
-             '<td class="tdA tdL">' + vert(lines[0], 16) + '</td>' +
-             '<td class="tdA">'     + vert(lines[1]) + '</td>' +
-             '<td class="tdA">'     + vert(lines[2]) + '</td>' +
-             '<td class="tdA">'     + vert(lines[3]) + '</td>' +
-             '<td class="tdA">'     + vert(lines[4]) + '</td>' +
-             '<td class="tdA">'     + vert(lines[5]) + '</td>' +
-             '<td class="tdA">'     + vert(lines[6]) + '</td>' +
-             this.renderLeadLine(lines[7], hasTitle && (cardlns.length < 8), num+1) +
+    var isActive = cardC.isActive ? '1' : '';
+    const tdHeight = '<td rowspan="2" class="tdA" width="1px><img border="0" src="spacer.png" width="1px" height="345px"></td>';
+    return '<a name="_' + this.chNum + '"' +
+           '></a><table border=0 bgcolor="#f8f8e3" cellspacing="0" class="content shadow' + isActive + '"><tr>' +
+             '<td rowspan="2" class="tdA tdL" background="divider.png">' + vert1(lines[0]) + '</td>' +
+             '<td rowspan="2" class="tdA" background="divider.png">'     + vert1(lines[1]) + '</td>' +
+             '<td rowspan="2" class="tdA" background="divider.png">'     + vert1(lines[2]) + '</td>' +
+             '<td rowspan="2" class="tdA" background="divider.png">'     + vert1(lines[3]) + '</td>' +
+             '<td rowspan="2" class="tdA" background="divider.png">'     + vert1(lines[4]) + '</td>' +
+             '<td rowspan="2" class="tdA" background="divider.png">'     + vert1(lines[5]) + '</td>' +
+             '<td rowspan="2" class="tdA" background="divider.png">'     + vert1(lines[6]) + '</td>' +
+             tdHeight +
+             this.renderLeadLine(lines[7], max<8, num+1, cardC.numInAll, cardC.anno,
+               BOOK_DOC.hasJiePages && cardC.getJiePagesDisp(this.cards[num-1], this.cards[num-2])) +
            '</tr></table>';
   }
 
-  renderLeadLine(txt, isTitle, num0) {
-    if (!num0) num0 = '';
-    if (isTitle)
-      txt = vert('　' + txt);
-    else {
-      var znum = this.chNumZh;
-      for (var i=13-txt.length-znum.length; i>=0; --i)
-        txt += '　';
-      txt = vert(txt) + '<br><font style="opacity:0.3">' + vert(znum + '　');
-    }
+  renderLeadLine(txt, isTitle, num0, numInAll, anno, jiePgsDisp) {
+    anno = anno || '';
+    var cnum = zNumber(numInAll) + '號卡';
     if (!isTitle)
-      return '<td class="tdA tdX">' + txt + '<br><font size="-1">' + num0 + '</font></font></td>';
-    var style = '';
-    if (this.PIbgcolor) style = ' style="background-color:' + this.PIbgcolor + '"';
-    return '<td class="tdA tdR"' + style + '>' + txt + '</td>';
+      return '<td class="tdAH tdR" style="color:black" title="' + anno + '">' + vert(txt) + '</td></tr>' +
+             '<tr><td class="tdAL tdR" align="center" valign="bottom"><font class="cardNum">' + vert(cnum) + '</font></td>';
+
+    const SP = '　'; // '〇';
+    var bgColor = (this.PIbgcolor) ? ('background-color:' + this.PIbgcolor) : '';
+    for (var i=5-cnum.length; i>0; i--) cnum = SP + cnum;
+    var ret;
+    if (num0 === 1)
+      ret = '<td class="tdAH tdR" style="' + bgColor + '" title="' + anno + '">' + vert(txt) + '</td>';
+    else
+      ret = '<td class="tdAH tdR" style="' + bgColor + ';color:darkgray" title="' + anno + '">' + vert(txt) +
+            '<br><font style="' + ff_HeiTi + '" size="-1">' + num0 + '</td>';
+    var jiePgs = '';
+    if (BOOK_DOC.hasJiePages)
+      jiePgs = '<font class="jiePagesDisp" title="《大經解》頁數">' + (jiePgsDisp || '&nbsp;<br>&nbsp;<br>&nbsp;') + '</font>';
+    return ret + '</tr>' +
+           '<tr><td class="tdAL tdR" align="center" valign="bottom">' + jiePgs +
+           '<br>&nbsp;<br><font class="cardNum">' + vert(cnum) + '</font></td>';
   }
 
   displayAllAsTRs(cols) {
@@ -103,7 +222,7 @@ class ChapterCards {
     for (var i=0; i<fulltrs; ++i) {
       w('<tr>');
       for (var j=0; j<cols; ++j)
-        w('<td valign="top">', this.renderCard(i * cols + cols - j - 1), '</td>');
+        w('<td valign="top">', this.renderCard(i*cols+cols-j-1), '</td>');
       w('</tr>');
     }
   }
@@ -111,14 +230,15 @@ class ChapterCards {
   displayTopRow(cols) {
     // display the cover to the right, and this card (first chapter) to the left
     // if enough space, display a TOC in the middle, next to the cover
-    w('<tr><td valign="top">', this.renderCard(0), '</td>');
+    w('<tr><td valign="top">', this.renderCard(1), '</td>',
+          '<td valign="top">', this.renderCard(0), '</td>');
     this.displayTOCCard(cols, '四十八品卡片目錄');
     this.displayCover();
     w('</tr>');
   }
 
   getTOCLink(chnum) {
-    var c = DOC.chapterCards[chnum-1];
+    var c = BOOK_DOC.chapterCards[chnum-1];
     var t = c.chTitle;
     var i = t.indexOf('第');
     var style = '';
@@ -131,7 +251,7 @@ class ChapterCards {
   }
 
   displayTOCCard(cols, TOCTitle) {
-    w('<td valign="top" align="right", colspan="', cols-2, '">');
+    w('<td valign="top" align="right", colspan="', cols-3, '">');
     if (cols < 5) {
       w('&nbsp;');
     } else {
@@ -140,23 +260,25 @@ class ChapterCards {
         '<tr><td class="tdA tdL" width="12px">&nbsp;</td>');
       for (i=0; i<24; i++) {
         //w('<td class="tdA">　<br>',
-        var cards1 = DOC.chapterCards[23-i].cards;
-        var cards2 = DOC.chapterCards[47-i].cards;
+        var cards1 = BOOK_DOC.chapterCards[23-i].cards;
+        var cards2 = BOOK_DOC.chapterCards[47-i].cards;
         w('<td class="tdA">',
           this.getTOCLink(24-i), '<br><font style="opacity:0.4" size="-1">', cards1.length, '</font><br>　<br>',
           this.getTOCLink(48-i), '<br><font style="opacity:0.4" size="-1">', cards2.length, '</font></td>');
       }
       w('<td class="tdA">　</td>',
-        '<td class="tdA tdR" style="color:black">',
-          vert('四十八品卡片目錄　　　　'),
+        '<td class="tdA tdR" style="color:black" title="Total ', BOOK_DOC.getTotalCards(), ' cards">',
+          //vert('四十八品卡片目錄　　　　'),
+          vert('四十八品卡片目錄　 '),
           '<font style="writing-mode:vertical-rl; font-size:16px">',
-          '【<a href="?print=1" title="', PRINT_HINT, '">打印版</a>】</font>',
+          '【<a href="?w=5&print=1">簡排</a>】',
+          '【<a href="?print=1" title="', PRINT_HINT, '">打印</a>】</font>',
         '</td></tr></table>');
     }
     w('</td>');
   }
 
-  // this is global, not for any particular card
+  // this is the one-and-only cover card
   displayCover() {
     w(`<td valign="top">
         <table border=0 bordercolor=red bgcolor="black" cellspacing="0" class="content shadow">
@@ -171,8 +293,10 @@ class ChapterCards {
         <td style="border-left:1px solid black; border-right:1px solid black; padding-right:6px">　</td>
         </tr>
         <tr style="color:${COVER_TEXT_COLOR}"><td>　</td>
-          <td colspan="6" rowspan="13" align="center" style="font-size:30px">經莊佛<br>　嚴說<br>　清大<br>　淨乘<br>　平無<br>　等量<br>　覺壽</td>
-          <td rowspan="13" align="center" style="padding-right:6px">夏<br>蓮<br>居<br>居<br>士<br><br>會<br>集</td></tr>
+          <td colspan="6" rowspan="13" align="center" style="font-size:30px"
+          >經莊佛<br>　嚴說<br>　清大<br>　淨乘<br>　平無<br>　等量<br>　覺壽</td>
+          <td rowspan="13" align="center" style="padding-right:6px"
+          >夏<br>蓮<br>居<br>居<br>士<br><br>會<br>集</td></tr>
         <tr><td>　</td></tr>
         <tr><td>　</td></tr>
         <tr><td>　</td></tr>
@@ -200,29 +324,37 @@ class ChapterCards {
 
 } // end of class ChapterCard.
 
-class ChapterDoc {
-  constructor(title, txt) {
+class BookCardsDoc {
+  constructor(title, txt, hasJiePages) {
     this.title = title;
+    this.chapterCards = [];
     this._parseCards(txt);
+    this.hasJiePages = hasJiePages;
   }
 
   setShortTitle(st) { this.title_s = st; return this }
 
   _parseCards(txt) {
-    this.chapterCards = [];
     const a = txt.split('\n');
-    var ch, card;
+    var curChptr, numInAll = 0;
     for (var i in a) {
       var ln = a[i];
       if (ln.trim().length === 0) continue;
       if (ln.length === 1) ln = '';
-      if (ln === '<>')
-        ch.cards.push( card = [] );
-      else if (ln.startsWith('>>>'))
-        this.chapterCards.push( ch = new ChapterCards(ln, this.chapterCards.length+1) );
+      if (ln.startsWith('>>>'))
+        this.chapterCards.push( curChptr = new ChapterCards(ln, this.chapterCards.length+1, ++numInAll) );
+      else if (ln.startsWith('<'))
+        curChptr.addCard(++numInAll, ln);
       else
-        ch.lastCard().push(ln);
+        curChptr.lastCard().addLine(ln);
     }
+  }
+
+  getTotalCards() {
+    var cntCards = 0, cntPIa = 0, cntTODO = 0;
+    for (var i in this.chapterCards)
+      cntCards += this.chapterCards[i].cards.length;
+    return cntCards;
   }
 
   printStats() {
@@ -240,17 +372,46 @@ class ChapterDoc {
       if (n < 100) return ' ' + n;
       return n;
     }
-    console.log(' Has-Copied:', to3(cntPIa), 'cards');
-    console.log('Yet-To-Copy:', to3(cntCards - cntPIa), 'cards');
-    console.log('      Total:', to3(cntCards), 'cards.');
-    console.log(' Working-On:', to3(cntTODO), 'cards.');
+    console.log(' Has-Copied:', to3(cntPIa), '張卡');
+    console.log('Yet-To-Copy:', to3(cntCards - cntPIa), '張卡');
+    console.log('      Total:', to3(cntCards), '張卡');
+    console.log(' Working-On:', to3(cntTODO), '張卡');
   }
 
-  displayPrintingVersion(cols) {
-    const all = []; // each is [ chapCards, i ]
+  printCardsInfo() {
     for (var i in this.chapterCards) {
+      var cc = this.chapterCards[i];
+      console.log('"' + cc.chTitle + '", ' + cc.cards.length + ',');
+    }
+  }
+
+  displayPrintingVersion(cols, chapters, cards) {
+    var needSpacers = cols < 5;
+    var cardIDs = (chapters || cards) ? {} : null;
+    if (chapters) {
+      var a = chapters.split(',');
+      for (var i in a) {
+        var ids = a[i].trim().split('-');
+        var start = parseInt(ids[0]),
+            end = 1 + ((ids.length>1) ? parseInt(ids[1]) : start);
+        for (var j=start; j<end; ++j)
+          for (var k=1; k<30; ++k)
+            cardIDs[j + '.' + k] = true;
+      }
+    }
+    if (cards) {
+      var a = cards.split(',');
+      for (var i in a)
+        cardIDs[a[i].trim()] = true;
+    }
+
+    const all = []; // each is [ chapCards, i ]
+    for (var i=0; i<this.chapterCards.length; ++i) {
       var cc = this.chapterCards[i], n = cc.numCards();
-      for (var j=0; j<n; ++j) all.push([cc,j]);
+      var id1 = (i+1) + '.';
+      for (var j=0; j<n; ++j)
+        if (!cardIDs || cardIDs[id1+(j+1)])
+          all.push([cc,j]);
     }
 
     var fulltrs = Math.floor(all.length / cols);
@@ -258,6 +419,7 @@ class ChapterDoc {
     for (var i=0; i<fulltrs; ++i) {
       w('<tr>');
       for (var j=0; j<cols; ++j) {
+        if (needSpacers && (j > 0)) w('<td width="5px">&nbsp;</td>')
         var x = all[i*cols + cols-j-1];
         if (x)
           w('<td valign="top">', x[0].renderCard(x[1]), '</td>');
@@ -265,54 +427,44 @@ class ChapterDoc {
           w('<td></td>');
       }
       w('</tr>');
+//      if (needSpacers) w('<tr><td colspan="', cols, '" style="font-size:5px">&nbsp;</td></tr>');
     }
   }
 
-} // end of class ChapterDoc.
+} // end of class BookCardsDoc.
 
+var BOOK_DOC;
 </script>
 
 <script src="01-cards.js"></script>
-
-<style>
-@media screen {
-  .shadow { box-shadow: -10px 10px 4px #d4ac0d }
-}
-@media print {
-  .shadow { }
-  table { page-break-inside:auto }
-  tr    { page-break-inside:avoid; page-break-after:auto }
-}
-
-a { text-decoration:none }
-.tdA { text-align:center; vertical-align:top; border-top:1px solid blue; border-bottom:1px solid blue; padding-top:3px; padding-bottom:5px }
-.tdL { border-left:1px solid blue; padding-left:3px }
-.tdR { border-right:1px solid blue; border-left:1px solid #fbb; padding-left:3px; padding-right:3px; color:red }
-.tdX { text-align:center; border-right:1px solid blue; border-left:1px solid #fbb; padding-right:6px }
-.content { font-family:KaiTi, 楷体, STKaiti, 华文楷体; font-size:20px }
-</style>
+<script src="01-dharani.js"></script>
 </head>
 
 <body bgcolor="#f9e79f"><center>
 
 <script>
-const isPrinting = get('print');
-document.title = DOC.title_s;
+const isDharani = get('dharani');
+var BOOK_DOC = isDharani ? DHARANI : SCRIPTURE;
+document.title = isDharani ? (BOOK_DOC.title_s+'咒誦') : BOOK_DOC.title_s;
+
+const chapters = get('chapters'), cards = get('cards');
+const isPrinting = isDharani || chapters || cards || get('print');
 
 // the hack is only because of the presence of the TOC cards (in FF, at least)
-w('<table cellpadding="8px" border=0 bordercolor=pink width="1%"',
+w('<table border="0" bordercolor="pink" cellpadding="8px" width="1%"',
   isPrinting ? (' title="' + PRINT_HINT + '"') : '', '>');
 
-var COLS = Math.max(3, parseInt(get('w') || (isPrinting ? '5' : '6')));
+var COLS = Math.max(3, parseInt(get('w') || (isPrinting ? '4' : '6')));
            // For viewing, best default would be 7, for more chapters,
            // but that would probably be too wide
            // hence 6, which is not too bad.
 if (isPrinting) {
-  DOC.displayPrintingVersion(COLS);
+  BOOK_DOC.displayPrintingVersion(COLS, chapters, cards);
 } else { // viewing
-  for (var i in DOC.chapterCards) {
-    if (i <= 0) DOC.chapterCards[0].displayTopRow(COLS);
-    else        DOC.chapterCards[i].displayAllAsTRs(COLS);
+  BOOK_DOC.printStats();
+  for (var i=0; i<BOOK_DOC.chapterCards.length; i++) {
+    if (i <= 0) BOOK_DOC.chapterCards[0].displayTopRow(COLS);
+    else        BOOK_DOC.chapterCards[i].displayAllAsTRs(COLS);
   }
 }
 
@@ -320,3 +472,6 @@ w('</table>');
 </script>
 
 </center></body></html>
+
+<!-- https://github.com/tsayen/dom-to-image -->
+
