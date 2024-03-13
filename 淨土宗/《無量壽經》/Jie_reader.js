@@ -67,6 +67,7 @@ const VOW_COLOR      = 'blue';
 const VOW_BGCOLOR    = '#afa';
 const TOPIC_COLOR    = 'blue';
 const QUOTE_COLOR    = '#d00';
+const XQUOTE_COLOR   = '#b09';
 const PIN_COLOR      = '#900';
 const MOTTO_COLOR    = '#009';
 const lbgc = '#f3ebe3';
@@ -84,6 +85,7 @@ const COVER_TEXT_COLOR = '#FFD700';
 const QIL_START = 'ㄍ'; // replaces {
 const QIL_END   = 'ㄑ'; // replaces }   e.g. {如是我聞}
 const QIL_LINE  = 'ㄇ'; // replaces ^{}
+const XIL_LINE  = QIL_LINE + 'x'; // replaces ^{x}
 const VIL_START = 'ㄅ';
 const VIL_END   = 'ㄆ';
 const VIL_START_NO_END = 'ㄇ';
@@ -92,6 +94,8 @@ const TIL_START = QIL_START + 't'; // replaces {t
 const TIL_END   = 't' + QIL_END;   // replaces t}  e.g. {t八相成道t}
 const PIL_START = QIL_START + 'p'; // replaces {p
 const PIL_END   = 'p' + QIL_END;   // replaces p}  e.g. {p受菩提記p}
+const XIL_START = QIL_START + 'x'; // replaces {x
+const XIL_END   = 'x' + QIL_END;   // replaces x}  e.g. {x擐大甲胄，以宏誓功德而自莊嚴。x}
 const 念祖      = 'ㄙ祖';
 
 var vows = [
@@ -106,7 +110,7 @@ var vows = [
   '樹現佛剎願', '徹照十方願', '寶香普薰願', '普等三昧願', '定中供佛願',
   '獲陀羅尼願', '聞名得忍願', '現證不退願',
   '不更惡趣願', '卅二相願',   '遍供諸佛願', '諸佛稱歎願', '女人往生願',
-  '蓮花化生願', '國無婦女願', '無差別願',
+  '蓮華化生願', '國無婦女願', '無差別願',
 ];
 
 (function(){
@@ -158,9 +162,12 @@ class JiePage {
       ln = ln.replace('#念祖', 念祖);
 
       // handle 經文引用
-      ln = ln.startsWith('{}')
-             ? (QIL_LINE + ln.substring(2))
-             : ln.replaceAll('{', QIL_START).replaceAll('}', QIL_END); // also covers TIL_START/END and PIL_START/END
+      if (ln.startsWith('{}'))
+        ln = QIL_LINE + ln.substring(2);
+      else if (ln.startsWith('{x}'))
+        ln = XIL_LINE + ln.substring(3);
+      else
+        ln = ln.replaceAll('{', QIL_START).replaceAll('}', QIL_END); // also covers (TIL|PIL|XIL)_START/END
       this.lines[i] = ln;
   
       // handle 「...願」
@@ -323,10 +330,13 @@ class ReaderStyles {
       window['無量壽經xgStyle'] || isXG && 'xg { background-color:#ffd }',
       '.dim { opacity:0.5 }\n',
       '.qil { color:' + QUOTE_COLOR + ' }\n',
+      '.xil { color:' + XQUOTE_COLOR + ' }\n',
       '.pil { color:' + PIN_COLOR + ' }\n',
       '.vil { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
       '.til { color:' + TOPIC_COLOR + ' }\n',
-      '.NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:darkblue; }\n',
+      'NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:#00d; }\n',
+      'NianZu::before { content:"念祖" }\n',
+      'xycm { font-weight:bold }\n', // 信願持名
       'a { text-decoration:none }\n',
       'a.main { background-color:#fdd }\n\n',
 
@@ -567,87 +577,46 @@ class PageDims {
 
   _div(buf, cssCls, styles, x, y, ln) {
     if (!ln) return;
-    ln = ln.replace(念祖, '<span class="NianZu">念祖</span>');
-    var idx;
-    // process Topic/Terminology InLine
-    for (idx=0; ; ) {
-      idx = ln.indexOf(TIL_START, idx);
-      if (idx < 0) {
-        idx = ln.indexOf(TIL_END, idx);
-        if (idx < 0) break;
-        if (ln.startsWith('<!xg>'))
-          ln = '<!xg><span class="til">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+TIL_END.length);
-        else
-          ln = '<span class="til">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+TIL_END.length);
-        idx++;
-        continue;
-      }
-      var idx1 = ln.indexOf(TIL_END, idx+1);
-      if (idx1 > 0) {
-        ln = ln.substring(0, idx) + '<span class="til">' + ln.substring(idx+TIL_START.length, idx1) + '</span>' + ln.substring(idx1+TIL_END.length);
-        idx = idx1 + 1;
-      } else {
-        ln = ln.substring(0, idx) + '<span class="til">' + ln.substring(idx+TIL_START.length) + '</span>';
-        idx = 0;
-      }
-    }
+    ln = ln.replace(念祖, '<NianZu></NianZu>');
 
-    // process 品名 Pin InLine
-    for (idx=0; ; ) {
-      idx = ln.indexOf(PIL_START, idx);
-      if (idx < 0) {
-        idx = ln.indexOf(PIL_END, idx);
-        if (idx < 0) break;
-        if (ln.startsWith('<!xg>'))
-          ln = '<!xg><span class="pil">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+PIL_END.length);
-        else
-          ln = '<span class="pil">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+PIL_END.length);
-        idx++;
-        continue;
-      }
-      var idx1 = ln.indexOf(PIL_END, idx+1);
-      if (idx1 > 0) {
-        ln = ln.substring(0, idx) + '<span class="pil">' + ln.substring(idx+PIL_START.length, idx1) + '</span>' + ln.substring(idx1+PIL_END.length);
-        idx = idx1 + 1;
-      } else {
-        ln = ln.substring(0, idx) + '<span class="pil">' + ln.substring(idx+PIL_START.length) + '</span>';
-        idx = 0;
-      }
-    }
-
-    // process Quote InLine
-    if (ln.startsWith(QIL_LINE)) {
-      ln = '<span class="qil">' + ln.substring(1) + '</span>';
-    } else {
+    function procInLine(startTag, endTag, cls, lineTag) { // operates upon ln
+      if (lineTag && ln.startsWith(lineTag))
+        return '<span class="' + cls + '">' + ln.substring(lineTag.length) + '</span>';
       for (idx=0; ; ) {
-        idx = ln.indexOf(QIL_START, idx);
+        idx = ln.indexOf(startTag, idx);
         if (idx < 0) {
-          idx = ln.indexOf(QIL_END, idx);
+          idx = ln.indexOf(endTag, idx);
           if (idx < 0) break;
           if (ln.startsWith('<!xg>'))
-            ln = '<!xg><span class="qil">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+1);
+            ln = '<!xg><span class="' + cls + '">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+endTag.length);
           else
-            ln = '<span class="qil">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+1);
+            ln = '<span class="' + cls + '">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+endTag.length);
           idx++;
           continue;
         }
-        var idx1 = ln.indexOf(QIL_END, idx+1);
+        var idx1 = ln.indexOf(endTag, idx+1);
         if (idx1 > 0) {
-          ln = ln.substring(0, idx) + '<span class="qil">' + ln.substring(idx+1, idx1) + '</span>' + ln.substring(idx1+1);
+          ln = ln.substring(0, idx) + '<span class="' + cls + '">' + ln.substring(idx+startTag.length, idx1) + '</span>' + ln.substring(idx1+endTag.length);
           idx = idx1 + 1;
         } else {
-          ln = ln.substring(0, idx) + '<span class="qil">' + ln.substring(idx+1) + '</span>';
+          ln = ln.substring(0, idx) + '<span class="' + cls + '">' + ln.substring(idx+startTag.length) + '</span>';
           idx = 0;
         }
       }
+      return ln;
     }
+
+    ln = procInLine(TIL_START, TIL_END, 'til');           // process Topic/Terminology InLine
+    ln = procInLine(PIL_START, PIL_END, 'pil');           // process 品名 Pin InLine
+    ln = procInLine(XIL_START, XIL_END, 'xil', XIL_LINE); // process External Quote (XQuote) InLine
+    ln = procInLine(QIL_START, QIL_END, 'qil', QIL_LINE); // process Quote InLine (THIS SHOULD BE THE LAST!)
 
     // process <!xg> dangling <xg> and </xg>. 'xg' is '信裹'.
     ln = this.__processSimpleTag(ln, 'xg');
 
     // process Vow InLine
     ln = ln.replaceAll(VIL_START, '「<span class="vil">').replaceAll(VIL_END, '</span>」');
-    idx = ln.lastIndexOf(VIL_START_NO_END);
+    var idx = ln.lastIndexOf(VIL_START_NO_END);
     if (idx > 0) ln = ln.substring(0, idx) + '「<span class="vil">' + ln.substring(idx+1) + '</span>';
     idx = ln.indexOf(VIL_END_NO_START);
     if (idx > 0) ln = '<span class="vil">' + ln.substring(0, idx) + '</span>」' + ln.substring(idx+1);

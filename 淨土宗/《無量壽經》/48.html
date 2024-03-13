@@ -296,7 +296,9 @@ for (var g=0; g<groups.length; ++g) {
     }
     else w('<tr bgcolor="', bgc, '"', colr, '>');
     var styl;
-    if (isTop)
+    if (g === 4 && i === 0) // 第十八到二十願合併
+      styl = 'border-bottom:none';
+    else if (isTop)
       styl = 'border-top:2px solid gray; border-bottom:1px solid gray';
     else if (isLastLast)
       styl = 'border-bottom:2px solid gray';
@@ -324,7 +326,9 @@ for (var g=0; g<groups.length; ++g) {
         ref = chapters[p.ref];
       }
     }
-    if (isTop)
+    if (g === 4 && i === 0) // 第十八到二十願合併
+      tdstyle = 'border-bottom:none; border-right:2px solid gray';
+    else if (isTop)
       tdstyle = 'border-top:2px solid gray; border-bottom:1px solid gray; border-right:2px solid gray';
     else if (isLastLast)
       tdstyle = 'border-bottom:2px solid gray; border-right:2px solid gray';
@@ -366,7 +370,7 @@ if (withCls) {
   const diagram = `
 ┌─ 1.極樂淨土 (2) ─── 無惡 ── 國無惡道願1   不墮惡趣願2
 │    〇〇〇〇      ┌─ 相好 ── 身悉金色願3   三十二相願4   身無差別願5
-│    〇〇〇〇      ├─ 神通 ── 宿命通〇願6   天眼通願〇7   天耳通〇願8
+│    〇〇〇〇      ├─ 神通 ── 宿命通〇願6   天眼通〇願7   天耳通〇願8
 ├─ 2.正報利益(10) ─┤  〇〇    他心通〇願9
 │    〇〇〇〇      │  〇〇    神足通〇願10  徧供諸佛願11
 │    〇〇〇〇      └─ 成就 ── 定成正覺願12
@@ -442,12 +446,12 @@ function showText(seg, txt) {
   }
   if (quiz1 > 0) {
     txt = '【測驗：' +
-          '<a href="javascript:showText(\'quiz2\')">正報利益願</a>，' +
+          '<a href="javascript:showText(\'quiz2\')">正報利益</a>，' +
           '<a href="javascript:showText(\'quiz3\')">教主己願</a>，' +
-          '<a href="javascript:showText(\'quiz4\')">聞名功德願</a>，' +
-          '<a href="javascript:showText(\'quiz5\')">正報莊嚴願</a>，' +
-          '<a href="javascript:showText(\'quiz6\')">依報莊嚴願</a>，' +
-          '<a href="javascript:showText(\'quiz7\')">他方菩薩願</a>，' +
+          '<a href="javascript:showText(\'quiz4\')">聞名功德</a>，' +
+          '<a href="javascript:showText(\'quiz5\')">正報莊嚴</a>，' +
+          '<a href="javascript:showText(\'quiz6\')">依報莊嚴</a>，' +
+          '<a href="javascript:showText(\'quiz7\')">他方菩薩</a>，' +
           '<a href="javascript:showText(\'quiz0\')">任何願</a>' +
           '】';
     if (quiz1 < 48) {
@@ -462,7 +466,7 @@ function showText(seg, txt) {
     }
   }
   else if (txt && seg) {
-    seg += ':';
+    seg = seg.replace(' ','') + ':';
     txt = '<table border="0"><tr><td nowrap valign="top">' + seg +
           '&nbsp;&nbsp;</td><td>' + txt + '</td></tr></table>';
   }
@@ -491,8 +495,8 @@ w('</table>');
 <div style="width:880" align="left">
 <table bgcolor="white" border="1" cellspacing="0" cellpadding="5px">
 <tr bgcolor="lightgray">
-<th nowrap width="33%">第十八願&nbsp;十念必生願</th>
-<th nowrap width="33%">第十九願&nbsp;聞名發心願<br>第二十願&nbsp;臨終接引願</th>
+<th nowrap width="33%" style="border-right:none">第十八願&nbsp;十念必生願</th>
+<th nowrap width="33%" style="border-left:none">第十九願&nbsp;聞名發心願<br>第二十願&nbsp;臨終接引願</th>
 <th nowrap width="33%">第廿一願&nbsp;悔過得生願</th></tr>
 
 <tr><td colspan="3" align="center">我作佛時，十方衆生，<red>聞我名號，</red></td></tr>
@@ -501,25 +505,19 @@ w('</table>');
 <td></td>
 <td><sup>1</sup>繫念我國，</td></tr>
 <tr>
-<td></td>
+<td rowspan="3"><red><sup>2,3,4</sup>所有善根，</red></td>
 <td><red><sup>2</sup>發菩提心，</red></td>
 <td><sup>2</sup>發菩提心，</td></tr>
 <tr>
-<td></td>
 <td><red><sup>3</sup>修諸功德，奉行六波羅密，</red></td>
-<td></td></tr>
-<tr>
-<td></td>
-<td><red><sup>4</sup>堅固不退。</red></td>
 <td><sup>4</sup>堅固不退。</td></tr>
 <tr>
-<td></td>
-<td></td>
+<td><red><sup>4</sup>堅固不退。</red></td>
 <td><sup>3</sup>植衆德本，</td></tr>
 <tr>
-<td valign="top"><red><sup>5</sup>所有善根，心心迴向，願生我國，</red></td>
+<td valign="top"><red><sup>5</sup>心心迴向，願生我國，</red></td>
 <td valign="top"><sup>5</sup>復以善根迴向，願生我國，</td>
-<td valign="top"><sup>5</sup>至心迴向，欲生極樂，<br>無不遂者。</td></tr>
+<td valign="top"><sup>5</sup>至心迴向，欲生極樂，無不遂者。</td></tr>
 <tr>
 <td valign="top">乃至十念，</td>
 <td valign="top">一心念我，晝夜不斷。</td>
