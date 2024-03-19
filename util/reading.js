@@ -508,16 +508,18 @@ class MyBookInfo {
     return this._curChapters;
   }
 
-  setImage(uri, width, height) {
+  setImage(uri, width, height, closeDisabled) {
     if (!this.noimg && uri) {
       if (typeof uri === 'object') {
-        this.imageUri    = uri.uri;
-        this.imageWidth  = uri.width;
-        this.imageHeight = uri.height;
+        this.imageUri      = uri.uri;
+        this.imageWidth    = uri.width;
+        this.imageHeight   = uri.height;
+        this.closeDisabled = uri.closeDisabled;
       } else {
-        this.imageUri    = uri;
-        this.imageWidth  = width;
-        this.imageHeight = height;
+        this.imageUri      = uri;
+        this.imageWidth    = width;
+        this.imageHeight   = height;
+        this.closeDisabled = closeDisabled;
       }
     }
     return this;
@@ -923,9 +925,13 @@ class MyBookInfo {
       var scale = (H - 2 * this.margin) / this.imageHeight;
       const imgW = !this.imageWidth  ? '' : (' width="'  + (this.imageWidth  * scale) + '"');
       const imgH = !this.imageHeight ? '' : (' height="' + (this.imageHeight * scale) + '"');
-      buf.w('<div style="position:absolute; top:', this.margin, 'px; left:', W, 'px">',
-            '<a href="javascript:LIVRE.renderReader(\'noimg\')">',
-            '<img border="0" src="', this.imageUri, '"', imgW, imgH, ' title="Click to turn off the image. (Reload the page to get the image back.)"></a></div>');
+      buf.w('<div style="position:absolute; top:', this.margin, 'px; left:', W, 'px">');
+      if (this.closeDisabled)
+        buf.w('<img border="0" src="', this.imageUri, '"', imgW, imgH, '>');
+      else
+        buf.w('<a href="javascript:LIVRE.renderReader(\'noimg\')">',
+              '<img border="0" src="', this.imageUri, '"', imgW, imgH, ' title="Click to turn off the image. (Reload the page to get the image back.)"></a>');
+      buf.w('</div>');
     }
     buf.render(this.elemId);
   }
