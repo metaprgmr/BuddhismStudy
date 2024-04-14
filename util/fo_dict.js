@@ -170,7 +170,14 @@ const FO_ZI = { // https://zh.wiktionary.org/wiki/罽
 '羸':  'léi',
 '鳧':  'fú',
 '鴈':  'yàn',
-'_end_': '' };
+'躐':  'liè',
+'勖':  'xù',
+'獝':  'xù',
+'舁':  'yú',
+'洎':  'jì',
+'刱':  '創',
+'稽顙': 'qǐ sǎng',
+'〇':  '' };
 
 
 function lookupTerm(term) { return FO_TERMS[term] }

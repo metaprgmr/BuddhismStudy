@@ -114,7 +114,7 @@ chapter#餘力學文
 #非聖書　屏勿視　蔽聰明　壞心志/
 #勿自暴　勿自棄　聖與賢　可馴致
 
-弟子規終
+chapter#弟子規終
 `));
 
 function preprocess(raw_content) {

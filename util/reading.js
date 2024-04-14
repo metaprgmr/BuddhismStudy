@@ -839,7 +839,7 @@ class MyBookInfo {
   }
 
   renderReader(dir) {
-    this.noimg = 'true' === sessionStorage.getItem(this.title + '_noimg');
+//    this.noimg = 'true' === sessionStorage.getItem(this.title + '_noimg');
     if (!this.readingStarted) {
       LIVRE = this;
       document.addEventListener("keydown",   (e) => LIVRE.nav(e), false);

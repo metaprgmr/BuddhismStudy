@@ -79,6 +79,7 @@ const BOOK_TITLE     = '佛說大乘無量壽莊嚴清淨平等覺經會集本�
 const LAST_PAGE_NUM  = 837;
 const FIRST_QUOTE_PAGE_NUM = 90;
 const COVER_TEXT_COLOR = '#FFD700';
+const LINE_NUM_STYLE = 'writing-mode:horizontal-tb; margin-top:-30px; font-family:helvetica; font-size:10px; color:lightgray';
 
 // "Quote InLine", "Pin(品名) InLine", "Vow InLine" and "Topic/Terminology InLine"  handling
 // Potential vows in the text are examined for「...願」and「...V」against `vows` below.
@@ -90,12 +91,16 @@ const VIL_START = 'ㄅ';
 const VIL_END   = 'ㄆ';
 const VIL_START_NO_END = 'ㄇ';
 const VIL_END_NO_START = 'ㄈ';
-const TIL_START = QIL_START + 't'; // replaces {t
+const TIL_START = QIL_START + 't'; // replaces {t  -- terminology
 const TIL_END   = 't' + QIL_END;   // replaces t}  e.g. {t八相成道t}
-const PIL_START = QIL_START + 'p'; // replaces {p
+const PIL_START = QIL_START + 'p'; // replaces {p  -- Quote (of this sutra) InLine
 const PIL_END   = 'p' + QIL_END;   // replaces p}  e.g. {p受菩提記p}
-const XIL_START = QIL_START + 'x'; // replaces {x
+const XIL_START = QIL_START + 'x'; // replaces {x  -- eXternal quoting InLine
 const XIL_END   = 'x' + QIL_END;   // replaces x}  e.g. {x擐大甲胄，以宏誓功德而自莊嚴。x}
+const SIL_START = '《'; //  -- Source name
+const SIL_END   = '》'; //  e.g. 《觀經》
+const TMP_START = 'ㄥ';
+const TMP_END   = 'ㄦ';
 const 念祖      = 'ㄙ祖';
 
 var vows = [
@@ -179,7 +184,7 @@ class JiePage {
           var v = ln.substring(idx1+1, idx+1);
           if ((v.length <= 5) && vows[v])
             this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + v + VIL_END + ln.substring(idx+2);
-          else console.log(v, ':', ln);
+//        else console.log(v, ':', ln);
         } else { // check the previous line
           var pg = this, lnNum = i-1;
           var ln1 = pg.lines[lnNum];
@@ -196,7 +201,7 @@ class JiePage {
               pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + ln1.substring(idx1+1);
               this.lines[i] = ln = ln.substring(0, idx+1) + VIL_END_NO_START + ln.substring(idx+2);
             }
-            else console.log(v, ':', ln1, ln);
+//          else console.log(v, ':', ln1, ln);
           }
         }
       }
@@ -331,12 +336,13 @@ class ReaderStyles {
       '.dim { opacity:0.5 }\n',
       '.qil { color:' + QUOTE_COLOR + ' }\n',
       '.xil { color:' + XQUOTE_COLOR + ' }\n',
-      '.pil { color:' + PIN_COLOR + ' }\n',
+      '.sil { font-weight:bold }\n',
+      '.pil { font-weight:normal; color:' + PIN_COLOR + ' }\n',
       '.vil { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
       '.til { color:' + TOPIC_COLOR + ' }\n',
       'NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:#00d; }\n',
       'NianZu::before { content:"念祖" }\n',
-      'xycm { font-weight:bold }\n', // 信願持名
+      'xycm { color:red; font-weight:bold }\n', // 信願持名
       'a { text-decoration:none }\n',
       'a.main { background-color:#fdd }\n\n',
 
@@ -575,39 +581,47 @@ class PageDims {
           'px;" onclick="showPage(\'', dest, '\')" title="', help, '"></div>');
   }
 
-  _div(buf, cssCls, styles, x, y, ln) {
+  _div(buf, cssCls, styles, x, y, ln, lnNum) {
     if (!ln) return;
     ln = ln.replace(念祖, '<NianZu></NianZu>');
 
     function procInLine(startTag, endTag, cls, lineTag) { // operates upon ln
       if (lineTag && ln.startsWith(lineTag))
         return '<span class="' + cls + '">' + ln.substring(lineTag.length) + '</span>';
+      var sTagRetained = '', eTagRetained = '';
+      if (startTag === '《') sTagRetained = TMP_START;
+      if (endTag === '》')   eTagRetained = TMP_END;
+      var sTagLen = startTag.length, eTagLen = endTag.length;
       for (idx=0; ; ) {
         idx = ln.indexOf(startTag, idx);
         if (idx < 0) {
           idx = ln.indexOf(endTag, idx);
           if (idx < 0) break;
           if (ln.startsWith('<!xg>'))
-            ln = '<!xg><span class="' + cls + '">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+endTag.length);
+            ln = '<!xg><span class="' + cls + '">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+eTagLen);
           else
-            ln = '<span class="' + cls + '">' + ln.substring(0, idx) + '</span>' + ln.substring(idx+endTag.length);
+            ln = '<span class="' + cls + '">' + ln.substring(0, idx) + '</span>' + eTagRetained + ln.substring(idx+eTagLen);
           idx++;
           continue;
         }
         var idx1 = ln.indexOf(endTag, idx+1);
         if (idx1 > 0) {
-          ln = ln.substring(0, idx) + '<span class="' + cls + '">' + ln.substring(idx+startTag.length, idx1) + '</span>' + ln.substring(idx1+endTag.length);
+          ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + ln.substring(idx+sTagLen, idx1) +
+               '</span>' + eTagRetained + ln.substring(idx1+eTagLen);
           idx = idx1 + 1;
         } else {
-          ln = ln.substring(0, idx) + '<span class="' + cls + '">' + ln.substring(idx+startTag.length) + '</span>';
+          ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + ln.substring(idx+sTagLen) + '</span>';
           idx = 0;
         }
       }
+      if (sTagRetained) ln = ln.replaceAll(TMP_START, startTag);
+      if (eTagRetained) ln = ln.replaceAll(TMP_END, endTag);
       return ln;
     }
 
     ln = procInLine(TIL_START, TIL_END, 'til');           // process Topic/Terminology InLine
     ln = procInLine(PIL_START, PIL_END, 'pil');           // process 品名 Pin InLine
+    ln = procInLine(SIL_START, SIL_END, 'sil');           // process Source title
     ln = procInLine(XIL_START, XIL_END, 'xil', XIL_LINE); // process External Quote (XQuote) InLine
     ln = procInLine(QIL_START, QIL_END, 'qil', QIL_LINE); // process Quote InLine (THIS SHOULD BE THE LAST!)
 
@@ -623,7 +637,12 @@ class PageDims {
 
     var buf1 = new Buffer('<div');
     cssCls && buf1.w(' class="', cssCls, '"');
-    buf1.w(' style="left:', x, 'px; top:', y, 'px;', styles || '', '">', ln, '</div>');
+    ln = ln.replaceAll('BJ', '<font class="sil">本經</font>')
+           .replaceAll('Bj', '<font class="sil">本</font>')
+           .replaceAll('bJ', '<font class="sil">經</font>');
+    buf1.w(' style="left:', x, 'px; top:', y, 'px;', styles || '', '">');
+    if (lnNum) buf1.w('<span style="', LINE_NUM_STYLE, '">', lnNum, '</span>');
+    buf1.w(ln, '</div>');
     buf.w(buf1.render());
   }
 
@@ -716,9 +735,9 @@ class PageDims {
     var dims = this._getReadAreaDims(isLeft);
     var lines = pgInfo.lines;
     var x = dims.origX;
-    var idx, len = lines.length;
+    var idx, len = lines.length, lnNum = 1;
     for (var i=0; i<len; ++i) {
-      var asis = false, ln = lines[i];
+      var asis = false, ln = lines[i], showLnNum = true;
       var cssCls = pgInfo.is序 ? 'introText' : (pgInfo.preferredStyle || 'regularText');
 
       if (ln.startsWith('#')) {
@@ -727,6 +746,7 @@ class PageDims {
           continue;
         }
         if (ln.startsWith('#title:')) {
+          showLnNum = false;
           cssCls = 'titleText';
           ln = ln.substring(7);
           if (i === 0) cssCls += 'First';
@@ -742,6 +762,7 @@ class PageDims {
           ln = ln.substring(6);
         }
         else if (ln.startsWith('#end:')) {
+          showLnNum = false;
           cssCls = 'endText';
           ln = ln.substring(5);
         }
@@ -758,11 +779,13 @@ class PageDims {
           ln = ln.substring(5);
         }
         else if (ln.startsWith('#h') && ln[3] === ':') { // #h1, #h2, #h3, #h4, #h5
+          showLnNum = ln.startsWith('#h5');
           cssCls = ln.substring(1, 3) + 'Text';
           ln = ln.substring(4);
           if (cssCls === 'h5Text') ln = '　　' + ln;
         }
         else if (ln.startsWith('#smallsubtitle:')) {
+          showLnNum = false;
           cssCls = 'smallsubtitle';
           ln = ln.substring(15);
         }
@@ -775,6 +798,8 @@ class PageDims {
           x -= this._renderFirstPageTitle(buf, dims);
         }
         else if (ln.startsWith('#double:')) {
+          showLnNum = false;
+          ++lnNum;
           ln = this._handleWrappedText(ln.substring(8), css.regularTextWrapSize);
           asis = true;
         }
@@ -811,7 +836,7 @@ class PageDims {
       x -= fnt.width;
       if (fnt.paddingLeft)  x -= fnt.paddingLeft;
       if (fnt.paddingRight) x -= fnt.paddingRight;
-      this._div(buf, cssCls, null, x, dims.origY, ln);
+      this._div(buf, cssCls, null, x, dims.origY, ln, showLnNum && ln.trim() ? lnNum++ : null);
     }
     if (pgInfo.preferredStyle) return; // a special page
 
