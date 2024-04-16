@@ -8,8 +8,8 @@ a:hover  { color:blue }
 a:focus  { color:blue }
 a:active { color:blue }
 
-.content { border:0px red solid; width:750px; text-align:left }
-.contentW { border:0px red solid; width:900px; text-align:left }
+.content { border:0px red solid; width:750px; text-align:left; font-size:20px }
+.contentW { border:0px red solid; width:900px; text-align:left; font-size:20px }
 .gatha   { text-align:center }
 
 .zKaiTi      { font-family: "KaiTi", "Kaiti TC", "楷体", STKaiti, "华文楷体" }
