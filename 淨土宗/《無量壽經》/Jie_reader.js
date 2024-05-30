@@ -332,7 +332,7 @@ class ReaderStyles {
     if (!isXG && this._isCSSAdded) return;
 
     const buf = new Buffer(
-      window['無量壽經xgStyle'] || isXG && 'xg { background-color:#ffd }',
+      window['xgStyle'] || isXG && 'xg { background-color:#ffd }',
       '.dim { opacity:0.5 }\n',
       '.qil { color:' + QUOTE_COLOR + ' }\n',
       '.xil { color:' + XQUOTE_COLOR + ' }\n',

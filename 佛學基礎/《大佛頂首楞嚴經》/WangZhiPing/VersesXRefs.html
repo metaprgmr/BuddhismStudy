@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>諸科判文本對照</title>
+<script src="verses-xrefs.js"></script>
+<script>
+function w() { for (var i in arguments) document.write(arguments[i]); }
+function get(name) {
+ if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+   return decodeURIComponent(name[1]);
+}
+
+function showXRefs() {
+  var volNum = arguments[0] || 0
+  var lst = verseXrefs[volNum];
+
+  w('<h2>諸科判文本對照&nbsp;&nbsp;第', volNum+1, '卷</h2>');
+  w('<table border=1 cellspacing=0 cellpadding=2>');
+  w('<tr bgcolor="lightgray">');
+  for (var j=1; j<arguments.length; ++j)
+    w('<th>', arguments[j], '</th>');
+  w('<th></th></tr>');
+
+  for (var i=0; i<lst.length; ++i) {
+    var d = lst[i], txt = '';
+    w('<tr>');
+    for (var j=1; j<arguments.length; ++j) {
+      var t = d[arguments[j]];
+      if (typeof t === 'string') {
+        var idx = t.indexOf('.');
+        if (idx > 0) { txt = t.substring(idx+1); t = t.substring(0, idx); }
+      }
+      w('<td align="center">', t || '', '</td>');
+    }
+    w('<td>', txt, '</td>');
+    w('</tr>');
+  }
+  w('</table>');
+}
+</script>
+</head>
+<body><center>
+
+<script>
+  var vol = parseInt(get('v') || get('vol') || '1');
+  showXRefs(vol-1, 'W', 'H', 'Y');
+</script>
+
+</center></body></html>
+

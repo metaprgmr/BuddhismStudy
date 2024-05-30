@@ -7,9 +7,13 @@ a { text-decoration:none }
 .title { color:#FF6600; font-widht:bold; font-size:17.0pt; }
 .verse { color:teal; font-weight:bold }
 .label { color:purple }
+.jielabel { background-color:purple; color:white }
+.jietext { background-color:#f0f0ff }
+.hy { color:lightgray }
 </style>
 <script src="../../../util/reading.js"></script>
 <script src="verses.js"></script>
+<script src="verses-xrefs.js"></script>
 <script>
 function toZNum(i) { return (i === 10) ? '十' : zNumber(i) }
 function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
@@ -31,7 +35,7 @@ function selectVol(volNum, verseNum) {
   }
   console.log('總　共：' + cnt + '段。');
   buf.w('</h3>');
-  buf.render('volumeNums');
+  buf.render('volumeNums1', 'volumeNums2');
 
   showText(volNum, verseNum);
 }
@@ -48,42 +52,44 @@ function showText(volNum, verseNum) {
   var vol = verses[volNum];
   var verseNum = 1;
   for (var i=0; i<vol.length; ++i) {
-    var j, k, ln = vol[i];
+    var j, k, ln = vol[i], hy = w2hyDisp(volNum+1, verseNum);
+    if (hy) hy = '<br><font class=hy>' + hy + '</font>';
     buf.w('<tr>');
     if (typeof ln === 'string') {
-      buf.w('<td colspan=3 style="border-top:1px solid gray"></td><td valign=top style="border-top:1px solid gray">', ln, '</td></tr>');
+      buf.w('<td colspan=3 style="border-top:1px solid #fbbbbb"></td><td valign=top style="border-top:1px solid gray">', ln, '</td></tr>');
     } else {
       // first row
       var rows = ln.components.length;
       if (ln.type === '正文') {
         if (rows > 1)
-          buf.w('<td valign=top class=label rowspan=', rows, ' style="border-top:1px solid gray">', digit3(verseNum++), '&nbsp;</td>');
+          buf.w('<td nowrap align=right valign=top class=label rowspan=', rows, ' style="padding-top:4px; padding-right:5px">', digit3RightAligned(verseNum++), hy, '</td>');
         else
-          buf.w('<td valign=top class=label style="border-top:1px solid gray">', digit3(verseNum++), '&nbsp;</td>'); // 【】
+          buf.w('<td nowrap align=right valign=top class=label style="padding-top:4px; padding-right:5px">', digit3RightAligned(verseNum++), hy, '</td>'); // 【】
       } else {
         if (rows > 1)
-          buf.w('<td rowspan=', rows, ' style="border-top:1px solid gray"></td>');
+          buf.w('<td rowspan=', rows, ' style="border-top:0px solid #fbbbbb"></td>');
         else
-          buf.w('<td style="border-top:1px solid gray"></td>');
+          buf.w('<td style="border-top:0px solid #fbbbbb"></td>');
       }
       if (ln.type === '經名') {
         if (rows > 1)
-          buf.w('<td width="250px" valign=top rowspan=', rows, ' style="border-top:1px solid gray; padding-right:20px"><span class="title">', ln.text, '</span></td>');
+          buf.w('<td width="400px" valign=top rowspan=', rows, ' style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="title">', ln.text, '</span></td>');
         else
-          buf.w('<td width="250px" valign=top style="border-top:1px solid gray; padding-right:20px"><span class="title">', ln.text, '</span></td>');
+          buf.w('<td width="400px" valign=top style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="title">', ln.text, '</span></td>');
       } else {
         if (rows > 1)
-          buf.w('<td width="250px" valign=top rowspan=', rows, ' style="border-top:1px solid gray; padding-right:20px"><span class="verse">', ln.text, '</span></td>');
+          buf.w('<td width="400px" valign=top rowspan=', rows, ' style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="verse">', ln.text, '</span></td>');
         else
-          buf.w('<td width="250px" valign=top style="border-top:1px solid gray; padding-right:20px"><span class="verse">', ln.text, '</span></td>');
+          buf.w('<td width="400px" valign=top style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="verse">', ln.text, '</span></td>');
       }
 
       if (rows === 0)
-        buf.w('<td colspan=3 style="border-top:1px solid gray"></td></tr>');
+        buf.w('<td colspan=3 style="border-top:1px solid #fbbbbb"></td></tr>');
       else {
         var c = ln.components[0];
-        buf.w('<td nowrap valign=top style="border-top:1px solid gray; padding-right:5px"><span class=label>', c.type, '</span></td>',
-              '<td valign=top style="border-top:1px solid gray">');
+        var cls = c.type == '解' ? ' class=jielabel' : ' class=label';
+        buf.w('<td nowrap align=right valign=top style="border-top:1px solid #fbbbbb; padding-right:5px"><span', cls, '>', c.type, '</span></td>');
+        buf.w('<td valign=top', c.type == '解' ? ' class=jietext' : '', ' style="border-top:1px solid #fbbbbb">');
         if (!c.content)
           ;
         else if (c.content.length === 1)
@@ -97,9 +103,10 @@ function showText(volNum, verseNum) {
         // following rows
         for (j=1; j<ln.components.length; ++j) {
           c = ln.components[j];
+          cls = c.type == '解' ? 'jielabel' : 'label';
           buf.w('<tr>',
-                '<td nowrap valign=top style="padding-right:5px"><span class=label>', c.type, '</span></td>',
-                '<td valign=top>');
+                '<td nowrap align=right valign=top style="padding-right:5px"><span class=', cls, '>', c.type, '</span></td>');
+          buf.w('<td valign=top', c.type == '解' ? ' class=jietext' : '', '>');
           if (!c.content)
             ;
           else if (c.content.length === 1)
@@ -123,8 +130,9 @@ function showText(volNum, verseNum) {
 >楞嚴經譯解<br><font style="font-size:18px">王治平居士</font></h2>
 
 <table border="0" width="95%">
-<tr><td align="center" id="volumeNums"></td></tr>
+<tr><td align="center" id="volumeNums1"></td></tr>
 <tr><td style="border-bottom:1px solid black" id="verseStage"></td></tr>
+<tr><td align="center" id="volumeNums2"></td></tr>
 </table>
 <script>
   selectVol(get('vid') || 0);

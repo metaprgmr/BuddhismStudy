@@ -1,0 +1,197 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>道德經</title>
+<link rel="stylesheet" href="../util/article.css">
+<link rel="stylesheet" href="common.css">
+<style>
+.zKaiTi   { font-family: "KaiTi", "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.zFSongTi { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋" }
+.zSongTi  { font-family: "SimSong", "Songti TC", "宋体", STSong, "华文宋体" }
+.zHeiTi   { font-family: "SimHei", "黑体", STHeiti, "华文黑体" }
+td { font-size:22px }
+zsq { font-size:18px }
+anno { color:blue }
+dif { background-color:#ffddee }
+.hilite { color:red }
+.same { opacity:0.5; background-color:white}
+inv { opacity:0 }
+v0 { color:red; background-color:yellow }
+v1 { color:brown }
+v2 { color:green }
+v3 { color:purple }
+v4 { color:blue }
+dot { font-size:12px }
+dot::before { content:"。" }
+</style>
+<script src="gdh-reader.js"></script>
+<script src="gdh.js"></script>
+<script src="content/ddj-compare.js"></script>
+<script>
+function e(elid) { return document.getElementById(elid) }
+function w() { for (var i in arguments) document.write(arguments[i]) }
+function get(name) {
+ if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+   return decodeURIComponent(name[1]);
+}
+
+function decoCh(srcs, i, infos, disps, plains) {
+  var cs = [], j, tag = '';
+  for (j=0; j<srcs.length; ++j) {
+    var x = infos[j] && infos[j].plain && infos[j].plain[i] || null;
+    if (x) cs[j] = x;
+  }
+  var isDiff = false;
+  var x;
+  for (j=0; j<srcs.length; ++j) {
+    var c = cs[j];
+    if (!c || c == '　') continue;
+    if (!x) { x = c; continue; }
+    isDiff = !areSynons(c, x);
+    if (isDiff) break;
+  }
+  for (j=0; j<srcs.length; ++j) {
+    var anno = infos[j] && infos[j].anno && infos[j].anno[i];
+    var c = cs[j];
+    if (!c) continue;
+    plains[j] += c;
+    if (anno) {
+      tag = '<anno title="' + anno + '"';
+      if (anno.endsWith('？')) tag += ' class="hilite"';
+      c = tag + '>' + c + '</anno>';
+    }
+    if (isDiff && (c != '　')) c = '<dif>' + c + '</dif>';
+    disps[j] += c;
+  }
+}
+const dot = '<dot></dot>';
+function getDisplayLines(lineLen, ddjChapter, srcs) {
+  var i, j, len = 0;
+  var infos = [];
+  var disps = [], plains = [], xgP = ddjChapter.xgP, xgPidx = 0;
+  for (j=0; j<srcs.length; ++j) {
+    infos[j] = ddjChapter[srcs[j]];
+    disps[j] = plains[j] = '';
+    if (infos[j] && infos[j].plain)
+      len = Math.max(infos[j].plain.length, len);
+  }
+  for (i=0; i<len; ++i) {
+    if ((i % lineLen == 0) && (i > 0))
+      for (j=0; j<disps.length; ++j)
+        if (infos[j]) { disps[j] += '|'; plains[j] += '|'; }
+    decoCh(srcs, i, infos, disps, plains);
+    if (i === xgP[xgPidx]) {
+      for (j=0; j<disps.length; ++j)
+        if (disps[j]) disps[j] += dot; // '。';
+      ++xgPidx;
+    }
+  }
+  for (j=0; j<disps.length; ++j) {
+    if (disps[j]) disps[j] = disps[j].split('|');
+    if (plains[j]) plains[j] = plains[j].split('|');
+  }
+  return [ disps, plains ];
+}
+var indicator = '▫&nbsp;';
+var filler = '<inv>' + indicator + '</inv>';
+
+function writeMulti(v) {
+  var a = v ? v.split(',') : [ 'XG' ];
+  if (a.length === 1) { writeSingle(a[0]); return; }
+  document.title = '道德經（對比）';
+  var i, j = '道德經（對比：', titles = [], srcs = [];
+  for (i=0; i<a.length; ++i) {
+    titles[i] = versions[ srcs[i] = a[i] ];
+    if (i > 0) j += '，';
+    j += '<v' + i + '>' + titles[i] + '</v' + i + '>';
+  }
+
+  var LINE_LEN = 30;
+
+  w('<h1>', j, '）</h1>');
+  w('<table border=0 cellspacing=0 cellpadding=10>');
+  for (i=0; i<ddjText.length; i++) {
+    var ddjChapter = ddjText[i];
+    var disps_plains = getDisplayLines(LINE_LEN, ddjChapter, srcs);
+    var disps = disps_plains[0], plains = disps_plains[1];
+    w('<tr><td style="padding-right:20px" valign="top">', i+1, '.&nbsp;', ddjTitles[i], '</td><td valign="top">');
+    var sz = disps[0].length;
+    var started = false, firstNonEmpty = 0;
+    for (var k=0; k<sz; ++k) {
+      var m, plain0 = plains[0][k], allSame = true;
+      for (m=1; m<disps.length; ++m) {
+        var x = plains[m][k];
+        if (x && (x != plain0)) { allSame = false; break; }
+      }
+      for (m=0; m<disps.length; ++m) {
+        var seg = disps[m][k];
+        if (seg) {
+          var prefix, showSeg = (m == 0) || (plains[m][k] != plain0);
+          if (!started) {
+            started = true;
+            firstNonEmpty = m;
+            prefix = indicator;
+          } else {
+            prefix = (m == firstNonEmpty) ? indicator : filler;
+            //if (showSeg) w('<br>');
+            if (m>0 && allSame) break;
+            w('<br>');
+          }
+          if (m == 0 || !allSame) {
+            if (showSeg) w('<v', m, ' title="', titles[m], '">', prefix, seg, '</v', m, '>');
+            else         w('<v', m, ' title="', titles[m], '" class="same">', prefix, seg, '</v', m, '>');
+          }
+        }
+      }
+    }
+    w('</td></tr>');
+  }
+  w('</table>');
+}
+
+function write9x9() {
+  w('<table border=0 cellpadding="2px">');
+  for (var i=0; i<9; ++i) {
+    w('<tr>');
+    for (var j=0; j<9; ++j)
+      w('<td align=right>&nbsp;', i*9+j+1, '.', ddjTitles[i*9+j], '&nbsp;</td>');
+    w('</tr>');
+  }
+  w('</table>');
+}
+
+function writeSingle(v) {
+  var SUTRA_TEXT = [];
+  document.title = '道德經';
+  lookuptool = new LookupTool(dict.setIgnoreLevel(get('level')), get('first'));
+
+  // preprocess the text into writeSutra()-style:
+  for (i=0; i<ddjText.length; i++) {
+    var ddjChapter = ddjText[i], xgP = ddjChapter.xgP, xgPidx = 0,
+        plain = '', ln = ddjChapter[v];
+    ln = ln && ln.plain;
+    if (!ln) continue;
+    var len = ln.length;
+    for (var j=0; j<len; ++j) {
+      plain += ln[j];
+      if (j === xgP[xgPidx]) {
+        plain += '。';
+        ++xgPidx;
+      }
+    }
+    SUTRA_TEXT.push(plain.replaceAll('　', ''));
+    SUTRA_TEXT.push('');
+  }
+  new GDHReader('道德經', SUTRA_TEXT);
+  readerHost.writeDoc();
+}
+</script>
+</head>
+<body><center>
+<h2 id="ddjtitle"></h2>
+<script>
+  write9x9();
+  writeMulti(get('v')); // 'XG,hsg,zmf,hs,zsq'. Default 'XG'.
+</script>
+</center></body></html>
+

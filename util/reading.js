@@ -38,6 +38,12 @@ function digit3(i, increment) {
   return (i<10) ? ('00' + i) : (i<100 ? ('0' + i) : i);
 }
 
+function digit3RightAligned(i) {
+  if (!i) i = 0;
+  if (typeof i === 'string') i = parseInt(i);
+  return (i<10) ? ('<font style="opacity:0">00</font>' + i) : (i<100 ? ('<font style="opacity:0">0</font>' + i) : i);
+}
+
 function startsWith() {
   var len = arguments.length;
   if (len > 0) {
@@ -97,11 +103,14 @@ class Buffer {
     this.buf = pre + this.buf;
   }
 
-  // renders to an element, or render() to get the text.
-  // clears the content afterwards.
-  render(elid) {
+  // renders to one or more elements.
+  // returns the text, and clears the internal content.
+  render() {
     var ret = this.buf;
-    if (elid) { var el = e(elid); el && (el.innerHTML = ret); }
+    for (var i in arguments) {
+      var el = e(arguments[i]);
+      el && (el.innerHTML = ret);
+    }
     this.buf = '';
     return ret;
   }
@@ -115,7 +124,7 @@ const zpuncs1L = '「『《（';
 const zpuncs1R = '」』》）—─…　';
 const zpuncs1 = zpuncs1L + zpuncs1R;
 const zpuncsAll = zpuncs + zpuncs1;
-const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u20000-\u2a6df]|[\u2a700-\u2b73f]|[\u2b740-\u2b81f]|[\u2b820-\u2ceaf]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u2f800-\u2fa1f]/;
+const REGEX_CHINESE = /[\u3300-\u4dbf]|[\u4e00-\u9fff]|[\uf900-\ufaff]|[\ufe30-\ufe4f]|[\u20000-\u2a6df]|[\u2a700-\u2ceaf]|[\u2f800-\u2fa1f]/;
 function isPunc(z)  { return zpuncs.indexOf(z) >= 0; }
 function isPunc1L(z) { return zpuncs1L.indexOf(z) >= 0; }
 function isPunc1R(z) { return zpuncs1R.indexOf(z) >= 0; }
@@ -280,6 +289,8 @@ function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
   return result;
 }
 
+function lastTag(tag) { return { tag, tagLast:false }; }
+
 function processPara(result, verseNum, ln, isGatha, lasteol, cureol, forView) {
   var anno, annoAll;
   if (Array.isArray(ln)) { anno = ln[1]; ln = ln[0] }
@@ -290,11 +301,13 @@ function processPara(result, verseNum, ln, isGatha, lasteol, cureol, forView) {
   if (anno) end += '</anno>';
   if (lasteol) result.push('<p>');
   var lastHtmlTag = null;
-  var emLast = { tagLast:false, tag:'em' };
-  var uLast  = { tagLast:false, tag:'u' };
+  var lastTags = [
+    lastTag('em'), lastTag('u'),
+    lastTag('xg'), lastTag('xg1'), lastTag('xg2'), lastTag('xg3')
+  ];
   for (var s=0; s<segs.length; ++s) {
-    ln = processLineHtmlTags(segs[s], emLast);
-    ln = processLineHtmlTags(ln, uLast);
+    ln = segs[s];
+    for (var lg in lastTags) ln = processLineHtmlTags(ln, lastTags[lg]);
     ln = ((s === segs.length-1) ? startLast : start) + processText(ln, s, verseNum) + end;
     if (forView && s < segs.length-1) ln += '<br>';
     result.push(ln);

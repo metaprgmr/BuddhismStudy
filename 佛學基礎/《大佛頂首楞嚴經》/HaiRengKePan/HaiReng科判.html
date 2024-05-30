@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="../../../util/kepan.css">
 <script src="../../../util/reading.js"></script>
 <script src="../../../util/kepan.js"></script>
+<script src="../WangZhiPing/verses-xrefs.js"></script>
 <script src="total.js"></script>
 <script src="main01.js"></script>
 <script src="main02.js"></script>
@@ -20,6 +21,12 @@
 </center></body></html>
 
 <script>
+function toVerseNum(zVolNum, volNum, verseNum) {
+  var wang = h2w(volNum, verseNum) || '';
+  if (wang) wang = '&nbsp;&nbsp;王' + wang;
+  return zVolNum + '&nbsp;' + verseNum + wang;
+}
+
 // A global "parts" variable is assumed.
 function write楞嚴經海仁法師科判(divId, part, terse) {
   if (divId) lastDivId = divId; else divId = lastDivId;
@@ -61,16 +68,16 @@ function write楞嚴經海仁法師科判(divId, part, terse) {
       var volNum = ln.substring(2,3);
       verseNum = ln.substring(3,6);
       switch (volNum) {
-      case 'A': verseNum = '一&nbsp;' + verseNum; break;
-      case 'B': verseNum = '二&nbsp;' + verseNum; break;
-      case 'C': verseNum = '三&nbsp;' + verseNum; break;
-      case 'D': verseNum = '四&nbsp;' + verseNum; break;
-      case 'E': verseNum = '五&nbsp;' + verseNum; break;
-      case 'F': verseNum = '六&nbsp;' + verseNum; break;
-      case 'G': verseNum = '七&nbsp;' + verseNum; break;
-      case 'H': verseNum = '八&nbsp;' + verseNum; break;
-      case 'I': verseNum = '九&nbsp;' + verseNum; break;
-      case 'J': verseNum = '十&nbsp;' + verseNum; break;
+      case 'A': verseNum = toVerseNum('一', 1, verseNum); break;
+      case 'B': verseNum = toVerseNum('二', 2, verseNum); break;
+      case 'C': verseNum = toVerseNum('三', 3, verseNum); break;
+      case 'D': verseNum = toVerseNum('四', 4, verseNum); break;
+      case 'E': verseNum = toVerseNum('五', 5, verseNum); break;
+      case 'F': verseNum = toVerseNum('六', 6, verseNum); break;
+      case 'G': verseNum = toVerseNum('七', 7, verseNum); break;
+      case 'H': verseNum = toVerseNum('八', 8, verseNum); break;
+      case 'I': verseNum = toVerseNum('九', 9, verseNum); break;
+      case 'J': verseNum = toVerseNum('十',10, verseNum); break;
       }
     }
     var kepanHint = '';
@@ -89,7 +96,7 @@ function write楞嚴經海仁法師科判(divId, part, terse) {
           '<span title="', kepanHint, '">', kepanLine, '</span>',
           '</td>');
     if (!terse)
-      buf.w('<td valign="top" align="right" nowrap style="font-size:12px; color:gray; ">&nbsp;', verseNum, '</td>');
+      buf.w('<td valign="top" nowrap style="font-size:12px; color:gray; ">&nbsp;&nbsp;&nbsp;', verseNum, '</td>');
     buf.w('</tr>');
   }
   buf.w('</table>');

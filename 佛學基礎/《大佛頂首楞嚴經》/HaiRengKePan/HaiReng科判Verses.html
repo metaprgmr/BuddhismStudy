@@ -13,7 +13,7 @@ function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : 
 function selectVol(volNum, verseNum) {
   volNum = ensureInt(volNum, 1);
   if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; sessionStorage.verseNum = null; }
-  var buf = new Buffer('　　　　　　　　　　　　　《楞嚴經》卷&nbsp;');
+  var buf = new Buffer('　《楞嚴經》海仁法師科判經文 卷&nbsp;');
   for (var i=1; i<=10; ++i) {　
     if (i > 1) buf.w('&nbsp;&nbsp;');
     if (i == volNum)
@@ -48,7 +48,7 @@ function showText(volNum, verseNum) {
     if (!v) break;
     if (!isAll && (i >= verseNum && i < verseNum+numVerses))
       style = ' style="background:yellow; font-weight:bold"';
-    buf.w('<a', style, ' href="javascript:showText(', volNum, ',', i, ')">', num, '</a> ');
+    buf.w('<a', style, ' href="javascript:showText(', volNum, ',', i, ')">', digit3RightAligned(i), '</a> ');
     if (i % width === 0) buf.w('<br>');
   }
   if (!isAll) buf.w('<a href="javascript:showText(', volNum, ', \'all\')">（全部）</a> ');
@@ -62,7 +62,7 @@ function showText(volNum, verseNum) {
     var id = digit3(verseNum+i);
     var v = HaiRenVerses[prefix + id];
     if (!v) break;
-    buf.w('<tr><td valign="top" style="font-family:fixed width">', id, '&nbsp;</td><td style="color:teal">', v, '</td></tr>');
+    buf.w('<tr><td valign="top" style="font-family:fixed width">', digit3RightAligned(verseNum+i), '&nbsp;</td><td style="color:teal">', v, '</td></tr>');
   }
   buf.w('</table>');
   buf.render('verseStage');
