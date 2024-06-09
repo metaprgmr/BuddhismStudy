@@ -34,7 +34,7 @@ function selectVol(volNum, verseNum) {
     cnt += ziCnt;
   }
   console.log('總　共：' + cnt + '段。');
-  buf.w('</h3>');
+  buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="WangVerses.html">純經文</a></h3>');
   buf.render('volumeNums1', 'volumeNums2');
 
   showText(volNum, verseNum);
@@ -60,28 +60,14 @@ function showText(volNum, verseNum) {
     } else {
       // first row
       var rows = ln.components.length;
+      var rowspan = (rows > 1) ? (' rowspan='+rows) : '';
       if (ln.type === '正文') {
-        if (rows > 1)
-          buf.w('<td nowrap align=right valign=top class=label rowspan=', rows, ' style="padding-top:4px; padding-right:5px">', digit3RightAligned(verseNum++), hy, '</td>');
-        else
-          buf.w('<td nowrap align=right valign=top class=label style="padding-top:4px; padding-right:5px">', digit3RightAligned(verseNum++), hy, '</td>'); // 【】
+        buf.w('<td nowrap align=right valign=top class=label', rowspan, ' style="padding-top:4px; padding-right:5px">', digit3RightAligned(verseNum++), hy, '</td>'); // 【】
       } else {
-        if (rows > 1)
-          buf.w('<td rowspan=', rows, ' style="border-top:0px solid #fbbbbb"></td>');
-        else
-          buf.w('<td style="border-top:0px solid #fbbbbb"></td>');
+        buf.w('<td', rowspan, ' style="border-top:0px solid #fbbbbb"></td>');
       }
-      if (ln.type === '經名') {
-        if (rows > 1)
-          buf.w('<td width="400px" valign=top rowspan=', rows, ' style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="title">', ln.text, '</span></td>');
-        else
-          buf.w('<td width="400px" valign=top style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="title">', ln.text, '</span></td>');
-      } else {
-        if (rows > 1)
-          buf.w('<td width="400px" valign=top rowspan=', rows, ' style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="verse">', ln.text, '</span></td>');
-        else
-          buf.w('<td width="400px" valign=top style="border-top:0px solid #fbbbbb; padding-right:20px"><span class="verse">', ln.text, '</span></td>');
-      }
+      buf.w('<td width="400px" valign=top', rowspan, ' style="border-top:0px solid #fbbbbb; padding-right:20px">',
+            '<span class="', (ln.type === '經名') ? 'title' : 'verse', '">', ln.text, '</span></td>');
 
       if (rows === 0)
         buf.w('<td colspan=3 style="border-top:1px solid #fbbbbb"></td></tr>');

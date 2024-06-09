@@ -5466,3 +5466,21 @@ for (var i=0; i<verses.length; ++i) {
 
 })();
 
+function getWangVerses() {
+  var ret = {};
+  var alphas = 'ABCDEFGHIJ';
+  var total = 0;
+  for (var i=0; i<verses.length; ++i) {
+    var vol = verses[i], prefix = alphas[i], verseNum = 1;
+    //console.log('Vol.', i+1, vol.length);
+    total += vol.length;
+    for (var j=0; j<vol.length; ++j) {
+      if (vol[j].type != '正文') continue;
+      var id = '' + (verseNum++);
+      while (id.length < 3) id = '0' + id;
+      ret[prefix + id] = vol[j].text;
+    }
+  }
+  //console.log('total', total);
+  return ret;
+}
