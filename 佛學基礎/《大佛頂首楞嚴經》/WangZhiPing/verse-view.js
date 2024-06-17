@@ -2,26 +2,50 @@ function toZNum(i) { return (i === 10) ? '十' : zNumber(i) }
 function toAlpha(i) { return ' ABCDEFGHIJKL'[i] }
 function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
 
-var myVerses;
+var myVerses, segsDisp;
+
 function selectVol(title, isHaiRen, volNum, verseNum) {
-  myVerses = isHaiRen ? HaiRenVerses : getWangVerses();
+  myVerses = isHaiRen ? getHaiRenVerses() : getWangVerses();
+  if (!segsDisp) {
+    var total = 0, a = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
+    var keys = Object.keys(myVerses);
+    for (var i in keys) {
+      var k = keys[i];
+      switch(k[0]) {
+      case 'A': ++a[0]; break; case 'B': ++a[1]; break;
+      case 'C': ++a[2]; break; case 'D': ++a[3]; break;
+      case 'E': ++a[4]; break; case 'F': ++a[5]; break;
+      case 'G': ++a[6]; break; case 'H': ++a[7]; break;
+      case 'I': ++a[8]; break; case 'J': ++a[9]; break;
+      }
+    }
+    for (var i=0; i<10; ++i) {
+      total += a[i];
+      a[i] = (i+1) + ':' + a[i];
+    }
+    segsDisp = '（共' + total + '段&nbsp;<font style="font-size:12px">' + a.join('; ') +'</font>）';
+  }
+
   volNum = ensureInt(volNum, 1);
   if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; sessionStorage.verseNum = null; }
-  var buf = new Buffer('　', title, ' 卷&nbsp;');
+  var buf = new Buffer('　', title, ' 卷');
   for (var i=1; i<=10; ++i) {　
-    if (i > 1) buf.w('&nbsp;&nbsp;');
+    //if (i > 1) buf.w('&nbsp;&nbsp;');
+    var alpha = toAlpha(i);
     if (i == volNum)
-      buf.w('<font style="color:red; background-color:yellow">', toZNum(i), '</font>');
+      buf.w('<font style="color:red; background-color:yellow" title="', alpha, '">', toZNum(i), '</font>');
     else
-      buf.w('<a href="?vid=', toAlpha(i), '">', toZNum(i), '</a>');
+      buf.w('<a href="?vid=', alpha, '" title="', alpha, '">', toZNum(i), '</a>');
   }
-  if (isHaiRen)
-    buf.w('&nbsp;（共分908段&nbsp;<font style="font-size:12px">1:77; 2:91; 3:119; 4:105; 5:52; 6:115; 7:71; 8:123; 9:79; 10:76</font>）');
-  else
-    buf.w('&nbsp;（共分1448段&nbsp;<font style="font-size:12px">1:187; 2:157; 3:179; 4:133; 5:133; 6:154; 7:92; 8:189; 9:129; 10:95</font>）');
+  buf.w('&nbsp;', segsDisp);
   buf.render('volumeNums');
 
   showText(volNum, verseNum);
+}
+
+function verseLink(volNum, vsNum, style) {
+  return '<a' + (style||'') + ' href="javascript:showText(' + volNum + ',' + vsNum + ')">' +
+         digit3RightAligned(vsNum) + '</a>';
 }
 
 function showText(volNum, verseNum) {
@@ -45,10 +69,13 @@ function showText(volNum, verseNum) {
     if (!v) break;
     if (!isAll && (i >= verseNum && i < verseNum+numVerses))
       style = ' style="background:yellow; font-weight:bold"';
-    buf.w('<a', style, ' href="javascript:showText(', volNum, ',', i, ')">', digit3RightAligned(i), '</a> ');
+    if (i == verseNum)
+      buf.w('<font', style, '>', digit3RightAligned(i), '</font> ');
+    else
+      buf.w(verseLink(volNum, i, style), ' ');
     if (i % width === 0) buf.w('<br>');
   }
-  if (!isAll) buf.w('<a href="javascript:showText(', volNum, ', \'all\')">（全部）</a> ');
+  if (!isAll) buf.w('<a href="javascript:showText(', volNum, ', \'all\')" style="font-size:12px">（全部）</a> ');
   buf.w('</td></tr></table>');
   buf.render('verseNums');
 
@@ -59,7 +86,9 @@ function showText(volNum, verseNum) {
     var id = digit3(verseNum+i);
     var v = myVerses[prefix + id];
     if (!v) break;
-    buf.w('<tr><td valign="top" style="font-family:fixed width">', digit3RightAligned(verseNum+i), '&nbsp;</td><td style="color:teal">', v, '</td></tr>');
+    buf.w('<tr><td valign="top" style="font-family:fixed width">',
+          i==0 ? digit3RightAligned(verseNum+i) : verseLink(volNum, verseNum+i),
+          '&nbsp;</td><td style="color:teal">', v, '</td></tr>');
   }
   buf.w('</table>');
   buf.render('verseStage');
