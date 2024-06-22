@@ -38,7 +38,7 @@ function selectVol(title, isHaiRen, volNum, verseNum) {
       buf.w('<a href="?vid=', alpha, '" title="', alpha, '">', toZNum(i), '</a>');
   }
   buf.w('&nbsp;', segsDisp);
-  buf.render('volumeNums');
+  buf.render('volumeNums1', 'volumeNums2');
 
   showText(volNum, verseNum);
 }
@@ -55,6 +55,8 @@ function showText(volNum, verseNum) {
   verseNum = ensureInt(verseNum, 1);
   sessionStorage.verseNum = verseNum;
   var buf = new Buffer();
+
+  // show the text numbers
   buf.w('<table border=0><tr><td>');
   if (volNum < 1 || volNum > 10) {
     buf.render('verseNums');
@@ -97,9 +99,10 @@ function main(isHaiRen) {
   var title = isHaiRen ? '海仁法師《楞嚴經》科判經文' : '王治平《<a href="Wang.html">楞嚴經譯解</a>》經文';
   document.title = isHaiRen ? '海仁法師《楞嚴經》科判經文' : '王治平《楞嚴經譯解》經文';
   w(`<center><table border="0">
-<tr><td align="center" id="volumeNums" style="border-bottom:1px solid black"></td></tr>
+<tr><td align="center" id="volumeNums1" style="border-bottom:1px solid black"></td></tr>
 <tr><td align="center" id="verseNums" style="border-bottom:1px solid black; font-family:fixed width"></td></tr>
 <tr><td style="border-bottom:1px solid black" id="verseStage"></td></tr>
+<tr><td align="center" id="volumeNums2"></td></tr>
 </table>`);
 
   var vid = get('vid'), v, n;

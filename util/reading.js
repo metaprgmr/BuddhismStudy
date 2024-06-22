@@ -22,7 +22,7 @@ function get(name) {
 
 function addjs(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
 function e(id) { return document.getElementById(id) }
-function w() { for(var i in arguments) { var x = arguments[i]; x && document.write(x) } }
+function w() { for(var i in arguments)document.write(arguments[i]) }
 
 function digit2(i, increment) {
   if (!i) i = 0;

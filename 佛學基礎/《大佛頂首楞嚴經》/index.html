@@ -29,7 +29,7 @@ function extLink(file, title, ending, ignoreCircle) {
   if (window['BOOK_BFNN']) file += 'ext';
   writeArticalLink('/books' + subdir + '/' + file + '.htm', title, ending, ignoreCircle);
 }
-function WangLink(i) { w('<a href="WangZhiPing/Wang.html?vid=', i, '">', i+1, '</a>', i<9 ? ' ' : ''); }
+function WangLink(i) { w('<a href="WangZhiPing/Wang.html?vid=', i, '">', i, '</a>', i<10 ? ' ' : ''); }
 </script>
 </head>
 <body><center>
@@ -95,7 +95,6 @@ writeArticalLink("/article2/1875.htm", "　海仁法師《大佛頂首楞嚴經�
   extLink("1884", '10', '　<a href="HaiRengKePan/HaiReng科判.html">科判</a>　', true);
 w('<a href="HaiRengKePan/HaiReng科判Verses.html">經文</a>　<br>');
 writeArticalLink("/article/0145.htm",  "王治平居士《大佛頂首楞嚴經譯解》");
-  WangLink(0);
   WangLink(1);
   WangLink(2);
   WangLink(3);
@@ -105,6 +104,7 @@ writeArticalLink("/article/0145.htm",  "王治平居士《大佛頂首楞嚴經�
   WangLink(7);
   WangLink(8);
   WangLink(9);
+  WangLink(10);
   w('<font style="opacity:0.5">（科判見海仁）</font><br>');
 writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　", '<font style="opacity:0">1 2 3 4 5 6 7 8 9 10　科判</font>　　　　');
 </script>

@@ -9,6 +9,7 @@ a { text-decoration:none }
 .label { color:purple }
 .jielabel { background-color:purple; color:white }
 .jietext { background-color:#e8e8ff }
+.note { font-size:12px }
 .hy { color:lightgray }
 </style>
 <script src="../../../util/reading.js"></script>
@@ -19,40 +20,95 @@ function toZNum(i) { return (i === 10) ? '十' : zNumber(i) }
 function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
 
 // volNum 0 based
-function selectVol(volNum, verseNum) {
+function selectVol(volNum, verseNum) { // volNum is 1-based, as [0] is for the sutra title!
+  var terse = get('terse');
+  if (terse) terse = '&terse=1';
+  if (!volNum) volNum = sessionStorage.volNum;
   volNum = ensureInt(volNum, 0);
   if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; sessionStorage.wangVerseNum = null; }
-  var cnt = 0, buf = new Buffer('<h3>卷&nbsp;');
-  for (var i=0; i<10; ++i) {　
-    var ziCnt = verses[i].length;
-    if (i > 0) buf.w('&nbsp;&nbsp;');
+  if (volNum < 0) volNum = 0;
+  var cnt = 0;
+  var buf = new Buffer('王治平居士《楞嚴經譯解》&nbsp;');
+  for (var i=0; i<=10; ++i) {　
+    var ziCnt = i===0 ? 0 : verses[i].length;
+    if (i === 0) {
+      if (i == volNum)
+        buf.w('<font style="color:red; background-color:yellow">釋題</font>');
+      else
+        buf.w('<a href="javascript:selectVol(-1)">釋題</a>');
+      buf.w('&nbsp;卷');
+      continue;
+    }
+    //if (i > 0) buf.w('&nbsp;');
     if (i == volNum)
-      buf.w('<font style="color:red; background-color:yellow" title="', ziCnt, '段">', toZNum(i+1), '</font>');
+      buf.w('<font style="color:red; background-color:yellow" title="', ziCnt, '段">', toZNum(i), '</font>');
     else
-      buf.w('<a href="?vid=', i, '" title="', ziCnt, '段">', toZNum(i+1), '</a>');
-    console.log('第' + toZNum(i+1) + '卷：' + verses[i].length + '段。');
+      buf.w('<a href="javascript:selectVol(', i, ')" title="', ziCnt, '段">', toZNum(i), '</a>');
+    if (i>0) console.log('第' + toZNum(i) + '卷：' + verses[i].length + '段。');
     cnt += ziCnt;
   }
   console.log('總　共：' + cnt + '段。');
-  buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="WangVerses.html">純經文</a></h3>');
+  if (terse)
+    buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="?vid=', volNum, '">完整版</a>');
+  else
+    buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="?vid=', volNum, '&terse=1">簡潔版</a>');
+  buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="WangVerses.html">純經文</a>',
+        '&nbsp;&nbsp;&nbsp;&nbsp;<a href="../HaiRengKePan/HaiReng科判.html">科判</a>',
+       );
   buf.render('volumeNums1', 'volumeNums2');
 
   showText(volNum, verseNum);
 }
 
+function verseLink(volNum, vsNum, style) {
+  return '<a' + (style||'') + ' href="javascript:showText(' + volNum + ',' + vsNum + ')">' +
+         digit3RightAligned(vsNum) + '</a>';
+}
+
 // volNum 0 based
 function showText(volNum, verseNum) {
-  var isAll = verseNum === 'all';
-  var numVerses = isAll ? 1000 : 10;
+  volNum = ensureInt(volNum, 0);
+  var terse = get('terse'),
+      isAll = verseNum === 'all',
+      numVerses = isAll ? 1000 : 10;
   if (!verseNum) verseNum = sessionStorage.wangVerseNum;
-  verseNum = ensureInt(verseNum, 1);
+  if (isAll) verseNum = 1;
+  else verseNum = ensureInt(verseNum, 1);
   sessionStorage.wangVerseNum = verseNum;
-  var buf = new Buffer();
-  buf.w('<table border=0 cellspacing=0>');
   var vol = verses[volNum];
-  var verseNum = 1;
-  for (var i=0; i<vol.length; ++i) {
-    var j, k, ln = vol[i], hy = w2hyDisp(volNum+1, verseNum);
+
+  // show the text numbers
+  var buf = new Buffer();
+  if (volNum > 0) {
+    buf.w('<table border=0><tr><td>');
+    if (volNum < 0 || volNum >= 11) {
+      buf.w('Volume number out of range: ', volNum);
+      buf.render('verseNums');
+      return;
+    }
+    var width = 20;
+    for (var i=1; i<=vol.length; i++) {
+      var num = digit3(i), style = '';
+      if (!isAll && (i >= verseNum && i < verseNum+numVerses))
+        style = ' style="background:yellow; font-weight:bold"';
+      if (i == verseNum)
+        buf.w('<font', style, '>', digit3RightAligned(i), '</font> ');
+      else
+        buf.w(verseLink(volNum, i, style), ' ');
+      if (i % width === 0) buf.w('<br>');
+    }
+    if (!isAll) buf.w('<a href="javascript:showText(', volNum, ', \'all\')" style="font-size:12px">（全部）</a> ');
+    buf.w('</td></tr></table>');
+  }
+  buf.render('verseNums', 'verseNums2');
+
+  // show the texts
+  buf.w('<table border=0 cellspacing=0>');
+  for (var i=0; i<numVerses; ++i) {
+    var id = digit3(verseNum+i);
+    var j, k, ln = vol[verseNum+i-1];
+    if (!ln) break;
+    var hy = w2hyDisp(volNum, verseNum+i);
     if (hy) hy = '<br><font class=hy>' + hy + '</font>';
     buf.w('<tr>');
     if (typeof ln === 'string') {
@@ -61,13 +117,18 @@ function showText(volNum, verseNum) {
       // first row
       var rows = ln.components.length;
       var rowspan = (rows > 1) ? (' rowspan='+rows) : '';
-      if (ln.type === '正文') {
-        buf.w('<td nowrap align=right valign=top class=label', rowspan, ' style="padding-top:4px; padding-right:5px">', digit3RightAligned(verseNum++), hy, '</td>'); // 【】
-      } else {
+      if (ln.type !== '正文') {
         buf.w('<td', rowspan, ' style="border-top:0px solid #fbbbbb"></td>');
+      } else {
+        var pref = '<td nowrap align=right valign=top class=label' + rowspan + ' style="padding-top:4px; padding-right:5px"';
+        if (terse)
+          buf.w(pref, ' title="', ln.text, '">', digit3RightAligned(verseNum+i),     '</td>');
+        else
+          buf.w(pref,                       '>', digit3RightAligned(verseNum+i), hy, '</td>');
       }
-      buf.w('<td width="400px" valign=top', rowspan, ' style="border-top:0px solid #fbbbbb; padding-right:20px">',
-            '<span class="', (ln.type === '經名') ? 'title' : 'verse', '">', ln.text, '</span></td>');
+      if (!terse)
+        buf.w('<td width="390px" valign=top', rowspan, ' style="border-top:0px solid #fbbbbb; padding-right:20px">',
+              '<span class="', (ln.type === '經名') ? 'title' : 'verse', '">', ln.text, '</span></td>');
 
       if (rows === 0)
         buf.w('<td colspan=3 style="border-top:1px solid #fbbbbb"></td></tr>');
@@ -79,10 +140,10 @@ function showText(volNum, verseNum) {
         if (!c.content)
           ;
         else if (c.content.length === 1)
-          buf.w(c.content[0], '</td></tr>');
+          buf.w(procLinks(c.content[0]), '</td></tr>');
         else {
           for (j=0; j<c.content.length; ++j)
-            buf.w('<p>', c.content[j], '</p>');
+            buf.w('<p>', procLinks(c.content[j]), '</p>');
           buf.w('</td></tr>');
         }
 
@@ -96,10 +157,10 @@ function showText(volNum, verseNum) {
           if (!c.content)
             ;
           else if (c.content.length === 1)
-            buf.w(c.content[0], '</td></tr>');
+            buf.w(procLinks(c.content[0]), '</td></tr>');
           else
             for (k=0; k<c.content.length; ++k)
-              buf.w('<p>', c.content[k], '</p>');
+              buf.w('<p>', procLinks(c.content[k]), '</p>');
           buf.w('</td></tr>');
         }
       }
@@ -108,20 +169,42 @@ function showText(volNum, verseNum) {
   buf.w('</table>');
   buf.render('verseStage');
 }
+
+function procLinks(ln) { // 並且把〈註〉變為<sup>
+  var idx, idx1;
+  ln = ln.replaceAll('〈註', '<sup class=note>〈註').replaceAll('〉', '〉</sup>');
+  idx = ln.indexOf('#[');
+  if (idx < 0) return ln;
+  var ret = ln.substring(0, idx);
+  idx += 2;
+  idx1 = ln.indexOf(']', idx);
+  var ln2 = ln.substring(idx1+1);
+  var lnks = ln.substring(idx,idx1).trim().split(',');
+  var lastVol;
+  for (var i=0; i<lnks.length; ++i) {
+    if (i>0) ret += '，';
+    var a = lnks[i].split(':');
+    if (a[0] != lastVol)
+      ret += '卷' + toZNum(parseInt(a[0]));
+    lastVol = a[0];
+    ret += '<a href="?vid=' + lastVol + '&vs=' + a[1] + '" target="secnd">' + a[1] + '</a>';
+  }
+  return ret + ln2;
+}
 </script>
 </head>
-<body><center>
-
-<h2 title="虽然虛雲老和尚說不必看註解，奈何根性漏劣，且不到出家的福分。還是看看譯解，聊勝於徹底茫然。"
->楞嚴經譯解<br><font style="font-size:18px">王治平居士</font></h2>
+<body bgcolor="#f0f0f0"><center>
 
 <table border="0" width="95%">
-<tr><td align="center" id="volumeNums1"></td></tr>
-<tr><td style="border-bottom:1px solid black" id="verseStage"></td></tr>
+<tr><td align="center" id="volumeNums1" style="border-bottom:1px solid black"
+        title="虽然虛雲老和尚說不必看註解，奈何根性漏劣，且不到出家的福分。還是看看譯解，聊勝於徹底茫然。"></td></tr>
+<tr><td align="center" id="verseNums" style="border-bottom:1px solid black; font-family:fixed width"></td></tr>
+<tr><td style="padding-top:20px; padding-bottom:20px; border-bottom:1px solid black" id="verseStage"></td></tr>
+<tr><td align="center" id="verseNums2" style="border-bottom:1px solid black; font-family:fixed width"></td></tr>
 <tr><td align="center" id="volumeNums2"></td></tr>
 </table>
 <script>
-  selectVol(get('vid') || 0);
+  selectVol(get('vid') || 0, get('vs'));
 </script>
 </center></body></html>
 

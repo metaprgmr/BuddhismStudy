@@ -25,7 +25,9 @@ function addFoTerms() { // first is the saṃskrit term; followed by 0 or more z
       info[key] = ANNOTATE_TYPE; // i.e. FO_TERMS[saṃskrit][annotation] = 2 for getting all annotations for a saṃskrit
     }
   }
-};
+}
+
+function bodhisatva(...) { addFoTerms(...) }
 
 var INT = '#'; // interpretive
 
@@ -66,9 +68,9 @@ addFoTerms('śūraṅgama',        '首楞嚴');
 addFoTerms('samanta-netra',    '普眼');
 addFoTerms('gṛdhrakūṭa',       '耆闍崛');
 addFoTerms('kalpa',            '劫數', '劫波', '劫簸');
-addFoTerms('vyūhakalpa',       '莊嚴劫'); //    past kalpa
-addFoTerms('bhadrakalpa',      '賢劫');   // present kalpa
-addFoTerms(null,               '星宿劫'); // future kalpa TODO
+addFoTerms('vyūha-kalpa',      '莊嚴劫'); //    past kalpa
+addFoTerms('bhadra-kalpa',     '賢劫');   // present kalpa
+addFoTerms('nakṣatra-kalpa',   '星宿劫'); //  future kalpa
 addFoTerms('saṃghārāma',       '僧伽', '僧伽藍摩');
 addFoTerms('mano-vijñāna',     '意識');
 addFoTerms('manas-vijñāna',    '末那識');
@@ -92,24 +94,24 @@ addFoTerms('cakravāda-parvata', '鐵輪圍山', '輪圍山', '金剛山', '金�
 addFoTerms('yama',             '閻摩', '琰魔', '閻魔', '夜摩', '剡魔', '焰摩');
 addFoTerms('yamaraja',         '閻摩羅闍', '閻魔大王', '夜摩天王');
 addFoTerms('naraka',           '地獄', '捺落迦', '那落迦', '奈落', '泥梨耶', '泥梨', '泥犁');
-addFoTerms('vinaya',           '律', INT, '鼻那夜', '毘那耶', '毗尼', '毗尼耶', '鞞尼迦');
+addFoTerms('vinaya',           '律', '戒律', INT, '鼻那夜', '毘那耶', '毗尼', '毗尼耶', '鞞尼迦');
 
 addFoTerms('lakṣana-vyañjana',      '莊嚴相好', '相好');
 addFoTerms('mahā-puruṣa lakṣaṇa',   '三十二相');
 addFoTerms('aśīty-anuvyañjanāni',   '八十種好');
 
 addFoTerms('sagara-nagaraja',  '娑竭羅龍王');
-addFoTerms('kṣitigarbha',      '地藏菩薩', '地藏王菩薩');
-addFoTerms('avalokiteśvara',   '觀世音', '觀世音菩薩');
-addFoTerms('mahāstramaprapta', '大勢至', '大勢至菩薩');
-addFoTerms('samantabhadra',    '普賢', '普賢菩薩', '普賢王菩薩');
-addFoTerms('maitreya',         '彌勒', '彌勒菩薩');
+bodhisatva('kṣitigarbha',      '地藏菩薩', '地藏王菩薩');
+bodhisatva('avalokiteśvara',   '觀世音', '觀世音菩薩');
+bodhisatva('mahāstrāmaprapta', '大勢至', '大勢至菩薩');
+bodhisatva('samantabhadra',    '普賢', '普賢菩薩', '普賢王菩薩');
+bodhisatva('maitreya',         '彌勒', '彌勒菩薩');
+bodhisatva('a-jita',           '阿逸多菩薩', '阿逸多', INT, '彌勒', '彌勒菩薩');
 addFoTerms('sudhana',          '善財');
 addFoTerms('sudhana-kumāra',   '善財童子');
-addFoTerms('mañju-śrī-kumāra-bhūta',  '文殊師利法王子', '文殊師利菩薩', '文殊師利');
-addFoTerms('a-jita',           '阿逸多菩薩', '阿逸多');
-addFoTerms('gandha-hastin',    '乾陀訶提菩薩');
-addFoTerms('nityodyukta',      '常精進菩薩');
+bodhisatva('mañju-śrī-kumāra-bhūta',  '文殊師利法王子', '文殊師利菩薩', '文殊師利');
+bodhisatva('gandha-hastin',    '乾陀訶提菩薩');
+bodhisatva('nityodyukta',      '常精進菩薩');
 addFoTerms('vairocana',        '毘盧遮那', INT, '遍一切處');
 addFoTerms('cakravartin',      '轉輪王');
 addFoTerms('upāsaka',          '優婆塞', '烏婆塞', '伊蒲塞', '優婆婆柯', '鄔波索迦',
@@ -182,6 +184,8 @@ const FO_ZI = { // https://zh.wiktionary.org/wiki/罽
 '洎':  'jì',
 '刱':  '創',
 '稽顙': 'qǐ sǎng',
+'隳':  'huī',
+'腠':  'còu',
 '〇':  '' };
 
 
