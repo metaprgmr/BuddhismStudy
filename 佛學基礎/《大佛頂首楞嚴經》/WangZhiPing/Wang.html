@@ -10,6 +10,7 @@ a { text-decoration:none }
 .jielabel { background-color:purple; color:white }
 .jietext { background-color:#e8e8ff }
 .note { font-size:12px }
+.seg { font-size:10px; color:red }
 .hy { color:lightgray }
 </style>
 <script src="../../../util/reading.js"></script>
@@ -121,14 +122,15 @@ function showText(volNum, verseNum) {
         buf.w('<td', rowspan, ' style="border-top:0px solid #fbbbbb"></td>');
       } else {
         var pref = '<td nowrap align=right valign=top class=label' + rowspan + ' style="padding-top:4px; padding-right:5px"';
+        var numDisp = i==0 ? digit3RightAligned(verseNum+i) : verseLink(volNum, verseNum+i);
         if (terse)
-          buf.w(pref, ' title="', ln.text, '">', digit3RightAligned(verseNum+i),     '</td>');
+          buf.w(pref, ' title="', ln.text, '">', numDisp,     '</td>');
         else
-          buf.w(pref,                       '>', digit3RightAligned(verseNum+i), hy, '</td>');
+          buf.w(pref,                       '>', numDisp, hy, '</td>');
       }
       if (!terse)
         buf.w('<td width="390px" valign=top', rowspan, ' style="border-top:0px solid #fbbbbb; padding-right:20px">',
-              '<span class="', (ln.type === '經名') ? 'title' : 'verse', '">', ln.text, '</span></td>');
+              '<span class="', (ln.type === '經名') ? 'title' : 'verse', '">', procDisp(ln.text), '</span></td>');
 
       if (rows === 0)
         buf.w('<td colspan=3 style="border-top:1px solid #fbbbbb"></td></tr>');
@@ -140,10 +142,10 @@ function showText(volNum, verseNum) {
         if (!c.content)
           ;
         else if (c.content.length === 1)
-          buf.w(procLinks(c.content[0]), '</td></tr>');
+          buf.w(procRefs(c.content[0]), '</td></tr>');
         else {
           for (j=0; j<c.content.length; ++j)
-            buf.w('<p>', procLinks(c.content[j]), '</p>');
+            buf.w('<p>', procRefs(c.content[j]), '</p>');
           buf.w('</td></tr>');
         }
 
@@ -157,10 +159,10 @@ function showText(volNum, verseNum) {
           if (!c.content)
             ;
           else if (c.content.length === 1)
-            buf.w(procLinks(c.content[0]), '</td></tr>');
+            buf.w(procRefs(c.content[0]), '</td></tr>');
           else
             for (k=0; k<c.content.length; ++k)
-              buf.w('<p>', procLinks(c.content[k]), '</p>');
+              buf.w('<p>', procRefs(c.content[k]), '</p>');
           buf.w('</td></tr>');
         }
       }
@@ -170,9 +172,13 @@ function showText(volNum, verseNum) {
   buf.render('verseStage');
 }
 
-function procLinks(ln) { // 並且把〈註〉變為<sup>
+function procDisp(ln) { // 並且把{}變為<sup class=seg>
+  return ln.replaceAll('{', '<sup class=seg>').replaceAll('}', '</sup>');
+}
+
+function procRefs(ln) { // 並且把〈註〉變為<sup class=note>, {}變為<sup class=seg>
   var idx, idx1;
-  ln = ln.replaceAll('〈註', '<sup class=note>〈註').replaceAll('〉', '〉</sup>');
+  ln = procDisp(ln).replaceAll('〈註', '<sup class=note>〈註').replaceAll('〉', '〉</sup>');
   idx = ln.indexOf('#[');
   if (idx < 0) return ln;
   var ret = ln.substring(0, idx);

@@ -2,9 +2,10 @@ function toZNum(i) { return (i === 10) ? '十' : zNumber(i) }
 function toAlpha(i) { return ' ABCDEFGHIJKL'[i] }
 function ensureInt(x, defVal) { return (!x || (x == '') || isNaN(x)) ? defVal : ((typeof x === 'string') ? parseInt(x) : x) }
 
-var myVerses, segsDisp;
+var myVerses, segsDisp, verseNumName;
 
 function selectVol(title, isHaiRen, volNum, verseNum) {
+  verseNumName = isHaiRen ? 'verseNum' : 'wangVerseNum';
   myVerses = isHaiRen ? getHaiRenVerses() : getWangVerses();
   if (!segsDisp) {
     var total = 0, a = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
@@ -27,7 +28,10 @@ function selectVol(title, isHaiRen, volNum, verseNum) {
   }
 
   volNum = ensureInt(volNum, 1);
-  if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; sessionStorage.verseNum = null; }
+  if (sessionStorage.volNum != volNum) {
+    sessionStorage.volNum = volNum;
+    sessionStorage[verseNumName] = null;
+  }
   var buf = new Buffer('　', title, ' 卷');
   for (var i=1; i<=10; ++i) {　
     //if (i > 1) buf.w('&nbsp;&nbsp;');
@@ -51,9 +55,9 @@ function verseLink(volNum, vsNum, style) {
 function showText(volNum, verseNum) {
   var isAll = verseNum === 'all';
   var numVerses = isAll ? 1000 : 10;
-  if (!verseNum) verseNum = sessionStorage.verseNum;
+  if (!verseNum) verseNum = sessionStorage[verseNumName];
   verseNum = ensureInt(verseNum, 1);
-  sessionStorage.verseNum = verseNum;
+  sessionStorage[verseNumName] = verseNum;
   var buf = new Buffer();
 
   // show the text numbers
@@ -95,6 +99,7 @@ function showText(volNum, verseNum) {
   buf.w('</table>');
   buf.render('verseStage');
 }
+
 function main(isHaiRen) {
   var title = isHaiRen ? '海仁法師《楞嚴經》科判經文' : '王治平《<a href="Wang.html">楞嚴經譯解</a>》經文';
   document.title = isHaiRen ? '海仁法師《楞嚴經》科判經文' : '王治平《楞嚴經譯解》經文';

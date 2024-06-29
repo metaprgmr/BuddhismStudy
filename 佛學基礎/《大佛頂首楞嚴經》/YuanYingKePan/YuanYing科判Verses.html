@@ -3,6 +3,10 @@
 <meta charset="utf-8">
 <title>圓瑛大師《楞嚴經講義》科判經文</title>
 <link rel="stylesheet" href="../../../util/kepan.css">
+<style>
+inv { opacity:0 }
+dim { opacity:0.3 }
+</style>
 <script src="../../../env-sample.js"></script>
 <script src="../../../env.js"></script>
 <script src="../../../util/reading.js"></script>
@@ -77,18 +81,20 @@ function showText(volNum) { // volNum: 1-based
         if (i < v.length-1) {
           var next = v[i+1];
           if (!next[0].endsWith(id + 'b')) // a single, whole segment.
-            end = '<font style="opacity:0">a</font>';
+            end = '<inv>a</inv>';
+          else
+            end = '<dim>a</dim>';
         }
         else if (i == v.length-1)
-          end = '<font style="opacity:0">a</font>';
+          end = '<inv>a</inv>';
         if (id.startsWith('0')) {
           if (id.startsWith('00'))
-            id = '<font style="opacity:0">00</font>' + id.substring(2);
+            id = '<inv>00</inv>' + id.substring(2);
           else
-            id = '<font style="opacity:0">0</font>' + id.substring(1);
+            id = '<inv>0</inv>' + id.substring(1);
         }
       } else { // 'b', 'c', 'd', ...
-        id = id.substring(id.length-1);
+        id = '<dim>' + id.substring(id.length-1) + '</dim>';
       }
       buf.w('<tr><td valign="top" align="right" style="color:#333399">', id, end, '&nbsp;&nbsp;</td>',
             '<td style="color:teal" title="', info, '">', row[1], '</td></tr>');
@@ -96,10 +102,10 @@ function showText(volNum) { // volNum: 1-based
   }
   buf.w('</table>');
   buf.render('verseStage');
-  if (volNum <= 1) buf.w('<font style="opacity:0.3">&lt;</font>');
+  if (volNum <= 1) buf.w('<dim>&lt;</dim>');
   else buf.w('<a href="?vid=', volNum-1, '" title="《講義》卷', toZNum(volNum-1), '">&lt;</a>');
   buf.w('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-  if (volNum >= 24) buf.w('<font style="opacity:0.3">&gt;</font>');
+  if (volNum >= 24) buf.w('<dim>&gt;</dim>');
   else buf.w('<a href="?vid=', volNum+1, '" title="《講義》卷', toZNum(volNum+1), '">&gt;</a>');
   buf.render('actions');
 }
