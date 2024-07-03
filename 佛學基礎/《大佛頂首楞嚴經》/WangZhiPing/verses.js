@@ -5412,7 +5412,7 @@ function getWangVerses() {
       if (vol[j].type != '正文') continue;
       var id = '' + (verseNum++);
       while (id.length < 3) id = '0' + id;
-      ret[prefix + id] = vol[j].text.replace(/{[^}*]}/g, '');
+      ret[prefix + id] = vol[j].text.replace(/{[^}]*}/g, '');
     }
   }
   //console.log('total', total);

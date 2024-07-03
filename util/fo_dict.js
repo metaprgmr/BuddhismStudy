@@ -27,7 +27,7 @@ function addFoTerms() { // first is the saṃskrit term; followed by 0 or more z
   }
 }
 
-function bodhisatva(...) { addFoTerms(...) }
+function bodhisatva(...a) { addFoTerms(...a) }
 
 var INT = '#'; // interpretive
 
