@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>《地藏本願經》青蓮大師科判</title>
+<link rel="stylesheet" href="../../../util/kepan.css">
+<script src="../../../util/reading.js"></script>
+<script src="../../../util/kepan.js"></script>
+<script src="dzj-kepan.js"></script>
+</head>
+<body><center>
+
+<h2>《地藏本願經》青蓮大師科判</h2>
+<div id="stage"></div>
+</center></body></html>
+
+<script>
+var kp0Link = '<a href="javascript:writeKP(null,0)">詳細版</a>&nbsp;&nbsp;',
+    kp1Link = '<a href="javascript:writeKP(null,1)">精簡版</a>&nbsp;&nbsp;',
+    kp2Link = '<a href="javascript:writeKP(null,2)">極精版</a>&nbsp;&nbsp;',
+    kp0Active = '<span style="font-weight:bold; background-color:yellow">詳細版</span>&nbsp;&nbsp;',
+    kp1Active = '<span style="font-weight:bold; background-color:yellow">精簡版</span>&nbsp;&nbsp;',
+    kp2Active = '<span style="font-weight:bold; background-color:yellow">極精版</span>&nbsp;&nbsp;',
+    verseLink = '<a href="dzjkz-verses.html">經文</a>';
+
+function writeKP(divId, option) {
+  option = ensureInt(option, 1);
+  var buf = new Buffer();
+  buf.w('<table border="0" cellspacing="0px" cellpadding="0" style="min-width:500px"><caption>');
+  switch (option) {
+  case 0:  buf.w(kp0Active, kp1Link, kp2Link, verseLink); break;
+  case 1:  buf.w(kp0Link, kp1Active, kp2Link, verseLink); break;
+  case 2:  buf.w(kp0Link, kp1Link, kp2Active, verseLink); break;
+  }
+  buf.w('</caption>');
+
+  // Write the main body
+  new KePanDoc().addAll(kepan).writeAsTRs(buf, option);
+  buf.w('</table>');
+
+  if (divId) lastDivId = divId; else divId = lastDivId;
+  buf.render(divId);
+}
+
+writeKP('stage');
+</script>

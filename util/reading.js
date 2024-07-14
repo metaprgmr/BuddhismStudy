@@ -7,6 +7,7 @@ const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999
   if (typeof n === 'string') n = parseInt(n);
   if (n == 0) return zdigits[0];
+  if (n == 10) return '十';
   var d100 = Math.floor(n / 100);
   var d10  = Math.floor((n-d100*100) / 10);
   var d1   = n - d100 * 100 - d10 * 10;
