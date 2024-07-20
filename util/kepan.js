@@ -163,7 +163,10 @@ class KePanDoc {
           buf.w('<td class=VERSE>', ln.verseText || '', '</td>');
         } else {
           var eid = '_' + ln.verseNum;
-          buf.w('<td onclick="flipVisible(\'', eid, '\')"><span class=VERSE>', ln.verseText || '', '</span><span style="color:gray">□</span>',
+          var hint = ln.plainText, maxlen = 100;
+          if (hint.length > maxlen) hint = hint.substring(0,maxlen) + '......';
+          buf.w('<td onclick="flipVisible(\'', eid, '\')"><span class=VERSE>', ln.verseText || '',
+                '</span><span style="color:gray" title="', hint, '">□</span>',
                 '<div id="', eid, '" class=PLAIN style="padding-top:5px; padding-bottom:5px; display:none">', ln.plainText, '</div></td>');
         }
       }

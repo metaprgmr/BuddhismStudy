@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>《楞嚴經》提要</title>
+<style>
+hai { color:red }
+</style>
+<script src="s1.js"></script>
+<script src="s2.js"></script>
+<script src="s3.js"></script>
+<script src="s4.js"></script>
+<script src="s5.js"></script>
+<script src="s6.js"></script>
+<script src="s7.js"></script>
+<script src="s8.js"></script>
+<script src="s9.js"></script>
+<script src="sX.js"></script>
+</head>
+<body bgcolor="#f0f0f0"><center>
+<table border="0" cellspacing="0px">
+<script>
+  function w() { for(var i in arguments)document.write(arguments[i]); }
+
+  var H=30, pg=0, reHR = /^.*\[HR.*$/;
+
+  for (var i=0; i<lines.length; ++i) {
+    var col=0, lns = lines[i].split('\n');
+    for (var isDone = false; !isDone; ++col) {
+      if (pg+col > 0) w('<td rowspan="2">&nbsp;&nbsp;&nbsp;</td>');
+      w('<td valign="top"><pre>');
+      for (var j=0; j<H; ++j) {
+        var ln = lns[col*H+j];
+        isDone = ln == undefined;
+        if (!isDone) {
+          ln = ln.replace(/\.$/, '');
+          var a = reHR.exec(ln);
+          if (a) w(a[0].substring(0,6), '<hai>', a[0].substring(6), '</hai><br>');
+          else w(ln, '<br>');
+        }
+      }
+      w('<pre></td>');
+    }
+    pg += col;
+  }
+  w('</tr><tr>');
+  for (i=1; i<=pg; ++i)
+    w('<td align="center" style="border-top:1px solid black">', i, '</td>');
+  w('</tr>');
+</script>
+</table>
+</center></body></html>
+
