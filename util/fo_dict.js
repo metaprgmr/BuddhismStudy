@@ -31,10 +31,15 @@ function bodhisatva(...a) { addFoTerms(...a) }
 
 var INT = '#'; // interpretive
 
+
+addFoTerms('sthaviravāda', '上座部', 'Pali：theravāda', '他鞞羅部', '體毘履部', '他毗利部', '他毘梨部');
+addFoTerms('mahāsāṃghika', '大眾部', '摩訶僧祇部', '僧祇部', '聖大眾部');
+
 addFoTerms('Gaṇḍavyūha-Sūtra', '華嚴經');
 addFoTerms('Kṣitigarbha Bodhisattva Pūrvapraṇidhāna Sūtra', '地藏菩薩本願經');
 addFoTerms('pariṇāmanā',       '回向', '施向', '回施');
 
+addFoTerms('aśvaghoṣa',        '馬鳴');
 addFoTerms('kumārajīva',       '鳩摩羅什');
 
 addFoTerms('catvāri saṃgraha-vastūni', '四攝法');

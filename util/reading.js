@@ -92,31 +92,48 @@ function alignedList(subject, content, bullet) {
 // Buffer
 class Buffer {
   constructor() {
-    this.buf = '';
-    for (var i in arguments) { var x = arguments[i]; this.buf += x }
+    this.bufList = [];
+    var tmp = '';
+    for (var i in arguments) { var x = arguments[i]; tmp += x }
+    if (tmp) this.bufList.push(tmp);
   }
 
-  w() { for (var i in arguments) { var x = arguments[i]; x && (this.buf += x) } }
+  w() {
+    var ret = '';
+    for (var i in arguments) ret += arguments[i];
+    if (ret) this.bufList.push(ret);
+    return (this.bufList.length < 1024) ? this : this.condense();
+  }
 
   prepend() {
-    var pre = '';
-    for (var i in arguments) { var x = arguments[i]; pre += x }
-    this.buf = pre + this.buf;
+    var ret = '';
+    for (var i in arguments) {
+      var x = arguments[i];
+      x && (ret += x);
+    }
+    if (ret) this.bufList.unshift(ret);
+    return this;
   }
 
   // renders to one or more elements.
   // returns the text, and clears the internal content.
   render() {
-    var ret = this.buf;
+    var ret = this.text();
     for (var i in arguments) {
       var el = e(arguments[i]);
       el && (el.innerHTML = ret);
     }
-    this.buf = '';
+    this.bufList = [];
     return ret;
   }
 
-  text() { return this.buf }
+  text() { return this.bufList.join('') }
+
+  condense() {
+    if (this.bufList.length > 100)
+      this.bufList = [ this.text() ];
+    return this;
+  }
 
 } // end of Buffer.
 
