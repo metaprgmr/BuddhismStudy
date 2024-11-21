@@ -1,6 +1,6 @@
 // 採自 http://www.fodizi.tw/fojing/other/10412.html
 
-const this_book = new MyBookInfo('般舟三昧經‧菩薩四事', '後漢月支三藏支婁迦讖譯')
+new MyBookInfo('般舟三昧經‧菩薩四事', '後漢月支三藏支婁迦讖譯')
 .set('paraPrefix', '')
 .addContent(
 `

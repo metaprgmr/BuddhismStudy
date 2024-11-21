@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('了凡四訓', '袁了凡居士 著').addContent(
+new MyBookInfo('了凡四訓', '袁了凡居士 著').addContent(
 
 `chapter#第一篇　立命之學
 

@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('般若波羅蜜多心經', '唐　三藏法師玄奘　譯')
+new MyBookInfo('般若波羅蜜多心經', '唐　三藏法師玄奘　譯')
 .set('paraPrefix', '')
 .addContent(
 '觀自在菩薩，行深般若波羅蜜多時，' +

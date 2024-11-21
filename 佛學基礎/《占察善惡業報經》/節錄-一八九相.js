@@ -1,5 +1,4 @@
-
-const this_book = new MyBookInfo('占經•一八九相節錄', '天竺三藏菩提燈譯')
+new MyBookInfo('占經•一八九相節錄', '天竺三藏菩提燈譯')
 //.setImage(window['IMAGE_KSITIGARBHA'])
 .set('paraPrefix', '')
 .set('breakLen', 27)

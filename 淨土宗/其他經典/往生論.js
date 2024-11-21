@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('無量壽經優波提舍願生偈', '<span title="Vasubandhu 世親菩薩 天親菩薩">婆藪槃豆菩薩</span>造　元魏天竺三藏菩提流支譯')
+new MyBookInfo('無量壽經優波提舍願生偈', '<span title="Vasubandhu 世親菩薩 天親菩薩">婆藪槃豆菩薩</span>造　元魏天竺三藏菩提流支譯')
 .setImage(window['IMAGE_AMITABHA'])
 .addContent(
 `

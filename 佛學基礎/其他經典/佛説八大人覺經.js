@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('佛説八大人覺經', '後漢沙門 安世高 譯')
+new MyBookInfo('佛説八大人覺經', '後漢沙門 安世高 譯')
 .set('paraPrefix', '')
 .addContent(
 `

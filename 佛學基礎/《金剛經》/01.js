@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('金剛般若波羅蜜經', '姚秦三藏法師鳩摩羅什譯　梁昭明王子斷分', '姚秦三藏法師鳩摩羅什譯')
+new MyBookInfo('金剛般若波羅蜜經', '姚秦三藏法師鳩摩羅什譯　梁昭明王子斷分', '姚秦三藏法師鳩摩羅什譯')
                   .set('chapterTitleStyle', 'chaptertitlesmall')
                   .setImage(window['IMAGE_SAKYAMUNI'])
 //                  .set('paraPrefix', '')

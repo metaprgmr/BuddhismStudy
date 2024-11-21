@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('華嚴經第四會夜摩天宮‧覺林菩薩偈', '覺林菩薩')
+new MyBookInfo('華嚴經第四會夜摩天宮‧覺林菩薩偈', '覺林菩薩')
                   .set('paraPrefix', '')
                   .addContent(
 `

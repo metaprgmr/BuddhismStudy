@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('佛說法滅盡經', '僧祐錄中失譯經人名今附宋錄')
+new MyBookInfo('佛說法滅盡經', '僧祐錄中失譯經人名今附宋錄')
 .set('paraPrefix', '')
 .addContent(
 `

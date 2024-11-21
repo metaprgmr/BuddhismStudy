@@ -1,5 +1,4 @@
-
-const this_book = new MyBookInfo('占察善惡業報經', '天竺三藏菩提燈譯')
+new MyBookInfo('占察善惡業報經', '天竺三藏菩提燈譯')
 .setImage(window['IMAGE_KSITIGARBHA'])
 .set('noChapterTitles', true) // 段落標題為我所加，缺乏權威，僅作參考，平時湮去
 //.set('paraPrefix', '')

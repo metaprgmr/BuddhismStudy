@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('六祖大師法寶壇經', '風旛報恩光孝禪寺住持嗣祖比丘宗寶編')
+new MyBookInfo('六祖大師法寶壇經', '風旛報恩光孝禪寺住持嗣祖比丘宗寶編')
 //.set('paraPrefix', '')
 .addContent(
 

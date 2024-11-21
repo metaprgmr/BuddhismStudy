@@ -22,7 +22,7 @@ const wishes = [
   '樹現佛剎願', '徹照十方願', '寶香普熏願', '普等三昧願', '定中供佛願', 
   '獲陀羅尼願', '聞名得忍願', '現證不退願' ];
 
-const this_book = new MyBookInfo('佛說大乘無量壽莊嚴清淨平等覺經', '夏蓮居居士會集')
+new MyBookInfo('佛說大乘無量壽莊嚴清淨平等覺經', '夏蓮居居士會集')
 .setImage(window['IMAGE_AMITABHA'])
 .setTOC({ itemsPerLine:4, itemLen:8 })
 .set('breakLen', undefined)

@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('大乘起信論', '馬鳴菩薩造 梁真諦三藏譯')
+new MyBookInfo('大乘起信論', '馬鳴菩薩造 梁真諦三藏譯')
 .set('paraPrefix', '')
 .addContent(
 `

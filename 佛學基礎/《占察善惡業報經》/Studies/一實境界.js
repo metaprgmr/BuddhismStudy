@@ -1,5 +1,4 @@
-
-const this_book = new MyBookInfo('占察善惡業報經‧一實境界', '天竺三藏菩提燈譯')
+new MyBookInfo('占察善惡業報經‧一實境界', '天竺三藏菩提燈譯')
 //.set('paraPrefix', '')
 .addContent(
 

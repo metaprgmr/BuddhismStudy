@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('佛說觀無量壽佛經', '劉宋西域三藏法師彊良耶舍 譯')
+new MyBookInfo('佛說觀無量壽佛經', '劉宋西域三藏法師彊良耶舍 譯')
 .setImage(window['IMAGE_AMITABHA'])
 .addContent(
 

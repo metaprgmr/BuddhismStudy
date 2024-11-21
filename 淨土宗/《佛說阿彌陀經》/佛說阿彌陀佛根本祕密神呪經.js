@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('佛說阿彌陀佛根本祕密神呪經', '曹魏朝三藏菩提流支奉詔譯')
+new MyBookInfo('佛說阿彌陀佛根本祕密神呪經', '曹魏朝三藏菩提流支奉詔譯')
 .setImage(window['IMAGE_AMITABHA'])
 .addContent(
 `

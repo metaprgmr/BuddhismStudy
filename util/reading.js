@@ -105,6 +105,10 @@ class Buffer {
     return (this.bufList.length < 1024) ? this : this.condense();
   }
 
+  append(s) { // for performance
+    this.bufList.push(s);
+  }
+
   prepend() {
     var ret = '';
     for (var i in arguments) {
@@ -127,11 +131,15 @@ class Buffer {
     return ret;
   }
 
-  text() { return this.bufList.join('') }
+  text() { 
+    var s = this.bufList.join('')
+    this.bufList = [ s ];
+    return s;
+  }
 
   condense() {
     if (this.bufList.length > 100)
-      this.bufList = [ this.text() ];
+      this.text();
     return this;
   }
 
@@ -151,6 +159,7 @@ function isHanZi(x)       { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpun
 function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncs.indexOf(x) < 0); }
 function isASCII(str) { return /^[\x00-\xFF]*$/.test(str) }
 
+var allHanZi = {};
 function countHanZi(txt) {
   var cnt = 0;
   const len = txt ? txt.length : 0;
@@ -168,7 +177,10 @@ function countHanZi(txt) {
       }
       break;
     default:
-      if (isHanZi(c)) ++cnt;
+      if (isHanZi(c)) {
+        ++cnt;
+        allHanZi[c] = true;
+      }
       break;
     }
   }
@@ -459,8 +471,14 @@ function processText(seg, segNum, verseNum) {
     return ret;
 }
 
+function printHanZiUsage(bi) {
+  var cnt = Object.keys(allHanZi).length;
+  var perc = (cnt / bi.ziCount * 100).toFixed(1);
+  console.log(`《${bi.title}》共${bi.ziCount}字。使用漢字：${cnt}個 (${perc}%)。`);
+}
+
 function render(id, bookInfo, chapterNum, chBaseUrl) {
-  console.log('《' + bookInfo.title + '》共' + bookInfo.ziCount + '字。');
+  printHanZiUsage(bookInfo);
   const el = e(id);
   el.innerHTML = processBookContent(id, bookInfo, chapterNum, chBaseUrl, true).join('');
   if (bookInfo.ziCount)
@@ -468,7 +486,7 @@ function render(id, bookInfo, chapterNum, chBaseUrl) {
 }
 
 function renderReading(id, bookInfo, chapterNum, chBaseUrl) {
-  console.log('《' + bookInfo.title + '》共' + bookInfo.ziCount + '字。');
+  printHanZiUsage(bookInfo);
   processBookContent(id, bookInfo, chapterNum, chBaseUrl);
   bookInfo.elemId = id;
   bookInfo.renderReader();
@@ -487,6 +505,8 @@ const KNOWN_PREFICES = {
   'note':       true, // TODO
 };
 
+var this_book; // the latest MyBookInfo is set here, in case a singleton is intended.
+var all_books = []; // for stats
 class MyBookInfo {
   constructor(title, desc, descNoChapterTitles) {
     this.noimg = noimg; // global
@@ -519,6 +539,8 @@ class MyBookInfo {
       titledesc: 28
     };
     this.chaptersOrig = [];
+    this_book = this;
+    all_books.push(this);
   }
 
 //  setSelectedChapters(chNums) {

@@ -1,5 +1,4 @@
-
-const this_book = new MyBookInfo('大乘大集地藏十輪經•卷四', '三藏法師玄奘奉詔譯')
+new MyBookInfo('大乘大集地藏十輪經•卷四', '三藏法師玄奘奉詔譯')
 .setImage(window['IMAGE_KSITIGARBHA'])
 .set('paraPrefix', '')
 .addContent(

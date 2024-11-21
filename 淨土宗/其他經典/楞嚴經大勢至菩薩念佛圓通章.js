@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('大勢至菩薩念佛圓通章', '唐天竺沙門般剌密帝譯')
+new MyBookInfo('大勢至菩薩念佛圓通章', '唐天竺沙門般剌密帝譯')
 .setImage(window['IMAGE_AMITABHA'])
 .addContent(
 

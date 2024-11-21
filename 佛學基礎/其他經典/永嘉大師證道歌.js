@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('永嘉大師證道歌', '永嘉大師')
+new MyBookInfo('永嘉大師證道歌', '永嘉大師')
                   .set('paraPrefix', '')
                   .addContent(
 '#君不見/',

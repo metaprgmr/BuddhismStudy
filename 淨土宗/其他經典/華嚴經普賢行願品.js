@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('大方廣佛華嚴經普賢行願品', '唐罽賓國三藏般若奉詔譯')
+new MyBookInfo('大方廣佛華嚴經普賢行願品', '唐罽賓國三藏般若奉詔譯')
 .setImage(window['IMAGE_AMITABHA'])
 .addContent(
 

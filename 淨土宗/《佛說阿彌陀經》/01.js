@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('佛說阿彌陀經', '姚秦三藏法師鳩摩羅什譯')
+new MyBookInfo('佛說阿彌陀經', '姚秦三藏法師鳩摩羅什譯')
 .setImage(window['IMAGE_AMITABHA'])
 .addContent(
 

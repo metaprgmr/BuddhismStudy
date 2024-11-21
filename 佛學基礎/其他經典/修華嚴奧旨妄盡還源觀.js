@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('修華嚴奧旨妄盡還源觀', '賢首國師著')
+new MyBookInfo('修華嚴奧旨妄盡還源觀', '賢首國師著')
 //.set('paraPrefix', '')
 .setImage({uri:'../images/修華嚴奧旨妄盡還源觀.png', width:681, height:942 })
 .addContent(

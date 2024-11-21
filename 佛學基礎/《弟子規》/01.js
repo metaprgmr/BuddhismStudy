@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('弟子規').addContent(preprocess(
+new MyBookInfo('弟子規').addContent(preprocess(
 
 `chapter#總敘
 

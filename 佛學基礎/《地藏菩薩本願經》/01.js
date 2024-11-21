@@ -1,5 +1,4 @@
-
-const this_book = new MyBookInfo('地藏菩薩本願經', '唐于闐國三藏沙門實叉難陀譯')
+new MyBookInfo('地藏菩薩本願經', '唐于闐國三藏沙門實叉難陀譯')
 .setImage(window['IMAGE_KSITIGARBHA'])
 .set('breakLen', undefined)
 .set('paraPrefix', '')
@@ -1869,7 +1868,3 @@ chapter#囑累人天品第十三
 
 |<b>地藏菩薩本願經</b>
 `);
-
-
-this_book.printStats();
-

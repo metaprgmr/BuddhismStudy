@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('佛說阿彌陀佛根本祕密神呪經•增插部分')
+new MyBookInfo('佛說阿彌陀佛根本祕密神呪經•增插部分')
 .set('paraPrefix', '')
 .addContent(
 `

@@ -1,4 +1,4 @@
-const this_book = new MyBookInfo('太上感應篇').addContent(
+new MyBookInfo('太上感應篇').addContent(
 
 '太上曰：「禍福無門，惟人自召；善惡之報，如影隨形。」',
 
