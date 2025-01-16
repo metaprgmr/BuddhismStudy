@@ -154,8 +154,11 @@ class KePanDoc {
         idDisp = '';
       if (idDisp.endsWith('000')) idDisp = '◼&nbsp;';
       buf.w('<tr>');
-      if (terseLevel !== -1)
-        buf.w(td1, anchor, ln.text, '&nbsp;</td>', td2, idDisp, '&nbsp;</td>');
+      if (terseLevel !== -1) {
+        var txt = ln.text, idx = txt.indexOf('正文卷第');
+        if (idx > 0) txt = txt.substring(0, idx) + '<span class="keyline">' + txt.substring(idx) + '</span>';
+        buf.w(td1, anchor, txt, '&nbsp;</td>', td2, idDisp, '&nbsp;</td>');
+      }
       else if (!ln.verseText)
         continue;
       if (showVerse) {

@@ -24,6 +24,9 @@ function get(name) {
 function addjs(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
 function e(id) { return document.getElementById(id) }
 function w() { for(var i in arguments)document.write(arguments[i]) }
+function renderText(id, txt) { var el = e(id); el && (el.innerHTML = txt); }
+function addClass(id, cls) { var el = e(id); el && el.classList.add(cls); } 
+function removeClass(id, cls) { var el = e(id); el && el.classList.remove(cls); } 
 
 function digit2(i, increment) {
   if (!i) i = 0;
@@ -91,12 +94,7 @@ function alignedList(subject, content, bullet) {
 
 // Buffer
 class Buffer {
-  constructor() {
-    this.bufList = [];
-    var tmp = '';
-    for (var i in arguments) { var x = arguments[i]; tmp += x }
-    if (tmp) this.bufList.push(tmp);
-  }
+  constructor() { this.bufList = Array.from(arguments); }
 
   w() {
     var ret = '';
