@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>佛咒集</title>
+<link rel="stylesheet" href="mantras.css">
+<script src="mantras.js"></script>
+<script>
+const mantra_coll = [
+  { title:  "大輪金剛陀羅尼",
+    aka:    "如來灌頂神咒",
+    // 自請如來灌頂神咒，一次滿二十一遍。
+    // http://abhisimca.dharma.tw/
+    // 灌頂﹕阿毘詵者 abhṣiṃca
+    from:   "出自《佛說大輪金剛總持陀羅尼經》",
+    text:   [ "namaḥ triyadhvika tathāgatāṇāṃ      | 禮敬 三世 如來眾",
+              "aṃ viraji viraji mahā-cakra-vajri   | 淨 大輪金剛",
+              "sata sata sārate sārate trayi trayi | 希求 真實法 三寶",
+              "vidhāmani saṃbhajani                | 方便寶 正相應",
+              "tramati siddhāgriya                 | 三慧 成就最上",
+              "traṃ svāhā                          | 圓滿"
+            ],
+    simple: "namaḥ triyadhvika tathāgatāṇāṃ\n" +
+            "aṃ viraji viraji mahā-cakra-vajri\n" +
+            "sata sata sārate sārate trayi trayi\n" +
+            "vidhāmani saṃbhajani tramati siddhāgriya traṃ svāhā"
+  },
+  { title:  "毗盧遮那佛大灌頂光真言",
+    text:   [ "oṃ amogha vairocana   | 不空 邊照",
+              "mahā mudrā maṇi padma | 大 法印 珠寶 蓮花",
+              "jvala pravarttaya hūṃ | 光明 運轉",
+            ],
+    simple: "oṃ amogha vairocana mahā mudrā maṇi padma\n" +
+            "jvala pravarttaya hūṃ"
+  },
+  { title:  "無量壽如來根本陀羅尼",
+    text:   [ "namo ratna tryāya",
+              "namaḥ āryāmitābhāya tathāgatāyārhate samyaksaṃbuddhāya",
+              "tadyathā oṃ",
+              "amṛte amṛto-d'bhave                | 甘露 生起",
+              "amṛta saṃbhave                     | 甘露 正發生",
+              "amṛta garbhe                       | 甘露 藏",
+              "amṛta siddhe                       | 甘露 成就",
+              "amṛta teje                         | 甘露 威光",
+              "amṛta vikrante                     | 甘露 奮迅",
+              "amṛta vikranta gāmine              | 甘露 奮迅 騰躍",
+              "amṛta gagana kirta-kare            | 甘露 虛空 好名聞",
+              "amṛta dundubhi svare               | 甘露 天鼓 音聲",
+              "sarvārtha sādhane                  | 一切事業 成就",
+              "sarva karma kleśa kṣayaṃkare svāhā | 一切 業 煩惱 滅盡",
+              "oṃ amṛta teje hara hūṃ             | 甘露 威光 作願",
+            ],
+    simple: "namo ratna tryāya namaḥ āryāmitābhāya\n" +
+            "tathāgatāyārhate samyaksaṃbuddhāya tadyathā oṃ\n" +
+            "amṛte amṛto-d'bhave amṛta saṃbhave\n" +
+            "amṛta garbhe amṛta siddhe amṛta teje\n" +
+            "amṛta vikrante amṛta vikranta gāmine\n" +
+            "amṛta gagana kirta-kare amṛta dundubhi svare\n" +
+            "sarvārtha sādhane sarva karma kleśa kṣayaṃkare\n" +
+            "svāhā oṃ amṛta teje hara hūṃ"
+  },
+  { title:  "变食真言",
+    aka:    "一切德光無量威力，無量威德自在光明殊勝妙力",
+    from:   "出自《佛說救拔焰口餓鬼陀羅尼經》",
+    text:   [ "namaḥ sarva tathāgata avalokite",
+              "oṃ bhāra bhāra saṃ-bhāra saṃ-bhāra hūm"
+            ],
+    simple: "namaḥ sarva tathāgata valokite oṃ saṃbhava saṃbhava hūṃ"
+  },
+  { title:  "甘露水真言",
+    from:   "出自《佛說甘露經陀羅尼咒》",
+    text:   [ "namo surūpāya tathāgatāyārhate samyaksaṃbuddhāya",
+              "tadyathā oṃ",
+              "surū surū prasurū prasurū                   | 美妙 極美妙",
+              "samara samara bhara bhara sambhara sambhara | 記得 帶來 授予",
+              "sarva preta-piśācānām āhāram dadāmi svāhā   | 餐點 供應",
+            ],
+    simple: "namo surūpāya tathāgatāyārhate samyaksaṃbuddhāya\n" +
+            "tadyathā oṃ surū surū prasurū prasurū\n" +
+            "samara samara bhara bhara saṃbhara saṃbhara\n" +
+            "sarva preta-piśācānām āhāram dadāmi svāhā",
+  },
+  { title:  "華嚴經陀羅尼",
+    note:   "YT:zjsb4X9kRgE",
+    text:   [ "namaḥ samada buddhānaṃ a-pratihata śāsanānāṃ",
+              "oṃ kiṇi-kiṇi tathāgata udbhava śānte varade",
+              "udhama udhama tathāgata udbhava hūṃ phaṭ svāhā"
+            ],
+    simple: "namaḥ samada buddhānaṃ a-pratihata śāsanānāṃ\n" +
+            "oṃ kiṇi-kiṇi tathāgata udbhava śānte varade\n" +
+            "udhama udhama tathāgata udbhava hūṃ phaṭ svāhā"
+  },
+];
+</script>
+</head>
+<body><center>
+
+<script>
+  showAll('佛咒集', mantra_coll, get('i') || '-1', get('simple'));
+</script>
+
+</center></body></html>

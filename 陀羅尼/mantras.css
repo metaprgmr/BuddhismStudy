@@ -1,0 +1,7 @@
+a { text-decoration:none }
+@media screen {
+  .toc { display:normal }
+}
+@media print {
+  .toc { display:none}
+}
