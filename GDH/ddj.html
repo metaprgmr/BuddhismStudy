@@ -95,20 +95,26 @@ function getDisplayLines(lineLen, ddjChapter, srcs) {
 var indicator = '▫&nbsp;';
 var filler = '<inv>' + indicator + '</inv>';
 
+const all = 'XG,hsg,zmf,hs,zsq';
+
 function writeMulti(v) {
-  var a = v ? v.split(',') : [ 'XG' ];
+  var a;
+  if (v == 'all')
+    a = all.split(',');
+  else
+    a = v ? v.split(',') : [ 'XG' ];
   if (a.length === 1) { writeSingle(a[0]); return; }
   document.title = '道德經（對比）';
   var i, j = '道德經（對比：', titles = [], srcs = [];
   for (i=0; i<a.length; ++i) {
     titles[i] = versions[ srcs[i] = a[i] ];
     if (i > 0) j += '，';
-    j += '<v' + i + '>' + titles[i] + '</v' + i + '>';
+    j += `<v${i} title="${srcs[i]}">${titles[i]}</v${i}>`;
   }
 
   var LINE_LEN = 30;
 
-  w('<h1>', j, '）</h1>');
+  w('<h2>', j, '）</h2>');
   w('<table border=0 cellspacing=0 cellpadding=10>');
   for (i=0; i<ddjText.length; i++) {
     var ddjChapter = ddjText[i];

@@ -63,7 +63,7 @@ function el(id, html) { document.getElementById(id).innerHTML = html }
 
 var chNum = 1, i, cumu = 0, cumuGood = 0;
 function td(txt, id) {
-  const url = '../../util/reader.html?s=../淨土宗/《無量壽經》&b=01';
+  const url = '../../util/reader.html?s=../淨土宗/《無量壽經》';
   if (!txt) { w('<td></td>'); return }
   var c = cnts[txt];
   cumu += c;
@@ -84,7 +84,7 @@ function td(txt, id) {
     else style += '#d00';
 
   var suffix = '<sup title="' + cumudisp + '" style="' + style + '">&nbsp;' + c + '字</sup>&nbsp;';
-  w('<td align="left"', bgc, '><a href="' + url + '&c=' + chNum + '#' + (chNum+1) + '">' + txt + '</a>' + suffix + '</td>');
+  w('<td align="left"', bgc, '><a href="' + url + '&c=' + chNum + '">' + txt + '</a>' + suffix + '</td>');
   ++chNum;
 }
 

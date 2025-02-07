@@ -912,10 +912,10 @@ class MyBookInfo {
     }
 
     const numPgs = this.pages.length
-    if (!dir) {
+    /* if (!dir) {
       dir = sessionStorage.getItem(this.title + '_curPage');
       if (typeof dir === 'string') dir = parseInt(dir);
-    }
+    } */
 
     if (typeof dir === 'number') {
       if (dir < 0 || dir >= numPgs) return;
