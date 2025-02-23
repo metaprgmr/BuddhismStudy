@@ -30,6 +30,7 @@ function extLink(file, title, ending, ignoreCircle) {
   writeArticalLink('/books' + subdir + '/' + file + '.htm', title, ending, ignoreCircle);
 }
 function WangLink(i) { w('<a href="WangZhiPing/Wang.html?vid=', i, '">', i, '</a>', i<10 ? ' ' : ''); }
+function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${base-1+i}.htm`, i, ' ', true); }
 </script>
 </head>
 <body><center>
@@ -106,7 +107,19 @@ writeArticalLink("/article/0145.htm",  "王治平居士《大佛頂首楞嚴經�
   WangLink(9);
   WangLink(10);
   w('　<a href="WangZhiPing/synopsis.html">全經梗概</a>　　<br>');
-writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　", '<font style="opacity:0">1 2 3 4 5 6 7 8 9 10　科判</font>　　　　');
+//writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　", '<font style="opacity:1">1 2 3 4 5 6 7 8 9 10　科判</font>　　　　');
+writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　");
+  bookInSetLink('books2', 1644, 1);
+  bookInSetLink('books2', 1644, 2);
+  bookInSetLink('books2', 1644, 3);
+  bookInSetLink('books2', 1644, 4);
+  bookInSetLink('books2', 1644, 5);
+  bookInSetLink('books2', 1644, 6);
+  bookInSetLink('books2', 1644, 7);
+  bookInSetLink('books2', 1644, 8);
+  bookInSetLink('books2', 1644, 9);
+  bookInSetLink('books2', 1644, 10);
+  w('　　　　　　　');
 </script>
 
 <hr>
