@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>英中對照 Śūraṅgama Sūtra</title>
+<link rel="stylesheet" href="../../../util/copyright.css">
+<link rel="stylesheet" type="text/css" href="s.css"></link>
+<script src="s.js"></script>
+</head>
+
+<body>
+<div id="hdr"> Śūraṅgama Sūtra (English/中文 Comparative Reading) </div>
+<div id="stg"><p style="margin-top:50px; font-size:50px; color:gray">Loading...</p></div>
+<div id="ftr"></div>
+</body></html>
+
+<script>
+var n = get('n') || 'Info', jsname;
+
+function toJSName(n) {
+  switch(n) {
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':     return 'part_' + n + '-en_zh'; break;
+  case 'pre-6': return 'part_pre-6-zh'; break;
+  default:      return n.toLowerCase(); break;
+  }
+}
+
+var menuItems = [
+  '#<span style="font-size:20px; font-weight:bold">The Śūraṅgama Sūtra 英中對照閱讀</span>&nbsp;&nbsp;&nbsp;&nbsp;&mdash;&nbsp;&nbsp;',
+  'Info', 'TOC', '#【 Parts:', '1', '2', '3', '4', '5', 'pre-6', '6', '7', '8', '#】'
+];
+var menuAnnos = {
+  '1': 'The Noumenon in the Tathāgata Store',
+  '2': 'The Phenomenon in the Tathāgata Store',
+  '3': 'The Tathāgata Store Containing Both Noumenon & Phenomenon',
+  '4': 'Self-Enlightenment',
+  '5': 'The Enlightenment of Others',
+  '6': 'Bodhisattva Development into Buddhahood',
+  '7': 'The Six Planes of Existence Caused by Unenlightenment',
+  '8': 'Warning to Practisers: The Fifty False States Caused by the Five Aggregates',
+  'pre-6': 'The Śūraṅgama Mantra part'
+};
+
+function showMenu(n) {
+  var buf = new Buffer();
+  buf.w('<center>&nbsp;&nbsp;');
+  for (var i=0; i<menuItems.length; ++i) {
+    var id = menuItems[i];
+    var anno = menuAnnos[id];
+    if (anno) anno = ` title="${anno}"`; else anno = '';
+    if (id[0] == '#')
+      buf.w(id.substring(1));
+    else if (id == n)
+      buf.w(`<red${anno} style="font-weight:bold">${id}</red>`);
+    else
+      buf.w(`<a${anno} href="?n=${id}">${id}</a>`);
+    buf.w('&nbsp;&nbsp;');
+  }
+  buf.w('&nbsp;&nbsp;<a href="../index.html">《楞嚴經》首頁</a>');
+  buf.w('</center>');
+  buf.render('hdr');
+}
+
+showMenu(n);
+
+addjs(toJSName(n) + '.js');
+var trycnt = 0;
+var intvl = setInterval(() => {
+  if (psg && psg.isReady) {
+    clearInterval(intvl);
+    psg.toHTML(new Buffer()).render('stg');
+    windowResize();
+  }
+  if (++trycnt > 30) {
+    alert(`Failed to load "${toJSName(n)}.js".`);
+    clearInterval(intvl);
+  }
+}, 150);
+
+window.addEventListener('resize', windowResize);
+</script>
