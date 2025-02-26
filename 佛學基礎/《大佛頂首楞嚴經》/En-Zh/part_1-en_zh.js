@@ -855,11 +855,17 @@ without seeing the Buddha
 []
 ‘Āṇanda,
 阿難！
-it is the same with you;
+it is the
+[]
+same with you;
 汝亦如是。
-(if your mind is not deluded),
-(汝之心靈)
-it will be clear about all this.
+(if
+[]
+your mind
+汝之心靈
+is not deluded), it will be
+[]
+clear about all this.
 一切明了。
 However,
 []
@@ -873,8 +879,10 @@ be clear about
 了知
 everything inside it.
 內身。
-You should, therefore,
-(頗有眾生，)
+You should,
+頗有眾生，
+therefore,
+[]
 see everything in your body
 先見身中，
 before seeing things outside it;
@@ -891,7 +899,9 @@ about that which
 []
 moves along your nerves
 筋轉
-and the pulsing of your veins.
+and the
+[]
+pulsing of your veins.
 脈搖，
 Why are you
 誠合明了，
@@ -1006,9 +1016,9 @@ they have
 []
 not the same body
 軀命不同。
-or life span {30}
+or life span {30} then
 []
-then how can
+how can
 云何
 one by eating
 一人
@@ -1025,9 +1035,9 @@ is outside your body,
 實在身外，身心相外，
 the two are separate.
 自不相干。
-Thus
+Thus when
 []
-when your mind
+your mind
 則心
 knows something,
 所知，
@@ -1051,7 +1061,9 @@ my hand,
 兜羅綿手，
 when your eyes see it,
 汝眼見時，
-does your mind discern it?’
+does
+[]
+your mind discern it?’
 心分別不？
 
 Ānanda replied:
@@ -1067,15 +1079,21 @@ The Buddha said:
 佛告阿難：
 ‘If so,
 若相知者，
-how can your mind be
+how can
 云何
-outside your body?
+your mind be
+[]
+outside
 在外？
+your body?
+[]
 Therefore,
 是故應知，
-your contention that
+your contention
 汝言
-your knowing and discerning
+that your
+[]
+knowing and discerning
 覺了能知
 mind
 之心，
@@ -1128,13 +1146,15 @@ The Buddha asked:
 
 Ānanda replied:
 阿難言：
-‘Since my knowing mind
+‘Since
+[]
+my knowing mind
 此了知心，
 does not
 既不
-see what is in my body
+see what is in
 知內，
-but
+my body but
 []
 can see things outside,
 而能見外。
@@ -1144,10 +1164,18 @@ hidden in
 潛伏
 my sense organ.
 根裏。
-For instance, if one
-猶如有人，
-covers one’s eyes with a crystal bowl,
-取琉璃碗，合其兩眼。
+For instance,
+猶如
+if one
+有人，
+covers one’s eyes
+@a@
+with
+[]
+a crystal bowl,
+取琉璃碗，
+@a@
+合其兩眼。
 the latter
 雖有物合，
 does not
@@ -1168,11 +1196,15 @@ does not see what is in
 不見內者，
 (my body), it is
 []
-because it is in the sense organ,
-為在根故。
-and
+because
+為
+it is
 []
-if it sees clearly
+in the sense organ,
+在根故。
+and if it
+[]
+sees clearly
 分明矚
 what is outside
 外，
@@ -1207,9 +1239,13 @@ and sees
 當見
 the mountain
 山
-and river,
+and
+[]
+river,
 河，
-does one also see the bowl?’
+does one also
+[]
+see the bowl?’
 見琉璃不？
 
 Ānanda replied:
@@ -1486,7 +1522,9 @@ is groundless.’
 
 Ānanda said:
 阿難言：
-‘I have always heard the Buddha
+‘I have always
+[]
+heard the Buddha
 我嘗聞佛
 when teaching
 開示
@@ -1502,15 +1540,19 @@ and then
 由法生故，
 all kinds of mind appear.”
 種種心生。
-I now think that
-我今思惟，即
-the substance of (my) thinking
-思惟體，
+I now think
+我今思惟，
+that the
+[]
+substance of (my) thinking
+即思惟體，
 is the nature of mind
 實我心性。
 which arises
 @a@
-when it unites with externals
+when
+[]
+it unites with externals
 隨所合處，
 @a@
 心則隨有。
@@ -1533,11 +1575,17 @@ all kinds of mind appear
 種種心生，
 when uniting with them.
 隨所合處。
-So this
+So
 []
-mind has no substance
-心隨有者，是心無體，
-and cannot unite with anything.
+[]
+心隨有者，
+this mind
+是心
+has no substance
+無體，
+and
+[]
+cannot unite with anything.
 則無所合。
 If that which has no substance
 若無有體
@@ -1582,7 +1630,9 @@ you should see your face.’
 見是
 that see
 其眼。
-and the mind that knows
+and the
+[]
+mind that knows
 心知
 is not the eyes:
 非眼。
@@ -1623,7 +1673,9 @@ or manifold?
 為有多體？
 As it is in your body,
 今在汝身，
-does it spread to every part of it
+does it
+[]
+spread to every part of it
 為復遍體，
 or not?
 為不遍體？
@@ -15464,7 +15516,7 @@ comes from
 生於
 your seeing,
 見中，
-then in the 
+then in the
 []
 absence of
 如無

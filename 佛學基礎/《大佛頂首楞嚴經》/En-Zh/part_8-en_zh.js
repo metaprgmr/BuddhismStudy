@@ -6,15 +6,23 @@ psg = new DualTextPassage(`
 
 # States of Māra Caused by the Five Aggregates
 
-As the gathering
-即時如來
-drew to a close,
-將罷法座。
-the Buddha
+As the gathering drew
 []
-grasped the teapoy and made a move to rise
-於師子床，攬七寶几，
-from His lion seat, when
+to a close,
+即時
+the Buddha
+如來
+@a@
+將罷法座。
+@b@
+於師子床，
+grasped the teapoy
+攬七寶几，
+and made a move to rise
+@a@
+from His lion seat,
+@b@
+when
 []
 suddenly he changed his mind,
 (迴紫金山，)
@@ -51,14 +59,14 @@ still do not know
 the
 []
 subtle states of Māra
-@a@
+@c@
 which appear when
 []
 you practise
 修
 śamatha-vipaśyanā.
 奢摩他毗婆舍那
-@a@
+@c@
 微細魔事。
 When they manifest,
 魔境現前，
@@ -84,7 +92,9 @@ of ghosts and spirits,
 或著鬼神。
 or of mischievous sprites.
 或遭魑魅。
-If you are not clear about them,
+If you are
+[]
+not clear about them,
 心中不明，
 you will
 []
@@ -106,8 +116,12 @@ untutored Bhikṣu
 第四禪無聞比丘，
 who when he reached the fourth dhyāna heaven
 []
-presumed that he had become a saint;
-妄言證聖。
+presumed
+妄言
+that he had
+[]
+become a saint;
+證聖。
 after he had enjoyed his reward
 天報已畢，
 in heaven,
@@ -120,9 +134,9 @@ appeared.
 現前。
 As he vilified the arhats,
 謗阿羅漢
-he created the karma
+he created the karma of {277}
 []
-of {277} future incarnation
+future incarnation
 身遭後有，
 and then
 []
@@ -136,7 +150,9 @@ You
 []
 should listen carefully
 汝應諦聽。
-to what I now tell you in detail.’
+to what
+[]
+I now tell you in detail.’
 吾今為汝仔細分別。
 
 Ānanda
@@ -152,15 +168,21 @@ and
 awaited His compassionate instruction.
 伏聽慈誨。
 
-The Buddha said:
-佛告(阿難及諸大眾。)
-‘You should all know that
-汝等當知。
-the
+The
 []
-clear substance of th
+Buddha said:
+佛告
+[]
+阿難及諸大眾。
+‘You
+[]
+should all know
+汝等當知。
+that the
+[]
+clear substance of the profound
 @a@
-e profound and bright basic Bodhi of
+and bright basic Bodhi of
 @a@
 @b@
 有漏
@@ -212,9 +234,9 @@ your obstinate wrong thinking.
 迷頑妄想安立。
 But you
 []
-should know that
+should know
 當知
-(relative)
+that (relative)
 []
 voidness
 虛空
@@ -238,8 +260,10 @@ which is
 []
 within this (relative) voidness?
 在虛空耶。
-If you realize the real
-汝等一人發真
+If you
+汝等
+realize the real
+一人發真
 to return to the source,
 歸元，
 the
@@ -6504,7 +6528,9 @@ is the undetected subtlety of his wrong thinking.
 []
 ‘Ānanda,
 阿難
-you should know
+you
+[]
+should know
 當知。
 that when
 []
@@ -9367,9 +9393,9 @@ which
 []
 sets up
 成
-the
+the mind thus 
 []
-mind thus realized
+realized
 所歸
 as
 []

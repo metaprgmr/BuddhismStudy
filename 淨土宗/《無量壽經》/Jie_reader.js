@@ -30,6 +30,7 @@ function get(name) {
    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
       return decodeURIComponent(name[1]);
 }
+function e(id) { return document.getElementById(id) }
 function isDigit(x) { return typeof x === 'number' || '9876543210'.indexOf(x) >= 0 }
 function sp(n, filler) {
   if (!n) return '';
@@ -39,24 +40,56 @@ function sp(n, filler) {
   return ret;
 }
 
+// Buffer
 class Buffer {
-  constructor() { this.buf = concat(arguments) }
-  w() { this.buf += concat(arguments) }
-  prepend() { this.buf = concat(arguments) + this.buf }
-  text() { return this.buf }
+  constructor() { this.bufList = Array.from(arguments); }
 
-  // renders to innerHTML of a valid element.
-  // returns the text.
-  // clears the internal buffer.
-  render(elid) {
-    var ret = this.buf;
-    if (elid) { var el = e(elid); el && (el.innerHTML = ret) }
-    this.buf = '';
+  w() {
+    var ret = '';
+    for (var i in arguments) ret += arguments[i];
+    if (ret) this.bufList.push(ret);
+    return (this.bufList.length < 1024) ? this : this.condense();
+  }
+
+  append(s) { // for performance
+    this.bufList.push(s);
+  }
+
+  prepend() {
+    var ret = '';
+    for (var i in arguments) {
+      var x = arguments[i];
+      x && (ret += x);
+    }
+    if (ret) this.bufList.unshift(ret);
+    return this;
+  }
+
+  // renders to one or more elements.
+  // returns the text, and clears the internal content.
+  render() {
+    var ret = this.text();
+    for (var i in arguments) {
+      var el = e(arguments[i]);
+      el && (el.innerHTML = ret);
+    }
+    this.bufList = [];
     return ret;
   }
 
-} // end of Buffer.
+  text() { 
+    var s = this.bufList.join('')
+    this.bufList = [ s ];
+    return s;
+  }
 
+  condense() {
+    if (this.bufList.length > 100)
+      this.text();
+    return this;
+  }
+
+} // end of Buffer.
 
 const      KAI_TI = "'KaiTi', '楷体', STKaiti, '华文楷体'";
 const FANGSONG_TI = "'FangSong', '仿宋', STFangsong, '华文仿宋'";
@@ -452,7 +485,7 @@ class PageDims {
           '</td></tr></table>>');
 */
 
-    document.getElementById(this.elemId).innerHTML = buf.text();
+    e(this.elemId).innerHTML = buf.text();
   }
 
   _findDualPages(pageId) {
@@ -946,7 +979,23 @@ class PageDims {
 
 var dims = new PageDims();
 
-function showPage(pageId) { dims.renderDualPages(pageId || get('p')); }
+function showPage(pageId) {
+console.log('showPage', pageId);
+  dims.renderDualPages(pageId || get('p'));
+}
+
+function showCtlPanel() {
+  var buf = new Buffer();
+  buf.w(`【 <a href="javascript:showPage('next')" title="或按左向鍵">後頁</a>`,
+        `｜<a href="javascript:showPage('prev')" title="或按右向鍵">前頁</a>`,
+        `｜至第&nbsp;<input size="2" id="toPage">&nbsp;頁`,
+        `｜<a href="javascript:showPage('toc')">目錄</a>`,
+        `｜<a href="javascript:showPage('backcover')" title="或按End鍵">封底</a>`,
+        `｜<a href="javascript:showPage('cover')" title="或按Home鍵">封面</a> 】`,
+        `&nbsp;【 <a href="javascript:showPage('nextQuote')" title="或按PgDn鍵">下段經文</a>`,
+        `｜<a href="javascript:showPage('prevQuote')" title="或按PgUp鍵">上段經文</a> 】`);
+  buf.render(`ctlpnl`);
+}
 
 function keypress(event) {
   var isShift = event.shiftKey;
@@ -960,7 +1009,7 @@ function keypress(event) {
   case 36: /* home  */ showPage('cover');     break;
   case 33: /* up    */ showPage('prevQuote'); break;
   case 34: /* down  */ showPage('nextQuote'); break;
-  case 13: /* enter */ var toPg = document.getElementById('toPage').value;
+  case 13: /* enter */ var toPg = e('toPage').value;
                        if (toPg !== '') showPage(toPg);
                        break;
   }
@@ -977,6 +1026,10 @@ const ABOUT_THIS = `
 
 <blockquote>
 推薦使用Firefox。諸主流瀏覽器應該可以。
+<br>
+可用書頁下方的控制臺尋訪所需頁面。
+<br>
+此外，也可在書面上直接操作：
 </blockquote>
 
 <blockquote>
@@ -989,15 +1042,12 @@ const ABOUT_THIS = `
 </blockquote>
 
 <blockquote>
-用鼠標：① 點擊左頁下沿去下一頁。<br>
+用鼠標：① 點擊左頁下沿去後一頁。<br>
 　　　　② 點擊右頁下沿去前一頁。<br>
 　　　　③ 點擊左頁上沿去目錄。<br>
 　　　　④ 點擊右頁上沿去封面。<br>
 </blockquote>
 
-<blockquote>
-翻到第&nbsp;<input size="1" id="toPage">&nbsp;頁
-</blockquote>
 
 <h4>【鏈接引用】</h4>
 <blockquote>

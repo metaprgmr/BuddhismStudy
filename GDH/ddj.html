@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="../util/article.css">
 <link rel="stylesheet" href="common.css">
 <style>
+.titleanno { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; opacity:0.5; font-size:14pt }
 .zKaiTi   { font-family: "KaiTi", "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .zFSongTi { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋" }
 .zSongTi  { font-family: "SimSong", "Songti TC", "宋体", STSong, "华文宋体" }
@@ -188,7 +189,7 @@ function writeSingle(v) {
     SUTRA_TEXT.push(plain.replaceAll('　', ''));
     SUTRA_TEXT.push('');
   }
-  new GDHReader('道德經', SUTRA_TEXT);
+  new GDHReader('道德經', SUTRA_TEXT).setTitleAnno(versions[v]);
   readerHost.writeDoc();
 }
 </script>

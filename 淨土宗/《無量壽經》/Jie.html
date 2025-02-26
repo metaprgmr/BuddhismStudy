@@ -5,6 +5,7 @@
 <title>大經念解</title>
 <link rel="stylesheet" href="../../util/copyright.css">
 <style>
+#ctlpnl { background-color:#CBD0D0; padding:2px 5px 2px 5px; width:600px }
 .pink { color:pink }
 </style>
 <script src="../../env-sample.js"></script>
@@ -17,6 +18,8 @@
 <body bgcolor="#447" style="padding:15px">
 <center>
 <span id="spanId"></span>
+<p style="line-height:10px; font-size:10px">&nbsp;</p>
+<div id="ctlpnl"></div>
 </center>
 </body>
 
@@ -29,5 +32,6 @@ if (!pid && window['lastPageId']) {
   pid = window['lastPageId'];
   alert('上次看到' + pid + '頁。（設置於 bookmarks.js 之 lastPageId 中。）');
 }
+showCtlPanel();
 showPage(pid);
 </script>

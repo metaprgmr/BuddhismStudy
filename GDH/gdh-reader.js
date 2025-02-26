@@ -137,6 +137,8 @@ class GDHReader {
     readerHost = this;
   }
 
+  setTitleAnno(ta) { this.titleAnno = ta; }
+
   useHrBeforeTitle() { this.hrBeforeTitle = true; return this; }
 
   setAudioFxn(fxn) {
@@ -267,8 +269,9 @@ class GDHReader {
 
   writeDoc() {
     document.title = this.pageTitle || this.title;
-    var a = this.text;
-    w('<h1 align="center">', this.title, '</h1><table border="0" cellpadding="0" cellspacing="0">');
+    var a = this.text, titleAn = this.titleAnno || '';
+    if (titleAn) titleAn = '<sup class="titleanno">&nbsp;' + titleAn + '</sup>';
+    w('<h1 align="center">', this.title, titleAn, '</h1><table border="0" cellpadding="0" cellspacing="0">');
     for (var i=0; i<a.length; ++i) {
       var ln = a[i];
       if (ln.startsWith('//')) continue; // commented out

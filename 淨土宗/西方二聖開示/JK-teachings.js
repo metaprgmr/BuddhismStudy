@@ -1621,6 +1621,7 @@ new JKPSLesson('CWnY-oDfJ6E', '淨空老和尚：現在的電視和網路是魔�
 new JKPSLesson('2lTxoI2S2kM', '淨空老和尚：這一生到世間做人,是來幹什麼的？', null,
                '淨土大經解演義', 54)
 .setType(t_其他)
+.level(GOOD)
 .content(
 `覺悟的人要做什麼？
 

@@ -23,24 +23,28 @@ psg = new SimpleHTMLContent(
 <caption>《楞嚴經 The Śūraṅgama Sūtra》英譯文八部分對應原經中文十卷</caption>
 
 <tr bgcolor="lightgray">
-<th>Part</th><th>Title</th><th>卷數</th>
+<th>Part</th><th>Title</th><th>卷數</th><th>經卷標題</th>
 </tr>
 <tr>
 <td align="center" rowspan="3">I</td>
 <td rowspan="3"><a class="lnk" href="?n=1">The Noumenon in the Tathāgata Store</a></td>
 <td align="center" bgcolor="#fff" style="border-bottom:0px">1</td>
+<td align="center" style="border-bottom:0px">七處徵心</td>
 </tr>
 <tr>
 <td align="center" bgcolor="#e8e8e8" style="border-bottom:0px; border-top:0px">2</td>
+<td align="center" bgcolor="#e8e8e8" style="border-bottom:0px; border-top:0px">十番顯現</td>
 </tr>
 <tr>
 <td align="center" bgcolor="#fff"; style="border-top:0px">3</td>
+<td align="center" style="border-bottom:0px; border-top:0px">如來藏</td>
 </tr>
 
 <tr>
 <td align="center" >II</td>
 <td><a class="lnk" href="?n=2">The Phenomenon in the Tathāgata Store</a></td>
 <td align="center" bgcolor="#e8e8e8">4</td>
+<td rowspan=3 align="center" bgcolor="#e8e8e8" style="border-bottom:0px; border-top:0px">根塵陰處<br>破妄顯真</td>
 </tr>
 
 <tr>
@@ -56,30 +60,36 @@ psg = new SimpleHTMLContent(
 </tr>
 <tr>
 <td align="center" bgcolor="#fff" style="border-bottom:0px; border-top:0px">5</td>
+<td align="center" style="border-bottom:0px; border-top:0px">二十五圓通闡述</td>
 </tr>
 <tr>
 <td align="center" bgcolor="#e8e8e8" style="border-top:0px">6</td>
+<td align="center" bgcolor="#e8e8e8" style="border-bottom:0px; border-top:0px">觀音法門</td>
 </tr>
 
 <tr>
 <td align="center" >V</td>
 <td><a class="lnk" href="?n=5">The Enlightenment of Others</a></td>
 <td align="center" bgcolor="#e8e8e8">6</td>
+<td align="center" bgcolor="#e8e8e8" style="border-bottom:0px; border-top:0px">四清靜明誨</td>
 </tr>
 
 <tr>
-<td>&nbsp;</td>
-<td><a class="lnk" href="?n=pre-6"><i>The Śūraṅgama MANTRA</i></a></td>
-<td align="center" bgcolor="#fff">7</td>
+<td bgcolor="#f4f4f4">&nbsp;</td>
+<td bgcolor="#f4f4f4"><a class="lnk" href="?n=pre-6"><i>The Śūraṅgama MANTRA</i></a></td>
+<td align="center">7</td>
+<td align="center" style="border-bottom:0px; border-top:0px">楞嚴咒　楞嚴道場</td>
 </tr>
 
 <tr>
 <td align="center" rowspan="2">VI</td>
 <td rowspan="2"><a class="lnk" href="?n=6">Bodhisattva Development into Buddhahood</a></td>
 <td align="center" bgcolor="#fff" style="border-bottom:0px">7</td>
+<td align="center" style="border-bottom:0px; border-top:0px">修行次第</td>
 </tr>
 <tr>
 <td align="center" bgcolor="#e8e8e8" style="border-top:0px">8</td>
+<td rowspan=2 align="center" bgcolor="#e8e8e8" style="border-bottom:0px; border-top:0px" nowrap>輪迴的原因與現象</td>
 </tr>
 
 <tr>
@@ -89,6 +99,7 @@ psg = new SimpleHTMLContent(
 </tr>
 <tr>
 <td align="center" bgcolor="#fff" style="border-top:0px">9</td>
+<td rowspan=2 align="center" style="border-bottom:0px; border-top:0px">禪修入魔道的原因</td>
 </tr>
 
 <tr>
@@ -98,6 +109,7 @@ psg = new SimpleHTMLContent(
 </tr>
 <tr>
 <td align="center" bgcolor="#e8e8e8" style="border-top:0px">10</td>
+<td align="center" bgcolor="#e8e8e8" style="border-top:0px">禪定中辨別魔事</td>
 </tr>
 
 </table>

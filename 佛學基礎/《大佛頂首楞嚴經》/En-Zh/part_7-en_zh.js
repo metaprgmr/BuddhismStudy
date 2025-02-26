@@ -254,11 +254,13 @@ karmic retribution.
 業報。
 As a result,
 發是語已，
-after her genital organ
-先於女根
-had been
+after
 []
-slowly scorched by the flame
+her genital organ
+先於女根
+had been slowly
+[]
+scorched by the flame
 生大猛火，
 (of passion),
 []
@@ -266,16 +268,16 @@ slowly scorched by the flame
 後於節節猛火燒然，
 she
 []
-fell into the
+fell into
+墮
+the
 []
 unintermittent hell.
-墮無間獄。
+無間獄。
 King Crystal
 琉璃大王
-(善星比丘)
 []
-[]
-琉璃為
+(善星比丘)琉璃為
 massacred
 誅
 men of the Gautama clan,
@@ -864,8 +866,12 @@ proportion of seven to three,
 七情三想，
 he will
 []
-sink into the wheel of water
-沈下水輪，
+sink into
+沈下
+the
+[]
+wheel of water
+水輪，
 close to the region of fire,
 生於火際，
 will endure intense heat
@@ -901,8 +907,12 @@ proportion of nine to one,
 九情一想，
 he will
 []
-sink into the wheel of fire
-下洞火輪，
+sink into
+下
+the
+[]
+wheel of fire
+洞火輪，
 and be
 []
 reborn where wind and fire meet.
@@ -2341,7 +2351,9 @@ wrong tasting
 交，
 @b@
 則臨終時，
-cause the person concerned to see
+cause the person concerned
+[]
+to see
 先見
 an iron net and
 鐵網
@@ -3776,7 +3788,7 @@ according
 []
 to the law of saṃsāra;
 法爾輪轉。
-they are
+they are the
 此輩名為
 most pitiable.
 可憐愍者。
@@ -4136,8 +4148,8 @@ they will be reborn in the regions
 []
 near the sun and the moon,
 鄰於日月。
-如是一類，
 []
+如是一類，
 called
 名
 the
@@ -4185,10 +4197,8 @@ called
 名
 the
 []
-Trayastrimśā
+Trayastrimśā heavens.
 忉利天。
-heavens.
-[]
 
 3.
 []
@@ -4228,10 +4238,8 @@ This is
 如是一類，名
 the
 []
-Suyāma
+Suyāma heaven.
 須燄摩天。
-heaven.
-[]
 
 4.
 []
@@ -4269,10 +4277,8 @@ This is
 如是一類，名
 the
 []
-Tuṣita
+Tuṣita heaven.
 兜率陀天。
-heaven.
-[]
 
 5.
 []
@@ -4304,10 +4310,8 @@ This is
 如是一類，名
 the
 []
-Nirmāṇarati
+Nirmāṇarati heaven.
 樂變化天。
-heaven.
-[]
 
 6.
 []
@@ -4333,10 +4337,8 @@ This is
 如是一類，名
 the
 []
-Paranirmitavaśavartin
+Paranirmitavaśavartin heaven.
 他化自在天。
-heaven.
-[]
 
 ‘Ānanda,
 阿難。
@@ -4604,17 +4606,19 @@ these devas
 如是天人，
 transmute this
 []
-perfect light into the theme of the voice
-圓光成音，
+perfect light
+圓光
+into the theme of
+[]
+the voice
+成音，
 which
 []
 reveals the wonderful (state)
 披音露妙，
-and thereby
+and thereby gives rise to pure conduct that
 []
-gives rise to
-[]
-pure conduct that unites {268} with dhyāna
+unites {268} with dhyāna
 發成精行，
 by
 []
@@ -4631,14 +4635,22 @@ heaven of Minor Purity
 
 2.
 []
-‘Pure voidness now manifests
-淨空現前，
-in its boundless immensity
+‘Pure voidness
+淨空
+now manifests
+現前，
+in its
+[]
+boundless immensity
 引發無際，
 causing both
 []
-body and mind to experience comfortable weightlessness
-身心輕安，
+body and mind
+身心
+to experience
+[]
+comfortable weightlessness
+輕安，
 and
 []
 nirvanic bliss.
@@ -5151,13 +5163,21 @@ the heaven of devas who are neither thoughtful nor thoughtless
 
 ### The Anāgāmin stage
 
-‘Though the devas of the four heavens beyond form succeed in looking exhaustively into the void,
+‘Though the devas of the four heavens beyond form succeed in
+[]
+looking exhaustively into the void,
 此等窮空，
-they fail to realize the absolute voidness of (immaterial) noumenon.
+they
+[]
+fail to realize the absolute voidness
 不盡空理。
-They all come from the five heavens of form from which there is no return
+of (immaterial) noumenon. They all come from the five heavens of form from which
+[]
+there is no return
 從不還天
-and if they do not stray from the holy Way,
+and if they do
+[]
+ not stray from the holy Way,
 聖道窮者，
 they are called
 如是一類，名
@@ -5174,11 +5194,21 @@ and stay in this inexhaustible voidness,
 窮空不歸，
 they will delight in samsaric heavens
 迷漏
-and will be deprived of the chance of hearing the Dharma;
-無聞，
-they will finally be turned back
+and will be
+[]
+deprived
+無
+of the chance of
+[]
+hearing the Dharma;
+聞，
+they will finally be
+[]
+turned back
 便入
-to the wheel of births and deaths. {273}
+to the wheel of
+[]
+births and deaths. {273}
 輪轉。
 
 ‘Ānanda,
@@ -5187,11 +5217,17 @@ all the devas in these heavens
 是諸天上各各天人，
 were once worldly men
 則是凡夫
-whose reward caused their rebirth there,
+whose
+[]
+reward caused their rebirth
 業果酬答，
-and after enjoying its fruit,
+there, and after
+[]
+enjoying its fruit,
 答盡
-they will have to return to Saṃsāra.
+they will have to
+[]
+return to Saṃsāra.
 入輪。
 However,
 []
@@ -5201,23 +5237,45 @@ are Bodhisattvas
 即是菩薩
 who, in their practice of Samādhi,
 遊三摩提，
-appear in their heavens which they use as paths
+appear in their heavens which they use as paths for
 []
-for their progressive advance towards Buddhahood.
-漸次增進，迴向聖倫所修行路。
+ their progressive
+漸次增進，
+advance towards Buddhahood.
+迴向聖倫所修行路。
 
 ‘Ānanda,
 阿難。
-the
+the devas in
 []
-devas in these four heavens beyond form
+these four heavens
 是四空天，
-have wiped out all traces of body and mind.
-身心滅盡，
-As their still (dhyāna) nature has appeared,
-定性現前，
-they are free from all retribution involving (material) forms.
-無業果色。
+beyond form have
+[]
+wiped out
+@a@
+all traces of
+[]
+body and mind.
+身心
+@a@
+滅盡，
+As their still
+[]
+(dhyāna) nature
+定性
+has appeared,
+現前，
+they are
+[]
+free from
+無
+all retribution
+業果
+involving (material)
+[]
+forms.
+色。
 Hence this is
 從此逮終，名
 the
@@ -5225,17 +5283,41 @@ the
 region beyond form.
 無色界。
 
-‘All this comes from their being not clear about the profound mind of Bodhi
-此皆不了妙覺明心。
-and because of their preservation of accumulated thoughts,
-積妄發生，
-they create the three illusory realms of existence
+‘All this
+此皆
+comes from their being
+[]
+not clear
+不了
+about the
+[]
+profound mind of Bodhi
+妙覺明心。
+and
+[]
+because of their preservation of
+@a@
+accumulated thoughts,
+積妄
+@a@
+發生，
+they create the
+[]
+three illusory realms of existence
 妄有三界。
-through the seven states;
-中間妄隨七趣沈溺。
-hence they are living beings (pudgala)
+through
+中間
+the
+[]
+seven states;
+妄隨七趣沈溺。
+hence they are living beings
+[]
+(pudgala)
 補特伽羅
-in the worlds they have deserved.
+in the worlds
+[]
+they have deserved.
 各從其類。
 
 # The Four Classes in the Realm of Titans (Asura-gati)
@@ -5261,13 +5343,29 @@ of existence.
 []
 ‘If a hungry ghost,
 若於鬼道
-while in his realm, strives to protect the Dharma
-以護法力，
-and thereby uses his powerful understanding to enter the void,
-乘通入空。
-he will be reborn from an egg as an asura
-此阿修羅從卵而生，
-who is connected with the realm of hungry ghosts.
+while in his realm,
+[]
+strives to
+以
+protect the Dharma
+護法力，
+and thereby
+[]
+uses his powerful understanding
+乘通
+to enter the void,
+入空。
+he will be
+[]
+reborn from an egg
+@a@
+as an asura
+此阿修羅
+@a@
+從卵而生，
+who is connected with the
+[]
+realm of hungry ghosts.
 鬼趣所攝。
 
 2.
@@ -5276,11 +5374,27 @@ who is connected with the realm of hungry ghosts.
 若於天中
 because of his diminishing merits,
 降德貶墜，
-is about to fall into the region near the sun and the moon,
-其所卜居鄰於日月。
-he will be {274} reborn from a womb as an asura
-此阿修羅從胎而出，
-who is connected with the realm of human beings.
+is about to fall into
+[]
+the region
+其所卜居
+near
+鄰於
+the
+[]
+sun and the moon,
+日月。
+he will be {274}
+[]
+reborn from a womb
+@a@
+as an asura
+此阿修羅
+@a@
+從胎而出，
+who is connected with the
+[]
+realm of human beings.
 人趣所攝。
 
 3.
@@ -5305,9 +5419,13 @@ of the four (lower) heavens.
 []
 @a@
 爭權。
-This asura is born by transformation
-此阿修羅因變化有，
-and is connected with the realm of heavens.
+This asura is
+此阿修羅
+born by transformation
+因變化有，
+and is connected with the
+[]
+realm of heavens.
 天趣所攝。
 
 4.
@@ -5322,20 +5440,28 @@ who are born in the sea on the bed of which they live in holes.
 生大海心，沈水穴口，
 They roam in space during the day
 旦遊虛空，
-and return to the sea at night.
-暮歸水宿，
-These asuras are born from humidity
-此阿修羅因濕氣有，
-and are
+and
 []
-connected with the realm of animals.
+return to the sea
+@a@
+at night.
+暮歸
+@a@
+水宿，
+These asuras are
+此阿修羅
+born from humidity
+因濕氣有，
+and are connected with the
+[]
+realm of animals.
 畜生趣攝。
 
 ‘Ānanda,
 阿難。
-the
+the above seven
 []
-above seven realms of
+realms of
 如是
 hells,
 地獄、
@@ -5372,30 +5498,86 @@ which has neither root nor clue.
 阿難。
 these living beings
 此等眾生，
-are unaware of their fundamental minds
-不識本心，
-and so suffer from this round of births and deaths in saṃsāra.
-受此輪迴，
-If they have passed countless aeons
+are
+[]
+unaware
+不識
+of their
+[]
+fundamental minds
+本心，
+and so
+[]
+suffer from
+受此
+this round of births and deaths in
+[]
+saṃsāra.
+輪迴，
+If they have passed
+[]
+countless aeons
 經無量劫，
-without realizing the true and pure (mind),
-不得真淨，
-it is because they have killed, stolen and been carnal,
-皆由隨順殺盜婬故。
+without realizing
+不得
 the
 []
-ceasing of which has caused them to be reborn where these acts are unknown.
-反此三種。又則出生無殺盜婬。
-Where these acts exist is called the realm of hungry ghosts
-有名鬼倫。
-and where they do not is called the realm of devas.
-無名天趣。
-The presence {275} or absence of these three evils alternate
-有無相傾，
+true and pure
+真淨，
+(mind), it is
+[]
+because
+皆由
+they have
+[]
+killed, stolen and been carnal,
+隨順殺盜婬故。
+the
+[]
+ceasing of which
+反此三種。
+has caused them to be
+[]
+reborn where
+又則出生
+these acts are unknown.
+無殺盜婬。
+Where
+[]
+these acts exist
+有
+is called
+名
+the
+[]
+realm of hungry ghosts
+鬼倫。
+and where
+[]
+they do not
+無
+is called
+名
+the
+[]
+realm of devas.
+天趣。
+The
+[]
+presence {275} or absence
+有無
+of these three evils
+[]
+alternate
+相傾，
 and
 []
-cause the wheel of Saṃsāra to turn.
-起輪迴性。
+cause
+起
+the wheel of
+[]
+Saṃsāra to turn.
+輪迴性。
 
 ‘If they
 若
@@ -5435,7 +5617,9 @@ and is also
 []
 beyond
 @b@
-this very freedom from duality.
+this very
+[]
+freedom from duality.
 無二
 @b@
 亦滅。
@@ -5466,9 +5650,9 @@ killing, stealing and carnality?
 
 ‘Ānanda,
 阿難。
-if an individual
+if an individual does
 []
-does not abstain from
+not abstain from
 不斷
 these
 []
@@ -5478,19 +5662,23 @@ he will
 []
 suffer from evil consequences.
 各各有私。
-If a group of individuals commit them,
-因各各私。
-they will
+If a
 []
-all endure the same suffering in the same place
-眾私同分，
+group of individuals commit them,
+因各各私。
+they will all endure the
+[]
+same suffering
+眾私
+in the same place
+同分，
 which
 []
 cannot be said to be non-existent.
 非無定處。
-However,
+However, this (place)
 []
-this (place) arises from falsehood
+arises from falsehood
 自妄發生，
 which has
 []
@@ -5533,8 +5721,12 @@ habits are not cut off,
 習氣不滅，
 you will
 []
-fall into the realm of demons,
-落於魔道。
+fall into
+落於
+the
+[]
+realm of demons,
+魔道。
 and
 []
 even if
@@ -5551,19 +5743,21 @@ only increase it.
 倍加虛偽。
 Therefore, the
 []
-Tathāgata says that
-如來說為
-you arc most pitiable
-可哀憐者。
+Tathāgata says
+如來說
+that
+[]
+you are most pitiable
+為可哀憐者。
 because
 []
 your sufferings
 汝妄
 are self-inflicted
 自造。
-and
+and do
 []
-do not
+not
 非
 come from any
 []
