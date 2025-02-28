@@ -1,5 +1,3 @@
-// FEATURE: replace tag's content with variable values. E.g. <xg title="$JK033$">
-
 // utilities
 const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999
@@ -103,6 +101,7 @@ const QUOTE_COLOR    = '#d00';
 const XQUOTE_COLOR   = '#b09';
 const PIN_COLOR      = '#900';
 const MOTTO_COLOR    = '#009';
+const ABOUT_COLOR    = '#999';
 const lbgc = '#f3ebe3';
 const LEFT_BG_COLOR  = lbgc + ';';
 const rbg4 = ',' + lbgc + ',' + lbgc + ',' + lbgc + ',' + lbgc;
@@ -113,6 +112,7 @@ const LAST_PAGE_NUM  = 837;
 const FIRST_QUOTE_PAGE_NUM = 90;
 const COVER_TEXT_COLOR = '#FFD700';
 const LINE_NUM_STYLE = 'writing-mode:horizontal-tb; margin-top:-30px; font-family:helvetica; font-size:10px; color:lightgray';
+const DEFAULT_XG     = 'xg { background-color:#ffd }';
 
 // "Quote InLine", "Pin(品名) InLine", "Vow InLine" and "Topic/Terminology InLine"  handling
 // Potential vows in the text are examined for「...願」and「...V」against `vows` below.
@@ -150,6 +150,72 @@ var vows = [
   '不更惡趣願', '卅二相願',   '遍供諸佛願', '諸佛稱歎願', '女人往生願',
   '蓮華化生願', '國無婦女願', '無差別願',
 ];
+const TERM_MAPPING =
+`第一:第一願
+第二:第二願
+第三:第三願
+第四:第四願
+第五:第五願
+第六:第六願
+第七:第七願
+第八:第八願
+第九:第九願
+第十:第十願
+第十一:第十一願
+第十二:第十二願
+第十三:第十三願
+第十四:第十四願
+第十五:第十五願
+第十六:第十六願
+第十七:第十七願
+第十八:第十八願
+第十九:第十九願
+第廿:第廿願
+第廿一:第廿一願
+第廿二:第廿二願
+第廿三:第廿三願
+第廿四:第廿四願
+第廿五:第廿五願
+第廿六:第廿六願
+第廿七:第廿七願
+第廿八:第廿八願
+第廿九:第廿九願
+第卅:第卅願
+第卅一:第卅一願
+第卅二:第卅二願
+第卅三:第卅三願
+第卅四:第卅四願
+第卅五:第卅五願
+第卅六:第卅六願
+第卅七:第卅七願
+第卅八:第卅八願
+第卅九:第卅九願
+第四十:第四十願
+第四十一:第四十一願
+第四十二:第四十二願
+第四十三:第四十三願
+第四十四:第四十四願
+第四十五:第四十五願
+第四十六:第四十六願
+第四十七:第四十七願
+第四十八:第四十八願
+頓:頓教
+漸:漸教
+正定:正定聚
+不定:不定聚
+邪定:邪定聚
+十玄:十玄門
+阿字:阿字功德
+彌勒所問十念:彌勒十念
+夏老居士:夏蓮居居士`;
+
+(function(){
+  var a = vows;
+  vows = {};
+  for (var i in a) vows[a[i]] = a[i];
+})();
+
+var xcnt = 0;
 
 (function(){
   var a = vows;
@@ -157,6 +223,7 @@ var vows = [
   for (var i in a) vows[a[i]] = true;
 })();
 
+var xcnt = 0;
 class JiePage {
   constructor(pageNum, pageName, is序) {
     this.pageNum = (typeof pageNum === 'string') ? parseInt(pageNum) : pageNum;
@@ -182,22 +249,51 @@ class JiePage {
           this.lines.push(l);
           if (!this.hasQuotes && (l.startsWith('#quote:') || l.startsWith('#title:')))
             this.hasQuotes = true;
+          if (!this.hasNotes && (l.indexOf('xg') >= 0))
+            this.hasNotes = true;
         }
       } else {
         if (ln.startsWith('#quot_')) ln = '#quote' + ln.substring(6);
         this.lines.push(ln)
         if (!this.hasQuotes && (ln.startsWith('#quote:') || ln.startsWith('#title:')))
           this.hasQuotes = true;
+        if (!this.hasNotes && (ln.indexOf('xg') >= 0))
+          this.hasNotes = true;
       }
     }
   }
 
   preprocessText() {
-    for (var i=0; i<this.lines.length; ++i) {
-      var ln = this.lines[i], idx;
+    var len = this.lines.length;
+    for (var i=0; i<len; ++i) {
+      var ln = this.lines[i], idx=0;
 
       // handle 念祖
       ln = ln.replace('#念祖', 念祖);
+
+      // handle terminologies
+      for (;;) {
+        var idx1 = ln.indexOf('{t', idx), term;
+        if (idx1 < 0) break;
+        var idx2 = ln.indexOf('t}', idx1+2);
+        if (idx2 < 0) {
+          term = ln.substring(idx1+2).trim();
+          var ln1 = this.lines[i+1];
+          if (!ln1) break;
+          idx2 = ln1.indexOf('t}');
+          if (idx2 > 0) {
+            idx1 = ln1.indexOf('{t');
+            if (idx1 >= 0 && idx1 < idx2) break;
+            term += ln1.substring(0, idx2).trim();
+            addTerm(term, this.pageNum);
+          }
+          break;
+        } else {
+          term = ln.substring(idx1+2, idx2).trim();
+          addTerm(term, this.pageNum);
+          idx = idx2+2;
+        }
+      }
 
       // handle 經文引用
       if (ln.startsWith('{}'))
@@ -275,9 +371,27 @@ class JiePage {
 
 const pages = []; // 正文，of JiePage's
 const 序pages = []; // 經解序，of JiePage's
+const terms = {};
+const TERM_MAP = {};
+
+function addTerm(term, pgnum) {
+  term = TERM_MAP[term] || term;
+  var info = terms[term];
+  if (!info)
+    terms[term] = { term, pages:[ pgnum ] };
+  else if (info.pages.indexOf(pgnum) < 0)
+    info.pages.push(pgnum);
+}
 
 (function(){
-  var a = JIE_TEXT.split('\n');
+  var a;
+  a = TERM_MAPPING.split('\n');
+  for (var i in a) {
+    var ab  = a[i].split(':');
+    if (a[1]) TERM_MAP[ab[0]] = ab[1];
+  }
+
+  a = JIE_TEXT.split('\n');
   var pg, lastName;
   for (var i in a) {
     var ln = a[i];
@@ -338,7 +452,8 @@ class ReaderStyles {
     this.introText            = { width:30, fontSize:18, fontFamily:FANGSONG_TI, paddingTop:25 };
     this.mottoText            = { width:50, fontSize:23, fontFamily:FANGSONG_TI, paddingTop:30, color:MOTTO_COLOR };
     this.mottoSrc             = { width:0,  fontSize:19, fontFamily:FANGSONG_TI, textAlign:'right', paddingBottom:60 };
-    this.parinamanaText       = { width:30, fontSize:18, fontFamily:KAI_TI, color:MOTTO_COLOR };
+    this.aboutText            = { width:30, fontSize:16, fontFamily:HEI_TI, color:ABOUT_COLOR };
+    this.parinamanaText       = { width:30, fontSize:21, fontFamily:FANGSONG_TI, color:MOTTO_COLOR };
     this.titleText            = { width:70, fontSize:30, fontFamily:KAI_TI, color:QUOTE_COLOR, paddingTop:50 };
     this.titleTextFirst       = copy(this.titleText, { width:30, paddingLeft:15 });
     this.quoteText            = { width:32, fontSize:20, fontFamily:HEI_TI, color:QUOTE_COLOR };
@@ -355,30 +470,29 @@ class ReaderStyles {
     this.vowText              = copy(this.vowTextInline, { width:30, paddingRight:-10, paddingLeft:10 });
     this.pageName             = { width:40, fontSize:14, fontFamily:KAI_TI, paddingTop:50 };
     this.pageNum              = copy(this.pageName, { textAlign:'right', paddingTop:0, paddingBottom:100 });
-    this.regularTextWrapSize  = 15;
+    this.regularTextWrapSize  = 13;
     this.endTextWrapSize      = 13;
   }
 
   // dims: { frameHeight, frameWidth, frameMarginTop, margin: { top, bottom } }
   addCSS(dims) {
-    var isXG = get('xg');
-    if (!isXG && this._isCSSAdded) return;
+    if (!dims.isXG && this._isCSSAdded) return;
 
     const buf = new Buffer(
-      window['xgStyle'] || isXG && 'xg { background-color:#ffd }',
+      dims.isXG,
       '.dim { opacity:0.5 }\n',
       '.qil { color:' + QUOTE_COLOR + ' }\n',
       '.xil { color:' + XQUOTE_COLOR + ' }\n',
       '.sil { font-weight:bold }\n',
       '.pil { font-weight:normal; color:' + PIN_COLOR + ' }\n',
       '.vil { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
+      'vow  { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
       '.til { color:' + TOPIC_COLOR + ' }\n',
       'NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:#00d; }\n',
       'NianZu::before { content:"念祖" }\n',
       'xycm { color:red; font-weight:bold }\n', // 信願持名
       'a { text-decoration:none }\n',
       'a.main { background-color:#fdd }\n\n',
-
       '.dualpageframe {',
         'position:',         'relative;',
         'background-color:', LEFT_BG_COLOR,
@@ -387,6 +501,18 @@ class ReaderStyles {
         'height:',           dims.frameHeight, 'px;',
         'width:',            dims.frameWidth,  'px;', 
         'margin-top:',       dims.frameMarginTop, 'px;',
+      '}\n\n',
+      '.termsframe sup { font-size:12px; }',
+      '.termsframe {',
+        'position: relative;',
+        'background-color:', LEFT_BG_COLOR,
+        'border:',           '1px black solid;',
+        'height:',           dims.frameHeight, 'px;',
+        'width:',            dims.frameWidth,  'px;', 
+        'margin-top:',       dims.frameMarginTop, 'px;',
+        'overflow: auto;',
+        'font-size: 14px;',
+        'text-align: left;', 
       '}');
 
     var names = Object.keys(this);
@@ -422,6 +548,7 @@ class PageDims {
     this.frameWidth     = width || 1050;
     this.frameHeight    = height || 720;
     this.margin         = { top:30, bottom:10, edge:20, ridge:30 };
+    this.isXG           = window['xgStyles'] || window['xgStyle'] || get('xg') && DEFAULT_XG || '';
 
     if (!this.keyHandlerSet) {
       document.addEventListener("keydown", keypress, false);
@@ -446,23 +573,47 @@ class PageDims {
     case 'prev5':     pageId = this._getPrevPageId(5); if (!pageId) return; break;
     case 'nextQuote': pageId = this._getNextQuotePageId(); break;
     case 'prevQuote': pageId = this._getPrevQuotePageId(); break;
+    case 'nextNote':  pageId = this._getNextNotePageId(); break;
+    case 'prevNote':  pageId = this._getPrevNotePageId(); break;
     }
+    if (!pageId) return;
     { sessionStorage.setItem('lastPageId', pageId);
       console.log('saved pageId', pageId);
     }
 
-    //var buf = new Buffer('<table border="0" cellspacing="10px"><tr><td><div class="dualpageframe"');
-    var buf = new Buffer('<div class="dualpageframe"');
+    var buf = new Buffer();
+    if (pageId == 'terms') {
+      buf.w('<div class="termsframe">',
+            '<h2 style="text-align:center">索引</h2>',
+            '<p style="padding:20px; margin-top:-25px">');
+      for (var ti in terms) {
+        var inf = terms[ti], a = [];
+        for (var tj=0; tj<inf.pages.length; ++tj) {
+          var pn = inf.pages[tj];
+          a.push(`<a href="javascript:showPage(${pn})">${pn}</a>`);
+        }
+        buf.w(inf.term, '<sup>&nbsp;', a.join(',&nbsp;'), '</sup> &nbsp;&nbsp;');
+        buf.w('</sup>');
+      }
+      buf.w('</p></div>');
+      buf.render(this.elemId);
+      return;
+    }
+
+    buf.w('<div class="dualpageframe"');
     if (pageId === 'backcover') buf.w(' style="background-color:black"');
     buf.w('>');
     switch (pageId) {
     case 'cover':
       this._renderBookCover(buf);
-      this._renderUsageInstructions(buf);
+      this._renderPage(buf, this._getMottoPage(), true);
       break;
     case 'backcover':
       this._renderBookBackCover(buf);
       this._renderPage(buf, this._getParinamanaPage());
+      break;
+    case 'about':
+      buf.w(this._getAboutPage());
       break;
     case 'toc':
       buf.w(this._getTOCPage());
@@ -470,29 +621,23 @@ class PageDims {
     default: // regular
       pageId = this._findDualPages(pageId);
       this._renderPage(buf, pageId && pageId.left, true);
-      this._renderPage(buf, pageId && pageId.right);
+      if (pageId.right == 'USAGE')
+        this._renderUsageInstructions(buf);
+      else
+        this._renderPage(buf, pageId && pageId.right);
       break;
     }
     this.curDisp = pageId;
     this._addNavBtns(buf);
     buf.w('</div>');
-/*
-    buf.w('</div></td><td valign="top" style="padding-left:20px">&nbsp;<br>',
-          '<button style="line-height:14px; margin-bottom:10px">封<br>面</button><br>',
-          '<button style="line-height:14px; margin-bottom:10px">目<br>錄</button><br>',
-          '<button style="line-height:14px; margin-bottom:10px">釋<br>經</button><br>',
-          '<button style="line-height:14px; margin-bottom:10px">封<br>底</button>',
-          '</td></tr></table>>');
-*/
-
-    e(this.elemId).innerHTML = buf.text();
+    buf.render(this.elemId);
   }
 
   _findDualPages(pageId) {
     var dpdisp = {}; // keys: right, left
     if ((typeof pageId === 'string') && (pageId.startsWith('序') || pageId.startsWith('i'))) {
       switch(parseInt(pageId.substring(1))) {
-      case 1: dpdisp.left = 序pages[0]; dpdisp.right = this._getMottoPage(); break;
+      case 1: dpdisp.left = 序pages[0];  dpdisp.right = this._getAboutPage(); break;
       case 2:
       case 3: dpdisp.left = 序pages[2]; dpdisp.right = 序pages[1]; break;
       case 4: dpdisp.left = pages[0];   dpdisp.right = 序pages[3]; break;
@@ -513,6 +658,32 @@ class PageDims {
       }
     } 
     return dpdisp;
+  }
+
+  _getNextNotePageId() {
+    if (!this.isXG) return null;
+    var pgInfo = this.curDisp && this.curDisp.left;
+    var startIdx = pgInfo ? (pgInfo.pageNum+1) : 1;
+    for (var i=startIdx; i<pages.length; ++i) {
+      var pi = pages[i];
+      if (pi.hasNotes) return pi.pageNum;
+    }
+    for (var i=1; i<startIdx; ++i) {
+      var pi = pages[i];
+      if (pi.hasNotes) return pi.pageNum;
+    }
+    return null;
+  }
+
+  _getPrevNotePageId() {
+    if (!this.isXG) return null;
+    var pgInfo = this.curDisp && this.curDisp.right;
+    var startIdx = !pgInfo ? (pages.length-1) : (pgInfo.pageNum-2);
+    for (var i=startIdx; i>1; --i)
+      if (pages[i].hasNotes) return pages[i].pageNum;
+    for (var i=pages.length-1; i>startIdx; --i)
+      if (pages[i].hasNotes) return pages[i].pageNum;
+    return null;
   }
 
   _getNextQuotePageId() {
@@ -561,10 +732,11 @@ class PageDims {
     if (this.curDisp === 'cover') return 'backcover';
     if (this.curDisp === 'backcover') return LAST_PAGE_NUM;
     if (this.curDisp === 'toc') return 'cover';
+    if (this.curDisp === 'about') return 'toc';
     var pgInfo = this.curDisp && this.curDisp.right;
     if (!pgInfo) pgInfo = this.curDisp && this.curDisp.left;
     if (pgInfo) {
-      if (pgInfo.isMotto) return 'toc';
+      if (pgInfo.isAbout) return 'toc';
       if (pgInfo.is序) {
         switch(pgInfo.pageNum) {
         case 1: return 'toc';
@@ -630,17 +802,20 @@ class PageDims {
         if (idx < 0) {
           idx = ln.indexOf(endTag, idx);
           if (idx < 0) break;
-          if (ln.startsWith('<!xg>'))
-            ln = '<!xg><span class="' + cls + '">' + ln.substring(5, idx) + '</span>' + ln.substring(idx+eTagLen);
-          else
+          if (ln.startsWith('<!xg')) {
+            var xx = ln.indexOf('>');
+            if (xx > 0)
+              ln = '<span class="' + cls + '">' + ln.substring(xx+1, idx) + '</span>' + ln.substring(idx+eTagLen);
+          } else
             ln = '<span class="' + cls + '">' + ln.substring(0, idx) + '</span>' + eTagRetained + ln.substring(idx+eTagLen);
           idx++;
           continue;
         }
         var idx1 = ln.indexOf(endTag, idx+1);
         if (idx1 > 0) {
-          ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + ln.substring(idx+sTagLen, idx1) +
-               '</span>' + eTagRetained + ln.substring(idx1+eTagLen);
+          var embedded = ln.substring(idx+sTagLen, idx1);
+          ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + embedded + '</span>' +
+               eTagRetained + ln.substring(idx1+eTagLen);
           idx = idx1 + 1;
         } else {
           ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + ln.substring(idx+sTagLen) + '</span>';
@@ -658,8 +833,11 @@ class PageDims {
     ln = procInLine(XIL_START, XIL_END, 'xil', XIL_LINE); // process External Quote (XQuote) InLine
     ln = procInLine(QIL_START, QIL_END, 'qil', QIL_LINE); // process Quote InLine (THIS SHOULD BE THE LAST!)
 
-    // process <!xg> dangling <xg> and </xg>. 'xg' is '信裹'.
+    // process <!xg> dangling <xg> and </xg>. 'xg' is '信裹', or 'extraneous-good'.
     ln = this.__processSimpleTag(ln, 'xg');
+    ln = this.__processSimpleTag(ln, 'xg1');
+    ln = this.__processSimpleTag(ln, 'xg2');
+    ln = this.__processSimpleTag(ln, 'xg3');
 
     // process Vow InLine
     ln = ln.replaceAll(VIL_START, '「<span class="vil">').replaceAll(VIL_END, '</span>」');
@@ -722,6 +900,7 @@ class PageDims {
          if (!isMain) idx2 = ln.indexOf(':', idx);
          var pageId = ln.substring(idx2+1, idx1);
          if (pageId.startsWith('i')) pageId = "'" + pageId + "'";
+         else if (pageId.startsWith('t')) pageId = "'terms'";
          var txt = ln.substring(idx+1, idx2);
          var note = TOC_notes[txt.trim()];
          if (note) note = ' title="' + note + '"';
@@ -737,15 +916,25 @@ class PageDims {
   _getMottoPage() {
     var pgInfo = new JiePage();
     pgInfo.preferredStyle = 'mottoText';
-    pgInfo.addLine(MOTTO.trim().split('\n'));
+    pgInfo.addLine(('\n' + MOTTO.trim()).split('\n'));
     pgInfo.isMotto = true;
+    return pgInfo;
+  }
+
+  _getAboutPage() {
+    var pgInfo = new JiePage();
+    pgInfo.preferredStyle = 'aboutText';
+    var a = ABOUT_THIS.trim().split('\n');
+    for (var i=0; i<a.length; ++i) a[i] = '　　　' + a[i];
+    pgInfo.addLine(a);
+    pgInfo.isAbout = true;
     return pgInfo;
   }
 
   _getParinamanaPage() {
     var pgInfo = new JiePage();
     pgInfo.preferredStyle = 'parinamanaText';
-    pgInfo.addLine('', '');
+    pgInfo.addLine('');
     pgInfo.addLine(PARINAMANA.trim().split('\n'));
     return pgInfo;
   }
@@ -768,9 +957,15 @@ class PageDims {
     var dims = this._getReadAreaDims(isLeft);
     var lines = pgInfo.lines;
     var x = dims.origX;
-    var idx, len = lines.length, lnNum = 1;
+    var idx, len = lines.length, lnNum = 1, ln, asis = false;
+    var isSpecial = pgInfo.preferredStyle;
+    if (pgInfo.getHTML) {
+      isSpecial = asis = true;
+      ln = pgInfo.getHTML();
+    } else // usual page...
     for (var i=0; i<len; ++i) {
-      var asis = false, ln = lines[i], showLnNum = true;
+      var showLnNum = true;
+      ln = lines[i];
       var cssCls = pgInfo.is序 ? 'introText' : (pgInfo.preferredStyle || 'regularText');
 
       if (ln.startsWith('#')) {
@@ -871,7 +1066,7 @@ class PageDims {
       if (fnt.paddingRight) x -= fnt.paddingRight;
       this._div(buf, cssCls, null, x, dims.origY, ln, showLnNum && ln.trim() ? lnNum++ : null);
     }
-    if (pgInfo.preferredStyle) return; // a special page
+    if (isSpecial) return;
 
     // page number, name
     var isEven = pgInfo.pageNum % 2 === 0;
@@ -880,8 +1075,9 @@ class PageDims {
   }
 
   _handleWrappedText(ln, wrapFontSize) {
+      var idx = 0;
     while (true) {
-      var idx = ln.indexOf('[');
+      idx = ln.indexOf('[', idx);
       if (idx < 0) break;
       var idx1 = ln.indexOf(']', idx);
       if (idx1 < 0) break;
@@ -891,8 +1087,9 @@ class PageDims {
         ln = a + b[0] + c;
       else
         ln = '<table border="0" cellspacing="0" cellpadding="0"><tr><td nowrap>' + a +
-             '</td><td nowrap style="font-size:' + wrapFontSize + '">' + b[0] + '<br>' + b[1] +
+             '</td><td nowrap style="line-height:' + (3+wrapFontSize) + 'px; font-size:' + wrapFontSize + '">' + b[0] + '<br>' + b[1] +
              '</td><td nowrap>' + c + '</td></tr></table>';
+      idx = idx1 + 1;
     }
     return ln;
   }
@@ -952,7 +1149,8 @@ class PageDims {
     }
 
     this._pageBackground(buf, 'black');
-    _r(font1, w1, H - font1.paddingTop, W - dims.bodyW/2 - w1/2 - titleOffset, '佛說大乘無量壽莊嚴<br>清淨平等覺經解');
+    _r(font1, w1, H - font1.paddingTop, W - dims.bodyW/2 - w1/2 - titleOffset,
+       '佛說大乘無量壽莊嚴<br>清淨平等覺經解');
     _r(font2, w2, H - font2.paddingTop, W - authorOffset, '黃念祖居士 著');
     _r(font3, w3, H - font3.paddingTop, W/2 + pubOffset, '佛陀教育基金會　印贈');
     _r(font4, w4, H - font4.paddingTop, W - versionOffset, '二〇一〇年五月修訂版');
@@ -980,20 +1178,32 @@ class PageDims {
 var dims = new PageDims();
 
 function showPage(pageId) {
-console.log('showPage', pageId);
   dims.renderDualPages(pageId || get('p'));
 }
 
 function showCtlPanel() {
   var buf = new Buffer();
-  buf.w(`【 <a href="javascript:showPage('next')" title="或按左向鍵">後頁</a>`,
-        `｜<a href="javascript:showPage('prev')" title="或按右向鍵">前頁</a>`,
-        `｜至第&nbsp;<input size="2" id="toPage">&nbsp;頁`,
-        `｜<a href="javascript:showPage('toc')">目錄</a>`,
-        `｜<a href="javascript:showPage('backcover')" title="或按End鍵">封底</a>`,
-        `｜<a href="javascript:showPage('cover')" title="或按Home鍵">封面</a> 】`,
-        `&nbsp;【 <a href="javascript:showPage('nextQuote')" title="或按PgDn鍵">下段經文</a>`,
-        `｜<a href="javascript:showPage('prevQuote')" title="或按PgUp鍵">上段經文</a> 】`);
+  const sp = '&nbsp;';
+  const sp3 = '&nbsp;&nbsp;&nbsp;';
+  const sp4 = sp3 + '&nbsp;';
+  buf.w(`<a href="../../index.html"><img src="../../images/download.svg" style="padding-top:2px" title="回主頁下載"></a>`,
+        sp3, sp3,
+        ` <a href="javascript:showPage('nextQuote')" title="下段經文。或按PgDn鍵">◂ </a>&nbsp;經文`,
+        `&nbsp;<a href="javascript:showPage('prevQuote')" title="上段經文。或按PgUp鍵"> ▸</a> `,
+        sp3, `<a href="javascript:showPage('next')" title="後一頁。或按左向鍵">⬅️ </a>`,
+        sp,  `&nbsp;<a href="javascript:showPage('prev')" title="前一頁。或按右向鍵">➡️</a>`,
+        sp4, `第&nbsp;<input size="2" id="toPage">&nbsp;頁`,
+        sp4, `<a href="javascript:showPage('backcover')" title="或按End鍵"><img src="jie_bcover.png" width="24px" title="封底。或按End鍵"></a>`,
+        sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按0鍵"></a>`,
+        sp3, `<a href="javascript:showPage('cover')" title="或按Home鍵"><img src="jie_cover.png" width="24px" title="封面。或按Home鍵"></a>`,
+        sp3, `【<a href="javascript:showPage('terms')" title="或按+鍵">索引</a>】`);
+  if (dims.isXG)
+    buf.w(`&nbsp;<font style="color:blue; opacity:0.8">`,
+          ` <a href="javascript:showPage('nextNote')">◂ </a>&nbsp;筆記`,
+          `&nbsp;<a href="javascript:showPage('prevNote')"> ▸</a> </font>`);
+  else
+    buf.w(`&nbsp;&nbsp;&nbsp;&nbsp;<span style="opacity:0.4">`,
+          `<a href="?xg=1">◻&nbsp;顯示筆記</a></span>`);
   buf.render(`ctlpnl`);
 }
 
@@ -1003,56 +1213,32 @@ function keypress(event) {
 //  var isCtrl  = event.ctrlKey;
 
   switch (event.keyCode) {
-  case 37: /* left  */ showPage(isShift ? 'next5' : 'next'); break;
-  case 39: /* right */ showPage(isShift ? 'prev5' : 'prev'); break;
-  case 35: /* end   */ showPage('backcover'); break;
-  case 36: /* home  */ showPage('cover');     break;
-  case 33: /* up    */ showPage('prevQuote'); break;
-  case 34: /* down  */ showPage('nextQuote'); break;
-  case 13: /* enter */ var toPg = e('toPage').value;
-                       if (toPg !== '') showPage(toPg);
-                       break;
+  case 107: /* + pad */
+  case  61: /* = +   */ showPage('terms'); break;
+  case  96: /* 0 pad */
+  case  48: /* 0     */ showPage('toc'); break;
+  case  37: /* left  */ showPage(isShift ? 'next5' : 'next'); break;
+  case  39: /* right */ showPage(isShift ? 'prev5' : 'prev'); break;
+  case  35: /* end   */ showPage('backcover'); break;
+  case  36: /* home  */ showPage('cover');     break;
+  case  33: /* up    */ showPage('prevQuote'); break;
+  case  34: /* down  */ showPage('nextQuote'); break;
+  case  13: /* enter */ var toPg = e('toPage').value;
+                        if (toPg !== '') showPage(toPg);
+                        break;
   }
 }
 
 const ABOUT_THIS = `
-<h4>【簡介】</h4>
+《大經解》專用閱讀器簡介
 
-<blockquote>
-本專用閱讀器乃對佛陀教育基金會恭印的黃念祖居士著《佛說大乘無量壽莊嚴清淨平等覺經解》之重新排版。排文求與硬拷貝雷同，悉尊原文標點、行啟、字體。稍事調整，及予經文引用等<a href="javascript:showPage(236)" title="例頁">著色</a>，增益屏幕閱讀，不昧文字頁數索引。改進標點、糾錯字（如人/入）。<a href="javascript:showPage('toc')">目錄</a>特製，非書原有。
-</blockquote>
+本閱讀器乃對佛陀教育基金會恭印的黃念祖居士著《佛說大乘無量壽莊嚴清淨
+平等覺經解》之重新排版。排文求與硬拷貝雷同，悉尊原文標點、行啟、字體。
+稍事調整，及予經文引用等著色，增益屏幕閱讀，不昧文字頁數索引。改進標
+點、糾錯字（如人、入）。目錄特製，非書原有。
 
-<h4>【使用操作】</h4>
-
-<blockquote>
 推薦使用Firefox。諸主流瀏覽器應該可以。
-<br>
-可用書頁下方的控制臺尋訪所需頁面。
-<br>
-此外，也可在書面上直接操作：
-</blockquote>
-
-<blockquote>
-用鍵盤：① 按左向鍵去後一頁。<br>
-　　　　② 按右向鍵去前一頁。<br>
-　　　　③ 按PgDn鍵去下個經文援引。<br>
-　　　　④ 按PgUp鍵去上個經文援引。<br>
-　　　　⑤ 按Home鍵去封面。<br>
-　　　　⑥ 按End鍵去封底。<br>
-</blockquote>
-
-<blockquote>
-用鼠標：① 點擊左頁下沿去後一頁。<br>
-　　　　② 點擊右頁下沿去前一頁。<br>
-　　　　③ 點擊左頁上沿去目錄。<br>
-　　　　④ 點擊右頁上沿去封面。<br>
-</blockquote>
 
 
-<h4>【鏈接引用】</h4>
-<blockquote>
-在URL上加&nbsp;<u>?p＝頁數</u>&nbsp;從那一頁開始。見<a href="?p=9">例</a>。
-</blockquote>
-
-<h4 style="opacity:0.6">【信裹居士恭製　1.0.0版　二〇二二年】</h4>
+【信裹居士恭製　1.0.0版　二〇二二年】
 `;
