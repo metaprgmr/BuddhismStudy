@@ -377,7 +377,9 @@ function addBookmarks(s) {
   if (!s) return;
   var a = s.trim().split('\n');
   for (var i in a) {
-    var xy = a[i].split(':');
+    var ln = a[i].trim();
+    if (!ln || ln.startsWith('//')) continue;
+    var xy = ln.split(':');
     var x = xy[0].trim(), y = xy[1].trim();
     if (x && y) BOOKMARKS[x] = y;
   }
@@ -509,6 +511,7 @@ class ReaderStyles {
         'border:',           '1px black solid;',
         'height:',           dims.frameHeight, 'px;',
         'width:',            dims.frameWidth,  'px;', 
+        'box-shadow:',       '5px 5px;', 
         'margin-top:',       dims.frameMarginTop, 'px;',
       '}\n\n',
       '.termsframe sup { font-size:12px; }',
@@ -518,6 +521,7 @@ class ReaderStyles {
         'border:',           '1px black solid;',
         'height:',           dims.frameHeight, 'px;',
         'width:',            dims.frameWidth,  'px;', 
+        'box-shadow:',       '5px 5px;', 
         'margin-top:',       dims.frameMarginTop, 'px;',
         'overflow: auto;',
         'font-size: 14px;',
@@ -1227,10 +1231,11 @@ function showCtlPanel() {
         sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按0鍵"></a>`,
         sp3, `<a href="javascript:showPage('cover')" title="或按Home鍵"><img src="jie_cover.png" width="24px" title="封面。或按Home鍵"></a>`,
         sp6, `<span style="color:blue">【<a href="javascript:showPage('terms')" title="或按+鍵">索引</a>】</span>`,
-        sp3, `<span style="color:blue" title="如何加書籤，請參看Jie.html的指示">書籤&nbsp;`, getBookmarksSel(), `</span>`,
         sp3, `<font style="color:blue" title="如何加高光筆記，請參看Jie.html的指示">`,
              ` <a href="javascript:showPage('nextNote')" title="或按數字小盤4鍵">◂ </a>&nbsp;筆記`,
-             `&nbsp;<a href="javascript:showPage('prevNote')" title="或按數字小盤6鍵"> ▸</a> </font>`);
+             `&nbsp;<a href="javascript:showPage('prevNote')" title="或按數字小盤6鍵"> ▸</a> </font>`,
+        sp3, `<span style="color:blue" title="如何加書籤，請參看Jie.html的指示">書籤&nbsp;`, getBookmarksSel(), `</span>`,
+  );
   buf.render(`ctlpnl`);
 }
 

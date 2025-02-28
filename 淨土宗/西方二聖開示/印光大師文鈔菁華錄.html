@@ -54,6 +54,7 @@ function displayEntry(id) {
 
 w('<table border="0" style="background-color:white" cellspacing="10">',
   '<tr height="30"><td nowrap valign="top" class="toc" style="font-weight:bold">目錄</td>',
+  '<td valign="top">李淨通<font style="opacity:0.4"><sup style="font-size:14px">居士</sup>編著</font></td>',
   '<td valign="top" align="right" class="toc">【',
    is333 ? '<a href="?m=a">完整全文</a>' : '<a href="?m=">333條總覽</a>',
   '】</td></tr>',
@@ -77,7 +78,8 @@ for (var i=0; i<TheBook.content.length; ++i) {
     }
 
     if (i === 7)
-      w('</table></td><td valign="top" align="right"><table border="0" width="320"><tr><td colspan=2 class="toc">　</td></tr><tr><td colspan=2>　</td></tr>');
+      w('</table></td><td colspan="2" valign="top" align="right">',
+        '<table border="0" width="320"><tr><td colspan=2 class="toc">　</td></tr><tr><td colspan=2>　</td></tr>');
 
     var style = (is333 && !num.endsWith('、') ? ' style="opacity:0.5"' : '');
     w('<tr><td class="toc" valign="top"', style, '>', num, '</td><td class="toc">', t);
