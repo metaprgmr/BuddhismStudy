@@ -247,18 +247,16 @@ class JiePage {
           var l = ln[i];
           if (l.startsWith('#quot_')) l = '#quote' + l.substring(6);
           this.lines.push(l);
-          if (!this.hasQuotes && (l.startsWith('#quote:') || l.startsWith('#title:')))
-            this.hasQuotes = true;
-          if (!this.hasNotes && (l.indexOf('xg') >= 0))
-            this.hasNotes = true;
+          this.hasQuotes |= l.startsWith('#quote:') || l.startsWith('#title:');
+          this.hasXG |= (l.indexOf('xg') >= 0);
+          this.hasHL |= (l.indexOf('<hl') >= 0);
         }
       } else {
         if (ln.startsWith('#quot_')) ln = '#quote' + ln.substring(6);
         this.lines.push(ln)
-        if (!this.hasQuotes && (ln.startsWith('#quote:') || ln.startsWith('#title:')))
-          this.hasQuotes = true;
-        if (!this.hasNotes && (ln.indexOf('xg') >= 0))
-          this.hasNotes = true;
+        this.hasQuotes |= ln.startsWith('#quote:') || ln.startsWith('#title:');
+        this.hasXG |= (ln.indexOf('xg') >= 0);
+        this.hasHL |= (ln.indexOf('<hl') >= 0);
       }
     }
   }
@@ -373,6 +371,17 @@ const pages = []; // 正文，of JiePage's
 const 序pages = []; // 經解序，of JiePage's
 const terms = {};
 const TERM_MAP = {};
+var   BOOKMARKS = {};
+
+function addBookmarks(s) {
+  if (!s) return;
+  var a = s.trim().split('\n');
+  for (var i in a) {
+    var xy = a[i].split(':');
+    var x = xy[0].trim(), y = xy[1].trim();
+    if (x && y) BOOKMARKS[x] = y;
+  }
+}
 
 function addTerm(term, pgnum) {
   term = TERM_MAP[term] || term;
@@ -625,6 +634,8 @@ class PageDims {
         this._renderUsageInstructions(buf);
       else
         this._renderPage(buf, pageId && pageId.right);
+      var el = e('toPage');
+      el && (el.value = pageId.left && pageId.left.pageNum || pageId.right && pageId.right.pageNum);
       break;
     }
     this.curDisp = pageId;
@@ -661,28 +672,46 @@ class PageDims {
   }
 
   _getNextNotePageId() {
-    if (!this.isXG) return null;
     var pgInfo = this.curDisp && this.curDisp.left;
     var startIdx = pgInfo ? (pgInfo.pageNum+1) : 1;
     for (var i=startIdx; i<pages.length; ++i) {
       var pi = pages[i];
-      if (pi.hasNotes) return pi.pageNum;
+      if (dims.isXG) {
+        if (pi.hasXG) return pi.pageNum;
+      } else {
+        if (pi.hasHL) return pi.pageNum;
+      }
     }
     for (var i=1; i<startIdx; ++i) {
       var pi = pages[i];
-      if (pi.hasNotes) return pi.pageNum;
+      if (dims.isXG) {
+        if (pi.hasXG) return pi.pageNum;
+      } else {
+        if (pi.hasHL) return pi.pageNum;
+      }
     }
     return null;
   }
 
   _getPrevNotePageId() {
-    if (!this.isXG) return null;
     var pgInfo = this.curDisp && this.curDisp.right;
     var startIdx = !pgInfo ? (pages.length-1) : (pgInfo.pageNum-2);
-    for (var i=startIdx; i>1; --i)
-      if (pages[i].hasNotes) return pages[i].pageNum;
-    for (var i=pages.length-1; i>startIdx; --i)
-      if (pages[i].hasNotes) return pages[i].pageNum;
+    for (var i=startIdx; i>1; --i) {
+      var pi = pages[i];
+      if (dims.isXG) {
+        if (pi.hasXG) return pi.pageNum;
+      } else {
+        if (pi.hasHL) return pi.pageNum;
+      }
+    }
+    for (var i=pages.length-1; i>startIdx; --i) {
+      var pi = pages[i];
+      if (dims.isXG) {
+        if (pi.hasXG) return pi.pageNum;
+      } else {
+        if (pi.hasHL) return pi.pageNum;
+      }
+    }
     return null;
   }
 
@@ -1186,8 +1215,9 @@ function showCtlPanel() {
   const sp = '&nbsp;';
   const sp3 = '&nbsp;&nbsp;&nbsp;';
   const sp4 = sp3 + '&nbsp;';
+  const sp6 = sp3 + sp3;
   buf.w(`<a href="../../index.html"><img src="../../images/download.svg" style="padding-top:2px" title="回主頁下載"></a>`,
-        sp3, sp3,
+        sp6,
         ` <a href="javascript:showPage('nextQuote')" title="下段經文。或按PgDn鍵">◂ </a>&nbsp;經文`,
         `&nbsp;<a href="javascript:showPage('prevQuote')" title="上段經文。或按PgUp鍵"> ▸</a> `,
         sp3, `<a href="javascript:showPage('next')" title="後一頁。或按左向鍵">⬅️ </a>`,
@@ -1196,15 +1226,23 @@ function showCtlPanel() {
         sp4, `<a href="javascript:showPage('backcover')" title="或按End鍵"><img src="jie_bcover.png" width="24px" title="封底。或按End鍵"></a>`,
         sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按0鍵"></a>`,
         sp3, `<a href="javascript:showPage('cover')" title="或按Home鍵"><img src="jie_cover.png" width="24px" title="封面。或按Home鍵"></a>`,
-        sp3, `【<a href="javascript:showPage('terms')" title="或按+鍵">索引</a>】`);
-  if (dims.isXG)
-    buf.w(`&nbsp;<font style="color:blue; opacity:0.8">`,
-          ` <a href="javascript:showPage('nextNote')">◂ </a>&nbsp;筆記`,
-          `&nbsp;<a href="javascript:showPage('prevNote')"> ▸</a> </font>`);
-  else
-    buf.w(`&nbsp;&nbsp;&nbsp;&nbsp;<span style="opacity:0.4">`,
-          `<a href="?xg=1">◻&nbsp;顯示筆記</a></span>`);
+        sp6, `<span style="color:blue">【<a href="javascript:showPage('terms')" title="或按+鍵">索引</a>】</span>`,
+        sp3, `<span style="color:blue" title="如何加書籤，請參看Jie.html的指示">書籤&nbsp;`, getBookmarksSel(), `</span>`,
+        sp3, `<font style="color:blue" title="如何加高光筆記，請參看Jie.html的指示">`,
+             ` <a href="javascript:showPage('nextNote')" title="或按數字小盤4鍵">◂ </a>&nbsp;筆記`,
+             `&nbsp;<a href="javascript:showPage('prevNote')" title="或按數字小盤6鍵"> ▸</a> </font>`);
   buf.render(`ctlpnl`);
+}
+
+function bookmarkChange(e) { var pg = e.target.value; pg && showPage(pg); }
+
+function getBookmarksSel() {
+  var buf = new Buffer('<select onchange="bookmarkChange(event)"><option> </option>');
+  for (var k in BOOKMARKS) {
+    var pg = BOOKMARKS[k];
+    buf.w(`<option value="${pg}">${k}(${pg})</option>\n`);
+  }
+  return buf.w('</select>').render();
 }
 
 function keypress(event) {
@@ -1223,6 +1261,8 @@ function keypress(event) {
   case  36: /* home  */ showPage('cover');     break;
   case  33: /* up    */ showPage('prevQuote'); break;
   case  34: /* down  */ showPage('nextQuote'); break;
+  case 102: /* > pad */ showPage('prevNote'); break;
+  case 100: /* < pad */ showPage('nextNote'); break;
   case  13: /* enter */ var toPg = e('toPage').value;
                         if (toPg !== '') showPage(toPg);
                         break;
