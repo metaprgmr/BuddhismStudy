@@ -489,6 +489,7 @@ class ReaderStyles {
   addCSS(dims) {
     if (!dims.isXG && this._isCSSAdded) return;
 
+    const shadow = '5px 5px #666;';
     const buf = new Buffer(
       dims.isXG,
       '.dim { opacity:0.5 }\n',
@@ -511,9 +512,16 @@ class ReaderStyles {
         'border:',           '1px black solid;',
         'height:',           dims.frameHeight, 'px;',
         'width:',            dims.frameWidth,  'px;', 
-        'box-shadow:',       '5px 5px;', 
+        'box-shadow:',       shadow,
         'margin-top:',       dims.frameMarginTop, 'px;',
-      '}\n\n',
+      '}\n',
+      '.ctlpnl {',
+        'background-color:', '#CBD0D0;',
+        'padding:',          '2px 5px 2px 5px;',
+        'border:',           '1px black solid;',
+        'width:',            dims.frameWidth-10, 'px;',
+        'box-shadow:',       shadow,
+      '}\n',
       '.termsframe sup { font-size:12px; }',
       '.termsframe {',
         'position: relative;',
@@ -521,7 +529,7 @@ class ReaderStyles {
         'border:',           '1px black solid;',
         'height:',           dims.frameHeight, 'px;',
         'width:',            dims.frameWidth,  'px;', 
-        'box-shadow:',       '5px 5px;', 
+        'box-shadow:',       shadow,
         'margin-top:',       dims.frameMarginTop, 'px;',
         'overflow: auto;',
         'font-size: 14px;',
