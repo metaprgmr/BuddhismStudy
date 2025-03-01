@@ -149,14 +149,14 @@ was heard is
 the ten quarters.
 遍十方界。
 Led by Mañjuśrī,
-@a@
+@c@
 a number of
 []
 Bodhisattvas as countless as sand grains in the Ganges,
 恒沙菩薩，
 had come to the holy place.
 來聚道場。
-@a@
+@c@
 文殊師利而為上首。
 
 Meanwhile,
@@ -353,9 +353,9 @@ on the point of
 breaking the rules of pure living.
 將毀戒體。
 
-But
+But the
 []
-the Buddha was aware of all this
+Buddha was aware of all this
 如來知彼婬術所加，
 and,
 []
@@ -363,7 +363,9 @@ after the royal feast,
 齋畢
 He returned to the vihāra
 旋歸。
-with the king,
+with the
+[]
+king,
 王
 princes and elders
 及大臣長者居士，

@@ -85,7 +85,9 @@ function show() {
   }
   w('</table></div>'); // end list of texts
   w('</td><td width="50px"></td><td valign="top">',
-    '<div id="txtshow"></div></td></tr></table>');
+    '<div id="txtshow">',
+    '<center><img src="../images/明代彩繪全圖釋迦如來應化事蹟.jpg" width="380px" style="padding-top:6px"></center>',
+    '</div></td></tr></table>');
   if (cnt < n) w('<p style="color:#f09">', cnt, '/', n, '<p>');
   else w('<p>&nbsp;</p>');
 }

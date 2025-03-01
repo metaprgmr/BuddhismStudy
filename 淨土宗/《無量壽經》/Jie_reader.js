@@ -377,8 +377,9 @@ function addBookmarks(s) {
   if (!s) return;
   var a = s.trim().split('\n');
   for (var i in a) {
-    var ln = a[i].trim();
-    if (!ln || ln.startsWith('//')) continue;
+    var ln = a[i].trim(), idx = ln.indexOf('//');;
+    if (idx >= 0) ln = ln.substring(0,idx).trim();
+    if (!ln) continue;
     var xy = ln.split(':');
     var x = xy[0].trim(), y = xy[1].trim();
     if (x && y) BOOKMARKS[x] = y;
