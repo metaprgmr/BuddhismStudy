@@ -114,27 +114,8 @@ const COVER_TEXT_COLOR = '#FFD700';
 const LINE_NUM_STYLE = 'writing-mode:horizontal-tb; margin-top:-30px; font-family:helvetica; font-size:10px; color:lightgray';
 const DEFAULT_XG     = 'xg { background-color:#ffd }';
 
-// "Quote InLine", "Pin(品名) InLine", "Vow InLine" and "Topic/Terminology InLine"  handling
-// Potential vows in the text are examined for「...願」and「...V」against `vows` below.
-const QIL_START = 'ㄍ'; // replaces {
-const QIL_END   = 'ㄑ'; // replaces }   e.g. {如是我聞}
-const QIL_LINE  = 'ㄇ'; // replaces ^{}
-const XIL_LINE  = QIL_LINE + 'x'; // replaces ^{x}
 const VIL_START = 'ㄅ';
 const VIL_END   = 'ㄆ';
-const VIL_START_NO_END = 'ㄇ';
-const VIL_END_NO_START = 'ㄈ';
-const TIL_START = QIL_START + 't'; // replaces {t  -- terminology
-const TIL_END   = 't' + QIL_END;   // replaces t}  e.g. {t八相成道t}
-const PIL_START = QIL_START + 'p'; // replaces {p  -- Quote (of this sutra) InLine
-const PIL_END   = 'p' + QIL_END;   // replaces p}  e.g. {p受菩提記p}
-const XIL_START = QIL_START + 'x'; // replaces {x  -- eXternal quoting InLine
-const XIL_END   = 'x' + QIL_END;   // replaces x}  e.g. {x擐大甲胄，以宏誓功德而自莊嚴。x}
-const SIL_START = '《'; //  -- Source name
-const SIL_END   = '》'; //  e.g. 《觀經》
-const TMP_START = 'ㄥ';
-const TMP_END   = 'ㄦ';
-const 念祖      = 'ㄙ祖';
 
 var vows = [
   '國無惡道願', '不墮惡趣願', '身悉金色願', '三十二相願', '身無差別願',
@@ -149,65 +130,11 @@ var vows = [
   '獲陀羅尼願', '聞名得忍願', '現證不退願',
 ];
 const vowsAlias = {
-  "不更惡趣願": 2,
-  "卅二相願":   4,
-  "無差別願":   5,
-  "遍供諸佛願": 11,
-  "諸佛稱歎願": 17,
-  "國無婦女願": 22,
-  "女人往生願": 23,
-  "蓮華化生願": 24,
+  "不更惡趣願": 2,  "卅二相願":   4,  "無差別願":   5,  "遍供諸佛願": 11,
+  "諸佛稱歎願": 17, "國無婦女願": 22, "女人往生願": 23, "蓮華化生願": 24,
 };
 const TERM_MAPPING =
-`第一:第一願
-第二:第二願
-第三:第三願
-第四:第四願
-第五:第五願
-第六:第六願
-第七:第七願
-第八:第八願
-第九:第九願
-第十:第十願
-第十一:第十一願
-第十二:第十二願
-第十三:第十三願
-第十四:第十四願
-第十五:第十五願
-第十六:第十六願
-第十七:第十七願
-第十八:第十八願
-第十九:第十九願
-第廿:第廿願
-第廿一:第廿一願
-第廿二:第廿二願
-第廿三:第廿三願
-第廿四:第廿四願
-第廿五:第廿五願
-第廿六:第廿六願
-第廿七:第廿七願
-第廿八:第廿八願
-第廿九:第廿九願
-第卅:第卅願
-第卅一:第卅一願
-第卅二:第卅二願
-第卅三:第卅三願
-第卅四:第卅四願
-第卅五:第卅五願
-第卅六:第卅六願
-第卅七:第卅七願
-第卅八:第卅八願
-第卅九:第卅九願
-第四十:第四十願
-第四十一:第四十一願
-第四十二:第四十二願
-第四十三:第四十三願
-第四十四:第四十四願
-第四十五:第四十五願
-第四十六:第四十六願
-第四十七:第四十七願
-第四十八:第四十八願
-頓:頓教
+`頓:頓教
 漸:漸教
 正定:正定聚
 不定:不定聚
@@ -257,12 +184,18 @@ class JiePage {
   preprocessText() {
     var len = this.lines.length;
     for (var i=0; i<len; ++i) {
-      var ln = this.lines[i], idx=0;
+      var ln = this.lines[i], idx = -1, wholeLineTag;
+      if (ln.startsWith('<!'))
+        idx = ln.indexOf('>');
+      if (idx > 0) {
+        wholeLineTag = ln.substring(0,idx+1);
+        ln = ln.substring(idx+1);
+      } else {
+        wholeLineTag = '';
+      }
 
-      // handle 念祖
-      ln = ln.replace('#念祖', 念祖);
-
-      // handle terminologies
+      // extract terminologies
+      idx = 0;
       for (;;) {
         var idx1 = ln.indexOf('{t', idx), term, vnum;
         if (idx1 < 0) break;
@@ -286,15 +219,6 @@ class JiePage {
         }
       }
 
-      // handle 經文引用
-      if (ln.startsWith('{}'))
-        ln = QIL_LINE + ln.substring(2);
-      else if (ln.startsWith('{x}'))
-        ln = XIL_LINE + ln.substring(3);
-      else
-        ln = ln.replaceAll('{', QIL_START).replaceAll('}', QIL_END); // also covers (TIL|PIL|XIL)_START/END
-      this.lines[i] = ln;
-  
       // handle 「...願」
       for (idx=0; ; idx+=2) {
         idx = ln.indexOf('願」', idx);
@@ -304,8 +228,10 @@ class JiePage {
           var v = ln.substring(idx1+1, idx+1);
           if (v.length <= 5) {
             vnum = vows[v];
-            if (vnum > 0)
-              this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + vnum + '願">' + v + VIL_END + ln.substring(idx+2);
+            if (vnum > 0) {
+              this.lines[i] = ln = ln.substring(0, idx1+1) + VIL_START + vnum + '願">' + v + VIL_END + ln.substring(idx+1);
+              addTerm('第' + vnum + '願', this.pageNum);
+            }
           }
         } else { // check the previous line
           var pg = this, lnNum = i-1;
@@ -322,8 +248,9 @@ class JiePage {
             if (v.length <= 5) {
               vnum = vows[v];
               if (vnum > 0) {
-                pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + vnum + '願">' + ln1.substring(idx1+1);
-                this.lines[i] = ln = ln.substring(0, idx+1) + VIL_END_NO_START + ln.substring(idx+2);
+                pg.lines[lnNum] = ln1.substring(0, idx1+1) + VIL_START + vnum + '願">' + ln1.substring(idx1+1);
+                this.lines[i] = ln = VIL_START + vnum + '願">' + ln.substring(0, idx+1) + VIL_END + '」' + ln.substring(idx+2);
+                addTerm('第' + vnum + '願', this.pageNum);
               }
             }
           }
@@ -338,7 +265,8 @@ class JiePage {
           var v = ln.substring(idx1+1, idx);
           if (v.length <= 5) {
             vnum = vows[v+'願'];
-            this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + vnum + '願">' + v + VIL_END + ln.substring(idx+2);
+            this.lines[i] = ln = ln.substring(0, idx1+1) + VIL_START + vnum + '願">' + v + VIL_END + ln.substring(idx+1);
+            addTerm('第' + vnum + '願', this.pageNum);
           }
         } else { // check the previous line
           var pg = this, lnNum = i-1;
@@ -355,8 +283,9 @@ class JiePage {
             if (v.length <= 5) {
               vnum = vows[v+'願'];
               if (vnum > 0) {
-                pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + vnum + '願">' + ln1.substring(idx1+1);
-                this.lines[i] = ln = ln.substring(0, idx) + VIL_END_NO_START + ln.substring(idx+2);
+                pg.lines[lnNum] = ln1.substring(0, idx1+1) + VIL_START + vnum + '願">' + ln1.substring(idx1+1);
+                this.lines[i] = ln = VIL_START + vnum + '願">' + ln.substring(0, idx) + VIL_END + '」' + ln.substring(idx+2);
+                addTerm('第' + vnum + '願', this.pageNum);
               }
             }
           }
@@ -571,6 +500,117 @@ class ReaderStyles {
 } // end of Styles.
 
 const css = new ReaderStyles();
+
+class LineProc {
+  constructor(ln) {
+    this.orig = ln; // for debugging
+
+    var idx = -1;
+    if (ln.startsWith('<!'))
+      idx = ln.indexOf('>');
+    if (idx > 0) {
+      this.wholeLineTag = ln.substring(2,idx);
+      this.line = ln.substring(idx+1);
+    } else {
+      this.line = ln;
+    }
+
+    this._proc();
+  }
+
+  get() { return this.line; }
+
+  _proc() {
+    var ln = this.line;
+    if (ln.startsWith('{}'))
+      ln = '{' + ln.substring(2) + '}';
+    else if (ln.startsWith('{x}'))
+      ln = '{x' + ln.substring(3) + 'x}';
+    this.line = ln.replaceAll('《', '《{s').replaceAll('》', 's}》');
+
+    this.__procInLine();
+
+    // process Vow InLine
+    this.line = this.line.replace('#念祖', '<NianZu></NianZu>')
+                         .replaceAll(VIL_START, '<span class="vil" title="第').replaceAll(VIL_END, '</span>')
+                         .replaceAll('BJ', '<font class="sil">本經</font>')
+                         .replaceAll('Bj', '<font class="sil">本</font>')
+                         .replaceAll('bJ', '<font class="sil">經</font>');
+
+    if (this.wholeLineTag)
+      this.line = `<${this.wholeLineTag}>${this.line}</${this.wholeLineTag}>`;
+  }
+
+  __procInLine() {
+    const CUSTTAGS = 'pxst'; // Pin, eX-quote, source, term
+    // parse into tokens
+    var ln = this.line, a = [], i, cur = '', len = ln.length, x;
+    for (i=0; i<len; ++i) {
+      var ch = ln[i];
+      switch (ch) {
+      case '{':
+        if (cur) { a.push(cur); cur = ''; }
+        ch = CUSTTAGS.indexOf(ln[i+1]);
+        if (ch < 0)
+          a.push('{q');
+        else {
+          a.push('{' + CUSTTAGS[ch]);
+          ++i;
+        }
+        break;
+      case '}': 
+        if (cur) { a.push(cur); cur = ''; }
+        ch = CUSTTAGS.indexOf(ln[i-1]);
+        if (ch < 0)
+          a.push('q}');
+        else {
+          if (a.length > 0) {
+            x = a[a.length-1];
+            a[a.length-1] = x.substring(0, x.length-1);
+          }
+          a.push(CUSTTAGS[ch] + '}');
+        }
+        break;
+      default:  cur += ch; break;
+      } 
+    }
+    if (cur) a.push(cur);
+
+    len = a.length;
+    // ensure leading end-tag is enclosed
+    for (var i=0; i<len; ++i) {
+      x = a[i];
+      if (x[0] == '{') break; // nothing to do
+      if (x.endsWith('}')) {
+        a.unshift('{' + x[0]); // enclose at the start
+        break;
+      }
+    }
+    // ensure ending start-tag is closed
+    for (var i=len-1; i>=0; --i) {
+      var x = a[i];
+      if (x.endsWith('}')) break; // nothing to do
+      if (x[0] == '{') {
+        a.push(x[1] + '}'); // close at the end
+        break;
+      }
+    }
+    var buf = new Buffer();
+    len = a.length;
+    for (var i=0; i<len; ++i) {
+      var x = a[i];
+      if (x.endsWith('}'))
+        buf.w('</span>');
+      else if (x.startsWith('{'))
+        buf.w('<span class="', x[1], 'il">');
+      else
+        buf.w(x);
+    }
+    this.line = buf.render();
+  }
+
+} // LineProc.
+
 
 class PageDims {
   constructor(width, height, frameMarginTop) {
@@ -838,108 +878,12 @@ class PageDims {
 
   _div(buf, cssCls, styles, x, y, ln, lnNum) {
     if (!ln) return;
-    ln = ln.replace(念祖, '<NianZu></NianZu>');
-
-    function procInLine(startTag, endTag, cls, lineTag) { // operates upon ln
-      if (lineTag && ln.startsWith(lineTag))
-        return '<span class="' + cls + '">' + ln.substring(lineTag.length) + '</span>';
-      var sTagRetained = '', eTagRetained = '', idx;
-      if (startTag === '《') sTagRetained = TMP_START;
-      if (endTag === '》')   eTagRetained = TMP_END;
-      var sTagLen = startTag.length, eTagLen = endTag.length;
-      for (idx=0; ; ) {
-        idx = ln.indexOf(startTag, idx);
-        if (idx < 0) {
-          idx = ln.indexOf(endTag, idx);
-          if (idx < 0) break;
-          if (ln.startsWith('<!xg')) {
-            var xx = ln.indexOf('>');
-            if (xx > 0)
-              ln = '<span class="' + cls + '">' + ln.substring(xx+1, idx) + '</span>' + ln.substring(idx+eTagLen);
-          } else
-            ln = '<span class="' + cls + '">' + ln.substring(0, idx) + '</span>' + eTagRetained + ln.substring(idx+eTagLen);
-          idx++;
-          continue;
-        }
-        var idx1 = ln.indexOf(endTag, idx+1);
-        if (idx1 > 0) {
-          var embedded = ln.substring(idx+sTagLen, idx1);
-          ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + embedded + '</span>' +
-               eTagRetained + ln.substring(idx1+eTagLen);
-          idx = idx1 + 1;
-        } else {
-          ln = ln.substring(0, idx) + sTagRetained + '<span class="' + cls + '">' + ln.substring(idx+sTagLen) + '</span>';
-          idx = 0;
-        }
-      }
-      if (sTagRetained) ln = ln.replaceAll(TMP_START, startTag);
-      if (eTagRetained) ln = ln.replaceAll(TMP_END, endTag);
-      return ln;
-    }
-
-    ln = procInLine(TIL_START, TIL_END, 'til');           // process Topic/Terminology InLine
-    ln = procInLine(PIL_START, PIL_END, 'pil');           // process 品名 Pin InLine
-    ln = procInLine(SIL_START, SIL_END, 'sil');           // process Source title
-    ln = procInLine(XIL_START, XIL_END, 'xil', XIL_LINE); // process External Quote (XQuote) InLine
-    ln = procInLine(QIL_START, QIL_END, 'qil', QIL_LINE); // process Quote InLine (THIS SHOULD BE THE LAST!)
-
-    // process <!xg> dangling <xg> and </xg>. 'xg' as 'extra-good' or anything.
-    ln = this.__processSimpleTag(ln, 'hl');
-    ln = this.__processSimpleTag(ln, 'hl1');
-    ln = this.__processSimpleTag(ln, 'xg');
-    ln = this.__processSimpleTag(ln, 'xg1');
-    ln = this.__processSimpleTag(ln, 'xg2');
-
-    // process Vow InLine
-    ln = this.__processVows(ln);
-
     var buf1 = new Buffer('<div');
     cssCls && buf1.w(' class="', cssCls, '"');
-    ln = ln.replaceAll('BJ', '<font class="sil">本經</font>')
-           .replaceAll('Bj', '<font class="sil">本</font>')
-           .replaceAll('bJ', '<font class="sil">經</font>');
     buf1.w(' style="left:', x, 'px; top:', y, 'px;', styles || '', '">');
     if (lnNum) buf1.w('<span style="', LINE_NUM_STYLE, '">', lnNum, '</span>');
-    buf1.w(ln, '</div>');
+    buf1.w(new LineProc(ln).get(), '</div>');
     buf.w(buf1.render());
-  }
-
-  __processVows(ln) {
-    ln = ln.replaceAll(VIL_START, '「<span class="vil" title="第').replaceAll(VIL_END, '</span>」');
-    var idx = ln.lastIndexOf(VIL_START_NO_END);
-    if (idx > 0) ln = ln.substring(0, idx) + '「<span class="vil" title="第' + ln.substring(idx+1) + '</span>';
-    idx = ln.indexOf(VIL_END_NO_START);
-    if (idx > 0) ln = '<span class="vil">' + ln.substring(0, idx) + '</span>」' + ln.substring(idx+1);
-    return ln;
-  }
-
-  __processSimpleTag(ln, tag) {
-    var startTag1 = '<' + tag + '>',
-        startTag2 = '<' + tag + ' ',
-        endTag   = '</' + tag + '>';
-    if (ln.startsWith('<!' + tag + '>')) // tag the whole line
-      return startTag1 + ln + endTag;
-
-    // handle dangling start-tag
-    var idx, idx1;
-    idx = ln.indexOf(endTag);
-    if (idx >= 0) {
-      idx1 = ln.indexOf(startTag1);
-      if (idx1 < 0)
-        idx1 = ln.indexOf(startTag2);
-      if (idx1 < 0 || idx1 > idx)
-        ln = startTag1 + ln;
-    }
-    // handle dangling end-tag
-    idx = ln.lastIndexOf(startTag1);
-    if (idx1 < 0)
-      idx1 = ln.indexOf(startTag2);
-    if (idx >= 0) {
-      idx1 = ln.lastIndexOf(endTag);
-      if (idx1 < 0 || idx1 < idx)
-        ln += endTag;
-    }
-    return ln;
   }
 
   _getTOCPage() {
