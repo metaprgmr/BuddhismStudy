@@ -147,9 +147,17 @@ var vows = [
   '教化隨意願', '衣食自至願', '應念受供願', '莊嚴無盡願', '無量色樹願',
   '樹現佛剎願', '徹照十方願', '寶香普薰願', '普等三昧願', '定中供佛願',
   '獲陀羅尼願', '聞名得忍願', '現證不退願',
-  '不更惡趣願', '卅二相願',   '遍供諸佛願', '諸佛稱歎願', '女人往生願',
-  '蓮華化生願', '國無婦女願', '無差別願',
 ];
+const vowsAlias = {
+  "不更惡趣願": 2,
+  "卅二相願":   4,
+  "無差別願":   5,
+  "遍供諸佛願": 11,
+  "諸佛稱歎願": 17,
+  "國無婦女願": 22,
+  "女人往生願": 23,
+  "蓮華化生願": 24,
+};
 const TERM_MAPPING =
 `第一:第一願
 第二:第二願
@@ -209,21 +217,6 @@ const TERM_MAPPING =
 彌勒所問十念:彌勒十念
 夏老居士:夏蓮居居士`;
 
-(function(){
-  var a = vows;
-  vows = {};
-  for (var i in a) vows[a[i]] = a[i];
-})();
-
-var xcnt = 0;
-
-(function(){
-  var a = vows;
-  vows = {};
-  for (var i in a) vows[a[i]] = true;
-})();
-
-var xcnt = 0;
 class JiePage {
   constructor(pageNum, pageName, is序) {
     this.pageNum = (typeof pageNum === 'string') ? parseInt(pageNum) : pageNum;
@@ -271,7 +264,7 @@ class JiePage {
 
       // handle terminologies
       for (;;) {
-        var idx1 = ln.indexOf('{t', idx), term;
+        var idx1 = ln.indexOf('{t', idx), term, vnum;
         if (idx1 < 0) break;
         var idx2 = ln.indexOf('t}', idx1+2);
         if (idx2 < 0) {
@@ -309,9 +302,11 @@ class JiePage {
         var idx1 = ln.lastIndexOf('「', idx);
         if (idx1 >= 0) {
           var v = ln.substring(idx1+1, idx+1);
-          if ((v.length <= 5) && vows[v])
-            this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + v + VIL_END + ln.substring(idx+2);
-//        else console.log(v, ':', ln);
+          if (v.length <= 5) {
+            vnum = vows[v];
+            if (vnum > 0)
+              this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + vnum + '願">' + v + VIL_END + ln.substring(idx+2);
+          }
         } else { // check the previous line
           var pg = this, lnNum = i-1;
           var ln1 = pg.lines[lnNum];
@@ -324,11 +319,13 @@ class JiePage {
           idx1 = ln1.lastIndexOf('「');
           if (idx1 >= 0) {
             v = ln1.substring(idx1+1) + ln.substring(0, idx+1);
-            if ((v.length <= 5) && vows[v]) {
-              pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + ln1.substring(idx1+1);
-              this.lines[i] = ln = ln.substring(0, idx+1) + VIL_END_NO_START + ln.substring(idx+2);
+            if (v.length <= 5) {
+              vnum = vows[v];
+              if (vnum > 0) {
+                pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + vnum + '願">' + ln1.substring(idx1+1);
+                this.lines[i] = ln = ln.substring(0, idx+1) + VIL_END_NO_START + ln.substring(idx+2);
+              }
             }
-//          else console.log(v, ':', ln1, ln);
           }
         }
       }
@@ -339,8 +336,10 @@ class JiePage {
         var idx1 = ln.lastIndexOf('「', idx);
         if (idx1 >= 0) {
           var v = ln.substring(idx1+1, idx);
-          if ((v.length <= 5) && vows[v+'願'])
-            this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + v + VIL_END + ln.substring(idx+2);
+          if (v.length <= 5) {
+            vnum = vows[v+'願'];
+            this.lines[i] = ln = ln.substring(0, idx1) + VIL_START + vnum + '願">' + v + VIL_END + ln.substring(idx+2);
+          }
         } else { // check the previous line
           var pg = this, lnNum = i-1;
           var ln1 = pg.lines[lnNum];
@@ -353,9 +352,12 @@ class JiePage {
           idx1 = ln1.lastIndexOf('「');
           if (idx1 >= 0) {
             v = ln1.substring(idx1+1) + ln.substring(0, idx);
-            if ((v.length <= 5) && vows[v+'願']) {
-              pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + ln1.substring(idx1+1);
-              this.lines[i] = ln = ln.substring(0, idx) + VIL_END_NO_START + ln.substring(idx+2);
+            if (v.length <= 5) {
+              vnum = vows[v+'願'];
+              if (vnum > 0) {
+                pg.lines[lnNum] = ln1.substring(0, idx1) + VIL_START_NO_END + vnum + '願">' + ln1.substring(idx1+1);
+                this.lines[i] = ln = ln.substring(0, idx) + VIL_END_NO_START + ln.substring(idx+2);
+              }
             }
           }
         }
@@ -372,6 +374,8 @@ const 序pages = []; // 經解序，of JiePage's
 const terms = {};
 const TERM_MAP = {};
 var   BOOKMARKS = {};
+
+function clearBookmarks() { BOOKMARKS = {}; }
 
 function addBookmarks(s) {
   if (!s) return;
@@ -395,8 +399,12 @@ function addTerm(term, pgnum) {
     info.pages.push(pgnum);
 }
 
-(function(){
-  var a;
+(()=>{
+  var a = vows;
+  vows = {};
+  for (var i=0; i<a.length; ++i) vows[a[i]] = i + 1;
+  for (var i in vowsAlias) vows[i] = vowsAlias[i];
+
   a = TERM_MAPPING.split('\n');
   for (var i in a) {
     var ab  = a[i].split(':');
@@ -835,7 +843,7 @@ class PageDims {
     function procInLine(startTag, endTag, cls, lineTag) { // operates upon ln
       if (lineTag && ln.startsWith(lineTag))
         return '<span class="' + cls + '">' + ln.substring(lineTag.length) + '</span>';
-      var sTagRetained = '', eTagRetained = '';
+      var sTagRetained = '', eTagRetained = '', idx;
       if (startTag === '《') sTagRetained = TMP_START;
       if (endTag === '》')   eTagRetained = TMP_END;
       var sTagLen = startTag.length, eTagLen = endTag.length;
@@ -875,18 +883,15 @@ class PageDims {
     ln = procInLine(XIL_START, XIL_END, 'xil', XIL_LINE); // process External Quote (XQuote) InLine
     ln = procInLine(QIL_START, QIL_END, 'qil', QIL_LINE); // process Quote InLine (THIS SHOULD BE THE LAST!)
 
-    // process <!xg> dangling <xg> and </xg>. 'xg' is '信裹', or 'extraneous-good'.
+    // process <!xg> dangling <xg> and </xg>. 'xg' as 'extra-good' or anything.
+    ln = this.__processSimpleTag(ln, 'hl');
+    ln = this.__processSimpleTag(ln, 'hl1');
     ln = this.__processSimpleTag(ln, 'xg');
     ln = this.__processSimpleTag(ln, 'xg1');
     ln = this.__processSimpleTag(ln, 'xg2');
-    ln = this.__processSimpleTag(ln, 'xg3');
 
     // process Vow InLine
-    ln = ln.replaceAll(VIL_START, '「<span class="vil">').replaceAll(VIL_END, '</span>」');
-    var idx = ln.lastIndexOf(VIL_START_NO_END);
-    if (idx > 0) ln = ln.substring(0, idx) + '「<span class="vil">' + ln.substring(idx+1) + '</span>';
-    idx = ln.indexOf(VIL_END_NO_START);
-    if (idx > 0) ln = '<span class="vil">' + ln.substring(0, idx) + '</span>」' + ln.substring(idx+1);
+    ln = this.__processVows(ln);
 
     var buf1 = new Buffer('<div');
     cssCls && buf1.w(' class="', cssCls, '"');
@@ -897,6 +902,15 @@ class PageDims {
     if (lnNum) buf1.w('<span style="', LINE_NUM_STYLE, '">', lnNum, '</span>');
     buf1.w(ln, '</div>');
     buf.w(buf1.render());
+  }
+
+  __processVows(ln) {
+    ln = ln.replaceAll(VIL_START, '「<span class="vil" title="第').replaceAll(VIL_END, '</span>」');
+    var idx = ln.lastIndexOf(VIL_START_NO_END);
+    if (idx > 0) ln = ln.substring(0, idx) + '「<span class="vil" title="第' + ln.substring(idx+1) + '</span>';
+    idx = ln.indexOf(VIL_END_NO_START);
+    if (idx > 0) ln = '<span class="vil">' + ln.substring(0, idx) + '</span>」' + ln.substring(idx+1);
+    return ln;
   }
 
   __processSimpleTag(ln, tag) {
@@ -1251,7 +1265,7 @@ function showCtlPanel() {
 function bookmarkChange(e) { var pg = e.target.value; pg && showPage(pg); }
 
 function getBookmarksSel() {
-  var buf = new Buffer('<select onchange="bookmarkChange(event)"><option> </option>');
+  var buf = new Buffer('<select onchange="bookmarkChange(event)"><option>　　　　　　</option>');
   for (var k in BOOKMARKS) {
     var pg = BOOKMARKS[k];
     buf.w(`<option value="${pg}">${k}(${pg})</option>\n`);
