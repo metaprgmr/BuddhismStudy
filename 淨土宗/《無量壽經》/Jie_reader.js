@@ -182,6 +182,19 @@ class JiePage {
   }
 
   preprocessText() {
+    function getVowTags(ln, pgnum) {
+      var idx=0;
+      while (true) {
+        var idx1 = ln.indexOf('<vow title="', idx);
+        if (idx1 < 0) break;
+        var idx2 = ln.indexOf('">', idx1+12);
+        var x = ln.substring(idx1+12, idx2);
+        if (x.startsWith('第') && x.endsWith('願'))
+          addTerm(x, pgnum);
+        idx = idx2+2;
+      }
+    }
+
     var len = this.lines.length;
     for (var i=0; i<len; ++i) {
       var ln = this.lines[i], idx = -1, wholeLineTag;
@@ -193,6 +206,7 @@ class JiePage {
       } else {
         wholeLineTag = '';
       }
+      getVowTags(ln, this.pageNum);
 
       // extract terminologies
       idx = 0;
@@ -652,18 +666,28 @@ class PageDims {
     }
 
     var buf = new Buffer();
+
+    function showTerm(inf, isVow) {
+      var a = [];
+      for (var tj=0; tj<inf.pages.length; ++tj) {
+        var pn = inf.pages[tj];
+        a.push(`<a href="javascript:showPage(${pn})">${pn}</a>`);
+      }
+      var tm = inf.term;
+      if (isVow) tm = '<b>' + tm.substring(1, tm.length-1) + '</b>';
+      buf.w(tm, '<sup>&nbsp;', a.join(',&nbsp;'), '</sup> &nbsp;&nbsp;');
+    }
+
     if (pageId == 'terms') {
       buf.w('<div class="termsframe">',
             '<h2 style="text-align:center">索引</h2>',
-            '<p style="padding:20px; margin-top:-25px">');
+            '<p style="padding:20px; margin-top:-25px">【四十八願：');
+      for (var i=1; i<=48; ++i)
+        showTerm(terms[`第${i}願`], true);
+      buf.w('】<br>');
       for (var ti in terms) {
-        var inf = terms[ti], a = [];
-        for (var tj=0; tj<inf.pages.length; ++tj) {
-          var pn = inf.pages[tj];
-          a.push(`<a href="javascript:showPage(${pn})">${pn}</a>`);
-        }
-        buf.w(inf.term, '<sup>&nbsp;', a.join(',&nbsp;'), '</sup> &nbsp;&nbsp;');
-        buf.w('</sup>');
+        if (ti[0] != '第' && !ti.endsWith('願'))
+          showTerm(terms[ti]);
       }
       buf.w('</p></div>');
       buf.render(this.elemId);
