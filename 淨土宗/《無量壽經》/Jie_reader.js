@@ -861,7 +861,7 @@ class PageDims {
     for (var i=startIdx; i<pages.length; ++i) {
       var pi = pages[i];
       if (dims.isXG) {
-        if (pi.hasXG) return pi.pageNum;
+        if (pi.hasXG || pi.hasHL) return pi.pageNum;
       } else {
         if (pi.hasHL) return pi.pageNum;
       }
@@ -869,7 +869,7 @@ class PageDims {
     for (var i=1; i<startIdx; ++i) {
       var pi = pages[i];
       if (dims.isXG) {
-        if (pi.hasXG) return pi.pageNum;
+        if (pi.hasXG || pi.hasHL) return pi.pageNum;
       } else {
         if (pi.hasHL) return pi.pageNum;
       }
@@ -883,7 +883,7 @@ class PageDims {
     for (var i=startIdx; i>1; --i) {
       var pi = pages[i];
       if (dims.isXG) {
-        if (pi.hasXG) return pi.pageNum;
+        if (pi.hasXG || pi.hasHL) return pi.pageNum;
       } else {
         if (pi.hasHL) return pi.pageNum;
       }
@@ -891,7 +891,7 @@ class PageDims {
     for (var i=pages.length-1; i>startIdx; --i) {
       var pi = pages[i];
       if (dims.isXG) {
-        if (pi.hasXG) return pi.pageNum;
+        if (pi.hasXG || pi.hasHL) return pi.pageNum;
       } else {
         if (pi.hasHL) return pi.pageNum;
       }
@@ -1318,12 +1318,12 @@ function showCtlPanel() {
         sp,  `&nbsp;<a href="javascript:showPage('prev')" title="前一頁。或按右向鍵">➡️</a>`,
         sp4, `第&nbsp;<input size="2" id="toPage">&nbsp;頁`,
         sp4, `<a href="javascript:showPage('backcover')" title="或按End鍵"><img src="jie_bcover.png" width="24px" title="封底。或按End鍵"></a>`,
-        sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按c鍵"></a>`,
+        sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按Ctrl-0鍵"></a>`,
         sp3, `<a href="javascript:showPage('cover')" title="或按Home鍵"><img src="jie_cover.png" width="24px" title="封面。或按Home鍵"></a>`,
-        sp3, `【<a href="javascript:showPage('terms')" title="或按+鍵">索引</a>】`,
+        sp3, `【<a href="javascript:showPage('terms')" title="或按Ctrl-+鍵">索引</a>】`,
         sp6, `<font style="color:blue" title="如何加高光筆記，請參看Jie.html的指示">`,
-             ` <a href="javascript:showPage('nextNote')" title="或按數字小盤4鍵">◂ </a>&nbsp;筆記`,
-             `&nbsp;<a href="javascript:showPage('prevNote')" title="或按數字小盤6鍵"> ▸</a> </font>`,
+             ` <a href="javascript:showPage('nextNote')" title="或按Ctrl-4鍵">◂ </a>&nbsp;筆記`,
+             `&nbsp;<a href="javascript:showPage('prevNote')" title="或按Ctrl-6鍵"> ▸</a> </font>`,
         sp3, `<span style="color:blue" title="如何加書籤，請參看Jie.html的指示">書籤&nbsp;`, getBookmarksSel(), `</span>`,
   );
   buf.render(`ctlpnl`);
@@ -1342,21 +1342,24 @@ function getBookmarksSel() {
 
 function keypress(event) {
   var isShift = event.shiftKey;
-//  var isAlt   = event.altKey;
-//  var isCtrl  = event.ctrlKey;
+  var isAlt   = event.altKey;
+  var isCtrl  = event.ctrlKey;
 
   switch (event.keyCode) {
-  case 107: /* + pad */
-  case  61: /* = +   */ showPage('terms'); break;
-  case  67: /* c     */ showPage('toc'); break;
+  case 107: /* +   ⊞ */
+  case  61: /* = +   */ if (isCtrl) showPage('terms'); break;
+  case  96: /* 0   ⊞ */
+  case  48: /* 0     */ if (isCtrl) showPage('toc'); break;
   case  37: /* left  */ showPage(isShift ? 'next5' : 'next'); break;
   case  39: /* right */ showPage(isShift ? 'prev5' : 'prev'); break;
   case  35: /* end   */ showPage('backcover'); break;
   case  36: /* home  */ showPage('cover');     break;
   case  33: /* up    */ showPage('prevQuote'); break;
   case  34: /* down  */ showPage('nextQuote'); break;
-  case 102: /* > pad */ showPage('prevNote'); break;
-  case 100: /* < pad */ showPage('nextNote'); break;
+  case 102: /* > 6 ⊞ */
+  case  54: /* 6     */ if (isCtrl) showPage('prevNote'); break;
+  case 100: /* < 4 ⊞ */
+  case  52: /* 4     */ if (isCtrl) showPage('nextNote'); break;
   case  13: /* enter */ var toPg = e('toPage').value;
                         if (toPg !== '') showPage(toPg);
                         break;
