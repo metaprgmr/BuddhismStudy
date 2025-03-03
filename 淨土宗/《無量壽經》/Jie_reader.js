@@ -117,18 +117,56 @@ const DEFAULT_XG     = 'xg { background-color:#ffd }';
 const VIL_START = 'ㄅ';
 const VIL_END   = 'ㄆ';
 
-var vows = [
-  '國無惡道願', '不墮惡趣願', '身悉金色願', '三十二相願', '身無差別願',
-  '宿命通願',   '天眼通願',   '天耳通願',   '他心通願',   '神足通願',
-  '徧供諸佛願', '定成正覺願', '光明無量願', '觸光安樂願', '壽命無量願',
-  '聲聞無數願', '諸佛稱嘆願', '十念必生願', '聞名發心願', '臨終接引願',
-  '悔過得生願', '國無女人願', '厭女轉男願', '蓮華化生願', '天人禮敬願',
-  '聞名得福願', '修殊勝行願', '國無不善願', '住正定聚願', '樂如漏盡願',
-  '不貪計身願', '那羅延身願', '光明慧辯願', '善談法要願', '一生補處願',
-  '教化隨意願', '衣食自至願', '應念受供願', '莊嚴無盡願', '無量色樹願',
-  '樹現佛剎願', '徹照十方願', '寶香普薰願', '普等三昧願', '定中供佛願',
-  '獲陀羅尼願', '聞名得忍願', '現證不退願',
-];
+var vows = {
+  '國無惡道願': 229,
+  '不墮惡趣願': 229,
+  '身悉金色願': 236,
+  '三十二相願': 236,
+  '身無差別願': 236,
+  '宿命通願':   239,
+  '天眼通願':   239,
+  '天耳通願':   239,
+  '他心通願':   246,
+  '神足通願':   247,
+  '徧供諸佛願': 247,
+  '定成正覺願': 249,
+  '光明無量願': 252,
+  '觸光安樂願': 252,
+  '壽命無量願': 254,
+  '聲聞無數願': 254,
+  '諸佛稱嘆願': 258,
+  '十念必生願': 259,
+  '聞名發心願': 267,
+  '臨終接引願': 267,
+  '悔過得生願': 273,
+  '國無女人願': 275,
+  '厭女轉男願': 275,
+  '蓮華化生願': 275,
+  '天人禮敬願': 278,
+  '聞名得福願': 278,
+  '修殊勝行願': 278,
+  '國無不善願': 280,
+  '住正定聚願': 280,
+  '樂如漏盡願': 280,
+  '不貪計身願': 280,
+  '那羅延身願': 286,
+  '光明慧辯願': 286,
+  '善談法要願': 286,
+  '一生補處願': 290,
+  '教化隨意願': 290,
+  '衣食自至願': 293,
+  '應念受供願': 293,
+  '莊嚴無盡願': 295,
+  '無量色樹願': 297,
+  '樹現佛剎願': 297,
+  '徹照十方願': 299,
+  '寶香普薰願': 300,
+  '普等三昧願': 301,
+  '定中供佛願': 301,
+  '獲陀羅尼願': 304,
+  '聞名得忍願': 304,
+  '現證不退願': 304,
+};
 const vowsAlias = {
   "不更惡趣願": 2,  "卅二相願":   4,  "無差別願":   5,  "遍供諸佛願": 11,
   "諸佛稱歎願": 17, "國無婦女願": 22, "女人往生願": 23, "蓮華化生願": 24,
@@ -343,9 +381,14 @@ function addTerm(term, pgnum) {
 }
 
 (()=>{
-  var a = vows;
-  vows = {};
-  for (var i=0; i<a.length; ++i) vows[a[i]] = i + 1;
+  var a = Object.keys(vows);
+  var obj = {};
+  for (var i=0; i<a.length; ++i) {
+    addTerm(`第${i+1}願`, vows[a[i]]);
+    obj[a[i]] = i + 1;
+    obj[i+1] = a[i]; // reverse map, from number to name.
+  }
+  vows = obj;
   for (var i in vowsAlias) vows[i] = vowsAlias[i];
 
   a = TERM_MAPPING.split('\n');
@@ -451,6 +494,8 @@ class ReaderStyles {
       '.pil { font-weight:normal; color:' + PIN_COLOR + ' }\n',
       '.vil { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
       'vow  { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
+      'red  { color:red }',
+      'darkred  { color:darkred }',
       '.til { color:' + TOPIC_COLOR + ' }\n',
       'NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:#00d; }\n',
       'NianZu::before { content:"念祖" }\n',
@@ -667,24 +712,30 @@ class PageDims {
 
     var buf = new Buffer();
 
-    function showTerm(inf, isVow) {
+    function showTerm(inf) {
+      var tm;
+      if (typeof inf == 'number') {
+        var i = inf;
+        inf = terms[`第${i}願`];
+        tm = `${i}.<b>${vows[i]}</b>`;
+      } else {
+        tm = inf.term;
+      }
       var a = [];
       for (var tj=0; tj<inf.pages.length; ++tj) {
         var pn = inf.pages[tj];
         a.push(`<a href="javascript:showPage(${pn})">${pn}</a>`);
       }
-      var tm = inf.term;
-      if (isVow) tm = '<b>' + tm.substring(1, tm.length-1) + '</b>';
-      buf.w(tm, '<sup>&nbsp;', a.join(',&nbsp;'), '</sup> &nbsp;&nbsp;');
+      buf.w(tm, '<sup>&nbsp;', a.join(',&nbsp;'), '</sup> &nbsp;');
     }
 
     if (pageId == 'terms') {
-      buf.w('<div class="termsframe">',
-            '<h2 style="text-align:center">索引</h2>',
-            '<p style="padding:20px; margin-top:-25px">【四十八願：');
+      buf.w('<div class="termsframe"><p style="padding:20px; margin-top:0px">',
+            '<b style="font-size:22px">【索引】&nbsp;&nbsp;</b>',
+            '<darkred>【四十八願】</darkred>');
       for (var i=1; i<=48; ++i)
-        showTerm(terms[`第${i}願`], true);
-      buf.w('】<br>');
+        showTerm(i);
+      buf.w('&nbsp;<darkred>【其他條目】</darkred>');
       for (var ti in terms) {
         if (ti[0] != '第' && !ti.endsWith('願'))
           showTerm(terms[ti]);
