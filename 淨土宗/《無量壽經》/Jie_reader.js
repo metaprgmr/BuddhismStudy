@@ -1284,7 +1284,7 @@ function showCtlPanel() {
 function bookmarkChange(e) { var pg = e.target.value; pg && showPage(pg); }
 
 function getBookmarksSel() {
-  var buf = new Buffer('<select onchange="bookmarkChange(event)"><option>　　　　　　</option>');
+  var buf = new Buffer('<select onchange="bookmarkChange(event)"><option value="">　　　　　　</option>');
   for (var k in BOOKMARKS) {
     var pg = BOOKMARKS[k];
     buf.w(`<option value="${pg}">${k}(${pg})</option>\n`);
