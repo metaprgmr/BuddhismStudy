@@ -39,6 +39,9 @@
 &nbsp;&nbsp;&nbsp;【<a href="GDH/index.html">趣味修學</a>】<br>
 &nbsp;&nbsp;&nbsp;【<a href="佛學基礎/nonbud.html">古聖賢書</a>】
 <script>
+if (document.URL.startsWith('file:'))
+  document.title = '信裹居士學佛（本地）';
+
 if (window['OTHERS']) {
   var a = window.OTHERS;
   for (var i=0; i<a.length; i+=2) {

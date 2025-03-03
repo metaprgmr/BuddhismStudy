@@ -13,7 +13,7 @@
 <style>
 
   hl  { background-color:#ff9 }
-  hl1 { background-color:#f99 }
+  hl1 { background-color:#fbb; color:#03c }
 
 </style>
 <script src="../../env-sample.js"></script>
@@ -37,6 +37,8 @@
 </body>
 
 <script>
+if (document.URL.startsWith('file:')) 
+  document.title = '大經念解（本地）';
 dims.setElemId('spanId');
 var pid = get('p');
 if (!pid)

@@ -112,7 +112,7 @@ const LAST_PAGE_NUM  = 837;
 const FIRST_QUOTE_PAGE_NUM = 90;
 const COVER_TEXT_COLOR = '#FFD700';
 const LINE_NUM_STYLE = 'writing-mode:horizontal-tb; margin-top:-30px; font-family:helvetica; font-size:10px; color:lightgray';
-const DEFAULT_XG     = 'xg { background-color:#ffd }';
+const DEFAULT_XG     = 'xg{background-color:lightyellow}xg1{background-color:yellow}xg2{background-color:orange}';
 
 const VIL_START = 'ㄅ';
 const VIL_END   = 'ㄆ';
@@ -220,6 +220,16 @@ class JiePage {
   }
 
   preprocessText() {
+    function getXGs(ln, lnnum, pgnum) {
+      var idx=0;
+      while (true) {
+        var idx1 = ln.indexOf('<xg', idx);
+        if (idx1 < 0) break;
+        var idx2 = ln.indexOf('>', idx1+1);
+        idx = idx2 + 1;
+        console.log(ln.substring(idx1+1, idx2), pgnum + ':' + lnnum);
+      }
+    }
     function getVowTags(ln, pgnum) {
       var idx=0;
       while (true) {
@@ -245,6 +255,7 @@ class JiePage {
         wholeLineTag = '';
       }
       getVowTags(ln, this.pageNum);
+      //getXGs(ln, i+1, this.pageNum);
 
       // extract terminologies
       idx = 0;
@@ -561,7 +572,7 @@ class ReaderStyles {
 const css = new ReaderStyles();
 
 class LineProc {
-  constructor(ln) {
+  constructor(lnNum, ln) {
     this.orig = ln; // for debugging
 
     var idx = -1;
@@ -570,6 +581,11 @@ class LineProc {
     if (idx > 0) {
       this.wholeLineTag = ln.substring(2,idx);
       this.line = ln.substring(idx+1);
+      idx = this.wholeLineTag.indexOf(' ');
+      if (idx > 0) {
+        this.wholeLineTagExtra = this.wholeLineTag.substring(idx);
+        this.wholeLineTag = this.wholeLineTag.substring(0, idx);
+      }
     } else {
       this.line = ln;
     }
@@ -598,7 +614,7 @@ class LineProc {
                          .replaceAll('bJ', '<font class="sil">經</font>');
 
     if (this.wholeLineTag)
-      this.line = `<${this.wholeLineTag}>${this.line}</${this.wholeLineTag}>`;
+      this.line = `<${this.wholeLineTag}${this.wholeLineTagExtra||''}>${this.line}</${this.wholeLineTag}>`;
   }
 
   __processSimpleTag() {
@@ -989,7 +1005,7 @@ class PageDims {
     cssCls && buf1.w(' class="', cssCls, '"');
     buf1.w(' style="left:', x, 'px; top:', y, 'px;', styles || '', '">');
     if (lnNum) buf1.w('<span style="', LINE_NUM_STYLE, '">', lnNum, '</span>');
-    buf1.w(new LineProc(ln).get(), '</div>');
+    buf1.w(new LineProc(lnNum, ln).get(), '</div>');
     buf.w(buf1.render());
   }
 
