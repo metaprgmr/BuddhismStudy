@@ -1318,7 +1318,7 @@ function showCtlPanel() {
         sp,  `&nbsp;<a href="javascript:showPage('prev')" title="前一頁。或按右向鍵">➡️</a>`,
         sp4, `第&nbsp;<input size="2" id="toPage">&nbsp;頁`,
         sp4, `<a href="javascript:showPage('backcover')" title="或按End鍵"><img src="jie_bcover.png" width="24px" title="封底。或按End鍵"></a>`,
-        sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按0鍵"></a>`,
+        sp3, `<a href="javascript:showPage('toc')"><img src="jie_toc.png" width="24px" title="目錄。或按c鍵"></a>`,
         sp3, `<a href="javascript:showPage('cover')" title="或按Home鍵"><img src="jie_cover.png" width="24px" title="封面。或按Home鍵"></a>`,
         sp3, `【<a href="javascript:showPage('terms')" title="或按+鍵">索引</a>】`,
         sp6, `<font style="color:blue" title="如何加高光筆記，請參看Jie.html的指示">`,
@@ -1348,8 +1348,7 @@ function keypress(event) {
   switch (event.keyCode) {
   case 107: /* + pad */
   case  61: /* = +   */ showPage('terms'); break;
-  case  96: /* 0 pad */
-  case  48: /* 0     */ showPage('toc'); break;
+  case  67: /* c     */ showPage('toc'); break;
   case  37: /* left  */ showPage(isShift ? 'next5' : 'next'); break;
   case  39: /* right */ showPage(isShift ? 'prev5' : 'prev'); break;
   case  35: /* end   */ showPage('backcover'); break;
