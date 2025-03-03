@@ -587,6 +587,7 @@ class LineProc {
       ln = '{x' + ln.substring(3) + 'x}';
     this.line = ln.replaceAll('《', '《{s').replaceAll('》', 's}》');
 
+    this.__processSimpleTag('hl', 'hl1', 'xg', 'xg1', 'xg2');
     this.__procInLine();
 
     // process Vow InLine
@@ -598,6 +599,37 @@ class LineProc {
 
     if (this.wholeLineTag)
       this.line = `<${this.wholeLineTag}>${this.line}</${this.wholeLineTag}>`;
+  }
+
+  __processSimpleTag() {
+    var ln = this.line;
+    for (var i in arguments) {
+      var tag = arguments[i],
+          startTag1 = '<' + tag + '>',
+          startTag2 = '<' + tag + ' ',
+          endTag   = '</' + tag + '>',
+          idx1, idx;
+
+      // handle dangling start-tag
+      idx = ln.indexOf(endTag);
+      if (idx >= 0) {
+        idx1 = ln.indexOf(startTag1);
+        if (idx1 < 0)
+          idx1 = ln.indexOf(startTag2);
+        if (idx1 < 0 || idx1 > idx)
+          ln = startTag1 + ln;
+      }
+      // handle dangling end-tag
+      idx = ln.lastIndexOf(startTag1);
+      if (idx1 < 0)
+        idx1 = ln.indexOf(startTag2);
+      if (idx >= 0) {
+        idx1 = ln.lastIndexOf(endTag);
+        if (idx1 < 0 || idx1 < idx)
+          ln += endTag;
+      }
+    }
+    this.line = ln;
   }
 
   __procInLine() {
