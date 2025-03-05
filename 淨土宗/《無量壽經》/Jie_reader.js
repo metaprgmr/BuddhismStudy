@@ -505,8 +505,8 @@ class ReaderStyles {
       '.pil { font-weight:normal; color:' + PIN_COLOR + ' }\n',
       '.vil { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
       'vow  { color:' + VOW_COLOR + '; background-color:' + VOW_BGCOLOR + ' }\n',
-      'red  { color:red }',
-      'darkred  { color:darkred }',
+      'red  { color:red }\n',
+      'darkred  { color:darkred }\n',
       '.til { color:' + TOPIC_COLOR + ' }\n',
       'NianZu { font-size:16; font-family:' + KAI_TI + '; padding-top:1; padding-bottom:1; color:#00d; }\n',
       'NianZu::before { content:"念祖" }\n',
@@ -530,7 +530,7 @@ class ReaderStyles {
         'width:',            dims.frameWidth-10, 'px;',
         'box-shadow:',       shadow,
       '}\n',
-      '.termsframe sup { font-size:12px; }',
+      '.termsframe sup { font-size:11px; }',
       '.termsframe {',
         'position: relative;',
         'background-color:', LEFT_BG_COLOR,
@@ -651,31 +651,37 @@ class LineProc {
   __procInLine() {
     const CUSTTAGS = 'pxst'; // Pin, eX-quote, source, term
     // parse into tokens
-    var ln = this.line, a = [], i, cur = '', len = ln.length, x;
+    var ln = this.line, i, cur = '', len = ln.length, x, a = [], braces = [];
     for (i=0; i<len; ++i) {
       var ch = ln[i];
       switch (ch) {
       case '{':
         if (cur) { a.push(cur); cur = ''; }
         ch = CUSTTAGS.indexOf(ln[i+1]);
-        if (ch < 0)
+        if (ch < 0) {
           a.push('{q');
-        else {
-          a.push('{' + CUSTTAGS[ch]);
+          braces.push('{q');
+        } else {
+          x = '{' + CUSTTAGS[ch];
+          a.push(x);
+          braces.push(x);
           ++i;
         }
         break;
       case '}': 
         if (cur) { a.push(cur); cur = ''; }
         ch = CUSTTAGS.indexOf(ln[i-1]);
-        if (ch < 0)
+        if (ch < 0) {
           a.push('q}');
-        else {
+          braces.push('q}');
+        } else {
           if (a.length > 0) {
             x = a[a.length-1];
             a[a.length-1] = x.substring(0, x.length-1);
           }
-          a.push(CUSTTAGS[ch] + '}');
+          x = CUSTTAGS[ch] + '}';
+          a.push(x);
+          braces.push(x);
         }
         break;
       default:  cur += ch; break;
@@ -683,28 +689,39 @@ class LineProc {
     }
     if (cur) a.push(cur);
 
-    len = a.length;
-    // ensure leading end-tag is enclosed
-    for (var i=0; i<len; ++i) {
-      x = a[i];
-      if (x[0] == '{') break; // nothing to do
-      if (x.endsWith('}')) {
-        a.unshift('{' + x[0]); // enclose at the start
-        break;
+    // ensure dangling start/end-tags are enclosed
+    for (i=0; i<braces.length; ++i) {
+      var br = braces[i];
+      if (!br) continue; // handled already
+      if (br[0] == '{') {
+        var expect = br[1] + '}'
+        for (var j=i+1; j<braces.length; ++j) {
+          if (braces[j] == expect) {
+            braces[i] = braces[j] = null; // wipe out pairs
+            break;
+          }
+        }
       }
     }
-    // ensure ending start-tag is closed
-    for (var i=len-1; i>=0; --i) {
-      var x = a[i];
-      if (x.endsWith('}')) break; // nothing to do
-      if (x[0] == '{') {
-        a.push(x[1] + '}'); // close at the end
-        break;
+    // cover '?}' from head
+    for (i=0; i<braces.length; ++i) {
+      var br = braces[i];
+      if (!br) continue; // handled already
+      if (br[1] == '}') {
+        braces[i] = null;
+        a.unshift('{' + br[0]);
       }
     }
+    // cover '{?' from tail
+    for (i=braces.length-1; i>=0; --i) {
+      var br = braces[i];
+      if (!br) continue; // handled already
+      a.push(br[1] + '}');
+    }
+
+    // turn braces into <span> tags
     var buf = new Buffer();
-    len = a.length;
-    for (var i=0; i<len; ++i) {
+    for (var i=0; i<a.length; ++i) {
       var x = a[i];
       if (x.endsWith('}'))
         buf.w('</span>');
@@ -779,13 +796,13 @@ class PageDims {
 
     if (pageId == 'terms') {
       buf.w('<div class="termsframe"><p style="padding:20px; margin-top:0px">',
-            '<b style="font-size:22px">【索引】&nbsp;&nbsp;</b>',
+            '<b style="font-size:20px">【索引】</b>',
             '<darkred>【四十八願】</darkred>');
       for (var i=1; i<=48; ++i)
         showTerm(i);
       buf.w('&nbsp;<darkred>【其他條目】</darkred>');
       for (var ti in terms) {
-        if (ti[0] != '第' && !ti.endsWith('願'))
+        if (!(ti[0] == '第' && ti.endsWith('願')))
           showTerm(terms[ti]);
       }
       buf.w('</p></div>');

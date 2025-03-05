@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>道德經註解</title>
+<style>
+body { background-color:#efe }
+anno { color:purple }
+a { text-decoration:none }
+.chapter { border-top:2px solid brown; border-bottom:1px solid gray }
+.caption { font-weight:bold; color:brown; font-family:細明體 }
+.bottom  { border-top:1px solid brown }
+.verse { color:teal;  font-family:細明體; font-weight:normal; font-size:22px; width:fit-content; white-space:nowrap; }
+.expound { font-family: "KaiTi", "Kaiti TC", "楷体", STKaiti, "华文楷体"; color:#788 }
+.my { color:#33d }
+h1 { color:brown; font-family: "KaiTi", "Kaiti TC", "楷体", STKaiti, "华文楷体";
+     margin-top:-15px; margin-bottom:5px;
+   }
+.docorig { font-family:細明體; font-weight:normal; font-size:22px; width:fit-content; white-space:nowrap; font-size:14px; }
+.footnote { text-align:right }
+</style>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../util/copyright.css">
+<script src="../../util/reading.js"></script>
+<script src="ddj3.js"></script>
+</head>
+<body>
+<div id="toc" align="center"></div>
+<div id="stg" align="center"></div>
+</body></html>
+
+<script>
+const cc_COLON = ':'.charCodeAt(0),
+      cc_EQ    = '='.charCodeAt(0),
+      cc_PLUS  = '+'.charCodeAt(0),
+      cc_SS    = '§'.charCodeAt(0),
+      cc_L     = 'L'.charCodeAt(0),
+      cc_H     = 'H'.charCodeAt(0),
+      cc_X     = 'X'.charCodeAt(0),
+      cc_0     = '0'.charCodeAt(0),
+      cc_9     = '9'.charCodeAt(0);
+const TDSP = '<td widtd="20px">&nbsp;</td>';
+const THSP = '<th width="20px">&nbsp;</th>';
+const Xw = '20%', Hw = '30%', Lw = '30%';
+function isDigit(cc) { return cc >= cc_0 && cc <= cc_9; }
+function isChar(cc, cc1) { return cc == cc1; }
+function isDigitAt(ln, i) { var cc = ln.charCodeAt(i); return cc >= cc_0 && cc <= cc_9; }
+function isCharAt(ln, i, cc) { return cc == ln.charCodeAt(i); }
+
+class LineUnit {
+  constructor(num, text) {
+    this.num = num;
+    this.text = text;
+    this.HL = [[], [], []]; // comments by HanShan, LvXian and myself
+  }
+  addLine(comment, ln) {
+    var a, secLn;
+    switch (comment) {
+    case 'X': a = this.HL[0]; break;
+    case 'H': a = this.HL[1]; break;
+    case 'L': a = this.HL[2]; break;
+    default:  throw `Unknown commentator: ${comment}`;
+    }
+    var idx = ln.indexOf('=', 1);
+    if (idx < 0)
+      idx = ln.indexOf(':', 1);   // only these two; only up to one occurrance
+    if (idx < 0)
+      idx = ln.indexOf('+', 1);   // 
+    if (idx > 1) {
+      secLn = ln.substring(idx);
+      ln = ln.substring(0, idx);
+    }
+    if (a.length == 0)
+      a.push(ln);
+    else {
+      var txt = a[a.length-1];
+      if (txt.charCodeAt(0) == ln.charCodeAt(0))
+        a[a.length-1] += ln.substring(1);
+      else
+        a.push(ln);
+    }
+    if (secLn)
+      this.addLine(comment, secLn);
+  }
+  renderAnnotation(buf, c, anno) {
+    buf.w(`<anno title="${anno}">${c}</anno>`);
+  }
+  renderVerse(buf, txt) {
+    txt = txt.replaceAll('|', '<br>');
+    while (true) {
+      var idx = txt.indexOf('[');
+      if (idx < 1) { buf.w(txt); break; }
+      var idx1 = txt.indexOf(']', idx+1);
+      if (idx > 1) buf.w(txt.substring(0, idx-1));
+      this.renderAnnotation(buf, txt[idx-1], txt.substring(idx+1, idx1));
+      if (idx1 == txt.length-1) break;
+      txt = txt.substring(idx1+1);
+    }
+  }
+  renderTR(buf, chnum) {
+    var styl = (this.num != 1) ? ' style="border-top:1px solid #fcc"' : '';
+    buf.w(`<tr><td valign="top" class="verse"${styl} title="${chnum}.${this.num}">`);
+    this.renderVerse(buf, this.text);
+    buf.w('</td><td></td>');
+    for (var hl=0; hl<3; ++hl) {
+      var comment = this.HL[hl];
+      if (hl != 0) buf.w('<td></td>');
+      buf.w('<td valign="top"', styl, '>');
+      for (var i=0; i<comment.length; ++i) {
+        var ln = comment[i], txt = ln.substring(1);
+        switch (ln[0]) {
+        case ':': buf.w('<span class="expound">', txt, '</span>'); break;
+        case '+': if (i==0)
+                    buf.w('<p class="expound" style="margin-top:1px">', txt, '</p>');
+                  else
+                    buf.w('<p class="expound">', txt, '</p>');
+                  break;
+        default:  if (hl == 0)
+                    buf.w('<span class="my">', txt, '</span>');
+                  else
+                    buf.w(txt);
+                  break;
+        }
+      }
+      buf.w('</td>');
+    }
+    buf.w('</tr>');
+  }
+}
+class DDJChapter {
+  constructor(ln) {
+    ln = ln.substring(1);
+    var idx = ln.indexOf(' ');
+    this.num = ln.substring(0,idx).trim();
+    this.title = ln.substring(idx+1).trim();
+    this.verses = [];
+    this.map = {};
+  }
+  isEmpty() { return this.verses.length == 0; }
+  addLine(ln) {
+    var cc = ln[0], cc0 = ln.charCodeAt(0), idx = ln.indexOf(' '), num;
+    if (isDigit(cc0)) {
+      num = ln.substring(0,idx);
+      ln = ln.substring(idx+1).trim();
+      var lu = this.map[num] = new LineUnit(num, ln);
+      this.verses.push(lu);
+      return;
+    }
+    if (cc == 'L' || cc == 'H' || cc == 'X') {
+      this.curComment = cc;
+      num = ln.substring(1, idx);
+      this.curUnit = this.map[num];
+      ln = ln.substring(idx+1).trim();
+    }
+    // accept ln to this.curUnit/this.curComment
+    this.curUnit.addLine(this.curComment, ln);
+  }
+  finish() {
+    delete this.curUnit;
+    delete this.curComment;
+    var hl0 = this.verses[0];
+    if (!hl0) return;
+    hl0 = hl0.HL;
+//  if (hl0[0][0] && hl0[0][0].startsWith('+')) this.titleX = hl0[0].shift().substring(1);
+    if (hl0[1][0] && hl0[1][0].startsWith('+')) this.titleH = hl0[1].shift().substring(1);
+//  if (hl0[2][0] && hl0[2][0].startsWith('+')) this.titleL = hl0[2].shift().substring(1);
+  }
+  renderTR(buf) {
+    buf.w('<tr><td valign="top" class="chapter caption">',
+          '<a name="_', this.num, '">', this.num, '</a>. ', this.title, '</td>',
+          '<td class="chapter"></td>');
+    if (!this.titleL) {
+        var ttl = this.titleH || '';
+        if (ttl) ttl = '【憨山】' + ttl;
+        buf.w('<td valign="top" colspan="5" class="chapter">', ttl, '</td>');
+    } else {
+      buf.w('<td valign="top" class="chapter expound">', this.titleH || '', '</td>', TDSP,
+            '<td valign="top" class="chapter expound">', this.titleL || '', '</td>');
+    }
+    buf.w('</tr>');
+    for (var i in this.verses) this.verses[i].renderTR(buf, this.num);
+  }
+}
+class DDJ {
+  constructor() {
+    this.chapters = [];
+    this.todo = [];
+    this.difficult = [ 59 ];
+  }
+  addLine(ln) {
+    if (isCharAt(ln,0,cc_SS)) {
+      if (this.curCh) this.curCh.finish();
+      this.curCh = new DDJChapter(ln);
+      this.chapters.push(this.curCh);
+    } else {
+      this.curCh.addLine(ln);
+    }
+  }
+  finish() { if (this.curCh) { this.curCh.finish(); delete this.curCh; } }
+  renderTOC() {
+    var buf = new Buffer('<table>');
+    buf.w(`<h1>《道德經》註解（三者對照）</h1>`);
+    for (var i=0; i<8; ++i) {
+      buf.w('<tr>');
+      for (var j=0; j<10; ++j) {
+        var n = i*10+j+1;
+        buf.w('<td nowrap>');
+        if (n<10) buf.w('<inv>0</inv>');
+        var styl = '';
+        if (this.todo[n-1]) // TODO
+          styl = ' style="background-color:#fcc"';
+        else if (n >= 38) // 《德經》
+          styl = ' style="background-color:#d0eed0"';
+        buf.w(`<span${styl}>${n}.&nbsp;<a href="javascript:writeChapter(${n})">`, this.chapters[n-1].title, '</a></span>&nbsp;</td>');
+      }
+      buf.w('</tr>');
+    }
+    buf.w('<tr><td style="border-bottom:1px solid black;">',
+          '<span style="background-color:#d0eed0">',
+          '81.&nbsp;<a href="#_81">', this.chapters[80].title, '</span></td>',
+          '<td colspan="9" align=right style="border-bottom:1px solid black">',
+          '<a href="javascript:clear()">【清除】</a>&nbsp;',
+          `<a href="javascript:writeChapter('all')">【全文】</a>&nbsp;`,
+          `<a href="javascript:showIntro(1)">【憨山大師註解引言】</a>&nbsp;`,
+          `<a href="javascript:showIntro(2)">【呂仙註解引言】</a>`,
+          '</td></tr></table>',
+          '<p style="line-height:5px; margin-top:-5px">&nbsp;</p>')
+       .render('toc');
+    return this;
+  }
+  renderChapters(n) {
+    if (!n) n = sessionStorage.getItem('ch');
+    if (!n) return;
+    var buf = new Buffer();
+    buf.w(`<table cellspacing="0"><tr><th>經文</th>${THSP}`,
+          `<th width="${Xw}" class="my">信裹居士的理解</th>${THSP}`,
+          `<th width="${Hw}">憨山大師註解</th>${THSP}`,
+          `<th width="${Lw}">純陽呂仙註解</th></tr>`);
+    if (n == 'all') {
+      for (var i in this.chapters)
+        this.chapters[i].renderTR(buf);
+    } else {
+      sessionStorage.setItem('ch', n);
+      this.chapters[n-1].renderTR(buf);
+    }
+    buf.w('<tr><td class="bottom" colspan="7"></td></tr></table>',
+          '<span class="copyright">&nbsp;</span>')
+       .render('stg');
+    return this;
+  }
+}
+
+// Global data
+var ddj = new DDJ(), intro;
+var introType; // 0:ddj; 1:HS; 2:LU
+
+(()=>{
+  var a = src.split('\n');
+  for (var i in a) {
+    var ln = a[i].trim();
+    if (!ln || ln.startsWith('//')) continue;
+    ddj.addLine(ln);
+  }
+  ddj.finish();
+})();
+
+clear(true);
+writeChapter();
+
+function writeChapter(n) {
+  if (introType) { ddj.renderTOC(n); introType = null; }
+  ddj.renderChapters(n);
+}
+function clear(keepStore) {
+  if (!keepStore) sessionStorage.removeItem('ch');
+  ddj.renderTOC();
+  new Buffer('<p style="opacity:0.6">古人作學之難，在於資訊匱乏，原始謬誤頻發，時無以為據，以訛傳訛。<br>',
+             '今人得益於廣源，古今中外俱覽。見趨逼真，本當使然。實無可自誇耳。</p>',
+             '<p>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</p><hr width="950px" size="1" color="red">',
+             '<span class="copyright">&nbsp;</span>')
+   .render('stg');
+}
+
+function showIntro(type) {
+  if (type == introType) return;
+  if (type == 2)
+    intro = new DDJCommentaryIntro(titleLU, introLU);
+  else
+    intro = new DDJCommentaryIntro(titleHS, introHS);
+  intro.render(1);
+  intro.renderHeader(1);
+}
+
+function writeIntro(n) {
+  if (!intro)
+    intro = new DDJCommentaryIntro(titleHS, introHS);
+  intro.render(n);
+  intro.renderHeader(n);
+}
+
+</script>
