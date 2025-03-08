@@ -336,7 +336,20 @@ class SimpleHTMLContent {
   toHTML(buf) {
     var forhtml = !buf;
     if (forhtml) buf = new Buffer();
-    buf.w(this.html, '<center><p>&nbsp;</p><hr style="color:red"> <span class="copyright"></span></center>');
+    var a = this.html.split('\n');
+    for (var i in a) {
+      var ln = a[i];
+      if (ln.endsWith(']#')) {
+        var idx = ln.lastIndexOf('[');
+        var n = ln.substring(idx+1, ln.length-2);
+        ln = ln.substring(0,idx);
+        idx = ln.indexOf(' ....');
+        buf.w(`<a class="lnk" href="?n=${n}">${ln.substring(0,idx)}</a>${ln.substring(idx)}\n`);
+      } else {
+        buf.w(ln, '\n');
+      }
+    }
+    buf.w('<center><p>&nbsp;</p><hr style="color:red"><span class="copyright"></span></center>');
     return forhtml ? buf.render() : buf;
   }
 }

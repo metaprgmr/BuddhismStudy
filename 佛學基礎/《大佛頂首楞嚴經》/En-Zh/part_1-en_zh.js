@@ -4041,7 +4041,7 @@ surroundings,
 and so,
 []
 from beginning to end,
-從始泊終，
+從始洎終，
 allow your
 []
 thoughts to rise and fall
@@ -4178,7 +4178,7 @@ instruction,
 誨敕。
 I met
 見
-(Kakuda) Kātyāyana
+(Krakuda) Kātyāyana
 迦旃延、
 and
 []

@@ -16,7 +16,7 @@ Translator .....................................................................
 Preface ............................................................................................................. 15
 
 I
-<a class="lnk" href="?n=1">The Noumenon in the Tathāgata Store</a> ................................................................................. 24
+The Noumenon in the Tathāgata Store .................................................................... [vol.1] .... 24 [1]#
   Ānanda’s Weakness–The Reason for this Sermon ...................................................................... 25
   Meditative Study of All as Void (Śamatha).......................................................................... 26
   Wiping Out the Five Aggregates & Eight Consciousnesses to Expose the Unreality of Ego ............................. 27
@@ -36,7 +36,7 @@ I
     Inverted Men .................................................................................................... 48
       The worlding’s inverted views ................................................................................. 49
       The Hinayanist’s inverted views ............................................................................... 50
-      The heretics’ inverted view of annihilation ................................................................... 52
+      The heretics’ inverted view of annihilation ...................................................... [vol.2] .... 52
       The inverted behaviour ........................................................................................ 55
       Delusion and Enlightenment are of the same source ............................................................. 56
   Wiping Out the Unreal ............................................................................................. 59
@@ -87,7 +87,7 @@ I
       The Third  Aggregate Sañjña ................................................................................... 89
       The Fourth Aggregate Saṃskāra ................................................................................. 90
       The Fifth  Aggregate Viñāna ................................................................................... 90
-    Fusing the Six Entrances ........................................................................................ 91
+    Fusing the Six Entrances ........................................................................... [vol.3] .... 91
       Entrance through the Eyes ..................................................................................... 91
       Entrance through the Ears ..................................................................................... 92
       Entrance through the Nose ..................................................................................... 93
@@ -122,8 +122,8 @@ I
   Ānanda’s Understanding Expressed in his Gāthā .................................................................... 122
 
 II
-<a class="lnk" href="?n=2">The Phenomenon in the Tathāgata Store</a> .............................................................................. 124
-  The Meditative Study of All as Unreal (Samāpatti) ................................................................ 124
+The Phenomenon in the Tathāgata Store .............................................................................. 124 [2]#
+  The Meditative Study of All as Unreal (Samāpatti) .................................................... [vol.4] ... 124
     The One Mind Beingthe Source of Both Delusion & Enlightenment .................................................. 124
     A Probe into the Disciple’s Understanding of Noumenon & Phenomenon to Reveal the Rise of Illusions ............. 126
     The Real Missed by Cognizance of the False ..................................................................... 126
@@ -138,7 +138,7 @@ II
     Expounding the Common Source of Delusion & Enlightenment to Sum Up the Intermingling of Phenomenon & Noumenon .. 135
 
 III
-<a class="lnk" href="?n=3">The Tathāgata Store Containing Both Noumenon & Phenomenon</a> .......................................................... 137
+The Tathāgata Store Containing Both Noumenon & Phenomenon .......................................................... 137 [3]#
   Meditative Study of the Mean (Dhyāna) ............................................................................ 137
     Elimination of ‘is’ to reveal the True Mind .................................................................... 137
     Elimination of ‘is not’ to reveal the True Mind ................................................................ 138
@@ -146,41 +146,41 @@ III
     The One Mind, Sudden Awakening & Realization ................................................................... 139
 
 IV
-<a class="lnk" href="?n=4">Self-Enlightenment</a> ................................................................................................. 146
+Self-Enlightenment ................................................................................................. 146 [4]#
   Objects Contemplated in Meditative Studies ....................................................................... 146
     The subjective mind in the meditation .......................................................................... 147
     The objective phenomena in the meditation ...................................................................... 147
     The point of departure ......................................................................................... 150
     Looking into the roots of kleśa to find the sense organ suitable for meditation ................................ 150
   Expedient Instruction on the One Mind ............................................................................ 158
-  Main Instruction on the Three Meditative Studies of the One Mind ................................................. 162
+  Main Instruction on the Three Meditative Studies of the One Mind ..................................... [vol.5] ... 162
   How to Untie the Six Knots ....................................................................................... 166
     Meditationon the six sense data ................................................................................ 171
     Meditationon the five sense organs ............................................................................. 175
     Meditationon the six consciousnesses ........................................................................... 178
     Meditationon the seven elements ................................................................................ 183
-    Meditationon the organ of hearing .............................................................................. 191
+    Meditationon the organ of hearing .................................................................. [vol.6] ... 191
   Mañjuśrī’s Gāthā Teaching the Appropriate Method for Human Beings ................................................ 203
 
 V
-<a class="lnk" href="?n=5">The Enlightenment of Others</a> ........................................................................................ 213
+The Enlightenment of Others ........................................................................................ 213 [5]#
   Discipline & its Three Decisive Steps: Śīla, Dhyāna, & Prajna .................................................... 214
     Prohibition against carnality .................................................................................. 214
     Prohibition against killing .................................................................................... 215
     Prohibition against stealing ................................................................................... 217
     Prohibition against lying ...................................................................................... 220
 
-<i><a class="lnk" href="?n=pre-6">The Śūraṅgama Mantra part</a></i>
+<i>The Śūraṅgama Mantra part</i> .............................................................................. [vol.7]
 
 VI
-<a class="lnk" href="?n=6">Bodhisattva Development into Buddhahood</a> ............................................................................ 222
+Bodhisattva Development into Buddhahood ............................................................................ 222 [6]#
   The Tathāgata Store from which Arise Both Saṃsāra & Nirvāṇa ...................................................... 223
   The Origin of Living Beings & the World .......................................................................... 223
     The Inverted Cause of the Existence of Living Beings ........................................................... 224
     The Inverted Cause of the Existence of the World ............................................................... 224
     The Twelve Types of Transformation ............................................................................. 225
     The Twelve Groups of Living Beings ............................................................................. 225
-  Transmutation of Saṃsārain to Nirvāṇa ............................................................................ 229
+  Transmutation of Saṃsārain to Nirvāṇa ................................................................ [vol.8] ... 229
   The Three Gradual Steps to Wipe Out Saṃsāra ...................................................................... 229
   Progressive Advance in Bodhisattva Development ................................................................... 232
     The Stage of Dry Wisdom ........................................................................................ 232
@@ -195,7 +195,7 @@ VI
   The Titles of this Sūtra ......................................................................................... 242
 
 VII
-<a class="lnk" href="?n=7">The Six Planes of Existence Caused by Unenlightenment</a> .............................................................. 244
+The Six Planes of Existence Caused by Unenlightenment .............................................................. 244 [7]#
   The Six States of Living Beings in Saṃsāra ....................................................................... 244
       The realm of devas ........................................................................................... 247
       The realm of seers (ṛṣi) and spirits ......................................................................... 247
@@ -229,7 +229,7 @@ VII
   The Ten Categories in the Realm of Seers(Ṛṣis) ................................................................... 263
   The Realm of the Gods (Devaloka) ................................................................................. 265
     The Six Heavens of the Realm of Desire (Kāmadhātu) ............................................................. 265
-    The Four Regions of the Dhyāna Heavens of the Realm of Form (Rūpadhātu) ........................................ 267
+    The Four Regions of the Dhyāna Heavens of the Realm of Form (Rūpadhātu) ............................ [vol.9] ... 267
       The first  region of the three dhyāna heavens ................................................................ 267
       The second region of the three dhyāna heavens ................................................................ 268
       The third  region of the three dhyāna heavens ................................................................ 268
@@ -242,12 +242,12 @@ VII
   The Four Classes in the Realm of Titans (Asura-gati) ............................................................. 274
 
 VIII
-<a class="lnk" href="?n=8">Warning to Practisers: The Fifty False States Caused by the Five Aggregates</a> ........................................ 277
+Warning to Practisers: The Fifty False States Caused by the Five Aggregates ........................................ 277 [8]#
   States of Māra Caused by the Five Aggregates ..................................................................... 277
     The Ten States Affected by the First  Aggregate of Form           (Rūpa) ....................................... 280
     The Ten States Affected by the Second Aggregate of Receptiveness  (Vedanā) ..................................... 284
     The Ten States Affected by the Third  Aggregate of Conception     (Sañjña) ..................................... 291
-    The Ten States Affected by the Fourth Aggregate of Discrimination (Saṃskāra) ................................... 304
+    The Ten States Affected by the Fourth Aggregate of Discrimination (Saṃskāra) ....................... [vol.10] .. 304
     The Ten States Affected by the Fifth  Aggregate of Consciousness  (Vijñana) .................................... 316
   The Falsehood of the FiveAggregates .............................................................................. 325
     Falseness of the first  aggregate of form           (rūpa) ..................................................... 326

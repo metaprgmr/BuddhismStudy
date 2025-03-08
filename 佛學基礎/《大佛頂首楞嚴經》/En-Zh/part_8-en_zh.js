@@ -9518,8 +9518,8 @@ Buddha-knowledge.
 the
 []
 second
-state of the
 第二
+state of the
 []
 aggregate of consciousness
 立能為心，
