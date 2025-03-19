@@ -8438,18 +8438,12 @@ supramundane,
 出世間。
 thereby realizing
 []
-an all-embracing
 @a@
-brightness
-@b@
-pervading
-[]
-the ten directions,
 十方
+an all-embracing brightness
+圓明。
+pervading the ten directions,
 @a@
-圓
-@b@
-明。
 and
 []
 acquired
@@ -8462,34 +8456,34 @@ The first
 一者，
 was in accord with
 上合
-the fundamental Profound Enlightened Mind of
-@c@
-all the Buddhas high up in the ten directions
+@b@
 十方諸佛
-@c@
+the fundamental Profound Enlightened Mind of
 本妙覺心，
+all the Buddhas high up in the ten directions
+@b@
 and possessed
 []
-the same merciful power
-@d@
-as the Tathāgata.
+@c@
 與佛如來
-@d@
+the same merciful power
 同一慈力。
+as the Tathāgata.
+@c@
 The second
 二者，
 was
 []
 in sympathy with
 下合
-all living beings in the six realms of existence
 @e@
+十方
+all living beings in the six realms of existence
+一切六道眾生，
 here below
 []
 in the ten directions
-十方一切
-@e@
-六道眾生，
+@c@
 and
 []
 shared with them
@@ -8519,24 +8513,20 @@ to realize the Diamond (Vajra) Samādhi
 修金剛三昧，
 which gave me
 []
-the same power of mercy
 @a@
-of all Buddhas
 與佛如來
-@a@
+the same power of mercy
 同慈力故，
+of all Buddhas
+@a@
 and
 []
-enabled me
+enabled me to
 令我
-@b@
-身
-to transform myself into
-成
-thirty-two
+transform myself into
+身成
+thirty-two bodily forms
 三十二應，
-bodily forms
-@b@
 for the purpose of
 []
 visiting
