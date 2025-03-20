@@ -3,20 +3,20 @@ function get(name) {
  if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
    return decodeURIComponent(name[1]);
 }
-function showAll(ttl, mantras, onlyOne, isSimple) { // 0-based, 0-9
+function showAll(ttl, mantras, onlyOne, isSimple, intro) { // 0-based, 0-9
   if (onlyOne != null) onlyOne = parseInt(onlyOne);
   const isOnlyOne = (onlyOne >= 0);
   var i, k, m, id, indent = '&nbsp;&nbsp;';
 
   if (!isOnlyOne && !isSimple) {
-    w('<h2 style="margin-left:95px">', ttl,
+    w(`<h2 style="margin-left:95px" title="${intro||''}">`, ttl,
       '<a href="?simple=1" style="margin-left:43px; font-size:14px">【緊縮版】</a></h2>',
       '<table class="toc" border="0">');
     for (i=0; i<mantras.length; i++) {
       m = mantras[i];
       id = i+1;
-      w('<tr><td align="right">', id, '.&nbsp;</td>',
-        '<td title="', m.titleS || '', '"><a href="#', id, '">', m.title, '</a>');
+      w(`<tr><td align="right">${id}.&nbsp;</td>`,
+        `<td title="${m.titleS || ''}"><a href="#${id}" title="${m.功德||''}">${m.title}</a>`);
       for (k=m.title.length; k<15; ++k) w('　');
       w('　【<a href="?i=', i, '">單此咒</a>】</td></tr>');
     }
@@ -51,6 +51,9 @@ function showAll(ttl, mantras, onlyOne, isSimple) { // 0-based, 0-9
         if (a.length === 1) w('<tr><td nowrap colspan="2">', indent, a[0].trim(), '</td></tr>');
         else w('<tr><td nowrap>', indent, a[0].trim(), '</td><td nowrap>', indent, a[1].trim(), '</td></tr>');
       }
+      if (isOnlyOne && m.功德)
+        w('<tr><td colspan="2"><div style="margin-top:40px; width:370px">',
+          m.功德, '</div></td></tr>');
     }
   }
   if (!isOnlyOne && !isSimple) w('<tr><td align="center" colspan="2"><hr></td></tr>');

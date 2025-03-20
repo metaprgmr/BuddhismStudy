@@ -7,6 +7,8 @@
 <script src="mantras.js"></script>
 <script>
 // main source: 蔡耀明(佛學老師) http://homepage.ntu.edu.tw/~tsaiyt/course-materials.html
+
+const ten_mantras_intro = "佛教的十小咒，要十個不同的咒語，分別由釋迦摩尼佛、觀世音菩薩、藥師佛等佛菩薩所說。咒語凝聚了十方三世諸佛菩薩的功德和願力，常持十小咒對修行上有很大的幫助，所以十小咒是列在早課誦本。";
 const ten_mantras = [
   { title:  "如意寶輪王陀羅尼",
     titleS: "cakra-vartin-cintā-maṇi-dhāraṇī",
@@ -26,7 +28,8 @@ const ten_mantras = [
             "tadyathā oṃ cakra-vartin cintā-maṇi mahā-padme\n" +
             "ru ru tiṣṭha jvala-ākarṣāya hūṃ phaṭ svāhā",
     心呪:   "oṃ padma cintā-maṇi mahā-jvala hūṃ",
-    隨心呪: "oṃ vara-da padme hūṃ"
+    隨心呪: "oṃ vara-da padme hūṃ",
+    功德:   "此咒是觀世音菩薩的咒，出自於《如意輪陀羅尼經》。一心讀誦此咒，能得到佛的智慧、妙法和明白佛法的道理，把煩惱轉成菩提，事事如意，臨終時能往生極樂世界。"
   },
   { title:  "消災吉祥神咒",
     titleS: "śāntika-śrīya-dhāraṇī",
@@ -45,7 +48,8 @@ const ten_mantras = [
     simple: "namaḥ samanta-buddhānām apratihata-śāsanānāṃ\n" +
             "tadyathā oṃ kha kha khāhi khāhi hūṃ hūṃ\n" +
             "jvala jvala pra-jvala pra-jvala tiṣṭha tiṣṭha ṣṭri ṣṭri\n" +
-            "sphaṭ sphaṭ śantika śriye svāhā"
+            "sphaṭ sphaṭ śantika śriye svāhā",
+    功德:   "此咒乃消除諸種災害，成就吉祥事之神咒，出自於《熾盛光大威德消災吉祥陀羅尼經》。一心讀誦此咒一百八遍或一千遍，一切災難皆悉消滅，不能為害，成就八萬種吉祥事，除滅八萬種不吉祥事。"
   },
   { title:  "功德寶山神咒",
     titleS: "guṇa-ratna-parvata-dhāraṇī",
@@ -58,7 +62,8 @@ const ten_mantras = [
               "svāhā"
             ],
     simple: "namo buddhāya namo dharmāya namaḥ saṃghāya\n" +
-            "oṃ śīte hu ru ru sindhu ru kṛpā kṛpā siddhaṇi pūrṇi svāhā"
+            "oṃ śīte hu ru ru sindhu ru kṛpā kṛpā siddhaṇi pūrṇi svāhā",
+    功德:   "此咒出自於《密咒圓因往生集》。一心讀誦此咒，有如禮大佛名經四萬五千四百遍。如所造罪業有世界微塵數那麼多，應墮阿鼻地獄者，專心持誦此咒，其罪皆得消滅不入地獄，臨終亦能往生西方。"
   },
   { title:  "准提神咒",
     titleS: "cundī-dhāraṇī",
@@ -67,7 +72,8 @@ const ten_mantras = [
               "tadyathā oṃ cale cule cunde svāhā | 行進 昇起 清淨",
             ],
     simple: "namaḥ saptānāṃ samyak-saṃbuddha-koṭīnāṃ\n" +
-            "tadyathā oṃ cale cule cunde svāhā"
+            "tadyathā oṃ cale cule cunde svāhā",
+    功德:   "此咒是由釋迦牟尼佛所說，出自於《佛說七俱胝佛母心大准提陀羅尼經》。此咒能滅十惡五逆一切罪障，成就一切功德。一心讀誦此咒，能使短命眾生增壽無量。若有無福、無相、求官不遂、貧苦所逼者，常誦此咒，能令現世得大福報。若求智慧得大智慧，求男女便得男女。凡有所求，一切隨心。"
   },
   { title:  "聖無量壽決定光明王咒",
     titleS: "aparimita-āyur-jñāna-suviniścita-tejo-rāja-dhāraṇī",
@@ -83,8 +89,9 @@ const ten_mantras = [
             ],
     simple: "namo bhagavate aparimita-āyur-jñāna-suviniścita-tejo-rājāya\n" +
             "tathāgatāya arhate samyak-saṃbuddhāya\n" +
-            "tadyathā oṃ sarva-saṃskāra-pariśuddha dharmate gagana\n" +
-            "samudgate svabhāva viśuddhe mahā-naya parivārī svāhā"
+            "tadyathā oṃ sarva-saṃskāra-pariśuddha dharmate gagana samudgate\n" +
+            "svabhāva viśuddhe mahā-naya parivārī svāhā",
+    功德:   "此咒是由釋迦牟尼佛所說，出自於《大乘聖無量壽決定光明王如來陀羅尼經》。誠心持誦此咒，能使短命之人不墜三惡道，復得長壽，生生世世得宿命智。若自書或教人書寫此咒，如同書寫八萬四千法藏，修建八萬四千寶塔，臨終時能往生九十九俱胝佛的佛土中。"
   },
   { title:  "藥師灌頂真言",
     titleS: "bhaiṣajya-guru-dhāraṇī",
@@ -95,7 +102,8 @@ const ten_mantras = [
             ],
     simple: "namo bhagavate bhaiṣajya-guru-vaiḍūrya-prabha-rājāya\n" +
             "tathāgatāya arhate samyak-saṃbuddhāya\n" +
-            "tadyathā oṃ bhaiṣajye bhaiṣajye bhaiṣajya-samudgate svāhā"
+            "tadyathā oṃ bhaiṣajye bhaiṣajye bhaiṣajya-samudgate svāhā",
+    功德:   "此咒是由藥師佛所說，出自於《藥師琉璃光如來本願功德經》。誠心持誦此真言，即可消除病苦，壽命延年。此咒包含了藥師如來的弘深誓願，無盡功德，一方面幫助眾生早成佛道，另一方面也能滿足眾生現世的需求，使他們身心安樂。如能為病苦者持誦此咒一百八遍，然後給病人服食乾淨的食物，藥物或水，所有病苦悉皆消滅，命終更可往生東方淨琉璃世界。修持《藥師灌頂真言》能拔業障，護持身心安康，得無量福慧，專心修行。"
   },
   { title:  "觀音靈感真言",
     titleS: "lokeśvara-dhāraṇī",
@@ -108,23 +116,25 @@ const ten_mantras = [
               "namo lokeśvarāya svāhā"
             ],
     simple: "oṃ maṇi padme hūṃ mahā-jñāna cittotpāda cittasya na-vitarka\n" +
-            "sarvartha prasiddhaka na-purāṇa na-pratyutpanna namo lokeśvarāya svāhā"
+            "sarvartha prasiddhaka na-purāṇa na-pratyutpanna namo lokeśvarāya svāhā",
+    功德:   "此咒是觀世音菩薩的咒，經藏中無可參考，傳聞是夢中授記。誠心持誦此真言，會事事順利，吉祥如意，幸福平安。此咒開始就是《六字大明咒》，即是藏教所推崇的《唵嘛呢叭咪吽》。觀世音菩薩，誓願宏深，隨感赴應，尋聲救苦，自古以來修行人虔誠持之，都有不可思議的感應。"
   },
   { title:  "七佛滅罪真言",
     titleS: "sapta-buddha-kṣaya-dhāraṇī",
     from:   "出自《陀羅尼雜集》。",
     // text not from the pdf
-    text:   [ "lipa lipate | 用第一神通滅罪　　　　（毗婆尸佛 Vipaśyin）",
-              "guha guhate | 用魄力破除因業滅罪　　（尸弃佛 Śikhin）",
-              "dharalite   | 用智慧謀略滅罪　　　　（毗舍浮佛 Viśvabhu）",
-              "nir-harate  | 用去除紛爭與名位滅罪　（拘留孙佛 Krakucchanda）",
-              "vimalāte    | 用去除口業與驕氣滅罪　（拘那含牟尼佛 Kanakamuni）",
-              "mahā gate   | 用大行動與大魄力滅罪　（迦叶佛 Kaśyapa）",
-              "cinekante   | 用去慾、去名利、去情緒滅罪（释迦牟尼佛 Śākyamuni）",
+    text:   [ "lipa lipate | 用第一神通滅罪",
+              "guha guhate | 用魄力破除因業滅罪",
+              "dharalite   | 用智慧謀略滅罪",
+              "nir-harate  | 用去除紛爭與名位滅罪",
+              "vimalāte    | 用去除口業與驕氣滅罪",
+              "mahā gate   | 用大行動與大魄力滅罪",
+              "cinekante   | 用去慾、去名利、去情緒滅罪",
               "svāhā"
             ],
     simple: "lipa lipate guha guhate dharalite nir-harate\n" +
-            "vimalāte mahā gate cinekante svāhā"
+            "vimalāte mahā gate cinekante svāhā",
+    功德:   "此咒是釋迦牟尼佛因文殊師利法王子的請求，而說過去七佛曾誦過的咒。《七佛滅罪真言》出自於《大方等陀羅尼經》。一個人若造了四重五逆罪，不僅後世受極大苦報，現世也不得平安。如能一心讀誦此咒，並坦誠懺悔，能消滅罪障，特別是犯戒的業障。之前六佛分別是：毗婆尸佛 Vipaśyin，尸棄佛 Śikhin，毗舍浮佛 Viśvabhu，拘留孙佛 Krakucchanda，拘那含牟尼佛 Kanakamuni，迦葉佛 Kaśyapa。"
   },
   { title:  "往生淨土神咒",
     titleS: "sukhāvatī-vyūha-dhāraṇī",
@@ -140,7 +150,8 @@ const ten_mantras = [
             ],
     simple: "nam’āmitābhāya tathāgatāya tadyathā\n" +
             "amṛto-d'bhave amṛta siddhaṃbhave amṛta vikrante\n" +
-            "amṛta vikranta gāmine gagana kirta-kare svāhā"
+            "amṛta vikranta gāmine gagana kirta-kare svāhā",
+    功德:   "出自於《小無量壽經》，是一部《阿彌陀經》之異譯本。一心讀誦此咒，能「拔一切業障根本」與「得生淨土」，是淨土法門之一。誦持此咒者，阿彌陀佛會在其頭上護持，日夜擁護，使他離苦得樂，消除現世業障，怨家遠離，現世安樂，並在其命終之時，接引其入西方淨土。"
   },
   { title:  "大吉祥天女咒",
     titleS: "śrī-mahā-devī-dhāraṇī",
@@ -165,7 +176,8 @@ const ten_mantras = [
             "tadyathā oṃ pari-pūraṇa cāre samanta-darśane mahā-vihāra-gate\n" +
             "samanta-vidhamane mahā-kārya pratiṣṭhāpane sarvartha-sādhane\n" +
             "su-pratipūri ayatna dharmate mahā-vikurvite mahā-maitri upa-saṃhite \n" +
-            "mahārṣe su-saṃgṛhīte samanta-artha anu-pālane svāhā"
+            "mahārṣe su-saṃgṛhīte samanta-artha anu-pālane svāhā",
+    功德:   "此咒是大吉祥天女的咒，出自於《金光明經》。善天女又名大吉祥天女，是專門賜予財富和吉祥的重要天神之一，也是佛教的護法神，並有初地菩薩的證量。一心讀誦此咒，可以幫助薄福貧窮的修行者，克服經濟上的困難，資糧無缺，破煩惱障、業障和報障，不會分散道心，並能早成正果。"
   }
 ];
 </script>
@@ -173,7 +185,7 @@ const ten_mantras = [
 <body><center>
 
 <script>
-  showAll('十小咒', ten_mantras, get('i') || '-1', get('simple'));
+  showAll('十小咒', ten_mantras, get('i') || '-1', get('simple'), ten_mantras_intro);
 </script>
 
 </center></body></html>
