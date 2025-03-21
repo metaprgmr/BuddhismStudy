@@ -24,7 +24,7 @@ a:active { color:blue }
 }
 
 @media screen {
-  .noprint {}
+  .noprint { font-family:細明體; font-size:14px; text-align:center; padding-top:10px }
 }
 @media print {
   .noprint { display:none }
