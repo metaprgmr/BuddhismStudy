@@ -17,6 +17,7 @@ a:active { color:blue }
 .zSongTi     { font-family: "SimSong", "Songti TC", "宋体", STSong, "华文宋体" }
 .zHeiTi      { font-family: "SimHei", "黑体", STHeiti, "华文黑体" }
 .simplified  { color:#00b }
+.epithet     { color:red; font-family:FangSong,仿宋,STFangsong,华文仿宋; line-height:20pt; margin-top:-15px; FOR:h3 }
 
 .copyright { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:14px }
 .copyright::before {

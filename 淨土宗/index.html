@@ -12,18 +12,29 @@
 var BOOKS9 = window['BOOKS9_BFNN'];
 function w() { for (var i in arguments) document.write(arguments[i]) }
 function writeBfnn9Link(uri9, extURL, title) { w('<a href="' + (BOOKS9 ? (BOOKS9 + uri9) : extURL) + '">' + title + '</a>') }
+function writeWLSJVersion(withPref, vers, name, ttl, zicnt) {
+  w(withPref ? '<br>　　　　　' : '',
+    `<a href="../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/${vers}.js">${name}</a><font style="font-size:14px">（${zicnt}字）</font>${ttl||''}`);
+}
+function writeWLSJWang() {
+  w(`宋王日休<a href="../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/Wang.js">校輯本</a>`,
+    '<font style="font-size:14px">（17739字）</font>《大阿彌陀經》');
+}
 </script>
 </head>
 <body><center>
 
 <h1>　　　　淨土宗　　　<a href="https://www.baus-ebs.org/sutra/fan-read/004/index.html" title="淨土專集">　</a></h1>
 
+<h3 class="epithet">人人是彌陀　事事是極樂</h3>
+
 <div class="contentW">
 
 <h2>淨土五經一論：</h2>
 <ol style="font-size:20px; line-height:150%">
-<li><a href="《無量壽經》/index.html" class="fundamental">《佛說大乘無量壽莊嚴清淨平等覺經》夏蓮居會集本</a>內容導引<br>
-　<a href="《無量壽經》/Jie.html">黃念祖<b>《大經解》</b></a>，<a
+<li><a href="《無量壽經》/index.html" class="fundamental">《佛說大乘無量壽莊嚴清淨平等覺經》夏蓮居會集本</a><font
+style="font-size:14px">（16171字）</font>內容導引<br>
+　<a href="《無量壽經》/Jie.html" class="fundamental">黃念祖<b>《大經解》</b></a>，<a
      href="《無量壽經》/JingKongKP.html">淨空法師<b>《科判》</b></a>，<a
      href="《無量壽經》/48.html">四十八願</a><br>
 　<b>經文諸型</b>：<a
@@ -31,6 +42,17 @@ function writeBfnn9Link(uri9, extURL, title) { w('<a href="' + (BOOKS9 ? (BOOKS9
   href="../util/viewer.html?s=../淨土宗/《無量壽經》">單頁版</a>，<a
   href="《無量壽經》/cards.html">卡片版</a>（對應《大經解》取段），<a
   href="《無量壽經》/sutra_as_mantra.html">咒誦版</a>
+  <ul>
+  <li>諸原譯本：<script>
+    writeWLSJVersion(0, 'HAN-trans',  '漢譯', '《無量清淨平等覺經》後漢月氏沙門支婁迦讖譯', 28224)
+    writeWLSJVersion(1, 'WU-trans',   '吳譯', '《佛說阿彌陀三耶三佛薩樓佛檀過度人道經》<br>' +
+                        '　　　　　　　　　　　吳月氏優婆塞支謙字恭明譯', 25124)
+    writeWLSJVersion(1, 'WEI-trans',  '魏譯', '《無量壽經》曹魏印度沙門康僧鎧譯', 17381)
+    writeWLSJVersion(1, 'TANG-trans', '唐譯', '《無量壽如來會》唐南印度三藏菩提流志譯', 14003)
+    writeWLSJVersion(1, 'SONG-trans', '宋譯', '《佛說大乘無量壽莊嚴經》宋西域沙門法賢譯', 11661)
+  </script></li>
+  <li><script> writeWLSJWang()</script>
+  </ul>
 </li>
 
 <li><a href="../util/reader.html?s=../淨土宗/《佛說阿彌陀經》" class="fundamental">《佛說阿彌陀經》</a>
