@@ -27,10 +27,10 @@
 
 a { text-decoration:none }
 .leadSeg { color:brown }
-.jiePagesDisp { font-size:12px; color:brown }
 .cardNum { color:darkgray; font-family:SimHei, 黑体, STHeiti, 华文黑体; font-size:14px }
 .content { font-family:KaiTi, 楷体, STKaiti, 华文楷体; font-size:20px }
 .cardNum { }
+.jiePagesDisp { font-size:12px; color:brown }
 .dharaniConnector { color:gray; font-size:10px }
 </style>
 
@@ -195,7 +195,7 @@ class ChapterCards {
 
   renderLeadLine(txt, isTitle, num0, numInAll, anno, jiePgsDisp) {
     anno = anno || '';
-    var cnum = zNumber(numInAll) + '號卡';
+    var cnum = zNumber(numInAll) + '號';
     if (!isTitle)
       return '<td class="tdAH tdR" style="color:black" title="' + anno + '">' + vert(txt) + '</td></tr>' +
              '<tr><td class="tdAL tdR" align="center" valign="bottom"><font class="cardNum">' + vert(cnum) + '</font></td>';
@@ -211,10 +211,11 @@ class ChapterCards {
             '<br><font style="' + ff_HeiTi + '" size="-1">' + num0 + '</td>';
     var jiePgs = '';
     if (BOOK_DOC.hasJiePages)
-      jiePgs = '<font class="jiePagesDisp" title="《大經解》頁數">' + (jiePgsDisp || '&nbsp;<br>&nbsp;<br>&nbsp;') + '</font>';
+      jiePgs = '<div class="jiePagesDisp" title="《大經解》頁數">' + jiePgsDisp + '</div>';
+    if (!jiePgs) jiePgs = '<br>&nbsp;';
     return ret + '</tr>' +
            '<tr><td class="tdAL tdR" align="center" valign="bottom">' + jiePgs +
-           '<br>&nbsp;<br><font class="cardNum">' + vert(cnum) + '</font></td>';
+           '<div class="cardNum">' + vert(cnum) + '</div></td>';
   }
 
   displayAllAsTRs(cols) {
@@ -246,9 +247,9 @@ class ChapterCards {
     if (c.PIbgcolor) style = ' style="background-color:' + c.PIbgcolor + '"';
     c = t.substring(i);
     t = '<a href="#_' + chnum + '"' + style + '>' + vert(t.substring(0,i)) +
-        '<br><font size="-1">' + vert(c) + '</a>';
+        '</a><div style="font-size:14px; padding-top:2px">' + vert(c);
     for (i=4-c.length; i>0; --i) t += '<br>　';
-    return t + '</font>';
+    return t += '</div>';
   }
 
   displayTOCCard(cols, TOCTitle) {
@@ -261,11 +262,11 @@ class ChapterCards {
         '<tr><td class="tdA tdL" width="12px">&nbsp;</td>');
       for (i=0; i<24; i++) {
         //w('<td class="tdA">　<br>',
-        var cards1 = BOOK_DOC.chapterCards[23-i].cards;
-        var cards2 = BOOK_DOC.chapterCards[47-i].cards;
+        var cds1 = BOOK_DOC.chapterCards[23-i].cards;
+        var cds2 = BOOK_DOC.chapterCards[47-i].cards;
         w('<td class="tdA">',
-          this.getTOCLink(24-i), '<br><font style="opacity:0.4" size="-1">', cards1.length, '</font><br>　<br>',
-          this.getTOCLink(48-i), '<br><font style="opacity:0.4" size="-1">', cards2.length, '</font></td>');
+          this.getTOCLink(24-i), '<font style="opacity:0.4" size="-1">', cds1.length, '</font><br>　<br>',
+          this.getTOCLink(48-i), '<font style="opacity:0.4" size="-1">', cds2.length, '</font></td>');
       }
       w('<td class="tdA">　</td>',
         '<td class="tdA tdR" style="color:black" title="Total ', BOOK_DOC.getTotalCards(), ' cards">',
@@ -295,9 +296,9 @@ class ChapterCards {
         </tr>
         <tr style="color:${COVER_TEXT_COLOR}"><td>　</td>
           <td colspan="6" rowspan="13" align="center" style="font-size:30px"
-          >經莊佛<br>　嚴說<br>　清大<br>　淨乘<br>　平無<br>　等量<br>　覺壽</td>
+          ><br>經莊佛<br>　嚴說<br>　清大<br>　淨乘<br>　平無<br>　等量<br>　覺壽<br>&nbsp;<br>&nbsp;<br></td>
           <td rowspan="13" align="center" style="padding-right:6px"
-          >夏<br>蓮<br>居<br>居<br>士<br><br>會<br>集</td></tr>
+          >夏<br>蓮<br>居<br>居<br>士<br><br>會<br>集<br>&nbsp;<br>&nbsp;<br></td></tr>
         <tr><td>　</td></tr>
         <tr><td>　</td></tr>
         <tr><td>　</td></tr>
@@ -319,7 +320,7 @@ class ChapterCards {
         <td>　</td>
         <td>　</td>
         <td>　</td>
-        </table>
+        </tr></table>
        </td>`);
   }
 

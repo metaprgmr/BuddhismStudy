@@ -8,13 +8,14 @@
 ._u { text-decoration-style:dotted; text-decoration-color:red }
 u { text-decoration-color:red }
 em { color:red; font-style:normal }
-.myGrouping table {width:750px;background-color:white;border:2px solid #666;border-spacing:0px;border-collapse:collapse} 
+.myGrouping table {width:800px;background-color:white;border:2px solid #666;border-spacing:0px;border-collapse:collapse} 
 .myGrouping table th {border:1px solid #666;border-bottom:1px solid #666;padding:2px;background-color:#ddd} 
 .myGrouping table td {border:1px solid #666;padding:2px} 
 .myGrouping table td.dim {background-color:#eee} 
 .myGrouping table td.center {text-align:center} 
 inv {opacity:0}
-.round1 { background-color: pink }
+dim {opacity:0.5}
+.round1_DISABLED { background-color: pink }
 </style>
 <script>
 /*
@@ -46,16 +47,69 @@ inv {opacity:0}
 */
 const selectedChapters = "2,4,6-8,12,17,24-26,29-37,40,43-47";
 
+const circnums = [
+'① ','② ','③ ','④ ','⑤ ','⑥ ','⑦ ','⑧ ','⑨ ','⑩ ',
+'⑪ ','⑫ ','⑬ ','⑭ ','⑮ ','⑯ ','⑰ ','⑱ ','⑲ ','⑳ ',
+'㉑','㉒','㉓','㉔','㉕','㉖','㉗','㉘','㉙','㉚',
+'㉛','㉜','㉝','㉞','㉟','㊱','㊲','㊳','㊴','㊵',
+'㊶','㊷','㊸','㊹','㊺','㊻','㊼','㊽','㊾','㊿' ];
+function toNumDisp(n) { return (n < 50) ? circnums[n-1] : n; }
+
 // user-defined preprocessors
 function _加註(term, meaning) { return '<u:' + meaning + '>' + term + '</u>'; }
 
 // Library
+function get(name) {
+ if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+   return decodeURIComponent(name[1]);
+}
 function e(elid) { return document.getElementById(elid) }
 function w() { for (var i in arguments) document.write(arguments[i]) }
 function replaceStrings(txt, map) {
   if (!map) console.log('Warning: replaceStrings() is called without params.');
   else for (var k in map) txt = txt.replaceAll(k, map[k]);
   return txt;
+}
+
+var selected = get('pins');
+if (selected) selected = selected.split(',');
+else console.log('To cherry-pick, add ?pins=1,3,5');
+
+function isSelected(num) {
+  if (!selected) return true;
+  if (num != 6) {
+    for (var i in selected)
+      if (selected[i] == num) return true;
+  }
+  return false;
+}
+function addLineNumbers(tableContent) {
+  function findTD(ln) {
+    if (!ln.startsWith('<tr>')) return 0;
+    var idx = 3, last;
+    while (true) {
+      idx = ln.indexOf('<td', idx+1);
+      if (idx < 0) return last;
+      last = ln.indexOf('>', idx+3) + 1;
+    }
+  }
+  var a = tableContent.trim().split('\n'), len=a.length,
+      arr=[], lnno=1, inTxt, idx;
+  for (var i=0; i<len; ++i) {
+    var ln = a[i], tdClose = findTD(ln);
+    if (tdClose) inTxt = true;
+    if (!inTxt) {
+      arr.push(ln);
+    } else {
+      if (tdClose)
+        arr.push(`${ln.substring(0,tdClose)}<dim>${toNumDisp(lnno++)}</dim>${ln.substring(tdClose)}`);
+      else
+        arr.push(`<dim>${toNumDisp(lnno++)}</dim>${ln}`);
+    }
+    if (ln.endsWith('</td></tr>') || ln.endsWith('</td>'))
+      inTxt = false;
+  }
+  return arr.join('');
 }
 function handleAnno(txt, uAnno, preprocessor, map) {
   if (!uAnno && !txt) return txt;
@@ -78,12 +132,14 @@ function handleAnno(txt, uAnno, preprocessor, map) {
 // uAnno can be a function, and params is passed to it.
 function writePin(num, thColspan, tableContent, uAnno, preprocessor, params) {
   // process text
+  if (!isSelected(num)) return;
+  if (num != 6) tableContent = addLineNumbers(tableContent);
   tableContent = handleAnno(render卡號(tableContent), uAnno, preprocessor, params);
 
   // render
-  w('<a name="_', num, '"></a>',
-    '<h2><font color="red">', getTitle(num), '</font>解析&nbsp;&nbsp;<a href="">▴</a></h2>',
-    '<div class="myGrouping"><table>');
+  w('<div class="myGrouping"><table><caption><a name="_', num, '"></a><h2><font color="red">', getTitle(num), '</font>解析',
+    selected ? '' : '&nbsp;&nbsp;<a href="">▴</a>',
+    '</h2></caption>');
   if (thColspan > 0)
     w('<tr><th colspan="', thColspan, '">義</th><th>經文</th><th nowrap>卡號</th></tr>');
   w(tableContent, '</table></div>');
@@ -117,7 +173,7 @@ function render卡號(txt) {
   return txt;
 }
 
-const titles = [
+const titles = [ // for each, title and number of cards
   '法會聖衆第一',     2, '德遵普賢第二',     8, '大教緣起第三',     5, '法藏因地第四',     6, '至心精進第五',     6,
   '發大誓願第六',    25, '必成正覺第七',     5, '積功累德第八',     6, '圓滿成就第九',     3, '皆願作佛第十',     2,
   '國界嚴淨第十一',   4, '光明遍照第十二',   4, '壽衆無量第十三',   3, '寶樹遍國第十四',   2, '菩提道場第十五',   4,
@@ -134,47 +190,58 @@ function getTitle(n) { // n: 1-based
 }
 </script>
 </head>
-<body><center><h1 title="自我判斷以及愈加傾向念老《大經解》">《佛說大乘無量壽莊嚴清淨平等覺經》精研</h1>
+<body><center>
 
 <script>
-w('<p>《密嚴經疏》：「今此密嚴藏，但於清淨如來藏心之所現，故非微塵成。」（第八品：莊嚴妙土）<br>',
-  '【按】迄今我曹至少發現三對應：第二品、第六品暨其餘各詳述品內容。<br>',
-  '<a href="cards.html?chapters=' + selectedChapters + '&w=5">經文卡片</a>',
-  '（<a href="cards.html?chapters=' + selectedChapters + '">打印</a>）</p>');
+function printPreamble() {
+  w('<h1 title="自我判斷以及愈加傾向念老《大經解》">《佛說大乘無量壽莊嚴清淨平等覺經》精研</h1>',
+    '<p>《密嚴經疏》：「今此密嚴藏，但於清淨如來藏心之所現，故非微塵成。」（第八品：莊嚴妙土）<br>',
+    '【按】迄今我曹至少發現三對應：第二品、第六品暨其餘各詳述品內容。<br>',
+    '<a href="cards.html?chapters=' + selectedChapters + '&w=5">經文卡片</a>',
+    '（<a href="cards.html?chapters=' + selectedChapters + '">打印</a>）</p>',
+    '<table cellpadding="0" cellspacing="0"><tr><td><h2>諸品解析&nbsp;&nbsp;&nbsp;</h2></td><td>');
 
-w('<table cellpadding="0" cellspacing="0"><tr><td><h2>諸品解析&nbsp;&nbsp;&nbsp;</h2></td><td>');
-
-// Indices ★
-// parse selectedChapters
-var cnums = [], a = selectedChapters.split(',');
-for (var i in a) {
-  var ids = a[i].trim().split('-'),
-      start = parseInt(ids[0]),
-      end   = (ids.length>1) ? parseInt(ids[1]) : start;
-  for (var j=start; j<=end; ++j)
-    cnums.push(j);
-}
-
-const W=24;
-for (var i=0; i<48/W; ++i) {
-  for (var j=0; j<W; ++j) {
-    var n = i*W+j+1;
-    var cls = (cnums.indexOf(n) >= 0) && 'round1' || '';
-    w('&nbsp;', n<10 ? '<inv>0</inv>' : '', '<a href="#_', n, '" class="', cls, '" title="' + getTitle(n) + '">', n, '</a>&nbsp;');
-    if (cls) console.log(n, titles[n-1]);
+  // Indices ★
+  // parse selectedChapters
+  var cnums = [], a = selectedChapters.split(',');
+  for (var i in a) {
+    var ids = a[i].trim().split('-'),
+        start = parseInt(ids[0]),
+        end   = (ids.length>1) ? parseInt(ids[1]) : start;
+    for (var j=start; j<=end; ++j)
+      cnums.push(j);
   }
-  w('<br>');
+
+  const W=24;
+  for (var i=0; i<48/W; ++i) {
+    for (var j=0; j<W; ++j) {
+      var n = i*W+j+1;
+      var cls = (cnums.indexOf(n) >= 0) && 'round1' || '';
+      w('&nbsp;', n<10 ? '<inv>0</inv>' : '', '<a href="#_', n, '" class="', cls, '" title="' + getTitle(n) + '">', n, '</a>&nbsp;');
+      if (cls) console.log(n, titles[n-1]);
+    }
+    w('<br>');
+  }
+  w('</td></tr></table>',
+    '<div class="content"><hr></div>');
 }
-w('</td></tr></table>',
-  '<div class="content"><hr></div>');
+
+
+function printEnd() {
+  w(
+`<br><h2><em>佛說大乘無量壽莊嚴清淨平等覺經</em></h2>
+<p>&nbsp;</p>
+<div class="content"><hr></div>
+<span class="copyright"></span>`);
+}
 
 function pinInfoDisplay(on) {
   e('pinInfo' ).style.display = on ? 'block' : 'none';
   e('pinInfoX').style.display = on ? 'none' : 'block';
 }
 
-const pinNames = `
-
+function printPinNames() {
+  const pinNames = `
 <div id="pinInfoX" onclick="pinInfoDisplay(true)">【諸品標題及簡訊】開啟&nbsp;▾</div>
 <div id="pinInfo" style="display:none" onclick="pinInfoDisplay(false)">
 【諸品標題及簡訊】關閉&nbsp;▴
@@ -242,8 +309,11 @@ const pinNames = `
 </pre>
 </td></tr></table>
 </div>`;
+  w(pinNames);
+}
 
-w(pinNames);
+
+if (!selected) printPreamble();
 
 // -----------------------------------
 writePin(1, 1,
@@ -1004,35 +1074,25 @@ writePin(31, 1,
 
 // -----------------------------------
 writePin(32, 2,
-`<tr><td colspan="2">勸</td>
-    <td>佛告彌勒菩薩諸天人等<br>
+`<tr><td colspan="2">勸</td><td>佛告彌勒菩薩諸天人等<br>
 　　　　 無量壽國聲聞菩薩功德智慧不可稱說 又其國土<u1>微妙安樂清淨</u>若此<br>
 　　　　 何不力為善 念道之自然</td>
     @@</tr>
-<tr><td rowspan="3" class="dim">德</td>
-    <td class="dim">勤</td>
-    <td>　　　　 <u:修福>出入供養</u> <u:修慧>觀經行道</u>喜樂久習 才猛智慧 心不<u2>中迴</u> 意無懈時 外若遲緩 內獨駛急<br>
+<tr><td rowspan="3" class="dim">德</td><td class="dim">勤</td><td>　　　　 <u:修福>出入供養</u> <u:修慧>觀經行道</u>喜樂久習 才猛智慧 心不<u2>中迴</u> 意無懈時 外若遲緩 內獨駛急<br>
 　　　　 容容虛空<u3>適得其中</u> 中表相應自然嚴整 檢斂端直</td>
     @+x2@</tr>
-<tr><td class="dim">行</td>
-    <td>　　　　 身心潔淨無有愛貪 志願安定無增缺減 求道和正不誤傾邪<br>
+<tr><td class="dim">行</td><td>　　　　 身心潔淨無有愛貪 志願安定無增缺減 求道和正不誤傾邪<br>
 　　　　 隨經約令<u4>不敢蹉跌 若於繩墨</u> 咸為道慕曠無他念 無有憂思<u5>自然無為</u><br>
 　　　　 虛空無立淡安無欲 <u6>作得善願盡心求索</u> <u7>含哀慈愍</u> <u8>禮義</u>都合 <u9>苞羅表裏</u>過度解脫</td></tr>
-<tr><td class="dim">悟</td>
-    <td>　　　　 <u10>自然保守</u>真真潔白 志願無上淨定安樂<br>
+<tr><td class="dim">悟</td><td>　　　　 <u10>自然保守</u>真真潔白 志願無上淨定安樂<br>
 　　　　 <u11>一旦開達明徹 自然中自然相</u> 自然之<u12>有</u> <u:本體，理體>根本</u> <u13>自然光色參迴 轉變最勝</u><br>
 　　　　 <u14>鬱單成七寶 橫攬成萬物 光精明俱出 善好殊無比</u> <u15>著於無上下 洞達無邊際</u></td>
     @x@</tr>
-<tr><td rowspan="4">策</td>
-    <td>勸</td>
-    <td>　　　　 宜各勤精進 努力自求之 必得超絕去 往生無量清淨阿彌陀佛國</td>
+<tr><td rowspan="4">策</td><td>勸</td><td>　　　　 宜各勤精進 努力自求之 必得超絕去 往生無量清淨阿彌陀佛國</td>
     @+x4@</tr>
-<tr><td>歎</td>
-    <td>　　　　 橫截於五趣 惡道自閉塞 無極之勝道 易往而無人</td></tr>
-<tr><td>勉</td>
-    <td>　　　　 其國不逆違 <u16>自然所牽隨</u> <u17>捐志若虛空</u> <u:一念單提也>勤行</u>求<u18>道德</u> 可得極長生 壽樂無有極</td></tr>
-<tr><td>誡</td>
-    <td>　　　　 何為著世事 譊譊憂無常</td>
+<tr><td>歎</td><td>　　　　 橫截於五趣 惡道自閉塞 無極之勝道 易往而無人</td></tr>
+<tr><td>勉</td><td>　　　　 其國不逆違 <u16>自然所牽隨</u> <u17>捐志若虛空</u> <u:一念單提也>勤行</u>求<u18>道德</u> 可得極長生 壽樂無有極</td></tr>
+<tr><td>誡</td><td>　　　　 何為著世事 譊譊憂無常</td>
 </tr>`, {
   u1: '極樂一切事相，皆是無漏之妙相。所顯一切皆實相。',
   u2: '信念不堅，遇緣則退',
@@ -1059,33 +1119,26 @@ writePin(33, 2,
 `<tr><td colspan="2" class="center">勸諭</td><td>　　　　 世人共爭不急之務 於此劇惡極苦之中 勤身營務以自給濟</td>
 @@</tr>
 
-<tr><td rowspan="3">事</td>
-<td class="dim">貪<br>財</td>
-<td>　　　　 尊卑貧富少長男女 累念積慮為心<u:奔波勞碌>走使</u> 無田憂田無宅憂宅 眷屬財物有無同憂<br>
+<tr><td rowspan="3">事</td><td class="dim">貪<br>財</td><td>　　　　 尊卑貧富少長男女 累念積慮為心<u:奔波勞碌>走使</u> 無田憂田無宅憂宅 眷屬財物有無同憂<br>
 　　　　 有一少一思欲齊等 適小具有又憂非常 水火盜賊怨家債主 焚漂劫奪消散磨滅<br>
 　　　　 心慳意固無能縱捨 命終棄捐莫誰隨者 貧富同然憂苦萬端</td>
 @x@</tr>
 
-<tr><td>眷<br>屬</td>
-<td>　　　　 世間人民 父子兄弟夫婦親屬 當相敬愛無相憎嫉 有無相通無得貪惜 言色常和莫相違戾<br>
+<tr><td>眷<br>屬</td><td>　　　　 世間人民 父子兄弟夫婦親屬 當相敬愛無相憎嫉 有無相通無得貪惜 言色常和莫相違戾<br>
 　　　　 或時心諍有所恚怒 後世轉劇至成大怨 世間之事更相患害 雖不臨時應急想破</td>
 @@</tr>
 
-<tr><td class="dim">愛<br>欲</td>
-<td>　　　　 人在愛欲之中 獨生獨死獨去獨來 苦樂自當無有代者<br>
+<tr><td class="dim">愛<br>欲</td><td>　　　　 人在愛欲之中 獨生獨死獨去獨來 苦樂自當無有代者<br>
 　　　　 善惡變化追逐所生 道路不同會見無期</td>
 @x2@</tr>
 
 <tr><td colspan="2" class="dim">勸誡</td><td>　　　　 何不於強健時努力修善 欲何待乎</td></tr>
 
-<tr><td rowspan="4">理</td>
-<td>愚</td>
-<td>　　　　 世人善惡自不能見 吉凶禍福競各作之 身愚神闇轉受餘教 顛倒相續無常根本<br>
+<tr><td rowspan="4">理</td><td>愚</td><td>　　　　 世人善惡自不能見 吉凶禍福競各作之 身愚神闇轉受餘教 顛倒相續無常根本<br>
 　　　　 蒙冥抵突不信經法 心無遠慮各欲快意 迷於瞋恚貪於財色 終不休止哀哉可傷</td>
 @@</tr>
 
-<tr><td class="dim">昧</td>
-<td>　　　　 先人不善不識道德 無有語者殊無怪也 死生之趣善惡之道 都不之信謂無有是<br>
+<tr><td class="dim">昧</td><td>　　　　 先人不善不識道德 無有語者殊無怪也 死生之趣善惡之道 都不之信謂無有是<br>
 　　　　 更相瞻視且自見之 或父哭子或子哭父 兄弟夫婦更相哭泣</td>
 @x@</tr>
 
@@ -1096,8 +1149,7 @@ writePin(33, 2,
 <tr><td>惑</td><td>　　　　 惑道者衆悟道者少 各懷殺毒惡氣冥冥 為妄興事違逆天地 恣意罪極頓奪其壽<br>
 　　　　 下入惡道無有出期</td></tr>
 
-<tr><td rowspan="3" class="dim">策<br>進</td>
-<td class="dim">善</td><td>　　　　 若曹當熟思計 遠離衆惡 擇其善者勤而行之</td>
+<tr><td rowspan="3" class="dim">策<br>進</td><td class="dim">善</td><td>　　　　 若曹當熟思計 遠離衆惡 擇其善者勤而行之</td>
 @x3@</tr>
 <tr><td class="dim">捨</td><td>　　　　 愛欲榮華不可常保 皆當別離 無可樂者</td></tr>
 <tr><td class="dim">生</td><td>　　　　 當勤精進生安樂國 智慧明達功德殊勝 勿得隨心所欲 虧負經戒 在人後也</td></td>`);
@@ -1136,8 +1188,7 @@ writePin(35, 2,
 　　　　 何等為五</td>
 @@</tr>
 
-<tr><td class="dim" rowspan="4">其<br>一</td>
-<td nowrap>罪惡</td><td>　　　　 其一者 世間諸衆生類欲為衆惡<br>
+<tr><td class="dim" rowspan="4">其<br>一</td><td nowrap>罪惡</td><td>　　　　 其一者 世間諸衆生類欲為衆惡<br>
 　　　　 強者伏弱轉相尅賊 殘害殺傷迭相吞噉 不知為善後受殃罰</td>
 @x2@</tr>
 <tr><td>因果</td><td>　　　　 故有窮乞孤獨聾盲瘖瘂癡惡尪狂 皆因前世不信道德不肯為善<br>
@@ -1150,8 +1201,7 @@ writePin(35, 2,
 　　　　 天地之間自然有是 雖不即時暴應 善惡會當歸之</td>
 @x@</tr>
 
-<tr><td rowspan="5">其<br>二</td>
-<td>貪欲</td><td>　　　　 其二者 世間人民不順法度 奢淫驕縱任心自恣<br>
+<tr><td rowspan="5">其<br>二</td><td>貪欲</td><td>　　　　 其二者 世間人民不順法度 奢淫驕縱任心自恣<br>
 　　　　 居上不明在位不正 陷人冤枉損害忠良 心口各異機偽多端 尊卑中外更相欺誑<br>
 　　　　 瞋恚愚癡欲自厚己 欲貪多有利害勝負 結忿成讐破家亡身 不顧前後</td>
 @@</tr>
@@ -1161,16 +1211,14 @@ writePin(35, 2,
 <tr><td>盜惡</td><td>　　　　 又或見善憎謗不思慕及 常懷盜心悕望他利 用自供給消散復取</td></tr>
 <tr><td>罪報</td><td>　　　　 <u3>神明</u> <u4>尅識</u>終入惡道 自有三途無量苦惱 輾轉其中累劫難出 痛不可言</td></tr>
 
-<tr><td class="dim" rowspan="3">其<br>三</td>
-<td>婬妷</td><td>　　　　 其三者 世間人民相因寄生壽命幾何 不良之人身心不正<br>
+<tr><td class="dim" rowspan="3">其<br>三</td><td>婬妷</td><td>　　　　 其三者 世間人民相因寄生壽命幾何 不良之人身心不正<br>
 　　　　 常懷邪惡常念<u5>婬妷</u> 煩滿胸中邪態外逸 費損家財事為非法 所當求者而不肯為</td>
 @x@</tr>
 <tr><td>殺戮</td><td>　　　　 又或交結聚會興兵相伐 攻劫殺戮強奪迫脅 歸給妻子極身作樂 衆共憎厭患而苦之</td>
 @x2@</tr>
 <tr><td>罪報</td><td>　　　　 如是之惡<u6>著於人鬼</u> <u7>神明記識</u>自入三途 無量苦惱輾轉其中 累劫難出痛不可言</td></tr>
 
-<tr><td rowspan="5">其<br>四</td>
-<td>妄語</td><td>　　　　 其四者 世間人民不念修善</td>
+<tr><td rowspan="5">其<br>四</td><td>妄語</td><td>　　　　 其四者 世間人民不念修善</td>
 @3@</tr>
 <tr><td>諸惡</td><td>　　　　 <u8>兩舌惡口妄言綺語</u> 憎嫉善人敗壞賢明 不孝父母輕慢師長 朋友無信難得誠實
 <tr><td>我慢</td><td>　　　　 尊貴自大謂己有道 橫行威勢侵易於人 欲人畏敬不自慚懼 難可降化常懷驕慢</td></tr>
@@ -1179,8 +1227,7 @@ writePin(35, 2,
 <tr><td>罪報</td><td>　　　　 又其名籍記在神明 殃咎牽引無從捨離 但得前行入於火鑊 身心摧碎神形苦極<br>
 　　　　 當斯之時悔復何及</td></tr>
 
-<tr><td class="dim" rowspan="3">其<br>五</td>
-<td>不義</td><td>　　　　 其五者 世間人民徙倚懈怠 不肯作善治身修業<br>
+<tr><td class="dim" rowspan="3">其<br>五</td><td>不義</td><td>　　　　 其五者 世間人民徙倚懈怠 不肯作善治身修業<br>
 　　　　 父母教誨違戾反逆 譬如怨家不如無子 負恩違義無有報償<br>
 　　　　 放恣遊散耽酒嗜美 魯扈抵突不識人情 無義無禮不可諫曉<br>
 　　　　 六親眷屬資用有無不能憂念 不惟父母之恩不存師友之義</td>
@@ -1192,8 +1239,7 @@ writePin(35, 2,
 　　　　 <u9>大命</u>將終悔懼交至 不豫修善臨時乃悔 悔之於後將何及乎</td>
 @x@</tr>
 
-<tr><td rowspan="2">總<br>結</td>
-<td>理事</td><td>　　　　 天地之間五道分明 善惡報應禍福相承 身自當之無誰代者<br>
+<tr><td rowspan="2">總<br>結</td><td>理事</td><td>　　　　 天地之間五道分明 善惡報應禍福相承 身自當之無誰代者<br>
 　　　　 善人行善 從樂入樂從明入明 惡人行惡 從苦入苦從冥入冥<br>
 　　　　 誰能知者獨佛知耳 教語開示信行者少 生死不休惡道不絕 如是世人難可具盡</td>
 @@</tr>
@@ -1315,14 +1361,14 @@ writePin(38, 1,
 writePin(39, 1,
 `<tr><td rowspan="3" nowrap>證實<br>所見</td><td style="border-bottom:none">爾時佛告阿難及慈氏菩薩<br>
 　　　　 汝見極樂世界 宮殿樓閣泉池林樹 具足微妙清淨莊嚴不<br>
-　　　　 汝見欲界諸天上至色究竟天 雨諸香華遍佛剎不<br>
+　　　　 汝見欲界諸天 上至色究竟天 雨諸香華遍佛剎不<br>
 阿難對曰 唯然已見</td>
 @@</tr>
 <tr><td style="border-top:none; border-bottom:none">　　　　 汝聞阿彌陀佛大音宣布一切世界 化衆生不<br>
 阿難對曰 唯然已聞</td>
 @@</tr>
 </tr>
-<tr><td style="border-top:none">佛言　　 汝見彼國淨行之衆遊處虛空 宮殿隨身無所障礙 遍至十方供養諸佛不<br>
+<tr><td style="border-top:none">佛言　　 汝見彼國淨行之衆 遊處虛空 宮殿隨身無所障礙 遍至十方供養諸佛不<br>
 　　　　 及見彼等念佛相續不 復有衆鳥住虛空界 出種種音 皆是化作 汝悉見不<br>
 慈氏白言 如佛所說 一一皆見</td>
 @@</tr>
@@ -1492,8 +1538,7 @@ writePin(45, 1,
 @x@</tr>
 
 <tr><td>前世<br>善惡</td><td>　　　　 若有衆生得聞佛聲 慈心清淨踊躍歡喜 衣毛為起或淚出者 皆由前世曾作佛道故非凡人<br>
-　　　　 若聞佛號心中狐疑 於佛經語都無所信 皆從惡道中來 宿殃未盡未當度脫<br>
-　　　　 故心狐疑不信向耳</td>
+　　　　 若聞佛號心中狐疑 於佛經語都無所信 皆從惡道中來 宿殃未盡未當度脫 故心狐疑不信向耳</td>
 @@</tr>`);
 
 
@@ -1505,10 +1550,12 @@ writePin(46, 1,
 @@</tr>
 
 <tr><td class="dim">堅持<br>修持</td><td>　　　　 為諸有情長夜利益 莫令衆生淪墮五趣 備受危苦 應勤修行 隨順我教<br>
-　　　　 當孝於佛 常念師恩 當令是法久住不滅 當堅持之 無得毀失 無得為妄增減經法</td>
+　　　　 當孝於佛 常念師恩 當令是法久住不滅 當堅持之<br>
+　　　　 無得毀失 無得為妄增減經法</td>
 @x2@</tr>
 
-<tr><td class="dim">全經<br>總結</td><td>　　　　 <u:實為全經之總結，淨宗修行之綱要。世尊此會所說之長行，於此告終。>常念不絕則得道捷 我法如是作如是說 如來所行亦應隨行 種修福善求生淨剎</u></td></tr>`);
+<tr><td class="dim">全經<br>總結</td><td>　　　　 常念不絕則得道捷<br>
+　　　　 <u:實為全經之總結，淨宗修行之綱要。世尊此會所說之長行，於此告終。>我法如是 作如是說 如來所行亦應隨行 種修福善求生淨剎</u></td></tr>`);
 
 
 // -----------------------------------
@@ -1551,12 +1598,7 @@ writePin(48, 1,
 尊者阿難 彌勒菩薩及諸菩薩聲聞天龍八部 一切大衆聞佛所說 皆大歡喜 信受奉行</td>
 @x@</tr>`);
 
+if (!selected) printEnd();
 </script>
 
-<br><h2><em>佛說大乘無量壽莊嚴清淨平等覺經</em></h2>
-
-<p>&nbsp;</p>
-<div class="content"><hr></div>
-
-<span class="copyright"></span>
 </center></body></html>

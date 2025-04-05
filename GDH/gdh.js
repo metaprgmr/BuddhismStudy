@@ -4,6 +4,7 @@
 const PUNCS = '：。，、；？！“”【】「」『』（）《》⋯⋯▸ 　';
 
 function isPunc(zi) { return PUNCS.indexOf(zi) >= 0 }
+function isWhite(c) { return c && c.length && !c.trim().length; }
 
 function getKeysOrdered(obj) {
   if (!obj) return null;
@@ -192,12 +193,103 @@ var dict = new YPDict(); // zi => ZiInfo
 var lookuptool = dict;
 var todo = {}; // as a set
 
+const NOYP = '-', DOYP = ' ', PUNC = '.';
+
+class YPLine {
+  constructor(ln) {
+    this.line = ln;
+    this.totalPunc = 0;
+    this.totalText = 0;
+    this.totalRuby = 0;
+    this._lookup();
+  }
+  _lookup() {
+    var y = []; // to parallel x, indicating if a zi needs YP or not.
+                // Initialized by lookup, and can be altered along the way of rendering.
+    var i, zi, zinfo, yp, noyp = {}, len = this.line.length;
+    for (i=0; i<len; ++i) {
+      var theZi = zi = this.line[i];
+      if (isPunc(zi)) { y[i] = PUNC; ++this.totalPunc; continue; }
+      ++this.totalText;
+      if (y[i] == NOYP) ; // already decided; nothing to do
+      else if (noyp[zi]) y[i] = NOYP; // optimize to save unnecessary future lookups
+      else {
+        zinfo = lookuptool.lookup(zi);
+        if (!zinfo || !zinfo.isVisible) {
+          noyp[zi] = true;
+          y[i] = NOYP;
+        } else {
+          y[i] = zinfo;
+          // enhance: now don't do YP for the following N zis, since it has just occurred...
+          const N = 50;
+          for (var cnt=N, i1=i+1; (cnt>0) && (i1<len); ++i1, --cnt) {
+            if (y[i1] == PUNC) { ++cnt; continue; } // punctuations don't count
+            if (this.line[i1] == theZi) y[i1] = NOYP;
+            if (this.line[i1] == '\n') break;
+          }
+        }
+      }
+    }
+    this.lineYPInfo = y;
+  }
+
+  toText() {
+    var disp = '', len = this.line.length;
+    for (i=0; i<len; ++i) {
+      var zi=this.line[i], zinfo=this.lineYPInfo[i], cls='';
+      if (typeof zinfo == 'object') {
+        var yp = zinfo.getYP();
+        cls = zinfo.isFaultAmi() ? ' class="faultami"' : '';
+        var ypRPad = '';
+        if ((i < len-1) && (this.line[i+1] == zi)) {
+          // enhance: same YP on consecutive zis
+          zi += zi;
+          ++i;
+        }
+        else
+        // enhance: if there is a space after the current, put yp atop the zi and space
+        if (this.line[i+1] == ' ' || this.line[i+1] == '　') {
+          zi = '<font ' + cls + '>' + zi + '</font>' + this.line[++i];
+          cls = '';
+        }
+        else
+        // enhance: if there is a space before the current, put yp atop the zi and space
+        if (disp[disp.length-1] == ' ' || disp[disp.length-1] == '　') {
+          zi = disp[disp.length-1] + '<font ' + cls + '>' + zi + '</font>';
+          disp = disp.substring(0, disp.length-1);
+          cls = '';
+        }
+        // enhance: check before and after, to place long YPs atop 3 zis.
+        // enhance: check before and after, to place long YPs atop 3 zis.
+        if ((yp.length > 3) &&
+            (disp.length > 0) && (disp[disp.length-1] != '>') && !isWhite(this.line[i-1]) &&
+            (i < len-1) && (typeof this.lineYPInfo[i+1] != 'object') && !isWhite(this.line[i+1])) {
+          zi = disp[disp.length-1] + '<font ' + cls + '>' + zi + '</font>' + this.line[++i];
+          disp = disp.substring(0, disp.length-1);
+          cls = '';
+        }
+        else
+        // enhance: check if it is followed by a punctuation, to place long YPs atop the two.
+        if ((yp.length > 3) && (i < len-1) && (this.lineYPInfo[i+1] == PUNC)) {
+          if (yp.length <= 4) ypRPad = '&nbsp;';
+          zi = '<font ' + cls + '>' + zi + '</font>' + this.line[++i];
+          cls = '';
+        }
+        zi = '<ruby' + cls + '>' + zi + '<rt>' + zinfo.getYP('red', 'black') + ypRPad + '</rt></ruby>';
+        ++this.totalRuby;
+      }
+      disp += zi;
+    }
+    return disp;
+  }
+}
+
 (function() {
   var fauxamis = toSet(
     '集習坑立泣疾急蜜畢吉訖迄乞漆禽禁坎堪尋品斤近塵貧熏勤仁新欽溪偽詣齎繫' +
-    '及稽繼攜救愁據舉驅淳卻斫腳像羌祥響強彼棄器欺歧履俗熾寺棘竊設諂禪親許' +
+    '及稽繼攜救愁據舉驅淳卻斫腳像羌祥響強棄器欺歧履俗熾寺棘竊設諂禪親許引' +
     '顯遣荊矜輕勸丸戀泉雪血速曲膝聚因休鄰逆誣繳劇井陷徙懈糺煢忪鋸兄犬牛伎' +
-    '除乳誦邑懇雀攫臨什忽' +
+    '乳誦邑懇雀攫臨什忽薰廓蓋突' +
     '差拖哽玷樂咄'); // 《地藏經》讀者發音迥異！
   function _isFA(zi) { return fauxamis[zi] }
 
@@ -333,8 +425,8 @@ haau2 geoi6 bou3 zoeng3 daai3 faan1 nin4 gei2 cong4 dai2 syu3 jin4 wui4 sik1 dai
 zoeng1 jing2 doi6 leot6 hau6 ceoi4 saai2 jyu6 dou1 zung1 fat1 fan5 bou3 ji4 gap1 gwaai3
 恐恣恩恭悅悕患惑惠感態慎慕慚慢慮
 hung2 zi1 jan1 gung1 jyut6 hei1 waan6 waak6 wai6 gam2 taai3 san6 mou6 caam4 maan6 leoi6
-慶憎憶懷懸懼戀戈截戲手承拔拘拜挂
-hing3 zang1 jik1 waai4 jyun4 geoi6 lyun2 gwo1 zit6 hei3 sau2 sing4 bat6 keoi1 baai3 gwaa3
+慶憎憶懷懸懼戀戈截戲手承拔拘拜挂罣
+hing3 zang1 jik1 waai4 jyun4 geoi6 lyun2 gwo1 zit6 hei3 sau2 sing4 bat6 keoi1 baai3 gwaa3 gwaa3
 指捐捷推揚摧擊擐據攬改攻敗敢敬
 zi2 gyun1 zit6 teoi1 joeng4 ceoi1 gik1 gwaan3 geoi3 laam5 goi2 gung1 baai6 gam2 ging3
 整敷斂斗新斷旃旋既旦映暇暉暑暗暢暴
@@ -455,6 +547,8 @@ wai2 paa3 zaak6 luk1 fok3 syun1 seon4 jiu1 haap6 jyu4 sin1 taat3 maan4 kau1 saan
 wai2 cyun1 nik6 hang4 han6 gon1 paau1 hei1 seon3 soek3 ling4 gai3 jung2 king4 jau6 gwai1 aai1
 錫振裡宛紺澄洪爐乍遙摘壇惹搖只打愆
 sek3 zan3 lei5 jyun2 gam3 cing4 hung4 lou4 zaa3 jiu4 zaak6 taan4 je5 jiu4 zi2 daa2 hin1
+翹披瀝憫詳
+kiu2 pei1 lik6 man5 coeng4
 `.split('\n');
 
   function _getIgnoreLevel(zi) {

@@ -476,6 +476,7 @@ function printHanZiUsage(bi) {
 }
 
 function render(id, bookInfo, chapterNum, chBaseUrl) {
+  bookInfo.printStats();
   printHanZiUsage(bookInfo);
   const el = e(id);
   el.innerHTML = processBookContent(id, bookInfo, chapterNum, chBaseUrl, true).join('');
@@ -488,6 +489,7 @@ function renderReading(id, bookInfo, chapterNum, chBaseUrl) {
   processBookContent(id, bookInfo, chapterNum, chBaseUrl);
   bookInfo.elemId = id;
   bookInfo.renderReader();
+  bookInfo.printStats();
 }
 
 //
@@ -768,11 +770,13 @@ class MyBookInfo {
   }
 
   printStats() {
-    for (var i in this.content) {
-      var c = this.content[i];
+    console.log('=================');
+    for (var i in this.chaptersOrig) {
+      var c = this.chaptersOrig[i];
       if (c.ziCount)
-        console.log(c.chapterNum, c.caption, c.ziCount);
+        console.log(c.chapterNum, c.caption, `共${c.ziCount}字`);
     }
+    console.log('=================');
     return this;
   }
 

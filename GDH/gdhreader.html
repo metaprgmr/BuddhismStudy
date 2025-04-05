@@ -28,12 +28,11 @@
 <body>
 <div class="container">
   <script>
-    if (!readerHost.hasAudio)
-      readerHost.writeDoc();
-    else
-      renderPlayer();
-    showZis(dict.usedFauxAmis, okFauxAmis);
-    showZis(dict.notAvailable, 'not available');
+    readerHost.writeDoc();
+    if (!readerHost.hasAudio) {
+      showZis(dict.usedFauxAmis, okFauxAmis);
+      showZis(dict.notAvailable, 'not available');
+    }
     //dict.printNotAvailable();
   </script>
 </div>

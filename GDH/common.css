@@ -1,14 +1,14 @@
 h3 { margin-top:15px; margin-bottom:-10px }
 h4 { margin-top:15px; margin-bottom:10px; color:blue }
-rt { font-size:20px; margin-bottom:-12px }
-num { font-size:16px }
-.txt { font-size:28px }
+rt { font-size:16px; margin-bottom:-10px }
+num { font-size:18px }
+.txt { font-size:24px }
 
 @media screen {
   .numZis { color:gray; font-size:10px }
-  .verylong { color:brown }
-  .medlong { color:blue }
-  .long { color:green }
+  .verylong { background-color:brown; color:white }
+  .medlong  { background-color:blue;  color:white }
+  .long     { background-color:green; color:white }
   .faultami { color:brown }
 }
 

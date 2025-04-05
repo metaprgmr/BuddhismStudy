@@ -1,10 +1,15 @@
 function js(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
 function e(elid) { return document.getElementById(elid) }
-function enableEl(id, set) { if (set) e(id).removeAttribute('disabled'); else e(id).setAttribute('disabled', ''); }
+function enableEl(id, set) { var c = e(id); if (set) c.removeAttribute('disabled'); else c.setAttribute('disabled', ''); }
 function w() { for (var i in arguments) document.write(arguments[i]) }
 function get(name) {
  if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
    return decodeURIComponent(name[1]);
+}
+function toW(n, w) {
+  n = '' + n;
+  while (n.length < w) n = ' ' + n;
+  return n;
 }
 function toInt(n) { return (typeof n === 'string') ? parseInt(n) : n; }
 function toZiNumber(n) {
@@ -15,58 +20,28 @@ function toZiNumber(n) {
   default: return n;
   }
 }
-function toW(n, w) {
-  n = '' + n;
-  while (n.length < w) n = ' ' + n;
-  return n;
-}
-
-function zhsp(n) {
-  var SP = '　', ret = '';
-  if (!n) n = 0;
-  for (; n>0; --n) ret += SP;
-  return ret;
-}
-
-function toPinyin(py) {
-  const shengmu = {
-    'a':'āáǎà', 'o':'ōóǒò', 'e':'ēéěè', 'i':'īíǐì', 'u':'ūúǔù', 'v':'ǖǘǚǜ', 'n':'ñńňǹ'
-  };
-  var i, ret = '';
-  for (i=0; i<py.length-1; ++i) {
-    var c = py[i];
-    var sm = shengmu[c];
-    if (sm) ret += sm[parseInt(py[i+1]) - 1];
-    else ret += c;
-  }
-  return (i < py.length) ? (ret + py[i]) : ret;
-}
+function hasDict() { return !!window['dict']; }
 
 // -------- audio player ---------
 const HLCOLOR = '#ff9';
 var lastEl, curSeg = 0;
 
-function renderPlayer() {
-    w(`<div class="main" id="main"><center>`);
-    readerHost.writeDoc();
-    w(`</center><p>&nbsp;<br>&nbsp;<br>&nbsp;</p></div>
-       <div class="footer" id="footer" style="display:block"><center>
-         <table><tr><td><audio controls id="audiop" style="width:600px" enabled=0></audio></td>
-         <td valign="center" style="padding-left:20px">
-           <button id="btnPrev" disabled onclick="playNext(-1)">&lt;上段</button>
-           <button id="btnRept" disabled onclick="playNext(0)">重聽</button>
-           <button id="btnNext" onclick="playNext(1)">下段&gt;</button></td></tr></table>
-       </center></div>`);
+function writePlayerUI() {
+  w(`<div class="footer" id="footer" style="display:block"><center>
+    <table><tr>
+    <td width="600px"><audio controls id="audiop" style="width:600px; display:none"></audio></td>
+    <td valign="center" style="padding-left:20px">
+      <button id="btnPrev" disabled onclick="playNext(-1)">&lt;上段</button>
+      <button id="btnRept" disabled onclick="playNext(0)">重聽</button>
+      <button id="btnNext" onclick="playNext(1)">下段&gt;</button></td></tr>
+    </table></div>`);
 }
 
 function playNext(dir) {
   switch (dir) {
-  case 1:  ++curSeg; break;
-  case -1: --curSeg; break;
+  case 1:  if (curSeg < 200) ++curSeg; break;
+  case -1: if (curSeg > 0) --curSeg; break;
   }
-  enableEl('btnNext', curSeg < 200);
-  enableEl('btnPrev', curSeg > 0);
-  enableEl('btnRept', curSeg > 0);
   e('_'+curSeg).scrollIntoView(true);
   playMyAudio(curSeg);
 }
@@ -85,6 +60,7 @@ function audiofxn(lnNum) {
 
   e('footer').style.display = 'block';
   var a = e('audiop');
+  a.style.display = 'block';
   a.src = toAudio(curSeg = lnNum);
   a.play();
 
@@ -103,12 +79,16 @@ const LONG = 90;
 var readerHost; // singleton
 
 function playMyAudio(x) {
-  if (readerHost && readerHost.playAudio)
-    readerHost.playAudio(x);
-  else
+  if (!readerHost || !readerHost.playAudio) {
     alert('Audio is not set up.\n' +
           'To it set up, assign an "AudioHost" object to the readerHost variable.\n' +
           'An "AudioHost" is required to have a function playAudio(x), where x is for the AudioHost object to interpret.');
+    return;
+  }
+  readerHost.playAudio(x);
+  enableEl('btnNext', x < 200);
+  enableEl('btnPrev', x > 1);
+  enableEl('btnRept', x > 0);
 }
 
 class GDHReader {
@@ -140,10 +120,23 @@ class GDHReader {
   setTitleAnno(ta) { this.titleAnno = ta; }
 
   useHrBeforeTitle() { this.hrBeforeTitle = true; return this; }
+  useLineBreak(v) { this.useLnBk = v; return this; }
 
   setAudioFxn(fxn) {
     this.playAudio = fxn;
     this.hasAudio = !!fxn;
+  }
+
+  writeDoc() {
+    if (this.hasAudio) {
+      w(`<div class="main" id="main"><center>`);
+      this._writeDoc();
+      w(`</center><p>&nbsp;<br>&nbsp;<br>&nbsp;</p></div>`);
+      writePlayerUI();
+      w(`</center></div>`);
+    } else {
+      this._writeDoc();
+    }
   }
 
   getTitle(n/* 1-based */) { return this.title ? this.titles[n-1] : null }
@@ -151,104 +144,42 @@ class GDHReader {
   _appendSeg(ln) {
     for (var i=0; i<ln.length; ++i) {
       var c = ln[i];
-      if (c != ' ' && c != '　') ++this._tmp_.lastLen;
+      if (c != ' ' && c != '　' && c != '\n') ++this._tmp_.lastLen;
     }
-    if (this._tmp_.lastSegs === '') this._tmp_.lastSegs = ln;
-    else this._tmp_.lastSegs += '<br>' + ln;
+    if (this._tmp_.lastSegs) this._tmp_.lastSegs += '\n';
+    this._tmp_.lastSegs += ln;
   }
-
   _decoDisp(disp) {
-    const NOYP = '-', DOYP = ' ', PUNC = '.';
-    var cls;
-    if (!this.hasAudio) {
-      var x = disp.replaceAll('<br>', '');
-      if (!window['dict']) {
-        disp = x;
-      } else {
-        var y = []; // to parallel x, indicating if a zi needs YP or not.
-                    // Initialized by lookup, and can be altered along the way of rendering.
-        var i, zi, zinfo, yp, noyp = {};
-        for (i=0; i<x.length; ++i) {
-          var theZi = zi = x[i];
-          if (isPunc(zi)) { y[i] = PUNC; ++this._tmp_.totalPunc; continue; }
-          ++this._tmp_.totalText;
-          if (y[i] == NOYP) ; // nothing to do
-          else if (noyp[zi]) y[i] = NOYP; // optimize to save unnecessary future lookups
-          else {
-            zinfo = lookuptool.lookup(zi);
-            if (!zinfo || !zinfo.isVisible) {
-              noyp[zi] = true;
-              y[i] = NOYP;
-            } else {
-              y[i] = zinfo;
-              // enhance: now don't do YP for the following N zis, since it has just occurred...
-              const N = 12;
-              for (var cnt=N, i1=i+1; (cnt>0) && (i1<x.length); ++i1, --cnt) {
-                if (y[i1] == PUNC) { ++cnt; continue; } // punctuations don't count
-                if (x[i1] == theZi) y[i1] = NOYP;
-              }
-            }
-          }
-        }
-        noyp = null;
-
-        disp = '';
-        for (i=0; i<x.length; ++i) {
-          var zi = x[i];
-          zinfo = y[i];
-          if (typeof zinfo == 'object') {
-            yp = zinfo.getYP();
-            cls = zinfo.isFaultAmi() ? ' class="faultami"' : '';
-            var ypRPad = '';
-            if ((i < x.length-1) && (x[i+1] == zi)) {
-              // enhance: same YP on consecutive zis
-              zi += zi;
-              ++i;
-            }
-            else if ((yp.length > 3) &&
-                     (disp.length > 0) && (disp[disp.length-1] != '>') &&
-                     (i < x.length-1) && (typeof y[i+1] != 'object')) {
-              // enhance: check before and after, to place long YPs atop 3 zis.
-              zi = disp[disp.length-1] + '<font ' + cls + '>' + zi + '</font>' + x[++i];
-              disp = disp.substring(0, disp.length-1);
-              cls = '';
-            }
-            else if ((yp.length > 3) && (i < x.length-1) && (y[i+1] == PUNC)) {
-              // enhance: check if it is followed by a punctuation, to place long YPs atop the two.
-              if (yp.length <= 4) ypRPad = '&nbsp;';
-              zi = '<font ' + cls + '>' + zi + '</font>' + x[++i];
-              cls = '';
-            }
-            zi = '<ruby' + cls + '>' + zi + '<rt>' + zinfo.getYP('red', 'black') + ypRPad + '</rt></ruby>';
-            ++this._tmp_.totalRuby;
-//        } else {
-//          zi = '<span title="' + yp + '">' + zi + '</span>';
-          }
-          disp += zi;
-        }
-      }
-    } else if (this._tmp_.lastLen >= LONG) {
-      cls;
-      if (this._tmp_.lastLen >= VERY_LONG)
-        cls = 'verylong';
-      else if (this._tmp_.lastLen >= MED_LONG)
-        cls = 'medlong';
-      else
-        cls = 'long';
-      disp = '<font class="' + cls + '">' + disp + '</font>';
+    if (hasDict()) {
+      var ypln = new YPLine(disp);
+      this._tmp_.totalPunc += ypln.totalPunc;
+      this._tmp_.totalText += ypln.totalText;
+      this._tmp_.totalRuby += ypln.totalRuby;
+      disp = ypln.toText();
     }
+    if (this.useLnBk) disp = disp.replaceAll('\n', '<br>');
     return disp;
   }
   _writeSegs() {
     if (!this._tmp_.lastSegs) return;
 
     this.ln2chapter[this._tmp_.curLnNum] = this._tmp_.lastChapter;
-    var cls = this.hasAudio ? '' : 'txt';
-    w('<tr id="_', this._tmp_.curLnNum, '"><td class="numZis" valign="top" align="right" style="padding-top:', this._tmp_.lastTitle ? 10 : 2, 'px">',
-      this._tmp_.lastTitle ? '<h4>　</h4>' : '', this.hasAudio ? (this._tmp_.lastLen + '字&nbsp;&nbsp;&nbsp;') : '', '</td>',
-      '<td align="right" valign="top" class="', cls, '"><a name="s_', this._tmp_.curLnNum, '">', this._tmp_.lastTitle ? '<h4>　</h4>' : '',
+    var cls = '';
+    if (this._tmp_.lastLen >= LONG) {
+      if (this._tmp_.lastLen >= VERY_LONG)
+        cls = 'verylong';
+      else if (this._tmp_.lastLen >= MED_LONG)
+        cls = 'medlong';
+      else
+        cls = 'long';
+    }
+    w('<tr id="_', this._tmp_.curLnNum, '">',
+      '<td class="numZis" nowrap valign="top" align="right" style="padding-top:', this._tmp_.lastTitle ? 10 : 2, 'px">',
+      `<span class="${cls}">&nbsp;${this._tmp_.lastLen}字&nbsp;</span></td>`,
+      '<td align="right" valign="top" class="txt"><a name="s_', this._tmp_.curLnNum, '">', this._tmp_.lastTitle ? '<h4>　</h4>' : '',
       this.hasAudio ? '<a href="javascript:playMyAudio('+this._tmp_.curLnNum+')" title="粵語誦讀">' : '',
-      '<num>', this._tmp_.curLnNum, '</num>', this.hasAudio ? '</a>' : '', '.&nbsp;</a></td><td valign="top" class="', cls, '">');
+      '<num>', this._tmp_.curLnNum, '</num>', this.hasAudio ? '</a>' : '', '.&nbsp;</a></td>',
+      '<td valign="top" class="txt" style="width:1200px">');
     if (this._tmp_.lastTitle) {
       if (this.hrBeforeTitle) w('<hr>');
       w('<h4><a name="_', this._tmp_.lastChapter, '">', this._decoDisp(this._tmp_.lastTitle), '</a></h4>');
@@ -267,7 +198,7 @@ class GDHReader {
     ++this._tmp_.curLnNum;
   }
 
-  writeDoc() {
+  _writeDoc() {
     document.title = this.pageTitle || this.title;
     var a = this.text, titleAn = this.titleAnno || '';
     if (titleAn) titleAn = '<sup class="titleanno">&nbsp;' + titleAn + '</sup>';
@@ -298,17 +229,15 @@ class GDHReader {
         this._tmp_.lastTitle = this.getTitle(chnum);
         this._tmp_.lastChapter = chnum;
       }
-      else if (ln.length === 0) {
+      else if (ln.length === 0)
         this._writeSegs();
-      }
-      else this._appendSeg(ln);
+      else
+        this._appendSeg(ln);
     }
     this._writeSegs();
     w('</td></tr></table><p>&nbsp;</p><hr>');
 
     this.postRender();
-
-    console.log(this._tmp_);
   }
 
 } // end of GDHReader.
@@ -319,7 +248,7 @@ function showZis(zis, exclude) {
   if (exclude === 'not available') {
     w('<p>&nbsp;</p>',
       '<table border=1 bordercolor="#dddddd" cellpadding=1 cellspacing=0><caption>', zis.length, '個字不在私人字典內</caption>',
-      '<tr><td>', zis, '</td></tr></table>');
+      '<tr><td style="min-width:300px">', zis, '</td></tr></table>');
     return;
   }
 
@@ -342,7 +271,7 @@ function showZis(zis, exclude) {
       var zinfo = dict.lookup(zis1[i]);
       var cls = 'ziDisp';
       if (zinfo.isFaultAmi()) cls += ' fa';
-      w('<ruby class="', cls, '">', zinfo.zi, '<rt class=ypDisp>', zinfo.getYP(), '&nbsp;</rt></ruby>');
+      w('<ruby class="', cls, '">', zinfo.zi, '<rt class=ypDisp>', zinfo.getYP(), '</rt></ruby>');
     }
     w('</td></tr>');
   }
