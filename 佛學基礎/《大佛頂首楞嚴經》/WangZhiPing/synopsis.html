@@ -4,6 +4,9 @@
 <title>《楞嚴經》提要（王）</title>
 <style>
 hai { color:red }
+td { padding-top:10px; padding-left:10px; padding-right:10px; border-top:1px solid black }
+.sep1 { border-left:1px solid black }
+.sep2 { border-left:2px solid red }
 </style>
 <script src="s1.js"></script>
 <script src="s2.js"></script>
@@ -17,36 +20,39 @@ hai { color:red }
 <script src="sX.js"></script>
 </head>
 <body bgcolor="#f0f0f0"><center>
+
 <table border="0" cellspacing="0px">
 <script>
   function w() { for(var i in arguments)document.write(arguments[i]); }
 
-  var H=30, pg=0, reHR = /^.*\[HR.*$/;
+  var H=45, pg=0, reHR = /^.*\[HR.*$/;
 
   for (var i=0; i<lines.length; ++i) {
-    var col=0, lns = lines[i].split('\n');
+    var col=0, lns = lines[i].split('\n'), newVol = true;
     for (var isDone = false; !isDone; ++col) {
-      if (pg+col > 0) w('<td rowspan="2">&nbsp;&nbsp;&nbsp;</td>');
-      w('<td valign="top"><pre>');
+      w(`<td valign="top" class="${newVol ? 'sep2' : 'sep1'}"><pre>`);
+      newVol = false;
       for (var j=0; j<H; ++j) {
         var ln = lns[col*H+j];
         isDone = ln == undefined;
         if (!isDone) {
-          ln = ln.replace(/\.$/, '');
+          ln = ln.replace(/　*\.$/, '');
           var a = reHR.exec(ln);
           if (a) w(a[0].substring(0,6), '<hai>', a[0].substring(6), '</hai><br>');
           else w(ln, '<br>');
         }
       }
-      w('<pre></td>');
+      w('</pre></td>');
     }
     pg += col;
+    newVol = true;
   }
-  w('</tr><tr>');
+  w('<td class="sep2">&nbsp;</td></tr><tr>');
   for (i=1; i<=pg; ++i)
-    w('<td align="center" style="border-top:1px solid black">', i, '</td>');
+    w('<td align="center>', i, '</td>');
   w('</tr>');
 </script>
 </table>
+
 </center></body></html>
 

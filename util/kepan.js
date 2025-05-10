@@ -13,6 +13,13 @@ function flipVisible(eid, eid1) {
   if (eid1) flipVisible(eid1);
 }
 
+function alpha2int(a) {
+  const _A = 'A'.charCodeAt(0), _Z = 'Z'.charCodeAt(0),
+        _a = 'a'.charCodeAt(0), _z = 'z'.charCodeAt(0);
+  var cc = a.charCodeAt(0);
+  return cc - ((cc <= _Z) ? _A : _a)  + 1;
+}
+
 function getPartInfo(part) {
   var ret = { caption:null, firstVerseID: null }
   part = parts[part];
@@ -43,14 +50,15 @@ function getPartInfo(part) {
 
 class KePanLine {
   constructor(line, verseText, plainText) {
+    this.first2 = line.substring(0,2);
     this.rawVerseNum = line.substring(2,6).trim();
     this.volNum = line.substring(2,3).trim();
     this.verseNum = line.substring(3,6).trim();
     this.text = line.substring(6);
     if (verseText) this.verseText = verseText;
     if (plainText) this.plainText = plainText;
-    var ln = this.text, idx = ln.indexOf('*'),
-        cls = 'keyLine';
+    var ln = this.text, idx = ln.indexOf('*'), cls = 'keyLine',
+        txt = this.text, before = '', after = '';
     if (idx < 0) {
       idx = ln.indexOf('+');
       if (idx > 0) this.isKeySecondary = true;
@@ -59,13 +67,30 @@ class KePanLine {
     if (idx > 0) {
       this.isKey = true;
       var idx1 = ln.lastIndexOf('　', idx-1);
-      this.text = ln.substring(0, idx1+1) + '<font class="' + cls + '">' + ln.substring(idx1+1, idx) + '</font>' + ln.substring(idx+1);
+      txt = ln.substring(idx1+1, idx);
+      before = ln.substring(0, idx1+1);
+      after = ln.substring(idx+1);
     }
+    txt = txt.replaceAll('〇', '　');
+    idx = txt.lastIndexOf('【');
+    if (idx > 0) {
+      after = '&nbsp;<hilite>' + txt.substring(idx) + '</hilite>' + after;
+      txt = txt.substring(0, idx);
+    } else {
+      idx = txt.lastIndexOf('ㄓ');
+      if (idx > 0) {
+        after = '　<hilite>' + txt.substring(idx+1) + '</hilite>' + after;
+        txt = txt.substring(0, idx);
+      }
+    }
+    if (this.isKey)
+      txt = `<${cls}>${txt}</${cls}>`;
+    this.text = before + txt + after;
   }
   debugDump() {
     console.log('rawVerseNum', this.rawVerseNum, 'volNum', this.volNum, 'verseNum', this.verseNum, 'text', this.text, 'verseText', this.verseText);
   }
-  getVerseIDDisp(suggestedRawVerseNum) {
+  getVerseIDDisp(suggestedRawVerseNum, le10) {
     var v = this.volNum;
     var n = this.verseNum;
     if (!v && suggestedRawVerseNum) {
@@ -74,9 +99,17 @@ class KePanLine {
     }
     if (!v || !n) return '';
     switch (v) {
-    case 'A': v = '　一'; break;  case 'B': v = '　二'; break; case 'C': v = '　三'; break;  case 'D': v = '　四'; break;
-    case 'E': v = '　五'; break;  case 'F': v = '　六'; break; case 'G': v = '　七'; break;  case 'H': v = '　八'; break;
-    case 'I': v = '　九'; break;  case 'J': v = '十　'; break; case 'K': v = '十一'; break;  case 'L': v = '十二'; break;
+    case 'A': v = le10 ? '一' : '　一'; break;
+    case 'B': v = le10 ? '二' : '　二'; break;
+    case 'C': v = le10 ? '三' : '　三'; break;
+    case 'D': v = le10 ? '四' : '　四'; break;
+    case 'E': v = le10 ? '五' : '　五'; break;
+    case 'F': v = le10 ? '六' : '　六'; break;
+    case 'G': v = le10 ? '七' : '　七'; break;
+    case 'H': v = le10 ? '八' : '　八'; break;
+    case 'I': v = le10 ? '九' : '　九'; break;
+    case 'J': v = le10 ? '十' : '十　'; break;
+    case 'K': v = '十一'; break;  case 'L': v = '十二'; break;
     case 'M': v = '十三'; break;  case 'N': v = '十四'; break; case 'O': v = '十五'; break;  case 'P': v = '十六'; break;
     case 'Q': v = '十七'; break;  case 'R': v = '十八'; break; case 'S': v = '十九'; break;  case 'T': v = '廿　'; break;
     case 'U': v = '廿一'; break;  case 'V': v = '廿二'; break; case 'W': v = '廿三'; break;  case 'X': v = '廿四'; break;

@@ -1016,11 +1016,17 @@ though they are arhats,
 是諸比丘，雖阿羅漢，
 they have
 []
-not the same body
-軀命不同。
-or life span {30} then
+not the same
+@a@
+body
+軀
+or
 []
-how can
+life span {30}
+命
+@a@
+不同。
+then how can
 云何
 one by eating
 一人
@@ -1034,10 +1040,12 @@ The Buddha said:
 ‘If your knowing mind
 若汝覺了知見之心，
 is outside your body,
-實在身外，身心相外，
+實在身外，
 the two are separate.
+身心相外，
+Thus
 自不相干。
-Thus when
+when
 []
 your mind
 則心
@@ -1045,9 +1053,7 @@ knows something,
 所知，
 your body
 身
-should
-[]
-not feel it
+should not feel it
 不能覺。
 and when
 []
@@ -1500,11 +1506,13 @@ should have no feeling.
 If you insist
 必汝執言，
 that both body and mind
-身眼兩覺，
+身眼
 have separate feelings,
-應有二知，
-there should be two separate perceptions
-[]
+兩覺，
+there should be
+應有
+two separate perceptions
+二知，
 and then your body
 即汝一身，
 should (one day)

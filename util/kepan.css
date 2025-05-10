@@ -1,10 +1,13 @@
 body { margin:20px }
+keyLine { background-color:ffa }
+keyLine1 { background-color:ffd }
 .keyLine { background-color:ffa }
 .keyLine1 { background-color:ffd }
 .printing { font-family:KaiTi,"Kaiti TC",楷体,STKaiti,华文楷体; font-size:16px; line-height:125%; letter-spacing:3px }
 .printing1 { font-size:16px; line-height:125%; letter-spacing:3px }
 h2 { letter-spacing:2px }
 
+hilite { color:red }
 inv { opacity:0 }
 chapter { font-weight:bold; color:black; }
 .VERSE { color:teal; font-weight:bold }

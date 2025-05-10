@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>王治平居士《楞嚴經譯解》</title>
+<title>王治平《楞嚴經譯解》</title>
 <style>
 a { text-decoration:none }
 .title { color:#FF6600; font-widht:bold; font-size:17.0pt; }
@@ -29,7 +29,7 @@ function selectVol(volNum, verseNum) { // volNum is 1-based, as [0] is for the s
   if (sessionStorage.volNum != volNum) { sessionStorage.volNum = volNum; sessionStorage.wangVerseNum = null; }
   if (volNum < 0) volNum = 0;
   var cnt = 0;
-  var buf = new Buffer('王治平居士《楞嚴經譯解》&nbsp;');
+  var buf = new Buffer('王治平《楞嚴經譯解》&nbsp;');
   for (var i=0; i<=10; ++i) {　
     var ziCnt = i===0 ? 0 : verses[i].length;
     if (i === 0) {
@@ -37,7 +37,7 @@ function selectVol(volNum, verseNum) { // volNum is 1-based, as [0] is for the s
         buf.w('<font style="color:red; background-color:yellow">釋題</font>');
       else
         buf.w('<a href="javascript:selectVol(-1)">釋題</a>');
-      buf.w('&nbsp;卷');
+      buf.w('&nbsp;&nbsp;'); //, '卷');
       continue;
     }
     //if (i > 0) buf.w('&nbsp;');
@@ -54,7 +54,7 @@ function selectVol(volNum, verseNum) { // volNum is 1-based, as [0] is for the s
   else
     buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="?vid=', volNum, '&terse=1">簡潔版</a>');
   buf.w('&nbsp;&nbsp;&nbsp;&nbsp;<a href="WangVerses.html">純經文</a>',
-        '&nbsp;&nbsp;&nbsp;&nbsp;<a href="../HaiRengKePan/HaiReng科判.html">科判</a>',
+        '&nbsp;&nbsp;&nbsp;&nbsp;<a href="../HaiRengKePan/HaiReng科判.html">海仁科判</a>',
        );
   buf.render('volumeNums1', 'volumeNums2');
 

@@ -11,15 +11,19 @@ body { writing-mode:vertical-rl }
 .atpunc   { text-decoration:none; text-decoration-color:lightgray; }
 .verseNum { color:red; font-size:11px; margin-bottom:0px; margin-left:0px; text-orientation:upright; }
 .inlineChapter { text-decoration:none; color:#bbb }
+a  { text-decoration:none }
 rt { color:red; font-size:20px; margin-bottom:-20px; margin-left:-12px; }
 em { font-style:normal; color:red; background-color:lightyellow; }
 em.utter { font-style:normal; color:yellow; background-color:red; }
 u  { text-decoration-color:#f99; color:#00b }
+dim5 { opacity:0.5 }
+dim2 { opacity:0.2 }
 
 titledesc { font-size:20px;  font-family:FangSong, 仿宋体, STFangSong, 华文仿宋体 }
 booktitle { font-size:32px; font-family:KaiTi, "Kaiti TC", 楷体, STKaiti, 华文楷体; }
+toc { font-size:28px; font-family:FangSong, 仿宋体, STFangSong, 华文仿宋体; font-weight:bold; color:#0000eb }
 chaptertitle { font-size:28px; font-family:KaiTi, "Kaiti TC", 楷体, STKaiti, 华文楷体; color:#8b0000; _color:#5C4033 }
-chaptertitlesmall { font-size:20px; font-family: SimHei, 黑体, STHeiti, 华文黑体; color:#8b0000; _color:#5C4033 }
+chaptertitlesmall { font-size:18px; font-family: SimHei, 黑体, STHeiti, 华文黑体; color:#8b0000; _color:#5C4033 }
 anno   { color:#909 }
 pinyin { color:#900 }
 punc1  { color:#e00 }

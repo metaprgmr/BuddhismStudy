@@ -1,9 +1,11 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="../util/article.css">
 <link rel="stylesheet" href="common.css">
 <style>
+extra {color:blue}
 .container{position:relative; width:100%; min-height:100%; }
 .main{position:fixed; top:0px; left:0px; width:100%; height:100%; overflow:scroll }
 .header{padding-bottom:10%; width:100%; position:fixed; top:0px; left:0px; }
@@ -13,6 +15,7 @@
 .fa { color:red }
 .ypDisp { font-size:24px; color:black; opacity:0.5; margin-bottom:-10px }
 </style>
+<script src="utils.js"></script>
 <script src="gdh.js"></script>
 <script src="gdh-reader.js"></script>
 <script>
@@ -26,6 +29,7 @@
 </script>
 </head>
 <body>
+<div id="header"></div>
 <div class="container">
   <script>
     readerHost.writeDoc();

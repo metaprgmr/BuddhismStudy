@@ -6,22 +6,38 @@
 <style>
 sup { font-size:14px }
 </style>
+<script>
+function item(title, srcname, prefix, suffix, urlExtra) {
+  if (!prefix) prefix = '《';
+  if (!suffix) suffix = '》';
+  if (!urlExtra) urlExtra = '';
+  if (srcname.endsWith('.js')) srcname = 'gdhreader.html?s=content/' + srcname;
+  var LEVEL = 'level=-1&first=6';
+      LEVEL = 'level=1';
+  document.write(`<li>${prefix}<a href="${srcname}?${LEVEL}${urlExtra}">${title}${suffix}</li>`);
+}
+</script>
 </head>
 <body><div align="center">
 
 <table border=0>
 <tr><td align=center><h3 style="font-size:30px">粵語讀誦集錦</h3></td></tr>
 <tr><td><ul style="font-size:30px">
-<li>《<a href="gdhreader.html?s=content/wlsj.js">佛說大乘無量壽莊嚴清淨平等覺經</a>》（有語音）</li>
-<li>《<a href="gdhreader.html?s=content/dzj.js?level=-1&first=6">地藏本願經</a>》</li>
-<li>《<a href="gdhreader.html?s=content/xinjing.js?level=-1&first=3">心經</a>》</li>
-<li>《<a href="gdhreader.html?s=content/jingangjing.js?level=-1&first=6">金剛經</a>》</li>
-<li>《<a href="gdhreader.html?s=content/dashizhi.js?level=-1&first=3">大勢至念佛圓通章</a>》</li>
-<li>《<a href="gdhreader.html?s=content/guanshiyin.js?level=-1&first=6">觀世音菩薩普門品</a>》</li>
-<li>《<a href="gdhreader.html?s=content/puxian.js?level=-1&first=6">普賢行願品</a>》</li>
-<li>《<a href="gdhreader.html?s=content/vow.js">西方發願文‧蓮池大師</a>》</li>
-<li>【<a href="gdhreader.html?s=content/various.js?level=-1">各色短文</a>】</li>
-<li>《<a href="ddj.html?level=-1&first=6">道德經</a>》</li>
+<script>
+  item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》（有語音）');
+  item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》（無語音）', '&noaudio=1');
+  item('地藏本願經', 'dzj.js');
+  item('占察善惡業報經‧後半部', 'ZhanCha-2nd-part.js');
+  item('阿彌陀經', 'amtb.js');
+  item('西方發願文‧原作蓮池大師', 'vow.js');
+  item('各色短文', 'various.js', '【', '】');
+  item('心經', 'xinjing.js');
+  item('金剛經', 'jingangjing.js');
+  item('大勢至念佛圓通章', 'dashizhi.js');
+  item('觀世音菩薩普門品', 'guanshiyin.js');
+  item('普賢行願品', 'puxian.js');
+  item('道德經', 'ddj.html');
+</script>
 </ul></td></tr>
 </table>
 

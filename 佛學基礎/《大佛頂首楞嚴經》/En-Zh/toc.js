@@ -3,20 +3,18 @@ psg = new SimpleHTMLContent(
 <h1>Contents of The Śūraṅgama Sūtra</h1>
 
 <p>This is the Contents from the English translation of The Śūraṅgama Sūtra done by  Upāsaka 陸寬昱.
-The page numbers are those in the PDF file.
+The page numbers are those in the PDF file.<br>
 The un-translated Śūraṅgama Mantra part is added in at the appropriate location.</p>
 
-<p>As a reminder, Upāsaka 陸's English translation of 《楞嚴經》 is grouped into eight logical parts,
-whereas the original Chinese version organizes the whole sutra into 10 volumes of roughly equal sizes.
-See more information <a href="?n=Info">HERE</a>.</p>
+<p>As a reminder, Upāsaka 陸's English translation of 《楞嚴經》 is grouped into eight logical parts, whereas the original Chinese version<br>
+organizes the whole sutra into 10 volumes of roughly equal sizes. See more information <a href="?n=Info">HERE</a>.</p>
 
 <pre>
 Comment ............................................................................................................ iii
 Translator .........................................................................................................   v
 Preface ............................................................................................................. 15
 
-I
-The Noumenon in the Tathāgata Store .................................................................... [vol.1] .... 24 [1]#
+<font color=red>I</font> The Noumenon in the Tathāgata Store .................................................................. [vol.1] .... 24 [1]#
   Ānanda’s Weakness–The Reason for this Sermon ...................................................................... 25
   Meditative Study of All as Void (Śamatha).......................................................................... 26
   Wiping Out the Five Aggregates & Eight Consciousnesses to Expose the Unreality of Ego ............................. 27
@@ -121,8 +119,7 @@ The Noumenon in the Tathāgata Store ...........................................
         The element of consciousness ............................................................................... 119
   Ānanda’s Understanding Expressed in his Gāthā .................................................................... 122
 
-II
-The Phenomenon in the Tathāgata Store .............................................................................. 124 [2]#
+<font color=red>II</font> The Phenomenon in the Tathāgata Store ........................................................................... 124 [2]#
   The Meditative Study of All as Unreal (Samāpatti) .................................................... [vol.4] ... 124
     The One Mind Beingthe Source of Both Delusion & Enlightenment .................................................. 124
     A Probe into the Disciple’s Understanding of Noumenon & Phenomenon to Reveal the Rise of Illusions ............. 126
@@ -137,16 +134,14 @@ The Phenomenon in the Tathāgata Store .........................................
     The Unhindered Intermingling of Noumenon & Phenomenon .......................................................... 133
     Expounding the Common Source of Delusion & Enlightenment to Sum Up the Intermingling of Phenomenon & Noumenon .. 135
 
-III
-The Tathāgata Store Containing Both Noumenon & Phenomenon .......................................................... 137 [3]#
+<font color=red>III</font> The Tathāgata Store Containing Both Noumenon & Phenomenon ...................................................... 137 [3]#
   Meditative Study of the Mean (Dhyāna) ............................................................................ 137
     Elimination of ‘is’ to reveal the True Mind .................................................................... 137
     Elimination of ‘is not’ to reveal the True Mind ................................................................ 138
     Simultaneous elimination of ‘is’ & ‘is not’ to reveal the Absolute Mind ........................................ 138
     The One Mind, Sudden Awakening & Realization ................................................................... 139
 
-IV
-Self-Enlightenment ................................................................................................. 146 [4]#
+<font color=red>IV</font> Self-Enlightenment .............................................................................................. 146 [4]#
   Objects Contemplated in Meditative Studies ....................................................................... 146
     The subjective mind in the meditation .......................................................................... 147
     The objective phenomena in the meditation ...................................................................... 147
@@ -162,8 +157,7 @@ Self-Enlightenment .............................................................
     Meditationon the organ of hearing .................................................................. [vol.6] ... 191
   Mañjuśrī’s Gāthā Teaching the Appropriate Method for Human Beings ................................................ 203
 
-V
-The Enlightenment of Others ........................................................................................ 213 [5]#
+<font color=red>V</font> The Enlightenment of Others ...................................................................................... 213 [5]#
   Discipline & its Three Decisive Steps: Śīla, Dhyāna, & Prajna .................................................... 214
     Prohibition against carnality .................................................................................. 214
     Prohibition against killing .................................................................................... 215
@@ -172,8 +166,7 @@ The Enlightenment of Others ....................................................
 
 <i>The Śūraṅgama Mantra part</i> .............................................................................. [vol.7]
 
-VI
-Bodhisattva Development into Buddhahood ............................................................................ 222 [6]#
+<font color=red>VI</font> Bodhisattva Development into Buddhahood ......................................................................... 222 [6]#
   The Tathāgata Store from which Arise Both Saṃsāra & Nirvāṇa ...................................................... 223
   The Origin of Living Beings & the World .......................................................................... 223
     The Inverted Cause of the Existence of Living Beings ........................................................... 224
@@ -194,8 +187,7 @@ Bodhisattva Development into Buddhahood ........................................
     The Absolute (or Wonderful) Enlightenment ...................................................................... 242
   The Titles of this Sūtra ......................................................................................... 242
 
-VII
-The Six Planes of Existence Caused by Unenlightenment .............................................................. 244 [7]#
+<font color=red>VII</font> The Six Planes of Existence Caused by Unenlightenment .......................................................... 244 [7]#
   The Six States of Living Beings in Saṃsāra ....................................................................... 244
       The realm of devas ........................................................................................... 247
       The realm of seers (ṛṣi) and spirits ......................................................................... 247
@@ -235,14 +227,13 @@ The Six Planes of Existence Caused by Unenlightenment ..........................
       The third  region of the three dhyāna heavens ................................................................ 268
       The fourth region of the four  dhyāna heavens ................................................................ 269
       The five heavens from which there is no return ............................................................... 270
-  The Four Heavens of the Formless Realm of Pure Spirit (Arūpadhātu) ............................................... 272
-    The state of the Great Arhat ................................................................................... 272
-    The four heavens beyond form ................................................................................... 272
-    The Anāgāmin stage ............................................................................................. 273
+    The Four Heavens of the Formless Realm of Pure Spirit (Arūpadhātu) ............................................. 272
+      The state of the Great Arhat ................................................................................. 272
+      The four heavens beyond form ................................................................................. 272
+      The Anāgāmin stage ........................................................................................... 273
   The Four Classes in the Realm of Titans (Asura-gati) ............................................................. 274
 
-VIII
-Warning to Practisers: The Fifty False States Caused by the Five Aggregates ........................................ 277 [8]#
+<font color=red>VIII</font> Warning to Practisers: The Fifty False States Caused by the Five Aggregates ................................... 277 [8]#
   States of Māra Caused by the Five Aggregates ..................................................................... 277
     The Ten States Affected by the First  Aggregate of Form           (Rūpa) ....................................... 280
     The Ten States Affected by the Second Aggregate of Receptiveness  (Vedanā) ..................................... 284

@@ -1,11 +1,12 @@
 var DEBUG = ''; // 'border:1px solid red;';
 const HILITE_COLOR = '#ff8';
 const KAI_TI = 'KaiTi, Kaiti TC, 楷体, STKaiti, 华文楷体';
+const FANGSONG_TI = 'FangSong, 仿宋体, STFangSong, 华文仿宋体';
 // 特殊符号大全 https://www.jiuwa.net/fuhao/agg/
 
 const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999
-  if (typeof n === 'string') n = parseInt(n);
+  if (typeof n == 'string') n = parseInt(n);
   if (n == 0) return zdigits[0];
   if (n == 10) return '十';
   var d100 = Math.floor(n / 100);
@@ -16,35 +17,46 @@ function zNumber(n) { // 0 to 999
   return ret;
 }
 
+var queryParams;
 function get(name) {
- if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-   return decodeURIComponent(name[1]);
+  if (!queryParams) { // singleton, instantiated on-demand
+    queryParams = {};
+    if (location.search.startsWith('?')) {
+      var qparams = location.search.substring(1).split('&');
+      for (var i=0; i<qparams.length; ++i) {
+        var a = qparams[i].split('=');
+        queryParams[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+      }
+    }
+  }
+  return queryParams[name];
 }
 
 function addjs(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
 function e(id) { return document.getElementById(id) }
 function w() { for(var i in arguments)document.write(arguments[i]) }
+function showTop(id) { var el=e(id); el && el.el.scrollIntoView(); }
 function renderText(id, txt) { var el = e(id); el && (el.innerHTML = txt); }
 function addClass(id, cls) { var el = e(id); el && el.classList.add(cls); } 
 function removeClass(id, cls) { var el = e(id); el && el.classList.remove(cls); } 
 
 function digit2(i, increment) {
   if (!i) i = 0;
-  if (typeof i === 'string') i = parseInt(i);
+  if (typeof i == 'string') i = parseInt(i);
   if (increment) ++i;
   return (i<10) ? ('0' + i) : i;
 }
 
 function digit3(i, increment) {
   if (!i) i = 0;
-  if (typeof i === 'string') i = parseInt(i);
+  if (typeof i == 'string') i = parseInt(i);
   if (increment) ++i;
   return (i<10) ? ('00' + i) : (i<100 ? ('0' + i) : i);
 }
 
 function digit3RightAligned(i) {
   if (!i) i = 0;
-  if (typeof i === 'string') i = parseInt(i);
+  if (typeof i == 'string') i = parseInt(i);
   return (i<10) ? ('<font style="opacity:0">00</font>' + i) : (i<100 ? ('<font style="opacity:0">0</font>' + i) : i);
 }
 
@@ -225,101 +237,9 @@ function ruby(zi, punc, cssCls) {
    return before + '<ruby>' + zi + rt + punc + '</rt></ruby>' + after;
 }
 
-function processBookContent(id, bookInfo, chapterNum, chBaseUrl, forView) {
-  var result = [], title = bookInfo.title;
-  var lines = bookInfo.content;
-  if (chapterNum) bookInfo.noChapterTitles = chapterNum === 'none';
-  if (bookInfo.noChapterTitles) chapterNum = null;
-  var desc = bookInfo.noChapterTitles ? bookInfo.descNoChapterTitles : bookInfo.desc;
-
-  var chNumS, chNumE;
-  if (chapterNum) {
-    var idx = chapterNum.indexOf('-');
-    if (idx <= 0) {
-      chNumS = chNumE = parseInt(chapterNum);  if (isNaN(chNumS)) chNumS = chNumE = null;
-    } else {
-      chNumS = parseInt(chapterNum.substring(0, idx)); if (isNaN(chNumS)) chNumS = null;
-      chNumE = parseInt(chapterNum.substring(idx+1));  if (isNaN(chNumE)) chNumE = null;
-    }
-    if (!chNumS) { // check if it is a chapter name
-      for (var k=0; k<bookInfo.getChapters().length; ++k)
-        if (chapterNum === bookInfo.getChapters()[k].caption) { chNumS = chNumE = k+1; break; }
-      if (!chNumS) chapterNum = null;
-    }
-  }
-  if (!Array.isArray(lines)) {
-    title = lines.title;
-    desc  = lines.desc;
-    lines = lines.content;
-  }
-
-  document.title = title;
-  var lasteol = true, verseNum = 1;
-
-  if (forView) { // book title matter; only for view
-    if (desc) result.push('<titledesc>' + desc + '</titledesc><br>');
-    result.push('<h2>' + title + '</h2>');
-  }
-
-  var inSession = (chapterNum == null);
-  var lastName = '_end';
-  for (var i in lines) {
-    var ln = lines[i];
-    if ((typeof ln === 'object') && !Array.isArray(ln)) {
-      if (chNumS != null) inSession = ln.chapterNum >= chNumS && ln.chapterNum <= chNumE;
-//    if (ln.id != null) { txt += '<a name="' + ln.id + '"></a>'; lastName = parseInt(ln.id) + 1; }
-      if (ln.tag) {
-        var tag = ln.tag;
-        if (bookInfo.noChapterTitles && tag.startsWith('chaptertitle'))
-          continue;
-        if (tag === 'chaptertitle')
-          if (forView) tag = 'h3'; // use h3 for viewing
-        else
-          result.push('<p>'); // insert some space in front
-        var txt = '<' + tag;
-        var tooltip = '';
-        if (ln.annotations) tooltip = ln.annotations.join('\n');
-        if (ln.ziCount) tooltip += (tooltip === '' ? '' : '\n') + ln.ziCount + '字';
-        if (tooltip != '') txt += ' title="' + tooltip + '"';
-        txt += (inSession ? '>' : ' class="inlineChapter">') + processText(ln.display);
-        if (!inSession) {
-          if (!forView) continue;
-          txt += '　<a href="' + chBaseUrl + '&c=' + ln.chapterNum + '" class="inlineChapter">……</a>';
-        }
-        txt += '</' + tag + '>';
-        result.push(txt);
-      }
-    }
-    else if (inSession) {
-      var anno = null;
-      if (Array.isArray(ln)) {
-        anno = ln[1];
-        ln = ln[0];
-      }
-
-      var nexteol = ln.endsWith('/');
-      if (nexteol) ln = ln.substring(0, ln.length-1);
-      var isGatha = ln.startsWith('#');
-      if (isGatha)
-        ln = ln.substring(1);
-      else {
-        isGatha = ln.startsWith('gatha#');
-        if (isGatha) ln = ln.substring(6);
-      }
-      if (anno) ln = [ ln, anno ];
-      processPara(result, !lasteol ? null : (verseNum++), ln, isGatha, lasteol, !nexteol, forView);
-      lasteol = !nexteol;
-    }
-  }
-
-//  var len = Math.min(100, result.length); for (var i=0; i<len; ++i) console.log(i+1, '---', result[i]);
-  if (!forView) bookInfo.displayLines = result;
-  return result;
-}
-
 function lastTag(tag) { return { tag, tagLast:false }; }
 
-function processPara(result, verseNum, ln, isGatha, lasteol, cureol, forView) {
+function processPara(result, verseNum, ln, isGatha, lasteol, cureol) {
   var anno, annoAll;
   if (Array.isArray(ln)) { anno = ln[1]; ln = ln[0] }
   var segs = ln.split('|'), start = '', startLast = '', end = '';
@@ -336,12 +256,10 @@ function processPara(result, verseNum, ln, isGatha, lasteol, cureol, forView) {
   for (var s=0; s<segs.length; ++s) {
     ln = segs[s];
     for (var lg in lastTags) ln = processLineHtmlTags(ln, lastTags[lg]);
-    ln = ((s === segs.length-1) ? startLast : start) + processText(ln, s, verseNum) + end;
-    if (forView && s < segs.length-1) ln += '<br>';
+    ln = ((s == segs.length-1) ? startLast : start) + processText(ln, s, verseNum) + end;
     result.push(ln);
   }
   if (cureol) result.push('</p>');
-  else if (forView) result.push('<br>');
 }
 
 function processLineHtmlTags(ln, tagLast) {
@@ -394,15 +312,15 @@ function processText(seg, segNum, verseNum) {
     for (i=0; i<len1; ++i) {
       var idelta = -1, cur = seg[i], nxt = seg[i+1], p1;
 
-      if (cur === '[') { // annotation for term, e.g. [普賢]               (look up)
-                         //                           [普賢=samantabhadra] (verbatim)
-                         //           or pinyin, e.g. [妷@zhi3]            (verbatim)
-                         //                           [妷@] [妷@-]         (look up)
-                         //
+      if (cur == '[') { // annotation for term, e.g. [普賢]               (look up)
+                        //                           [普賢=samantabhadra] (verbatim)
+                        //           or pinyin, e.g. [妷@zhi3]            (verbatim)
+                        //                           [妷@] [妷@-]         (look up)
+                        //
         var term = nxt;
         for (p1=i+2; p1<len; ++p1) {
           nxt = seg[p1];
-          if (nxt === ']') { idelta = p1 - i; nxt = seg[p1+1]; break }
+          if (nxt == ']') { idelta = p1 - i; nxt = seg[p1+1]; break }
           else term += nxt;
         }
 
@@ -410,7 +328,7 @@ function processText(seg, segNum, verseNum) {
         if (idx1 > 0) { // pinyin
           var py1 = term.substring(idx1+1);
           term = term.substring(0, idx1);
-          if (py1 === '' || py1 === '-')
+          if (py1 == '' || py1 == '-')
             py1 = lookupSound(term) || ('(pronunciation not available)' + term + ')');
           else
             py1 = toPinyin(py1);
@@ -434,7 +352,7 @@ function processText(seg, segNum, verseNum) {
           ret += ruby('　', verseNum, 'verseNum') + ruby(cur, nxt);
           ++i;
         } else {
-          if (cur === '<') {
+          if (cur == '<') {
             for (; i<len1 && seg[i] !== '>'; ++i) ret += seg[i];
             ret += '>';
             cur = seg[++i];
@@ -469,47 +387,55 @@ function processText(seg, segNum, verseNum) {
     return ret;
 }
 
-function printHanZiUsage(bi) {
-  var cnt = Object.keys(allHanZi).length;
-  var perc = (cnt / bi.ziCount * 100).toFixed(1);
-  console.log(`《${bi.title}》共${bi.ziCount}字。使用漢字：${cnt}個 (${perc}%)。`);
-}
-
-function render(id, bookInfo, chapterNum, chBaseUrl) {
-  bookInfo.printStats();
-  printHanZiUsage(bookInfo);
-  const el = e(id);
-  el.innerHTML = processBookContent(id, bookInfo, chapterNum, chBaseUrl, true).join('');
-  if (bookInfo.ziCount)
-    el.title = '《' + bookInfo.title + '》（' + bookInfo.ziCount + '字）';
-}
-
-function renderReading(id, bookInfo, chapterNum, chBaseUrl) {
-  printHanZiUsage(bookInfo);
-  processBookContent(id, bookInfo, chapterNum, chBaseUrl);
-  bookInfo.elemId = id;
-  bookInfo.renderReader();
-  bookInfo.printStats();
+function renderReading(elid, chapterNum, chBaseUrl, noReadHL) {
+  LIVRE.set('elemId',   elid)
+       .set('noReadHL', noReadHL)
+       .printHanZiUsage()
+       .processBookContent(chapterNum, chBaseUrl)
+       .printStats()
+       .renderReader();
 }
 
 //
 // MyBookInfo
 //
-
-var LIVRE;
-
-const KNOWN_PREFICES = {
-  'gatha':      true, // shorthanded as ''
-  'chapter':    true,
-  'versequote': true, // TODO
-  'note':       true, // TODO
-};
-
-var this_book; // the latest MyBookInfo is set here, in case a singleton is intended.
+var LIVRE; // the latest MyBookInfo is set here, in case a singleton is intended.
 var all_books = []; // for stats
+class ChapterInfo {
+  constructor(caption, display, chNum, tag) {
+    this.caption = caption;
+    this.display = display || caption;
+    this.id      = chNum;
+    this.chapterNum = chNum;
+    tag && (this.tag = tag);
+    this.ziCount = 0;
+  }
+  isTOC() { return this.chapterNum == 'TOC'; }
+}
+class PageInfo {
+  constructor(start, end, lastW, chNum) {
+    this.start   = start || 0;
+    this.end     = end   || 0;
+    this.lastW   = lastW || 0;
+    this.chapter = chNum || 0;
+  }
+  isNormal() { return typeof this.chapter != 'string'; }
+  isTOC()    { return this.chapter == 'TOC'; }
+  getType()  { return this.isNormal() ? null : this.chapter; }
+  getPageName() {
+    switch(this.getType()) {
+    case 'TOC': return '目錄';
+    default:    return '';
+    }
+  }
+  pageNumDisp(num) { return `${this.getPageName()}第${zNumber(num+1)}頁`; }
+}
 class MyBookInfo {
   constructor(title, desc, descNoChapterTitles) {
-    this.noimg = noimg; // global
+    LIVRE = this;
+    all_books.push(this);
+
+    this.noimg = !!get('noimg') && !get('withimg');
     this._className = 'MyBookInfo';
     this.title = title;
     this.desc = desc;
@@ -517,10 +443,11 @@ class MyBookInfo {
     this.ziCount = 0;
     this.content = [];
     this.chapterNum = 0;
-    this.paraPrefix = '　　';
-    this.breakLen = 25;
+    this.chaptersOrig = [];
 
     // for reader rendition
+    this.paraPrefix = '　　';
+    this.breakLen = 25;
     this.readerHeight = 700;  // settable by individual books
     this.chapterTitleStyle = 'chaptertitle';
     this.margin = 20;
@@ -538,15 +465,24 @@ class MyBookInfo {
       booktitle: 42,
       titledesc: 28
     };
-    this.chaptersOrig = [];
-    this_book = this;
-    all_books.push(this);
+  }
+
+  addTOC() {
+    if (this._myTOC) return;
+    this._myTOC = new ChapterInfo('目錄', '目錄', 'TOC', 'toc');
+    this.chaptersOrig.unshift(this._myTOC);
+    this.content.unshift(this._myTOC);
   }
 
 //  setSelectedChapters(chNums) {
 //    this.readingStarted = false;
 //    this._selectedChapters = !chNums || chNums.sort();
 //  }
+
+  getChapter(chnum) {
+    var a = this.getChapters();
+    return a[a[0].isTOC() ? (chnum+1) : chnum];
+  }
 
   getChapters() {
     if (!this._curChapters) {
@@ -563,7 +499,7 @@ class MyBookInfo {
 
   setImage(uri, width, height, closeDisabled) {
     if (!this.noimg && uri) {
-      if (typeof uri === 'object') {
+      if (typeof uri == 'object') {
         this.imageUri      = uri.uri;
         this.imageWidth    = uri.width;
         this.imageHeight   = uri.height;
@@ -593,13 +529,13 @@ class MyBookInfo {
       var arg = arguments[0];
       if (Array.isArray(arg))
         lines = arg;
-      else if (typeof arg === 'string')
+      else if (typeof arg == 'string')
         lines = this.parseContent(arg, this.breakLen);
     }
 
     for (var i in lines) {
       var ln = this.processMarks( this.preprocessAnnos(lines[i]) );
-      if ((typeof ln === 'string') && ln.startsWith('chapter#')) {
+      if ((typeof ln == 'string') && ln.startsWith('chapter#')) {
         curChpt = this.addedChapter(ln.substring(8).trim());
         this.content.push(curChpt);
       } else {
@@ -636,7 +572,7 @@ class MyBookInfo {
     for (var i=0; i<lines.length; ++i) {
       var ln = lines[i];
       var cnt;
-      for (cnt=0; ln[cnt] === '　'; ++cnt);
+      for (cnt=0; ln[cnt] == '　'; ++cnt);
       ln = ln.trim();
       for (; cnt > 0; --cnt) ln = '　' + ln;
       if (ln.length > 0) ret.push(ln);
@@ -654,7 +590,7 @@ class MyBookInfo {
       var idxStart = ++i, idxDiv = -1;
       for (; i<ln.length; ++i) {
         c = ln[i];
-        if (c === ']') {
+        if (c == ']') {
           var term, anno, divr;
           if (idxDiv < 0) {
             term = ln.substring(idxStart, i);
@@ -710,7 +646,7 @@ class MyBookInfo {
         for (++i; ; ++i) {
           var x = ln[i];
           c += x;
-          if (x === ']')
+          if (x == ']')
             break;
         }
         break;
@@ -763,20 +699,139 @@ class MyBookInfo {
     if (idx > 0)
       txt = txt.substring(0, idx) + ' <span style="color:gray">' + txt.substring(idx) + '</span> ';
     var chNum = ++this.chapterNum;
-    var c = { caption, display:txt, id:chNum, chapterNum:chNum, tag:this.chapterTitleStyle, ziCount:0 };
+    var c = new ChapterInfo(caption, txt, chNum, this.chapterTitleStyle);
     if (arr.length > 0) c.annotations = arr;
     this.chaptersOrig.push(c);
     return c;
   }
 
-  printStats() {
-    console.log('=================');
-    for (var i in this.chaptersOrig) {
-      var c = this.chaptersOrig[i];
-      if (c.ziCount)
-        console.log(c.chapterNum, c.caption, `共${c.ziCount}字`);
+  processBookContent(chapterNum, chBaseUrl) {
+    var result = [], title = this.title;
+    var lines = this.content;
+    if (chapterNum) this.noChapterTitles = chapterNum == 'none';
+    var desc = this.noChapterTitles ? this.descNoChapterTitles : this.desc;
+    if (this.noChapterTitles) chapterNum = null;
+    else if (this.getChapters().length > 1) { // fabricate a TOC page
+      var chs = this.getChapters();
+      this.content.unshift('#/');
+      this.content.unshift('#/');
+      for (var i=chs.length-1; i>=0; --i)
+        this.content.unshift(`#§${chs[i].caption}/`); // page numbers will be updated in _computePages()
+      this.addTOC();
     }
-    console.log('=================');
+  
+    var chNumS, chNumE;
+    if (chapterNum) {
+      var idx = chapterNum.indexOf('-');
+      if (idx <= 0) {
+        chNumS = chNumE = parseInt(chapterNum);  if (isNaN(chNumS)) chNumS = chNumE = null;
+      } else {
+        chNumS = parseInt(chapterNum.substring(0, idx)); if (isNaN(chNumS)) chNumS = null;
+        chNumE = parseInt(chapterNum.substring(idx+1));  if (isNaN(chNumE)) chNumE = null;
+      }
+      if (!chNumS) { // check if it is a chapter name
+        for (var k=0; k<this.getChapters().length; ++k)
+          if (chapterNum == this.getChapter(k).caption) { chNumS = chNumE = k+1; break; }
+        if (!chNumS) chapterNum = null;
+      }
+    }
+    if (!Array.isArray(lines)) {
+      title = lines.title;
+      desc  = lines.desc;
+      lines = lines.content;
+    }
+  
+    document.title = title;
+    var lasteol = true, verseNum = 1;
+  
+    var inSession = (chapterNum == null);
+    var lastName = '_end';
+    for (var i in lines) {
+      var ln = lines[i];
+      if ((typeof ln == 'object') && !Array.isArray(ln)) {
+        if (chNumS != null) inSession = ln.chapterNum >= chNumS && ln.chapterNum <= chNumE;
+//      if (ln.id != null) { txt += '<a name="' + ln.id + '"></a>'; lastName = parseInt(ln.id) + 1; }
+        if (ln.tag) {
+          var tag = ln.tag;
+          if (this.noChapterTitles && tag.startsWith('chaptertitle'))
+            continue;
+          if (tag != 'chaptertitle')
+            result.push('<p>'); // insert some space in front
+          var txt = `<${tag}`;
+          var tooltip = '';
+          if (ln.annotations) tooltip = ln.annotations.join('\n');
+          if (ln.ziCount) tooltip += (tooltip === '' ? '' : '\n') + ln.ziCount + '字';
+          if (tooltip != '') txt += ' title="' + tooltip + '"';
+          if (!inSession)    txt += ' class="inlineChapter"';
+          result.push(txt + `>${processText(ln.display)}</${tag}>`);
+        }
+      }
+      else if (inSession) {
+        var anno = null;
+        if (Array.isArray(ln)) { anno = ln[1]; ln = ln[0]; }
+        if (!ln) ln = '';
+        var nexteol = ln.endsWith('/');
+        if (nexteol) ln = ln.substring(0, ln.length-1);
+        var isGatha = ln.startsWith('#');
+        if (isGatha)
+          ln = ln.substring(1);
+        else {
+          isGatha = ln.startsWith('gatha#');
+          if (isGatha) ln = ln.substring(6);
+        }
+        if (anno) ln = [ ln, anno ];
+        processPara(result, !lasteol ? null : (verseNum++), ln, isGatha, lasteol, !nexteol);
+        lasteol = !nexteol;
+      }
+    }
+    this.displayLines = result;
+    return this;
+  }
+
+  _updateTOC() {
+    if (!this._myTOC) return this;
+    var len = this.getChapters().length;
+    for (var i=0; i<len-1; ++i) {
+      var ch = this.getChapter(i);
+      this._myTOC[ch.caption] = ch.startPage+1;
+    }
+  }
+
+  _toTOCLine(ln, idx) {
+    var entry = ln.substring(idx+1);
+    var pn = this._myTOC[entry];
+    if (!pn) return ln;
+    var num = zNumber(pn);
+    ln = ln.substring(0, idx) + entry;
+    var fillerLen = this.breakLen - (ln.length + num.length);
+    num = `<a href="javascript:LIVRE.renderReader(${pn-1})">${num}</a>`;
+    if (fillerLen >= 0) {
+      ln += '　';
+      for (var i=0; i<fillerLen; ++i) ln += '<dim2>⋅</dim2>';
+      return ln + num;
+    }
+    ln = ln.substring(0, ln.length + fillerLen);
+    var last1 = `<dim2 title="${entry}">${ln[ln.length-1]}</dim2>`;
+    var last2 = `<dim5 title="${entry}">${ln[ln.length-2]}</dim5>`;
+    return ln.substring(0, ln.length-2) + last2 + last1 + '　' + num;
+  }
+
+  printStats() {
+    if (this.chaptersOrig.length) {
+      console.log('=================');
+      for (var i in this.chaptersOrig) {
+        var c = this.chaptersOrig[i];
+        console.log(c.chapterNum, c.caption, `共${c.ziCount}字`);
+      }
+      console.log('=================');
+    }
+    return this;
+  }
+
+  printHanZiUsage() {
+    var cnt = Object.keys(allHanZi).length;
+    var perc = (cnt / this.ziCount * 100).toFixed(1);
+    console.log(`《${this.title}》共${this.ziCount}字。使用漢字：${cnt}個 (${perc}%)。`);
     return this;
   }
 
@@ -790,7 +845,7 @@ class MyBookInfo {
       var idx = findFirst(ln, '>', ' ');
       if (idx > 0) tag = ln.substring(1, idx);
       else tag = ln.substring(1);
-      if (tag === 'anno') {
+      if (tag == 'anno') {
         var idx1 = ln.indexOf('>');
         if (idx < idx1) {
           var tmp = ln.substring(tag.length+1, idx1).trim();
@@ -799,10 +854,10 @@ class MyBookInfo {
         }
       }
     }
-    var w = (tag === 'p') ? this.pW : (this.widths[tag] || this.textW);
+    var w = (tag == 'p') ? this.pW : (this.widths[tag] || this.textW);
 
     if (buf) {
-      if (tag === 'p') ln = '';
+      if (tag == 'p') ln = '';
       w -= 3;
       var x = lastX - w;
       buf.w('<div style="', DEBUG, 'position:absolute; height:', h, 'px; width:', w,
@@ -812,7 +867,7 @@ class MyBookInfo {
         buf.w('background-color:#ddd;');
         ln = '&nbsp;' + ln;
       }
-      if (tag === 'booktitle') buf.w('border-left:1px solid lightgray');
+      if (tag == 'booktitle') buf.w('border-left:1px solid lightgray');
       else if (ln !== '') buf.w('line-height:', w, 'px;');
       while (ln.endsWith('\n')) ln = ln.substring(0, ln.length-1);
       buf.w('">', ln, '</div>\n');
@@ -826,7 +881,7 @@ class MyBookInfo {
     return w;
   }
 
-  _computePages() {
+  _computePages(isResize) {
     var el = e(this.elemId),
         W = this._clientWidth(el),
         len = this.displayLines.length,
@@ -840,7 +895,7 @@ class MyBookInfo {
 
     this.pages = [];
     var lastTitle = true;
-    var curPg = { start:0, end:len-1, lastW: 0, chapter:0, isChapterStart:false }, curW = 0;
+    var curPg = new PageInfo(0, len-1), curW = 0;
     this.pages.push(curPg);
     var curChapterIdx = -1;
     for (var i=0; i<len; ++i) {
@@ -849,7 +904,7 @@ class MyBookInfo {
       if (startsWith(ln, '<p>') && lastTitle) continue; // ignored in front of a chapter (or any?) title
       lastTitle = ln.startsWith('<chaptertitle');
       if (lastTitle) { // set up chapter stuff
-        var ch = this.getChapters()[++curChapterIdx];
+        var ch = this.getChapter(++curChapterIdx);
         if (ch) ch.startPage = this.pages.length-1;
       }
 
@@ -858,14 +913,14 @@ class MyBookInfo {
       if (curW > readWidth) {
         curPg.end = i-1;
         curPg.lastW = lastW;
-        curPg = { start:i, end:len-1, chapter:curChapterIdx };
-        if (this.getChapters().length > 0 && !lastTitle && this.getChapters()[curPg.chapter])
-          curPg.chapterTitle = this.getChapters()[curPg.chapter].caption;
+        curPg = new PageInfo(i, len-1, null, curChapterIdx);
+        if (this.getChapters().length > 0 && !lastTitle && this.getChapter(curPg.chapter))
+          curPg.chapterTitle = this.getChapter(curPg.chapter).caption;
         this.pages.push(curPg);
         curW = 0;
       }
       if (lastTitle) {
-        var ch = this.getChapters()[curChapterIdx];
+        var ch = this.getChapter(curChapterIdx);
         if (!ch) continue;
         var t = ch.caption;
         if (!curPg.chapterTitle) {
@@ -877,9 +932,16 @@ class MyBookInfo {
           else // limit to 3 chapter titles on the side
             curPg.chapterTitle = a[a.length-2] + '　　' + a[a.length-1] + '　　' + t;
         }
-        curPg.isChapterStart = lastTitle;
       }
     }
+
+    this._updateTOC();
+    if (isResize) {
+      this._setCurPage(0);  // 0-based
+      this.curHilite = -1;  // 0-based
+      sessionStorage.removeItem(this.title + '_curPage');
+    }
+    return this;
   }
 
   _clientWidth(el) {
@@ -889,70 +951,71 @@ class MyBookInfo {
   }
 
   _setCurPage(cp) {
-    cp && sessionStorage.setItem(this.title + '_curPage', cp);
+    if (cp || (cp === 0))
+      sessionStorage.setItem(this.title + '_curPage', cp);
     this.curPage = cp;
   }
 
   renderReader(dir) {
-//    this.noimg = 'true' === sessionStorage.getItem(this.title + '_noimg');
+    this.noimg = 'true' == sessionStorage.getItem(this.title + '_noimg');
     if (!this.readingStarted) {
-      LIVRE = this;
       document.addEventListener("keydown",   (e) => LIVRE.nav(e), false);
       document.addEventListener("mousedown", (e) => LIVRE.nav(e), false);
       document.addEventListener("mousemove", (e) => LIVRE.nav(e), false);
-      window.addEventListener("resize", () => { LIVRE._computePages(); LIVRE.renderReader() }, false);
+      window.addEventListener("resize", () => LIVRE._computePages(true).renderReader(), false);
       this.readingStarted = true;
-
-      this._computePages();
-      this._setCurPage(0);  // 0-based
-      this.curHilite = -1; // 0-based
+      this._computePages(); // first time
     }
-    else if (dir === 'noimg') {
+    else if (dir == 'noimg') {
       this.noimg = true;
       sessionStorage.setItem(this.title + '_noimg', 'true');
-      this._computePages();
-      this._setCurPage(0);  // 0-based
-      this.curHilite = -1; // 0-based
+      this._computePages(true);
+    }
+    else if (dir == 'withimg') {
+      this.noimg = false;
+      sessionStorage.removeItem(this.title + '_noimg');
+      this._computePages(true);
     }
 
-    const numPgs = this.pages.length
-    /* if (!dir) {
+    const numPgs = this.pages.length;
+    if (!dir && (dir !== 0)) {
       dir = sessionStorage.getItem(this.title + '_curPage');
-      if (typeof dir === 'string') dir = parseInt(dir);
-    } */
+      dir && (dir = parseInt(dir));
+    }
 
-    if (typeof dir === 'number') {
-      if (dir < 0 || dir >= numPgs) return;
+    if (typeof dir == 'number') {
+      if (dir < 0 || dir >= numPgs) return this;
       this._setCurPage(dir);
     } else {
       switch (dir) {
-      case 'nextHilite': this._toNextHilite(true); break;
-      case 'prevHilite': this._toNextHilite(false); break;
+      case 'nextHilite': if (!this.noReadHL) this._toNextHilite(true); break;
+      case 'prevHilite': if (!this.noReadHL) this._toNextHilite(false); break;
       case 'next5Pages': this._nextPage(5); break;
       case 'prev5Pages': this._prevPage(5); break;
       case   'nextPage': this._nextPage(); break;
       case   'prevPage': this._prevPage(); break;
-      case      'start': this._setCurPage(0); this.curHilite = null; break;
-      case        'end': this._setCurPage(numPgs-1); this.curHilite = null; break;
+      case        'end': this._setCurPage(numPgs-1); this.curHilite = -1; break;
+      case      'start':
+      default:           this._setCurPage(0); this.curHilite = -1; break;
       }
     }
 
     var el = e(this.elemId);
-    if (!el) { alert('Element [id=' + this.elemId + '] is not found.'); return; }
+    if (!el) { alert('Element [id=' + this.elemId + '] is not found.'); return this; }
 
-    var W = this._clientWidth(el),
-        H = this.readerHeight,
-        origR = W - this.margin;
+    var W = this._clientWidth(el), H = this.readerHeight, origR = W - this.margin;
     el.style.height = H + 'px';
 
     var buf = new Buffer(), lastX = origR;
-
     var desc  = this.noChapterTitles ? this.descNoChapterTitles :  this.desc, pageOffset = 0;
     if (desc) {
       pageOffset = this._renderReadLine(buf, '<titledesc>' + desc + '</titledesc>', false, lastX, H);
       lastX -= pageOffset;
     }
-    var pageW = this._renderReadLine(buf, '<booktitle>' + this.title + '</booktitle>', false, lastX, H);
+    var showimg = '';
+    if (this.noimg && this.imageUri)
+      showimg = ` <a href="javascript:LIVRE.renderReader('withimg')" title="show image">✶</a>`;
+    var pageW = this._renderReadLine(buf, `<booktitle>${this.title}${showimg}</booktitle>`, false, lastX, H);
     this.bookTitleW = pageW;
     lastX -= pageW + this.titleGap;
 
@@ -960,19 +1023,22 @@ class MyBookInfo {
     var len = this.displayLines.length, curPg = this.pages[this.curPage];
     for (var i=curPg.start; i<=curPg.end; ++i) {
       var ln = this.displayLines[i];
+      var idx = ln.indexOf('§');
+      if (idx >= 0) // TOC line
+        ln = this._toTOCLine(ln, idx);
       if (startsWith(ln, '</p>')) continue; // flat ignored
       if (startsWith(ln, '<p>') && lastTitle) continue; // ignored in front of a chapter (or any?) title
       lastTitle = ln.startsWith('<chaptertitle');
-      lastX -= this._renderReadLine(buf, ln, lastTitle, lastX, H, this.curHilite === i);
+      lastX -= this._renderReadLine(buf, ln, lastTitle, lastX, H, this.curHilite == i);
     }
 
     const h = H - this.margin * 2;
     var div_= '<div style="position:absolute; text-align:right; font-size:16px; font-family:' +
-              KAI_TI + '; height:' + h + 'px; top: ' + this.margin + 'px; width:' + (pageW/2) +
+              FANGSONG_TI + '; height:' + h + 'px; top: ' + this.margin + 'px; width:' + (pageW/2) +
               'px; line-height:' + (pageW/2) + 'px; left:';
     if (numPgs > 1) {
       buf.w(div_, origR - pageW/2 - pageOffset/2, 'px">共', zNumber(numPgs), '頁　</div>',
-            div_, origR - pageW   - pageOffset/2, 'px">第', zNumber(this.curPage+1), '頁　</div>');
+            div_, origR - pageW   - pageOffset/2, 'px">', curPg.pageNumDisp(this.curPage), '　</div>');
       if (curPg.chapterTitle)
         buf.w(div_, origR - pageW*3/2 - pageOffset, 'px">', curPg.chapterTitle, '　</div>');
     }
@@ -984,8 +1050,9 @@ class MyBookInfo {
       if (this.closeDisabled)
         buf.w('<img border="0" src="', this.imageUri, '"', imgW, imgH, '>');
       else
-        buf.w('<a href="javascript:LIVRE.renderReader(\'noimg\')">',
-              '<img border="0" src="', this.imageUri, '"', imgW, imgH, ' title="Click to turn off the image. (Reload the page to get the image back.)"></a>');
+        buf.w(`<a href="javascript:LIVRE.renderReader('noimg')">`,
+              '<img border="0" src="', this.imageUri, '"', imgW, imgH,
+              ' title="Click to turn off the image. (Reload the page to get the image back.)"></a>');
       buf.w('</div>');
     }
     buf.render(this.elemId);
@@ -1071,7 +1138,6 @@ var s = get('s'),          // subject
     b = get('b') || '01',  // book (number, with a volume)
     chapterNum = get('c'), // chapter (number, with a book)
     t = get('t'), // single text
-    noimg = get('noimg'),
     chBaseUrl;
 if (t) {
   addjs(t);

@@ -9,6 +9,7 @@ dim { opacity:0.3 }
 </style>
 <script src="../../../env-sample.js"></script>
 <script src="../../../env.js"></script>
+<script src="../../../util/bfnn.js"></script>
 <script src="../../../util/reading.js"></script>
 <script src="../../../util/kepan.js"></script>
 <script src="verses.js"></script>
@@ -21,10 +22,9 @@ function toZNum(i) {
   return zNumber(i)
 }
 function volToBookUri(volNum) {
-  const BFNN_BOOK = window['BOOK_BFNN'] || 'https://book.bfnn.org';
   var file = 1472 + volNum - 1;
-  if (window['BOOK_BFNN']) file += 'ext';
-  return BFNN_BOOK + '/books2/' + file + '.htm';
+  if (isBfnnLocal()) file += 'ext';
+  return bfnn('/books2/' + file + '.htm');
 }
 
 function volStartDisp(vol) { return '<a name="sutra' + vol + '"></a>《大佛頂首楞嚴經》卷第' + toZNum(vol) + '始' }

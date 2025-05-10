@@ -1,25 +1,3 @@
-function js(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
-function e(elid) { return document.getElementById(elid) }
-function enableEl(id, set) { var c = e(id); if (set) c.removeAttribute('disabled'); else c.setAttribute('disabled', ''); }
-function w() { for (var i in arguments) document.write(arguments[i]) }
-function get(name) {
- if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-   return decodeURIComponent(name[1]);
-}
-function toW(n, w) {
-  n = '' + n;
-  while (n.length < w) n = ' ' + n;
-  return n;
-}
-function toInt(n) { return (typeof n === 'string') ? parseInt(n) : n; }
-function toZiNumber(n) {
-  n = toInt(n);
-  switch(n) {
-  case 1: return '一'; case 2: return '二'; case 3: return '三'; case 4: return '四'; case 5: return '五';
-  case 6: return '六'; case 7: return '七'; case 8: return '八'; case 9: return '九'; case 10: return '十';
-  default: return n;
-  }
-}
 function hasDict() { return !!window['dict']; }
 
 // -------- audio player ---------
@@ -75,6 +53,7 @@ const MIN_LEN = 40;
 const VERY_LONG = 120;
 const MED_LONG = 110;
 const LONG = 90;
+const DEBUG = get('debug');
 
 var readerHost; // singleton
 
@@ -85,6 +64,7 @@ function playMyAudio(x) {
           'An "AudioHost" is required to have a function playAudio(x), where x is for the AudioHost object to interpret.');
     return;
   }
+  curSeg = x;
   readerHost.playAudio(x);
   enableEl('btnNext', x < 200);
   enableEl('btnPrev', x > 1);
@@ -95,14 +75,14 @@ class GDHReader {
 
   constructor(title, text, titles, audioFn) {
     this.title  = title;
-    this.text   = Array.isArray(text) ? text : text.split('\n');;
+    this.text   = toLines(text);
     this.titles = titles || [];
     this.setAudioFxn(audioFn);
 
     this._tmp_ = { curLnNum: 1,
                     lastLen: 0,
                      maxLen: 0,
-                   lastSegs: '',
+                   lastSegs: [],
                   lastTitle: null,
                 lastChapter: null,
                     curPart: null,
@@ -117,10 +97,12 @@ class GDHReader {
     readerHost = this;
   }
 
-  setTitleAnno(ta) { this.titleAnno = ta; }
+  setTOCBreak(n) { this.tocBreak = n; return this; }
+  setTitleAnno(ta) { this.titleAnno = ta; return this; }
+  setContentWidth(n) { this.contentWidth = n; return this; }
 
   useHrBeforeTitle() { this.hrBeforeTitle = true; return this; }
-  useLineBreak(v) { this.useLnBk = v; return this; }
+  useLineBreak() { this.useLnBk = true; return this; }
 
   setAudioFxn(fxn) {
     this.playAudio = fxn;
@@ -146,10 +128,10 @@ class GDHReader {
       var c = ln[i];
       if (c != ' ' && c != '　' && c != '\n') ++this._tmp_.lastLen;
     }
-    if (this._tmp_.lastSegs) this._tmp_.lastSegs += '\n';
-    this._tmp_.lastSegs += ln;
+    this._tmp_.lastSegs.push(ln);
   }
   _decoDisp(disp) {
+    if (!disp) return '';
     if (hasDict()) {
       var ypln = new YPLine(disp);
       this._tmp_.totalPunc += ypln.totalPunc;
@@ -157,11 +139,10 @@ class GDHReader {
       this._tmp_.totalRuby += ypln.totalRuby;
       disp = ypln.toText();
     }
-    if (this.useLnBk) disp = disp.replaceAll('\n', '<br>');
     return disp;
   }
   _writeSegs() {
-    if (!this._tmp_.lastSegs) return;
+    if (!this._tmp_.lastSegs.length) return;
 
     this.ln2chapter[this._tmp_.curLnNum] = this._tmp_.lastChapter;
     var cls = '';
@@ -174,39 +155,108 @@ class GDHReader {
         cls = 'long';
     }
     w('<tr id="_', this._tmp_.curLnNum, '">',
-      '<td class="numZis" nowrap valign="top" align="right" style="padding-top:', this._tmp_.lastTitle ? 10 : 2, 'px">',
+      `<td class="numZis" nowrap valign="top" align="right" style="padding-top:${this._tmp_.lastTitle?10:2}px">`,
       `<span class="${cls}">&nbsp;${this._tmp_.lastLen}字&nbsp;</span></td>`,
-      '<td align="right" valign="top" class="txt"><a name="s_', this._tmp_.curLnNum, '">', this._tmp_.lastTitle ? '<h4>　</h4>' : '',
+      `<td nowrap align="right" valign="top" class="txt"><a name="s_${this._tmp_.curLnNum}">`,
+      this._tmp_.lastTitle ? '<h4>　</h4>' : '',
       this.hasAudio ? '<a href="javascript:playMyAudio('+this._tmp_.curLnNum+')" title="粵語誦讀">' : '',
-      '<num>', this._tmp_.curLnNum, '</num>', this.hasAudio ? '</a>' : '', '.&nbsp;</a></td>',
+      `<num>${this._tmp_.curLnNum}</num>${this.hasAudio?'</a>':''}.&nbsp;</a></td>`,
       '<td valign="top" class="txt" style="width:1200px">');
     if (this._tmp_.lastTitle) {
       if (this.hrBeforeTitle) w('<hr>');
-      w('<h4><a name="_', this._tmp_.lastChapter, '">', this._decoDisp(this._tmp_.lastTitle), '</a></h4>');
+      w('<h4><a name="__', this._tmp_.lastChapter, '">', this._decoDisp(this._tmp_.lastTitle), '</a></h4>');
       this._tmp_.lastTitle = null;
     }
-    var txt = this.hasAudio ? this._tmp_.lastSegs : this._tmp_.lastSegs.replaceAll('　','');
-    w(this._decoDisp(txt), '</td></tr>');
+
+    var ln, cols = 0, colsep = '|', len = this._tmp_.lastSegs.length,
+        lastNoBk = false, doLnBk = false, lnNum = 0;
+    for (var i=0; i<len; ++i) {
+      ln = this._tmp_.lastSegs[i];
+      if (ln[0] == '@') {
+        if (ln == '@lnbk') {
+          doLnBk = true;
+        } else if (ln == '@/lnbk') {
+          doLnBk = false;
+          lastNoBk = false;
+        } else if (ln[1] == '/') {
+          cols = 0;
+          w('</table>');
+          lastNoBk = true;
+        } else {
+          colsep = ln[ln.length-1];
+          if (isDigit(colsep)) {
+            colsep = '|';
+            cols = parseInt(ln.substring(1));
+          } else {
+            cols = parseInt(ln.substring(1, ln.length-1));
+          }
+          w('<table>');
+        }
+      } else if (cols > 0) {
+        var a = ln.split(colsep);
+        w('<tr>');
+        for (var j=0; j<cols; ++j) {
+//          if (j > 0) w('<td width="5px">&nbsp;</td>');
+          var s = a[j] || '', tdx ='', isend = false;
+          switch (s[0]) {
+          case '>':
+            s = s.substring(1);
+            tdx = ' align="right"';
+            break;
+          case '+':
+            s = s.substring(1);
+            tdx = ` colspan="${cols-j}"`;
+            isend = true;
+            break;
+          }
+          w('<td style="padding-right:10px" valign="bottom"', tdx, '>', this._decoDisp(s) || '&nbsp;', '</td>');
+          ++lnNum;
+          if (isend) break; // for()
+        }
+        w('</tr>');
+      } else {
+        var SPa = '', SPb = '';
+        if (lastNoBk)
+          lastNoBk = false;
+        else if (lnNum>0)
+          SPa = (this.useLnBk || doLnBk)  ? '<br>' : ' ';
+        if (ln.endsWith('@')) {
+          ln = ln.substring(0,ln.length-1);
+          if (!this.useLnBk && !doLnBk) SPb = '<br>';
+        }
+        w(SPa, this._decoDisp(ln), SPb);
+        ++lnNum;
+      }
+    }
+    if (cols > 0) w('</table>'); // in case the closing is missing.
+    w('</td></tr>');
 
     if (this._tmp_.lastLen > this._tmp_.maxLen) this._tmp_.maxLen = this._tmp_.lastLen;
     if (this._tmp_.curPart) {
       this._tmp_.curPart.cntZis += this._tmp_.lastLen;
       ++this._tmp_.curPart.cntSegs;
     }
-    this._tmp_.lastSegs = '';
+    this._tmp_.lastSegs = [];
     this._tmp_.lastLen = 0;
     ++this._tmp_.curLnNum;
   }
 
   _writeDoc() {
     document.title = this.pageTitle || this.title;
-    var a = this.text, titleAn = this.titleAnno || '';
+    var titleAn = this.titleAnno || '';
+    var buf = new Buffer();
     if (titleAn) titleAn = '<sup class="titleanno">&nbsp;' + titleAn + '</sup>';
-    w('<h1 align="center">', this.title, titleAn, '</h1><table border="0" cellpadding="0" cellspacing="0">');
+    buf.w('<h1 align="center">', this.title, titleAn, '</h1>');
+    if (this.hasAudio) w(buf.render());
+    var a = this.text;
+    w(`<center><table border="${DEBUG ? 1 : 0}" cellpadding="0" cellspacing="0">`);
     for (var i=0; i<a.length; ++i) {
       var ln = a[i];
       if (ln.startsWith('//')) continue; // commented out
-      if (ln.startsWith('#')) {
+      if (ln.startsWith('@')) {
+        this._appendSeg(ln.trim());
+      }
+      else if (ln.startsWith('#')) {
         if (ln.startsWith('#@')) {
           this._tmp_.curPart = { cntPins:0, cntSegs:0, cntZis:0, title:ln.substring(2).trim() };
           this.partStats.push(this._tmp_.curPart);
@@ -235,14 +285,43 @@ class GDHReader {
         this._appendSeg(ln);
     }
     this._writeSegs();
-    w('</td></tr></table><p>&nbsp;</p><hr>');
+    w('</td></tr>');
+    if (this.contentWidth) {
+      w(`<tr><td colspan="2"></td><td nowrap style="opacity:${DEBUG ? 0.5 : 0}">`);
+      for (var k=this.contentWidth; k>=0; --k) w('〇');
+      w('</td></tr>');
+    }
+    w('</table></center><p>&nbsp;</p><hr>');
 
     this.postRender();
+
+    // write header
+    if (!this.hasAudio && this.titles) {
+      buf.w('<center><table><tr><td valign="top" nowrap>');
+      if (!this.tocBreak) {
+        buf.w('<ol>');
+        for (var i=0; i<this.titles.length; ++i)
+          buf.w('<li><a href="#__', i+1, '">', this.titles[i], '</a></li>');
+        buf.w('</ol>');
+      } else {
+        buf.w('<ol>');
+        for (var i=0; i<this.titles.length; ++i) {
+          if (i % this.tocBreak == 0) {
+            if (i > 0) buf.w('</ol></td>');
+            buf.w(`<td valign="top" nowrap><ol start="${i+1}">`);
+          }
+          buf.w('<li><a href="#__', i+1, '">', this.titles[i], '</a></li>');
+        }
+        buf.w('</ol>');
+      }
+      buf.w('</td></tr></table></center>');
+      buf.render('header');
+    }
   }
 
 } // end of GDHReader.
 
-var okFauxAmis = '品及集強設蜜禪立因像兄牛漆畢泣戀速救差習休勤哽血誦詣許疾貧鋸舉彼仁輕愁寺據樂稽塵臨';
+var okFauxAmis = ''; // 品及集強設蜜禪立因像兄牛漆畢泣戀速救差習休勤哽血誦詣許疾貧鋸舉彼仁輕愁寺據樂稽塵臨';
 function showZis(zis, exclude) {
   if (!zis) return;
   if (exclude === 'not available') {

@@ -3,6 +3,9 @@
 <meta charset="utf-8">
 <title>海仁法師《楞嚴經講義》科判</title>
 <link rel="stylesheet" href="../../../util/kepan.css">
+<style>
+.lnstyle { font-size:12px; background-color:#e8e8e8; border-bottom:1px #fff solid }
+</style>
 <script src="../../../util/reading.js"></script>
 <script src="../../../util/kepan.js"></script>
 <script src="../WangZhiPing/verses-xrefs.js"></script>
@@ -21,12 +24,6 @@
 </center></body></html>
 
 <script>
-function toVerseNum(zVolNum, volNum, verseNum) {
-  var wang = h2w(volNum, verseNum) || '';
-  if (wang) wang = '&nbsp;&nbsp;王' + wang;
-  return zVolNum + '&nbsp;' + verseNum + wang;
-}
-
 // A global "parts" variable is assumed.
 function write楞嚴經海仁法師科判(divId, part, terse) {
   if (divId) lastDivId = divId; else divId = lastDivId;
@@ -42,7 +39,11 @@ function write楞嚴經海仁法師科判(divId, part, terse) {
   }
 
   buf.w('<h2>海仁法師《楞嚴經講義》');
-  if (part > 0) buf.w('<a href="?part=&terse=', terse, '">科判</a>'); else buf.w('科判');
+  if (part > 0) {
+    buf.w('<a href="?part=&terse=', terse, '">科判</a>');
+    document.title = '《楞嚴經講義》正宗分第' + partNum;
+  }
+  else buf.w('科判');
   buf.w('</h2>');
   var partInfo = getPartInfo(part);
   if (partInfo.caption && (partInfo.caption != '序分'))
@@ -59,44 +60,20 @@ function write楞嚴經海仁法師科判(divId, part, terse) {
     if (ln.startsWith('//')) continue;
     if (ln.length > maxlen) maxlen = ln.length;
   }
+  KePanLine.prototype.toVNum = (me) => {
+    var verseNum = me.getVerseIDDisp(null, true);
+    var wang = h2w(alpha2int(me.volNum), me.verseNum);
+    return wang ? `${verseNum}&nbsp;&nbsp;王${wang}` : verseNum;
+  };
   for (i in a) {
     ln = a[i];
     var anchor = '';
     if (ln.length === 0 || ln.startsWith('//')) continue;
-    var verseNum = '';
-    if (!terse) {
-      var volNum = ln.substring(2,3);
-      verseNum = ln.substring(3,6);
-      switch (volNum) {
-      case 'A': verseNum = toVerseNum('一', 1, verseNum); break;
-      case 'B': verseNum = toVerseNum('二', 2, verseNum); break;
-      case 'C': verseNum = toVerseNum('三', 3, verseNum); break;
-      case 'D': verseNum = toVerseNum('四', 4, verseNum); break;
-      case 'E': verseNum = toVerseNum('五', 5, verseNum); break;
-      case 'F': verseNum = toVerseNum('六', 6, verseNum); break;
-      case 'G': verseNum = toVerseNum('七', 7, verseNum); break;
-      case 'H': verseNum = toVerseNum('八', 8, verseNum); break;
-      case 'I': verseNum = toVerseNum('九', 9, verseNum); break;
-      case 'J': verseNum = toVerseNum('十',10, verseNum); break;
-      }
-    }
-    var kepanHint = '';
-    var idx = ln.lastIndexOf('：');
-//    if (idx > 0) kepanHint = ln.substring(idx+1).trim(); // if kepan font too small, use hint to help
-    var kepanLine = ln.substring(6);
-    idx = kepanLine.indexOf('*');
-    var isKey = idx > 0;
-    if (isKey) {
-      var idx1 = kepanLine.lastIndexOf('　', idx) + 1;
-      ln = kepanLine;
-      kepanLine = ln.substring(0, idx1) + '<font class="keyLine">' + ln.substring(idx1, idx) + '</font>' + ln.substring(idx+1);
-    }
-    else if (terse) continue;
-    buf.w('<tr><td valign="top" nowrap style="font-size:12px; background-color:#e8e8e8; border-bottom:1px #fff solid">', anchor,
-          '<span title="', kepanHint, '">', kepanLine, '</span>',
-          '</td>');
+    var kpl = new KePanLine(ln);
+    if (terse && !kpl.isKey) continue;
+    buf.w('<tr><td valign="top" nowrap class="lnstyle">', anchor, kpl.text, '</td>');
     if (!terse)
-      buf.w('<td valign="top" nowrap style="font-size:12px; color:gray; ">&nbsp;&nbsp;&nbsp;', verseNum, '</td>');
+      buf.w('<td valign="top" nowrap style="font-size:12px; color:gray; ">&nbsp;&nbsp;&nbsp;', kpl.toVNum(kpl), '</td>');
     buf.w('</tr>');
   }
   buf.w('</table>');

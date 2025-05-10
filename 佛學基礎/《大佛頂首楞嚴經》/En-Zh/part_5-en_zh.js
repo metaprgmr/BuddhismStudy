@@ -1514,8 +1514,8 @@ the fourth decisive deed.
 第四決定清淨明誨。
 []
 是故
-阿難。
 Ānanda,
+阿難。
 if lying is not stopped,
 若不斷其大妄語者，
 the practice of dhyāna-samādhi

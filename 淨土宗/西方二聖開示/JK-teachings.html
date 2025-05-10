@@ -22,6 +22,16 @@ function get(name) {
 function w() {
   for (var i in arguments) { var a = arguments[i]; a && document.write(a) }
 }
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function getJingYuID() {
+  var max = JKPSTeachings.length;
+  var num = getRandomInt(1, max);
+  return '_' + num;
+}
 </script>
 </head>
 <body style="margin:20px; background:#dfd">
@@ -29,6 +39,7 @@ function w() {
 
 <script>
 var lsn, idx = get('i'), isOrig = (idx === 'orig');
+if (idx == 'random') idx = getJingYuID();
 if (!isOrig) sortJKPSTeachings();
 if (idx && !isOrig) {
   lsn = JKPSTeachingsDict[idx];
@@ -41,7 +52,7 @@ if (idx && !isOrig) {
     w('<p>', txt, '</p>');
   }
   w('</td></tr>',
-    '<tr><td align="center"><hr>', lsn.source, ' ', lsn.srcVol, '</td></tr></table>');
+    '<tr><td align="center"><hr>【<a href="?i=">迴目錄</a>】&nbsp;&nbsp;', lsn.source, ' ', lsn.srcVol, '&nbsp;&nbsp;【<a href="?i=random">隨機選</a>】</td></tr></table>');
 } else {
   const len = JKPSTeachings.length;
   const aTag = isOrig ? '<a href="?" title="分類">' : '<a href="?i=orig" title="原序">';
