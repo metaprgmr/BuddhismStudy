@@ -1,6 +1,6 @@
 new MyBookInfo('地藏菩薩本願經', '唐于闐國三藏沙門實叉難陀譯')
 .setImage(window['IMAGE_KSITIGARBHA'])
-.set('breakLen', undefined)
+.set('noLineBreak', true)
 .set('paraPrefix', '')
 .addContent(
 

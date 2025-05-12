@@ -635,7 +635,7 @@ class MyBookInfo {
   }
 
   breakLine(ln) { // tags like <em> and <u> must be closed within a single line.
-    if (!this.breakLen) return ln;
+    if (this.noLineBreak) return ln;
     // pre-insert "\n|" to break the lines. Mind the <>'s!
     var result = '', cnt = this.breakLen+1;
     for (var i=0; i<ln.length; ++i) {

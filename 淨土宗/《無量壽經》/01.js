@@ -25,7 +25,7 @@ const wishes = [
 new MyBookInfo('佛說大乘無量壽莊嚴清淨平等覺經', '夏蓮居居士會集')
 .setImage(window['IMAGE_AMITABHA'])
 .setTOC({ itemsPerLine:4, itemLen:8 })
-.set('breakLen', undefined)
+.set('noLineBreak', true)
 .set('paraPrefix', '')
 .addContent(
 

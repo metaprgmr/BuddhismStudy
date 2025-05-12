@@ -24,8 +24,13 @@ function item(title, srcname, prefix, suffix, urlExtra) {
 <tr><td align=center><h3 style="font-size:30px">粵語讀誦集錦</h3></td></tr>
 <tr><td><ul style="font-size:30px">
 <script>
-  item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》（有語音）');
-  item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》（無語音）', '&noaudio=1');
+  var url = document.URL;
+  if (url.indexOf('.org/') < 0) {
+    item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》（有語音）');
+    item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》（無語音）', '&noaudio=1');
+  } else {
+    item('佛說大乘無量壽莊嚴清淨平等覺經', 'wlsj.js', null, '》', '&noaudio=1');
+  }
   item('地藏本願經', 'dzj.js');
   item('占察善惡業報經‧後半部', 'ZhanCha-2nd-part.js');
   item('阿彌陀經', 'amtb.js');
