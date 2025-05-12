@@ -157,7 +157,7 @@ class Buffer {
 
 const zpuncs = '，、；：。？！';
 const zpuncs1L = '「『《（';
-const zpuncs1R = '」』》）—─…　';
+const zpuncs1R = '」』》）—─…'; // '　' is punc?
 const zpuncs1 = zpuncs1L + zpuncs1R;
 const zpuncsAll = zpuncs + zpuncs1;
 const REGEX_CHINESE = /[\u3300-\u4dbf]|[\u4e00-\u9fff]|[\uf900-\ufaff]|[\ufe30-\ufe4f]|[\u20000-\u2a6df]|[\u2a700-\u2ceaf]|[\u2f800-\u2fa1f]/;
@@ -806,9 +806,9 @@ class MyBookInfo {
     var fillerLen = this.breakLen - (ln.length + num.length);
     num = `<a href="javascript:LIVRE.renderReader(${pn-1})">${num}</a>`;
     if (fillerLen >= 0) {
-      ln += '　';
-      for (var i=0; i<fillerLen; ++i) ln += '<dim2>⋅</dim2>';
-      return ln + num;
+      ln += '　<dim2>';
+      for (var i=0; i<fillerLen; ++i) ln += '⋅';
+      return ln + '</dim2>' + num;
     }
     ln = ln.substring(0, ln.length + fillerLen);
     var last1 = `<dim2 title="${entry}">${ln[ln.length-1]}</dim2>`;
