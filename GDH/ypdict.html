@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="common.css">
 <style>
 .ziDisp { font-size:24px }
+.poly   { text-decoration:underline; text-decoration-style:dashed; text-decoration-color:red }
 .fa { color:red }
 .ypDisp { color:red; font-size:24px }
 .ypDisp1 { font-size:14px; opacity:0.5; margin-bottom:-10px }
@@ -33,19 +34,22 @@ function show(bgcolor, title, groupByFxn, ypDispFxn, cptr) {
     w('<tr><td class=ypDisp align=center>', v, '</td><td>');
     zInfos.sort(cptr);
     for (var j in zInfos) {
-      var zinfo = zInfos[j];
-      var cls = 'ziDisp';
+      var zinfo = zInfos[j], ttl = '', cls = 'ziDisp';
       if (zinfo.isFaultAmi()) cls += ' fa';
-      w('<ruby class="', cls, '">', zinfo.zi, '<rt class=ypDisp1>', zinfo[ypDispFxn](), '&nbsp;</rt></ruby>');
+      if (zinfo.isPoly()) {
+        cls += ' poly';
+        ttl = ` title="${zinfo.getAllYPs('\n')}"`;
+      }
+      w(`<ruby class="${cls}"${ttl}>${zinfo.zi}<rt class=ypDisp1>${zinfo[ypDispFxn]()}&nbsp;</rt></ruby>`);
     }
     w('</td></tr>');
   }
   w('</table>');
 }
 
-show('#f9f9f9', '私人粵拼字典，按韻母分', 'groupByVowel', 'getFirstConsonantTone', consonantCptr);
-w('<div class="pagebr">&nbsp;</div>');
 show('#f0f0f0', '私人粵拼字典，按聲母分', 'groupByConsonant', 'getFirstYP', vowelCptr);
+w('<div class="pagebr">&nbsp;</div>');
+show('#f9f9f9', '私人粵拼字典，按韻母分', 'groupByVowel', 'getFirstConsonantTone', consonantCptr);
 </script>
 </div></body></html>
 

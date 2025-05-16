@@ -33,7 +33,8 @@ class YPInfo
       this.tone = yp[len-1];
     }
   }
-  toYP() {
+  toYP(simple) {
+    if (simple) return this.consonant + this.vowel + (this.tone||'');
     var ret = yptone && this.tone ? `<font class="yptone">${this.tone}</font>` : (this.tone||'');
     ret = `${this.consonant}${this.vowel}<font class="yptone">${ret}</font>`;
     return !ypcolor ? ret : `<font class="${ypcolor}">${ret}</font>`;
@@ -44,7 +45,7 @@ class YPInfo
     ret = `${this.consonant}${this.vowel}<font class="yptone">${ret}</font>`;
     return `<rt${cls}>${ret}${rpad||''}</rt>`;
   }
-  toConsonantTone(divider) { return `this.consonant${this.consonant ? (divider||'-') : ''}this.tone`; }
+  toConsonantTone(divider) { return `${this.consonant}${this.consonant ? (divider||'-') : ''}${this.tone}`; }
 }
 
 const GENERAL = 100; // general level
@@ -72,18 +73,24 @@ class ZiInfo {
   getYP_rt(rpad,hint) { return this.getYPInfo(hint).toYP_rt(rpad); }
   getConsonant(hint)  { return this.getYPInfo(hint).consonant; }
   getConsonantTone(divider,hint) { return this.getYPInfo(hint).toConsonantTone(divider); }
-  getFirstYP()        { return this.this.yps[0].toYP(); }
-  getFirstVowel()     { return this.this.yps[0].vowel; }
+  getFirstYP()        { return this.yps[0].toYP(); }
+  getFirstVowel()     { return this.yps[0].vowel; }
   getFirstConsonant() { return this.yps[0].consonant; }
   getFirstConsonantTone(divider) { return this.yps[0].toConsonantTone(divider); }
   isFaultAmi()        { return this.isFA; }
+  isPoly()            { return this.yps.length > 1; }
+  getAllYPs(sep) {
+    var a = [];
+    for (var i in this.yps) a.push(this.yps[i].toYP(true));
+    return a.join(sep || ', ');
+  }
 }
 
 class ZiInfoPoly {
   constructor(ziinfo,hint) { this.ziInfo = ziinfo; this.hint = hint; }
   getYP()        { return this.ziInfo.getYPInfo(this.hint).toYP(); }
   getYP_rt(rpad) { return this.ziInfo.getYPInfo(this.hint).toYP_rt(rpad); }
-  isFaultAmi() { return this.ziInfo.isFaultAmi(); }
+  isFaultAmi()   { return this.ziInfo.isFaultAmi(); }
 }
 
 class YPDict {
@@ -318,7 +325,7 @@ class YPLine {
     '集習坑立泣疾急蜜畢吉訖迄乞漆禽禁坎堪尋品斤近貧熏勤仁新欽溪偽詣齎繫誦' +
     '及稽繼攜救愁據舉驅淳卻斫腳像羌祥響強棄器欺歧履俗熾寺棘竊設諂禪親許引' +
     '顯遣荊矜輕勸丸戀泉雪血速曲膝因休鄰逆誣繳劇井陷徙懈糺煢忪鋸兄犬牛伎乳' +
-    '邑懇雀攫臨什忽薰突屈' +
+    '邑懇雀攫臨什忽薰突屈欣幸' +
     '差拖哽玷樂咄'); // 《地藏經》讀者發音迥異！
   function _isFA(zi) { return fauxamis[zi] }
 
