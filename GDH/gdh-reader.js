@@ -209,7 +209,7 @@ class GDHReader {
             isend = true;
             break;
           }
-          w('<td style="padding-right:10px" valign="bottom"', tdx, '>', this._decoDisp(s) || '&nbsp;', '</td>');
+          w('<td nowrap style="padding-right:10px" valign="bottom"', tdx, '>', this._decoDisp(s) || '&nbsp;', '</td>');
           ++lnNum;
           if (isend) break; // for()
         }

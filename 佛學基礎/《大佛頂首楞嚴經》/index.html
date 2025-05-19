@@ -18,6 +18,13 @@ kw  { color:red }
 <script src="../../util/reading.js"></script>
 <script>
 function w() { for (var i in arguments) document.write(arguments[i]) }
+function leftPad(x, len, digit) {
+  x = '' + x;
+  if (!digit) digit = '0';
+  if (!len) len = 4;
+  while (x.length < len) x = digit + x;
+  return x;
+}
 function writeArticalLink(uri, title, ending, ignoreCircle) {
   if (!ignoreCircle && isBfnnLocal()) w('&cir;&nbsp;&nbsp;');
   w(`<a href="${bfnn(uri)}">${title}</a>`);
@@ -33,7 +40,7 @@ function extLink(file, title, ending, ignoreCircle, addExt) {
   if (addExt && isBfnnLocal()) file += 'ext';
   writeArticalLink('/books' + subdir + '/' + file + '.htm', title, ending, ignoreCircle);
 }
-function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${base-1+i}.htm`, i, ' ', true); }
+function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${leftPad(base-1+i)}.htm`, i, ' ', true); }
 
 function YuanYinLinks() {
   writeArticalLink("/article2/1472.htm", "　圓瑛大師《大佛頂首楞嚴經講義》");
@@ -53,6 +60,12 @@ function HanShanLinks() {
   writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　");
   for (var i=1; i<=10; ++i) bookInSetLink('books2', 1644, i);
   writeArticalLink("/article2/1643.htm", "《楞嚴經懸鏡》", null, true);
+}
+function OuYiLinks() {
+  writeArticalLink("/article/0880.htm", "明蕅益大師《大佛頂首楞嚴經文句》");
+  for (var i=1; i<=10; ++i) bookInSetLink('books', 880, i);
+  writeArticalLink("/books/0880.htm", "《玄義》　　　", null, true);
+  w('<br>');
 }
 function HaiRenLinks() {
   writeArticalLink("/article2/1875.htm", "　海仁法師《大佛頂首楞嚴經講記》");
@@ -109,6 +122,7 @@ w('<hr>');
   YuanYinLinks();
   HaiRenLinks();
   WangLinks();
+  OuYiLinks();
   HanShanLinks();
 w('<hr>');
   HaiRenKePan();
