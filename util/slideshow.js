@@ -174,29 +174,32 @@ class SlideShow {
     //console.log(`${event.keyCode} ${isShift?'[shift]':''}${isAlt?'[alt]':''}${isCtrl?'[ctrl]':''}`);
 
     switch (event.keyCode) {
-    case  37: // left
-    case 100: // < 4 ⊞
+    case  38: // up
+    case 104: // ^ 8 ⊞
       curShow.showPrev(); break;
-    case  39: // right
-    case 102: // > 6 ⊞
+    case  40: // down
+    case  98: // v 2 ⊞
     case  32: // space
       curShow.showNext(); break;
-/*  case 107: // +   ⊞
-    case  61: // = +
-    case  96: // 0   ⊞
-    case  48: // 0
-    case  37: // left
-    case  39: // right
-    case  35: // end
-    case  36: // home
-    case  33: // up
-    case  34: // down
-    case 102: // > 6 ⊞
-    case  54: // 6
-    case 100: // < 4 ⊞
-    case  52: // 4
+/*
     case  13: // enter
     case  32: // space
+    case  33: // pgup
+    case  34: // pgdown
+    case  35: // end
+    case  36: // home
+    case  37: // left
+    case  38: // up
+    case  39: // right
+    case  40: // down
+    case  48: // 0
+    case  61: // = +
+    case  96: // 0   ⊞
+    case  98: // v 2 ⊞
+    case 100: // < 4 ⊞
+    case 102: // > 6 ⊞
+    case 104: // ^ 8 ⊞
+    case 107: // +   ⊞
 */
     }
   }
