@@ -1,5 +1,15 @@
-var alfa = 0;
 var curShow; // singleton
+
+function toTimeDisp(secs) {
+  secs = secs % 3600; // only mins:secs
+  var mins = Math.floor(secs / 60);
+  secs = Math.floor(secs - mins * 60);
+  var ret = '';
+  if (mins < 10) ret += '<inv>0</inv>';
+  ret += mins + ':';
+  if (secs < 10) ret += '0';
+  return ret + secs;
+}
 
 function toSecs(time) {
   if (typeof time == 'number') return time;
@@ -88,15 +98,20 @@ class SlideShow {
 
   checkAndShowNext() {
     var next = this.slides[this.showPtr+1];
-    if (!next) { this.stopTimer(); return; }
+    if (!next) { this.startedAt = Date.now(); return; }
     var curts = Date.now();
+    var durSecs = (curts - this.pausedPeriod - this.startedAt) / 1000;
     if (next.at) { // absolute
-      if (curts - this.pausedPeriod - this.startedAt >= next.at * 1000)
+      if (durSecs >= next.at)
         this.showNext();
     } else { // relative
       var cur = this.slides[this.showPtr];
       if (curts - this.lastStart >= cur.dur * 1000)
         this.showNext();
+    }
+    if (this.clockId) {
+      var el = e(this.clockId);
+      el && (el.innerHTML = toTimeDisp(durSecs));
     }
   }
 
@@ -133,9 +148,11 @@ class SlideShow {
     this.addKeyHandler();
   }
 
-  startAutoPilot() {
+  startAutoPilot(clockId) {
+    if (clockId) this.clockId = clockId;
     this.removeKeyHandler();
-    console.log('Starting auto-pilotting.');
+    this.stopTimer();
+    console.log('Starting auto-pilotting,', clockId ? 'with' : 'without', 'time display.');
     this._startShow();
     this._startSingleAudio();
     this.startTimer();
