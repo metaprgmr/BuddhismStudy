@@ -18,6 +18,17 @@ monian::after  { color:blue; content: '」' }
 dong   { color:blue }
 dong::before { content: '（' }
 dong::after  { content: '）' }
+.fadein {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 1s;
+}
+@keyframes fadeInOpacity {
+  0% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
 </style>
 <script src="../../env-sample.js"></script>
 <script src="../../env.js"></script>
@@ -354,8 +365,8 @@ function getSlideShow() {
        '<instr>（次往餘靜室，端坐一心，<br>' +
        '若稱誦，若默念，<red>地藏菩薩</red>。<br>' +
        '其惛蓋多者，應於道場中旋遶誦念。）</instr></p>', '38:58')
-  .add('<img src="../../images/南無阿彌陀佛.jpg" height="500px">', '39:49')
-  .add('<img src="../../images/南無地藏王菩薩1.jpg">', '40:50');
+  .add('<img src="../../images/南無阿彌陀佛.jpg" height="500px" class="fadein">', '39:49')
+  .add('<img src="../../images/南無地藏王菩薩1.jpg" class="fadein">', '40:50');
 
   return ss.setSlideCallback(showSections);
 }

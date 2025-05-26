@@ -238,3 +238,9 @@ function ruby(zi, punc, cssCls) {
    return before + '<ruby>' + zi + rt + punc + '</rt></ruby>' + after;
 }
 
+function writingRedir(name, ttl) {
+  if (!ttl) ttl = name;
+  document.title = ttl;
+  w(`<meta http-equiv="Refresh" content="1;url=../個人文集/${name}.html">`,
+    `</head><body><h2>${ttl}</h2></body></html>`);
+}
