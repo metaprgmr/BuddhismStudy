@@ -98,10 +98,11 @@ class SlideShow {
 
   checkAndShowNext() {
     var next = this.slides[this.showPtr+1];
-    if (!next) { this.startedAt = Date.now(); return; }
     var curts = Date.now();
     var durSecs = (curts - this.pausedPeriod - this.startedAt) / 1000;
-    if (next.at) { // absolute
+    if (!next) { // end reached
+       this.startedAt = Date.now();
+    } else if (next.at) { // absolute
       if (durSecs >= next.at)
         this.showNext();
     } else { // relative

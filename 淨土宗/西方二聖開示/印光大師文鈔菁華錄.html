@@ -14,18 +14,14 @@ em { font-style:normal; color:red; background-color:lightyellow }
 comment { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:16px }
 anno { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:14px }
 </style>
+<script src="../../util/utils.js"></script>
 <script src="印光大師文鈔菁華錄.js"></script>
 <script>
-function get(name) {
-  if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-    return decodeURIComponent(name[1]);
-}
-function w() {
-  for (var i in arguments) { var a = arguments[i]; a && document.write(a) }
-}
+var m = get('m');
+var is333  = m != 'a';
+var isRand = m == 'r';
 
-var is333 = get('m') !== 'a';
-function displayEntry(id) {
+function displayEntry(id, toTop) {
   var el, e, last = TheBook.curFullTextId;
   if (last) {
     e = TheBook.entryById(last);
@@ -34,12 +30,14 @@ function displayEntry(id) {
   }
 
   e = TheBook.entryById(id);
+  if (!e) return;
   el = document.getElementById('_' + e.id);
   if (el) {
     el.innerHTML = e.getFullText();
     el.innerHTML = '<div style="border:1px solid blue; padding:5px" onclick="displayEntry()">' +
                    e.getFullText() + '</div>';
     TheBook.curFullTextId = e.id;
+    if (toTop) el.scrollIntoView(true);
   }
 }
 
@@ -127,6 +125,7 @@ if (is333) {
       }
     }
   }
+  if (isRand) displayEntry(getRandomInt(1,333), true);
   w('<tr><td colspan="4"><hr></td></tr>');
   console.log(ziCnt, '字');
 } else {
