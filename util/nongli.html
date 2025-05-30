@@ -1,0 +1,29 @@
+<html charset="utf-8">
+<head>
+<meta charset="utf-8">
+<style>
+a { text-decoration:none }
+.jieqi { color:#3C3; font-weight:bold }
+.event { background-color:yellow; font-weight:bold }
+.traditional { color:red; font-weight:bold }
+inv { opacity:0 }
+red { color:red }
+</style>
+<title>農曆日曆</title>
+<script src="nongli.js"></script>
+<script src="../../../journal.js"></script>
+</head>
+<body><center>
+<div id="stg"></div>
+
+<script>
+  for (var i in nongliNians) nongliNians[i].setOtherEvents(journal);
+
+  var nlyr = get('year') || `${curYr}`;
+  if (nlyr.length == 2) nlyr = `20${nlyr}`;
+  console.log('農曆年：', nlyr);
+  nongliNians[nlyr].showCal('stg');
+</script>
+
+</center></body></html>
+

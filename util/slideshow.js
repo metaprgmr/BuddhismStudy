@@ -1,4 +1,5 @@
 var curShow; // singleton
+var TEST_SPEED = 1;
 
 function toTimeDisp(secs) {
   secs = secs % 3600; // only mins:secs
@@ -49,7 +50,7 @@ class SlideShow {
       this.slides.push({ content, dur:time, at:0 });
     else if (this.allAbs || isAbs)
       this.slides.push({ content, at:time });
-    else
+    else 
       this.slides.push({ content, dur:time });
     return this;
   }
@@ -100,14 +101,17 @@ class SlideShow {
     var next = this.slides[this.showPtr+1];
     var curts = Date.now();
     var durSecs = (curts - this.pausedPeriod - this.startedAt) / 1000;
-    if (!next) { // end reached
+    if (this.showPtr == this.slides.length - 1) { // end just reached
        this.startedAt = Date.now();
+       ++this.showPtr;
+    } else if (!next) { // is done
+       ;
     } else if (next.at) { // absolute
-      if (durSecs >= next.at)
+      if (durSecs >= next.at / TEST_SPEED)
         this.showNext();
     } else { // relative
       var cur = this.slides[this.showPtr];
-      if (curts - this.lastStart >= cur.dur * 1000)
+      if (curts - this.lastStart >= cur.dur * 1000 / TEST_SPEED)
         this.showNext();
     }
     if (this.clockId) {
@@ -160,7 +164,7 @@ class SlideShow {
   }
 
   _startSingleAudio() {
-    if (!this.singleAudio || !this.audioId) return;
+    if (!this.singleAudio || !this.audioId || TEST_SPEED != 1) return;
     var a = e(this.audioId);
     a.style.display = 'block';
     a.src = this.singleAudio;

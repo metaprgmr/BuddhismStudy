@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <title>《占察經》懺法</title>
 <link rel="stylesheet" href="../util/copyright.css">
+<script src="../../env-sample.js"></script>
+<script src="../../env.js"></script>
+<script src="../../util/utils.js"></script>
+<script src="../../util/slideshow.js"></script>
 <style>
 a      { text-decoration:none }
 u      { text-decoration-color:red }
@@ -18,22 +22,26 @@ monian::after  { color:blue; content: '」' }
 dong   { color:blue }
 dong::before { content: '（' }
 dong::after  { content: '）' }
+<script>w(`
 .fadein {
   opacity: 1;
   animation-name: fadeInOpacity;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
-  animation-duration: 1s;
+  animation-duration: ${2/TEST_SPEED}s;
 }
-@keyframes fadeInOpacity {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+.fadeout {
+  opacity: 0;
+  animation-name: fadeOutOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-duration: 2s;
+  animation-delay: ${58/TEST_SPEED}s;
 }
+`);</script>
+@keyframes fadeInOpacity { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes fadeOutOpacity { 0% { opacity: 1; } 100% { opacity: 0; } }
 </style>
-<script src="../../env-sample.js"></script>
-<script src="../../env.js"></script>
-<script src="../../util/utils.js"></script>
-<script src="../../util/slideshow.js"></script>
 <script>
   if (window['xgStyles']) document.write('<style>'+window.xgStyles+'</style>');
 </script>
@@ -86,16 +94,18 @@ function getSlideShow() {
        '願此香華雲，徧滿十方界，供養一切佛。<br>' +
        '尊法諸賢聖，無邊佛土中，受用作佛事。</nian></p>', '1:46')
   .add('<p><nian>一切佛法僧寶，體常徧滿，無所不在。<br>' +
-       '願令以此香華，等同法性，普熏一切諸佛剎土，施作佛事。<br>' +
-       '十方一切供具，無時不有，我今當以十方所有一切種種<br>' +
-       '香華瓔珞、幢幡寶蓋、諸珍妙飾、種種音樂、<br>' +
-       '燈明燭火、飲食衣服、臥具湯藥，<br>' +
+       '願令以此香華，等同法性，<br>' +
+       '普熏一切諸佛剎土，施作佛事。<br>' +
+       '十方一切供具，無時不有，我今當以十方<br>' +
+       '所有一切種種香華瓔珞、幢幡寶蓋、諸珍妙飾、<br>' +
+       '種種音樂、燈明燭火、飲食衣服、臥具湯藥，<br>' +
        '乃至盡十方所有一切種種莊嚴供養之具。<br>' +
        '憶想遙擬，普共衆生奉獻供養。</nian></p>' +
        '<p><nian>一切世界中有脩供養者，我今隨喜。<br>' +
        '若未脩供養者，願得開導，令脩供養。</nian></p>', '2:04') // '2:52')
-  .add('<p><nian>又願我身，速能徧至一切剎土，於一一佛法僧所，<br>' +
-       '各以一切種種莊嚴供養之具，共一切衆生等持奉獻，<br>' +
+  .add('<p><nian>又願我身，速能徧至一切剎土，<br>' +
+       '於一一佛法僧所，各以一切種種<br>' +
+       '莊嚴供養之具，共一切衆生等持奉獻，<br>' +
  　　  '供養一切諸佛法身、色身、舍利、<br>' +
        '形像、浮圖、廟塔、一切佛事，<br>' +
  　　  '供養一切所有法藏及說法處，<br>' +
@@ -137,13 +147,13 @@ function getSlideShow() {
        '等真法性，充滿虛空，<br>' +
        '顯現道場，受我供養。</nian><br>' +
        '<dong>三稱後跪拜</dong><br>', '10:22')
-  .add('<nian><u>堅淨信菩薩</u>、<u>徧吉菩薩</u>、<br>' +
-       '<u>觀世音菩薩</u>等，十方一切賢聖，<br>' +
+  .add('<nian><u>堅淨信菩薩</u>、<u>徧吉菩薩</u>、</nian>　<br>' +
+       '<nian><u>觀世音菩薩</u>等，十方一切賢聖，<br>' +
        '不捨大慈，來臨法座，<br>' +
        '哀憐覆護，證我行法。</nian><br>' +
        '<dong>三稱後跪拜</dong><br>', '11:04')
-  .add('<nian><red>地藏菩薩摩訶薩</red>，<br>' +
-       '救世真士、大智開士，善安慰說者、<br>' +
+  .add('<nian><red>地藏菩薩摩訶薩</red>，</nian><br>' +
+       '　<nian>救世真士、大智開士，善安慰說者、<br>' +
        '速除諸障、增淨信者，大慈大悲，<br>' +
        '不違本誓，放大光明，滿我所願。</nian><br>' +
        '<dong>三稱後跪拜　起身</dong><br>', '11:53')
@@ -159,7 +169,10 @@ function getSlideShow() {
        '願無量劫中，常脩多供養。</nian></p>',
        '13:36')
 
-  var i, lines = `
+  var i, lines;
+
+if (TEST_SPEED < 100) {
+  lines = `
   13:56,毘婆尸佛
   14:06,尸棄佛
   14:16,毘舍浮佛
@@ -258,8 +271,7 @@ function getSlideShow() {
     ss.add(txt + '</table>', ts);
   }
 
-  ss
-  .addSlideGroup('一心敬禮', null, [
+  ss.addSlideGroup('一心敬禮', null, [
      '27:15,十方三世一切諸佛,三稱、三拜',
      '27:52,十方一切法藏,三稱、三拜',
      '28:25,<red>占察善惡業報經</red>微妙法藏,一拜',
@@ -267,12 +279,26 @@ function getSlideShow() {
      '29:11,<u>堅淨信菩薩摩訶薩</u>,一拜',
      '29:23,<u>徧吉菩薩</u>、<u>觀世音菩薩摩訶薩</u><br>,一拜',
      '29:36,<red>地藏菩薩摩訶薩</red>,三稱、三拜'
-     ])
+     ]);
+} // TEST_SPEED >= 100
+
+  var lastPray =
+    '我弟子<instr>某甲</instr>，至心發願，願十方三寶、<red>地藏</red>慈尊，<br>' +
+    '哀愍護持，救拔拯濟，令此國土，災亂消除，<br>' +
+    '正法流通，咸生淨信，無諸障礙，永斷魔邪，<br>' +
+    '我及衆生，重罪速滅，現離衰惱，充足資生，<br>' +
+    '三聚戒根，畢竟清淨。二種觀道，應念現前。<br>' +
+    '三昧總持，神通方便。四攝六度，無不圓成。<br>' +
+    '了悟自心，一實境界。捨身他世，生在佛前。<br>' +
+    '面奉<red>彌陀</red>，歷侍諸佛，親蒙受記。<br>' +
+    '回入塵勞，普會群迷，同歸密藏。';
+
+  ss
   .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11')
   .add('<p><nian>我弟子<instr>某甲</instr>，一心仰吿<red>地藏</red>慈尊、十方三寶，<br>' +
-　　   '弟子過去曾犯殺生，偷盜，邪淫，妄語，沽酒，<br>'+
-       '說四衆過，自讚毀他，慳吝，嫉妒，嗔恚，邪見，<br>' +
-　　   '毀謗三寶，種種罪惡，<br>' +
+　　   '弟子過去曾犯殺生，偷盜，邪淫，妄語，<br>'+
+       '沽酒，說四衆過，自讚毀他，慳吝，嫉妒，<br>' +
+　　   '嗔恚，邪見，毀謗三寶，種種罪惡，<br>' +
        '至心懺悔，殷勤悔過，即令消滅。</nian><br>' +
        '<dong>跪拜</dong></p>', '30:26')
   .add('<p><nian>我及衆生，無始常為三業六根重罪所障，<br>' +
@@ -281,57 +307,66 @@ function getSlideShow() {
        '今對<red>地藏</red>，十方佛前，普為衆生歸命懺悔，<br>' +
        '惟願加護，令障消滅。</nian><br>' +
        '<dong>跪拜</dong></p>', '31:05')
-  .add('<p><nian>普為法界一切衆生，悉願斷除三障，歸命懺悔。</nian><br>' +
+  .add('<p><nian>普為法界一切衆生，<br>' +
+       '悉願斷除三障，歸命懺悔。</nian><br>' +
        '<dong>跪拜</dong></p>', '31:43')
   .add('<p><nian>我與衆生，無始來今，由愛見故，<br>' +
-       '內計我人，外加惡友，<br>' +
-       '不隨喜他一毫之善，惟徧三業，廣造衆罪。<br>' +
-       '事雖不廣，惡心徧布，晝夜相續，無有間斷。<br>' +
-       '覆諱過失，不欲人知，不畏惡道，<br>' +
-       '無慚無愧，撥無因果。<br>', '31:59')
-  .add('<nian>故於今日，深信因果，生重慚愧，<br>' +
-       '生大怖畏，發露懺悔。<br>' +
-       '斷相續心，發菩提心，斷惡脩善，<br>' +
+       '內計我人，外加惡友，不隨喜他</nian>　<br>' +
+       '<nian>一毫之善，惟徧三業，廣造衆罪。<br>' +
+       '事雖不廣，惡心徧布，晝夜相續，<br>' +
+       '無有間斷。覆諱過失，不欲人知，<br>' +
+       '不畏惡道，無慚無愧，撥無因果。<br>', '31:59')
+  .add('<nian>故於今日，深信因果，<br>' +
+       '生重慚愧，生大怖畏，<br>' +
+       '發露懺悔。斷相續心，<br>' +
+       '發菩提心，斷惡脩善，<br>' +
        '勤策三業，翻昔重過。<br>' +
-       '隨喜凡聖一毫之善，念十方佛有大福慧，<br>' +
-       '能救拔我及諸衆生，從二死海，置三德岸。</nian>', '32:29')
-  .add('<nian>從無始來，不知諸法本性空寂，<br>' +
+       '隨喜凡聖一毫之善，<br>' +
+       '念十方佛有大福慧，<br>' +
+       '能救拔我及諸衆生，<br>' +
+       '從二死海，置三德岸。</nian>', '32:29')
+  .add('<nian>從無始來，<br>' +
+       '不知諸法　本性空寂，<br>' +
        '廣造衆惡。今知空寂。<br>' +
        '為求菩提，為衆生故，<br>' +
-       '廣脩諸善，徧斷衆惡。<br>&nbsp;<br>' +
-       '惟願一切三寶、<red>地藏菩薩</red>，<br>' +
-       '慈悲攝受，聽我懺悔。</nian><br>' +
+       '廣脩諸善，徧斷衆惡。<br>' +
+       '惟願一切三寶、<red>地藏菩薩</red>，</nian>　　<br>' +
+       '<nian>慈悲攝受，聽我懺悔。</nian><br>' +
        '<dong>跪拜</dong></p>', '33:00')
-  .add('<nian>我弟子<instr>某甲</instr>，至心懺悔。<br>' +
-       '我及衆生，自性清淨。一實境界，諸佛體同。<br>' +
+  .add('<nian>我弟子<instr>某甲</instr>，至心懺悔。</nian>　<br>' +
+       '<nian>我及衆生，自性清淨。一實境界，諸佛體同。<br>' +
        '無明癡暗，熏習因緣，現妄境界，令生念著，<br>' +
        '計我我所，習諸惡法，三業六根，廣造重罪，<br>' +
        '十惡五逆，重難輕遮，障慧障定，障諸戒品，<br>' +
-       '致使長淪苦海，永無出期。<br>' +
-       '設欲脩行，多諸疑障，或擾外魔，<br>' +
+       '致使長淪苦海，永無出期。</nian>　　<br>' +
+       '<nian>設欲脩行，多諸疑障，或擾外魔，<br>' +
        '或遭邪見，助緣缺乏，淨信不成。</nian>', '33:32')
   .add('<nian>今遇<red>地藏菩薩</red>摩訶薩，善安慰說，<br>' +
        '開我迷雲，滌慮洗心，求哀悔過。<br>' +
        '惟願十方諸大慈尊，證知護念。<br>' +
        '我今懺悔，不復更造。</nian>', '34:24')
-  .add('<nian>願我及一切衆生，速得除滅無量劫來，<br>' +
-       '十惡，四重，五逆，顛倒，<br>' +
-       '謗毀三寶，一闡提罪。<br>' +
+  .add('<nian>願我及一切衆生，<br>' +
+       '速得除滅無量劫來，十惡，四重，<br>' +
+       '五逆，顛倒，謗毀三寶，一闡提罪。<br>' +
        '如是罪性，本惟空寂，但從虛妄，<br>' +
-       '顛倒心起，無有定實，而可得者。<br>' +
+       '顛倒心起，無有定實，而可得者。<br>&nbsp;<br>' +
        '願一切衆生，速達心本，永滅罪根。<br>&nbsp;<br>' +
        '懺悔已，歸命禮三寶。</nian><br>' +
        '<dong>跪拜</dong></p>', '34:45')
   .add('<h3>◎發勸請願</h3>' +
-       '<p><nian>我弟子<instr>某甲</instr>，至心勸請。<br>' +
-       '願令十方一切菩薩，未成正覺者，願速成正覺。<br>' +
-       '若已成正覺者，願常住在世，轉正法輪，不入涅槃。<br>&nbsp;<br>' +
+       '<p><nian>我弟子<instr>某甲</instr>，至心勸請。</nian>　<br>' +
+       '<nian>願令十方一切菩薩，<br>' +
+       '未成正覺者，願速成正覺。<br>' +
+       '若已成正覺者，願常住在世，</nian>　<br>' +
+       '<nian>轉正法輪，不入涅槃。<br>&nbsp;<br>' +
        '勸請已，歸命禮三寶。</nian><br>' +
        '<dong>跪拜</dong></p>', '35:26')
   .add('<h3>◎發隨喜願</h3>' +
        '<p><nian>我弟子<instr>某甲</instr>，至心隨喜。<br>' +
-       '願我及一切衆生，畢竟永捨嫉妒之心，<br>' +
-       '於三世中，一切剎土，所有脩學一切功德，<br>' +
+       '願我及一切衆生，<br>' +
+       '畢竟永捨嫉妒之心，<br>' +
+       '於三世中，一切剎土，<br>' +
+       '所有脩學一切功德，<br>' +
        '及成就者，悉皆隨喜。<br>&nbsp;<br>' +
        '隨喜已，歸命禮三寶。</nian><br>' +
        '<dong>跪拜</dong></p>', '35:57')
@@ -342,19 +377,9 @@ function getSlideShow() {
        '同趣佛智，至涅槃城。<br>&nbsp;<br>' +
        '迴向已，歸命禮三寶。</nian><br>' +
        '<dong>跪拜</dong></p>', '36:28')
-  .add('<h3>◎補發願</h3>' +
-       '<p><nian>我弟子<instr>某甲</instr>，至心發願，<br>' +
-       '願十方三寶，<red>地藏</red>慈尊，<br>' +
-       '哀愍護持，救拔拯濟，令此國土，災亂消除，<br>' +
-       '正法流通，咸生淨信，無諸障礙，永斷魔邪，<br>' +
-       '我及衆生，重罪速滅，現離衰惱，充足資生，<br>' +
-       '三聚戒根，畢竟清淨。二種觀道，應念現前。<br>' +
-       '三昧總持，神通方便。四攝六度，無不圓成。<br>' +
-       '了悟自心，一實境界。捨身他世，生在佛前。<br>' +
-       '面奉<red>彌陀</red>，歷侍諸佛，親蒙受記。<br>' +
-       '回入塵勞，普會群迷，同歸密藏。<br>&nbsp;<br>' +
-       '發願已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜　起身</dong></p>', '36:52')
+  .add('<h3>◎補發願</h3><p><nian>' + lastPray + '<br>&nbsp;<br>' +
+       '發願已，歸命禮三寶。<br>' +
+       '<dong>跪拜　起身</dong></nian></p>', '36:52')
   .addSlideGroup(null, '一拜', [
        '38:09,自皈依佛，當願衆生，體解大道，發無上心。',
        '38:24,自皈依法，當願衆生，深入經藏，智慧如海。',
@@ -365,8 +390,9 @@ function getSlideShow() {
        '<instr>（次往餘靜室，端坐一心，<br>' +
        '若稱誦，若默念，<red>地藏菩薩</red>。<br>' +
        '其惛蓋多者，應於道場中旋遶誦念。）</instr></p>', '38:58')
-  .add('<img src="../../images/南無阿彌陀佛.jpg" height="500px" class="fadein">', '39:49')
-  .add('<img src="../../images/南無地藏王菩薩1.jpg" class="fadein">', '40:50');
+  .add('<img src="../../images/南無阿彌陀佛.jpg" height="500px" class="fadein fadeout">', '39:49')
+  .add('<a href="javascript:curShow.showNext()"><img src="../../images/南無地藏王菩薩1.jpg" class="fadein"></a>', '40:50')
+  .add('<p style="color:blue">' + lastPray + '</p>', '55:00');
 
   return ss.setSlideCallback(showSections);
 }

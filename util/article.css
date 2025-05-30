@@ -32,7 +32,7 @@ a:active { color:blue }
 }
 
 .fadein {
-  opacity: 0;
+  opacity: 1;
   animation-name: fadeInOpacity;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
@@ -43,7 +43,7 @@ a:active { color:blue }
   100% { opacity: 1; }
 }
 .fadeout {
-  opacity: 1;
+  opacity: 0;
   animation-name: fadeOutOpacity;
   animation-iteration-count: 1;
   animation-timing-function: ease-out;
