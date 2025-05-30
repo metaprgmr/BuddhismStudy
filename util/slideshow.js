@@ -1,6 +1,8 @@
 var curShow; // singleton
 var TEST_SPEED = 1;
 
+function isReal() { return TEST_SPEED == 1; }
+
 function toTimeDisp(secs) {
   secs = secs % 3600; // only mins:secs
   var mins = Math.floor(secs / 60);
