@@ -36,7 +36,7 @@ function get(name) {
 function addjs(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
 function e(id) { return document.getElementById(id) }
 function w() { for(var i in arguments)document.write(arguments[i]) }
-function showTop(id) { var el=e(id); el && el.el.scrollIntoView(); }
+function showTop(id) { var el=e(id); el && el.scrollIntoView(); }
 function renderText(id, txt) { var el = e(id); el && (el.innerHTML = txt); }
 function addClass(id, cls) { var el = e(id); el && el.classList.add(cls); } 
 function removeClass(id, cls) { var el = e(id); el && el.classList.remove(cls); } 

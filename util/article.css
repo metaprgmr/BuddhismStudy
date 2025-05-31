@@ -8,6 +8,7 @@ a:hover  { color:blue }
 a:focus  { color:blue }
 a:active { color:blue }
 
+inv { opacity:0 }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }
 .contentW { border:0px red solid; width:900px; text-align:left; font-size:19px }
 .gatha   { text-align:center }
