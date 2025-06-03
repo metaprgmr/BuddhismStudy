@@ -1,58 +1,3 @@
-function get(name) {
- if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-   return decodeURIComponent(name[1]);
-}
-function e(id) { return document.getElementById(id) }
-class Buffer {
-  constructor() { this.bufList = Array.from(arguments); }
-
-  w() {
-    var ret = '';
-    for (var i in arguments) ret += arguments[i];
-    if (ret) this.bufList.push(ret);
-    return (this.bufList.length < 1024) ? this : this.condense();
-  }
-
-  append(s) { // for performance
-    this.bufList.push(s);
-  }
-
-  prepend() {
-    var ret = '';
-    for (var i in arguments) {
-      var x = arguments[i];
-      x && (ret += x);
-    }
-    if (ret) this.bufList.unshift(ret);
-    return this;
-  }
-
-  // renders to one or more elements.
-  // returns the text, and clears the internal content.
-  render() {
-    var ret = this.text();
-    for (var i in arguments) {
-      var el = e(arguments[i]);
-      el && (el.innerHTML = ret);
-    }
-    this.bufList = [];
-    return ret;
-  }
-
-  text() {
-    var s = this.bufList.join('')
-    this.bufList = [ s ];
-    return s;
-  }
-
-  condense() {
-    if (this.bufList.length > 100)
-      this.text();
-    return this;
-  }
-
-} // end of Buffer.
-
 const iMonths     = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ], // international
       iWdayNames  = [ 'M', 'T', 'W', 'H', 'F', 'S', 'N' ],              // international
       z天干 = '甲乙丙丁戊己庚辛壬癸',
@@ -98,7 +43,6 @@ class NongLiYear
     nongliNians[`${year}`] = this;
     if (firstDayYangLi[0] != year) firstDayYangLi.unshift(year);
     if (year < firstYr) firstYr = year; // global
-    if (year > curYr) curYr = year;     // global
     this.year = year;
     this.firstDay = firstDayYangLi;
     this.daysOfMonths = daysOfMonths;
