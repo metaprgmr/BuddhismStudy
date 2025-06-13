@@ -17,7 +17,7 @@ function toTimeDisp(secs) {
 function toSecs(time) {
   if (typeof time == 'number') return time;
   // time is string
-  var a = time.split(':'), ret = parseInt(a[a.length-1]), factor = 60;
+  var a = time.split(':'), ret = parseFloat(a[a.length-1]), factor = 60;
   for (var i=2; i<=a.length; ++i) {
     ret += factor * a[a.length-i];
     factor *= 60;
@@ -26,34 +26,40 @@ function toSecs(time) {
 }
 
 class SlideShow {
-  constructor(elid, audioId, singleAudio) {
-    curShow = this;
-    this.elid = elid;
-    this.audioId = audioId;
-    this.singleAudio = singleAudio;
-    this.defaultDur = 5;
-    this.slides = [];
-    this.addKeyHandler();
-  }
+  constructor(cfg) {
+    // environment
+    this.contentId   = cfg.contentElid;
+    this.audioId     = cfg.audioElid;
+    this.singleAudio = cfg.singleAudio;
+    this.btnManualId = cfg.btnManualElid;
+    this.btnAutoId   = cfg.btnAutoElid;
+    this.msgbarId    = cfg.msgbarElid;
 
-  setAllAbs() { this.allAbs = true; return this; }
+    // init internals
+    this.audioTime = 0;
+    this.slides = [];
+
+    // Add event handlers
+    this.addKeyHandler();
+    var a = this.audioId && e(this.audioId);
+    if (a) {
+      a.src = this.singleAudio;
+      a.addEventListener('play', audioStartedHandler);
+      a.addEventListener('ended', audioEndHandler);
+      a.addEventListener('timeupdate', audioTimeHandler);
+    }
+
+    curShow = this; // global single to this.
+  }
 
   setSlideCallback(cb) { this.slideCallback = cb; return this; }
 
-  add(content, time, isAbs) { return this.addSlide(content, time, isAbs); } // alias
+  add(content, time) { return this.addSlide(content, time ); } // alias
 
-  addSlide(content, time, isAbs) { // content: can be string (as HTML) or function(this)
-                                   //    time: in seconds
-                                   //   isAbs: time = isAbs ? (relative to start) : (a duration)
-    if (!time || (time < 0)) time = this.defaultDur;
-    else time = toSecs(time);
-    var ss;
-    if (this.slides.length == 0) // for first, time must be duration
-      this.slides.push({ content, dur:time, at:0 });
-    else if (this.allAbs || isAbs)
-      this.slides.push({ content, at:time });
-    else 
-      this.slides.push({ content, dur:time });
+  addSlide(content, time) { // content: can be string (as HTML) or function(this)
+                            //    time: from the start, in seconds
+    if (!time || time < 0 || this.slides.length == 0) time = 0;
+    this.slides.push({ content, at:toSecs(time) });
     return this;
   }
 
@@ -87,107 +93,133 @@ class SlideShow {
     var next = this.slides[this.showPtr+delta];
     if (!next) return;
     this.showPtr += delta;
+    console.log(' >>> Showing slide', this.showPtr, '/', this.slides.length);
     if (typeof next.content == 'function')
-      e(this.elid).innerHTML = next.content();
+      e(this.contentId).innerHTML = next.content();
     else {
       var c = next.content;
-      if (c) e(this.elid).innerHTML = c;
+      if (c) e(this.contentId).innerHTML = c;
     }
-    this.lastStart = Date.now();
     if (this.slideCallback) this.slideCallback(next);
   }
 
   showPrev() { this.showNext(-1); }
 
-  checkAndShowNext() {
-    var next = this.slides[this.showPtr+1];
-    var curts = Date.now();
-    var durSecs = (curts - this.pausedPeriod - this.startedAt) / 1000;
-    if (this.showPtr == this.slides.length - 1) { // end just reached
-       this.startedAt = Date.now();
-       ++this.showPtr;
-    } else if (!next) { // is done
-       ;
-    } else if (next.at) { // absolute
-      if (durSecs >= next.at / TEST_SPEED)
-        this.showNext();
-    } else { // relative
-      var cur = this.slides[this.showPtr];
-      if (curts - this.lastStart >= cur.dur * 1000 / TEST_SPEED)
-        this.showNext();
+  _checkShowPtrFromAudio(curSecs) {
+    var len = this.slides.length, ptr = this.showPtr;
+    if (ptr < 0 || ptr>=len) ptr = len/2;
+    var cur = this.slides[ptr], nxt;
+    if (!cur) return -1;
+    if (curSecs >= cur.at) {
+      for (; ptr<len; ++ptr) {
+        nxt = this.slides[ptr+1];
+        if (!nxt || nxt.at > curSecs) return ptr;
+      }
+      return -1;
     }
-    if (this.clockId) {
-      var el = e(this.clockId);
-      el && (el.innerHTML = toTimeDisp(durSecs));
+    else {
+      for (; ptr>0; --ptr) {
+        nxt = this.slides[ptr-1];
+        if (!nxt || nxt.at < curSecs) return ptr;
+      }
+      return -1;
     }
   }
 
-  pause(exit) {
-    if (!this.timer) return; // only for auto-pilot
-    var a = e(this.audioId);
-    if (a) {
-      if (exit) {
-        this.pausedPeriod = Date.now() - this.pausedAt;
-        a.play();
-      } else {
-        this.pausedAt = Date.now();
-        a.pause();
-      }
+  _checkAndShowNext() { // only used in automatic mode
+    var next = this.slides[this.showPtr+1];
+    var durSecs = this.audioTime;
+    if (!this.audioStarted) // audio has ended; continue with timer
+      durSecs += (Date.now() - this.timerStart) / 1000;
+
+    var ptr = this._checkShowPtrFromAudio(durSecs);
+    if ((ptr != this.showPtr) && (ptr >= 0)) {
+      this.showPtr = ptr-1;
+      this.showNext();
+    }
+
+    var el = e(this.msgbarId);
+    if (el && (el.style.display == 'block')) {
+      var tm = toTimeDisp(durSecs);
+      el.innerHTML = `${tm}　　　　　　　占察懺畢。大衆自修。　　　　　　${tm}`;
     }
   }
 
   addKeyHandler() { if (!this.kbSet) { document.addEventListener("keydown", this._keypress, false); this.kbSet = true; } }
   removeKeyHandler() { if (this.kbSet) { document.removeEventListener("keydown", this._keypress); this.kbSet = false; } }
-  startTimer() {
-    if (!this.timer) this.timer = setInterval(this._timerHandler, 500);
-    this.startedAt = Date.now();
-    this.lastStart = this.startedAt;
-  }
-  stopTimer() {
-    if (this.timer) { clearInterval(this.timer); delete this.timer; }
-    this._stopSingleAudio();
-  }
 
   startManual() {
-    this.stopTimer();
-    console.log('Starting manual show. Use SPACE or Right-Arrow to go forward, and Left-Arror to go backward.');
+    this._stopTimer();
     this._startShow();
     this.addKeyHandler();
+    var el = e(this.msgbarId);
+    if (el)
+      el.innerHTML = '占察懺，手工模式進行中&nbsp;';
+    console.log('Starting manual show. Use SPACE or Right-Arrow to go forward, and Left-Arror to go backward.');
   }
 
-  startAutoPilot(clockId) {
-    if (clockId) this.clockId = clockId;
+  startAutoPilot() {
     this.removeKeyHandler();
-    this.stopTimer();
-    console.log('Starting auto-pilotting,', clockId ? 'with' : 'without', 'time display.');
+    // Prepare UI
+    showEl(this.audioId);
+    hideEl(this.btnManualId);
+    hideEl(this.btnAutoId);
+    hideEl(this.msgbarId);
+
+    // Start it
     this._startShow();
     this._startSingleAudio();
-    this.startTimer();
+    console.log('Starting auto-pilotting.');
+  }
+
+  audioEnded() {
+    this.audioStarted = false;
+    // Update UI
+    hideEl(this.audioId);
+    showEl(this.msgbarId);
+
+    // Start the timer to continue after the audio
+    this._startTimer();
   }
 
   _startSingleAudio() {
     if (!this.singleAudio || !this.audioId || TEST_SPEED != 1) return;
     var a = e(this.audioId);
-    a.style.display = 'block';
-    a.src = this.singleAudio;
-    a.play();
+    if (a) {
+      showEl(a);
+      a.src = this.singleAudio;
+      a.play();
+    }
   }
 
   _stopSingleAudio() {
     var a = e(this.audioId);
     a.style.display = 'none';
     a.pause();
-    a.currentTime = 0;
+    this.audioStarted = false;
   }
 
   _startShow() {
     this.showPtr = -1;
-    this.pausedPeriod = 0;
     this.showNext();
   }
 
-  _timerHandler() { // uses the global singletone curShow.
-    curShow.checkAndShowNext();
+  _timerHandler() { if (!this.audioStarted) curShow._checkAndShowNext(); }
+
+  _startTimer() {
+    if (!this.timer) {
+      this.timer = setInterval(this._timerHandler, 500);
+      console.log("Timer started.");
+    }
+    this.timerStart = Date.now();
+  }
+  _stopTimer() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      delete this.timer;
+      delete this.timerStart;
+      console.log("Timer cleared.");
+    }
   }
 
   _keypress(event) { // uses the global singletone curShow.
@@ -229,3 +261,23 @@ class SlideShow {
   }
 
 } // end of SlideShow.
+
+function audioStartedHandler(event) {
+  console.log('Audio started playing');
+  curShow._stopTimer();
+  curShow.audioTime = 0;
+  curShow.audioStarted = true;
+}
+
+function audioEndHandler(event) {
+  console.log('Audio playing finished');
+  curShow.audioEnded();
+  curShow.audioStarted = false;
+}
+
+function audioTimeHandler(event) {
+  //console.log('Current time:', event.target.currentTime);
+  curShow.audioTime = event.target.currentTime;
+  curShow._checkAndShowNext();
+}
+

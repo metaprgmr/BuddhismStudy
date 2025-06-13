@@ -264,7 +264,7 @@ const zhongwen =
  　　舜若多性可銷亡 爍迦羅心無動轉
 
     ----------------------------（第一會）-----------------------------<a name="part1"></a>
-    禮敬　如來　善逝　應　正等正覺！　　　　　　　　　　　　　　　　　　【<a class="nav" href="index.html">總介紹</a>】
+    禮敬　如來　善逝　應　正等正覺！　　　　　　　　　　　　　　　　　　【<a class="nav" href="index.html" style="background-color:pink">總介紹</a>】
     　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
  1  敬禮　一切　佛、菩薩　眾。　　　　　　　　　　　　　　　　　　　　　【<a class="nav" href="#part2">第二會</a>】
  2  敬禮　七俱胝正等覺　及　聲聞僧伽眾。　　　　　　　　　　　　　　　　【<a class="nav" href="#part3">第三會</a>】
@@ -505,7 +505,7 @@ const translit =
  　　略有不完備者。其解宜作參考。
 
     ----------------------------（第一會）-----------------------------<a name="part1"></a>
-    南無薩怛他蘇伽多耶阿羅訶帝三藐三菩陀寫<sup>1</sup> 薩怛他佛陀俱胝瑟尼釤<sup>2</sup>     　<span style="display:none">【<a class="nav" href="index.html">總介紹</a>】</span>
+    南無薩怛他蘇伽多耶阿羅訶帝三藐三菩陀寫<sup>1</sup> 薩怛他佛陀俱胝瑟尼釤<sup>2</sup>     　<span style="display:none">【<a class="nav" href="index.html" style="background-color:pink">總介紹</a>】</span>
 
  1  南無薩婆勃陀勃地薩跢鞞弊<sup>3</sup>     　　　　　　　　　　　　　　　　　　　<span style="display:none">【<a class="nav" href="#part2">第二會</a>】</span>
  2  南無薩多南三藐三菩陀俱知喃<sup>4</sup> 娑舍囉婆迦僧伽喃<sup>5</sup>     　　　　　　　　　<span style="display:none">【<a class="nav" href="#part3">第三會</a>】</span>

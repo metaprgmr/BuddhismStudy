@@ -9,6 +9,7 @@
 <script src="../../util/utils.js"></script>
 <script src="../../util/slideshow.js"></script>
 <style>
+#msgbar { color:white; font-size:30px; margin-top:-25px }
 a      { text-decoration:none }
 u      { text-decoration-color:red }
 instr  { color:green }
@@ -59,11 +60,12 @@ dong::after  { content: '）' }
 </td></tr>
 </table>
 <br>
-<button onclick="letsgo()">啟動手工模式</button>&nbsp;&nbsp;&nbsp;&nbsp;
-<button onclick="letsgo(1)">啟動自動模式</button>
-<audio id="audiop"></audio>
-&nbsp;&nbsp;<span id="clock" style="color:white"><input type="checkbox" id="cbShowTime" checked>
-<font style="font-size:16px">顯示時間</font></span>
+<div id="controller" align=center>
+<button id="btnMan" onclick="letsgo()">手工模式</button>&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="msgbar">《占察善惡業報經》正脩懺法　</span>
+<button id="btnAuto" onclick="letsgo(1)">自動模式</button>
+<audio id="audiop" controls style="margin-top:-25px; width:900px; display:none"></audio>
+</div>
 
 </center></body></html>
 
@@ -76,7 +78,13 @@ function letsgo(auto) {
 }
 
 function getSlideShow() {
-  var ss = new SlideShow('divContent', 'audiop', '占察懺儀軌-定弘法師-簡版改.mp3').setAllAbs()
+  var ss = new SlideShow({
+    contentElid:   'divContent',
+    audioElid:     'audiop',
+    msgbarElid:    'msgbar',
+    btnManualElid: 'btnMan',
+    btnAutoElid:   'btnAuto',
+    singleAudio:   '占察懺儀軌-定弘法師-簡版改.mp3' })
   .add('<img src="../../images/南無地藏王菩薩1.jpg" height="500px">' +
        '<p><instr>（專秉一心，念所脩法。' +
        '<u>不得剎那念世雜事</u>，<br>當思生死事大，無常迅速，堅精努力，乃剋有濟。<br>' +
@@ -398,11 +406,18 @@ function lastPray(decorated) {
        '其惛蓋多者，應於道場中旋遶誦念。）</instr></p>', '38:58');
   var cls1 = isReal() ? ' class="fadein"'  : '',
       cls2 = isReal() ? ' class="fadeout"' : '';
+  var amtb = '../../images/南無阿彌陀佛.jpg',
+      dzng = '../../images/南無地藏王菩薩1.jpg';
+  var finalSrn =
+`<table><tr><td style="padding-right:20px" valign=top><img src="${dzng}" height="200px"></td>
+<td align=center style="color:blue">${lastPray()}</td>
+<td style="padding-left:20px" valign=top><img src="${amtb}" height="200px"></td></tr></table>`;
+
   ss
-  .add(`<img src="../../images/南無阿彌陀佛.jpg" height="614px"${cls1}></a>`, '39:49')
-  .add(`<img src="../../images/南無阿彌陀佛.jpg" height="614px"${cls2}></a>`, '40:47')
-  .add(`<a href="javascript:curShow.showNext()"><img src="../../images/南無地藏王菩薩1.jpg"${cls1}></a>`, '40:49')
-  .add('<p style="color:blue">' + lastPray() + '</p>', '55:00');
+  .add(`<img src="${amtb}" height="614px"${cls1}></a>`, '39:49')
+  .add(`<img src="${amtb}" height="614px"${cls2}></a>`, '40:47')
+  .add(`<a href="javascript:curShow.showNext()"><img src="${dzng}"${cls1}></a>`, '40:49')
+  .add(finalSrn, '55:00');
 
   ss.setSlideCallback(showSections);
 }

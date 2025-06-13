@@ -33,13 +33,16 @@ function get(name) {
   return queryParams[name];
 }
 
-function addjs(uri) { document.write('<s' + 'cript src="' + uri + '"></s' + 'cript>') }
-function e(id) { return document.getElementById(id) }
-function w() { for(var i in arguments)document.write(arguments[i]) }
-function showTop(id) { var el=e(id); el && el.scrollIntoView(); }
-function renderText(id, txt) { var el = e(id); el && (el.innerHTML = txt); }
-function addClass(id, cls) { var el = e(id); el && el.classList.add(cls); } 
-function removeClass(id, cls) { var el = e(id); el && el.classList.remove(cls); } 
+function addjs(uri)           { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
+function toEl(x)              { return (typeof x=='string')?e(x):x; }
+function e(id)                { return document.getElementById(id) }
+function showEl(id)           { var el=toEl(id); el && (el.style.display='block'); }
+function hideEl(id)           { var el=toEl(id); el && (el.style.display='none'); }
+function w()                  { for(var i in arguments)document.write(arguments[i]); }
+function showTop(id)          { var el=toEl(id); el && el.scrollIntoView(); }
+function renderText(id, txt)  { var el=toEl(id); el && (el.innerHTML=txt); }
+function addClass(id, cls)    { var el=toEl(id); el && el.classList.add(cls); } 
+function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); } 
 
 function digit2(i, increment) {
   if (!i) i = 0;
