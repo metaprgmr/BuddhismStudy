@@ -1,0 +1,65 @@
+.Normal
+        {margin:0cm;
+        margin-bottom:.0001pt;
+        font-size:12.0pt;
+        font-family:"Times New Roman";}
+.MsoPlainText
+        {margin:0cm;
+        margin-bottom:.0001pt;
+        font-size:12.0pt;
+        font-family:細明體;}
+
+.book      { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; background-color: #BBFFBB }
+a { text-decoration:none }
+.bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px }
+BODY {SCROLLBAR-FACE-COLOR: #0099FF; SCROLLBAR-HIGHLIGHT-COLOR: #0099FF; SCROLLBAR-SHADOW-COLOR: #006699; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: 
+#00354F; } 
+
+.xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
+my   { }
+my_1 { }
+.caption { font-size:36.0pt;font-family:標楷體;color:#FF6600;font-weight:bold; text-align:center }
+.kepan { color:#333399 }
+kpDone { color:#333399 }
+.volend { color:brown }
+.endImage { width:300px; height:30px; background-size:300px 30px; background-image:url('../books/sign.gif'); }
+.endImageXG { width:300px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); }
+.gathanum { float:left; color:black; opacity:0.4; font-size:10px; width:25pt; padding-top:3pt }
+.gatha { color:teal }
+verseNum { color:#333399; font-weight:normal }
+ verseNum::before { content:'【' }
+ verseNum::after  { content:'】 ' }
+dcirc  { color:purple }
+ dcirc::before { content:'◎' }
+small { color:brown }
+cil { color:#777; font-weight:normal } /* comment in-line */
+ail { color:#003300 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+black { color:black }
+purple { color:purple }
+label { font-weight:normal; color:purple }
+inv { opacity:0 }
+
+/* for paragraphs */
+LNSP {margin:0cm; font-size:9.0pt; font-family:細明體;}
+LNSP::before {content: '　';}
+.TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}
+.TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}
+.TEXTC    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center}
+.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#333399}
+.TEXT339L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#333399}
+.TEXT339C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#333399}
+.TEXT030  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#003300}
+.TEXT030L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#003300}
+.TEXT030C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#003300}
+.TEXT1    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt;}
+.TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#FF6600;}
+subtitle  { font-size:24.0pt }
+.VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
+.MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
+.VERSESEG {font-weight:bold; color:teal}
+verse     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:teal;}
+quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:#000077;}
+.bglightyellow { background-color:lightyellow }
+.COMPONENT{margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
+.KEPAN    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#333399;}
+hrAdd { font-weight:normal; color:black; opacity:0.5; }

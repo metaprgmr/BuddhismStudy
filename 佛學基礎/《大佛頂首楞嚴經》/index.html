@@ -44,7 +44,7 @@ function extLink(file, title, ending, ignoreCircle, addExt) {
 function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${leftPad(base-1+i)}.htm`, i, ' ', true); }
 
 function YuanYinLinks() {
-  writeArticalLink("/article2/1472.htm", "　圓瑛大師《大佛頂首楞嚴經講義》");
+  w("　圓瑛大師《大佛頂首楞嚴經講義》");
   for (var i=1; i<=24; ++i) {
     var extra = ' ';
     if (i == 12) extra = '<br>　　　　　　　　　　　<a href="YuanYingKePan/YuanYing科判Verses.html">經文</a>　<a href="YuanYingKePan/YuanYing科判.html">科判</a>' + '　';
@@ -53,23 +53,23 @@ function YuanYinLinks() {
   }
 }
 function WangLinks() {
-  writeArticalLink("/article/0145.htm",  "王治平居士《大佛頂首楞嚴經譯解》");
+  w("&nbsp;王治平居士《大佛頂首楞嚴經譯解》&nbsp;&nbsp;");
   for (var i=1; i<=10; ++i) w('<a href="WangZhiPing/Wang.html?vid=', i, '">', i, '</a>', i<10 ? ' ' : '');
   w('　<a href="WangZhiPing/synopsis.html">全經梗概</a>　　<br>');
 }
 function HanShanLinks() {
-  writeArticalLink("/article2/1644.htm", "明憨山大師《楞嚴經通議》　　　　");
+  w("&nbsp;明憨山大師《楞嚴經通議》　　　　&nbsp;&nbsp;");
   for (var i=1; i<=10; ++i) bookInSetLink('books2', 1644, i);
   writeArticalLink("/books2/1643.htm", "《楞嚴經懸鏡》", null, true);
 }
 function OuYiLinks() {
-  writeArticalLink("/article/0880.htm", "明蕅益大師《大佛頂首楞嚴經文句》");
-  for (var i=1; i<=10; ++i) bookInSetLink('books', 880, i);
+  w("&nbsp;明蕅益大師《大佛頂首楞嚴經文句》&nbsp;&nbsp;");
+  for (var i=1; i<=10; ++i) bookInSetLink('books', 881, i);
   writeArticalLink("/books/0880.htm", "《玄義》　　　", null, true);
   w('<br>');
 }
 function HaiRenLinks() {
-  writeArticalLink("/article2/1875.htm", "　海仁法師《大佛頂首楞嚴經講記》");
+  w("&nbsp;　海仁法師《大佛頂首楞嚴經講記》&nbsp;&nbsp;");
   for (var i=1; i<=10; ++i)
     extLink(`${1874+i}`, i,
             (i != 10) ? ' ' : '　<a href="HaiRengKePan/HaiReng科判.html">科判</a>　',

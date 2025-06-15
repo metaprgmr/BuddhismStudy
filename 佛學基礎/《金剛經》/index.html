@@ -53,12 +53,12 @@ const lst = [
   { title:'應化非真分第三十二' }
 ];
 function writeBookLink(uri, title, ending, ignoreCirc) {
-  if (!ignoreCirc && BFNN_BOOK.startsWith('file:')) document.write('&cir;&nbsp;&nbsp;');
+  if (!ignoreCirc && isBfnnLocal()) document.write('&cir;&nbsp;&nbsp;');
   document.write(`<a href="${bfnn(uri)}">${title}</a>`);
   if (ending) document.write(ending);
 }
 function writeJiangWeiNongLinks() {
-  if (BFNN_BOOK.startsWith('file:')) document.write('&cir;&nbsp;&nbsp;');
+  if (isBfnnLocal()) document.write('&cir;&nbsp;&nbsp;');
   document.write('<span title="恭問：哪位等覺菩薩或佛之再來？">江味農居士</span>《金剛般若波羅密經講義》');
   writeBookLink('/books2/1108.htm', '上', '&nbsp;', true);
   writeBookLink('/books2/1109.htm', '中', '&nbsp;', true);
@@ -77,7 +77,7 @@ function writeJiangWeiNongLinks() {
 　　㈣&nbsp;<a href="KEPANs.html?type=yy">圓瑛大師科判</a>
 
 <hr width="920px">
-<table border="0" cellspacing="0" cellpadding="0" style="font-size:14px">
+<table border=0 cellspacing=0 cellpadding=0 style="font-size:14px">
 <script>
   const aurl = '<a href="../../util/reader.html?s=../佛學基礎/《金剛經》/&c=';
   function show(i, r) {
@@ -108,7 +108,7 @@ function writeJiangWeiNongLinks() {
 </table>
 
 <hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td valign="top">
 <script>
 writeJiangWeiNongLinks();
@@ -140,7 +140,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="何人學"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center"><h3>何人學《金剛經》</h3>
 </td></tr>
 <tr><td>
@@ -159,7 +159,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="般若綱要"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center"><h3>般若綱要<br>
 <font style="font-size:14px">（江味農居士《講義（上）》之「說般若綱要」科原文。<font class="mywork">段落為我所分；原文無。</font>）</font></h3></td></tr>
 <tr><td>
@@ -295,7 +295,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="金剛智"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center"><h3>金剛智<br>
 <font style="font-size:14px">（江味農居士《講義（中）》請名解釋之末，「示應離言說相持」科原文。）</font></h3></td></tr>
 <tr><td>
@@ -316,7 +316,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="修行之法"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center"><h3>修行之法<br>
 <font style="font-size:14px">（江味農居士《講義（中）》之「<font class="quote">若心有住，則為非住</font>」句釋意原文。<font class="mywork">諸小標題為我所加。</font>）</font></h3></td></tr>
 <tr><td>
@@ -464,7 +464,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="諸相非諸相"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center"><h3>諸相非諸相，衆生非衆生<br>
 <font style="font-size:14px">（江味農居士《講義（中）》之「<font class="quote">如來說：一切諸相，即是非相；又說：一切衆生，則非衆生</font>」句釋意原文。）</font></h3></td></tr>
 <tr><td>
@@ -500,7 +500,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="上下部"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center" colspan="2">
 <h3>上半部，下半部<br>
 <font style="font-size:14px">（江味農居士《講義（中）》之最後一句，「<font class="quote">須菩提！當知是經義不可思議，果報亦不可思議。</font>」句釋意原文後半部分。<font class="mywork">引言為我所攝。</font>）</font></h3></td></tr>
@@ -508,7 +508,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 <p>首次「<font class="quote">唯然，世尊！願樂欲聞。</font>」後至流通分（全經倒數第五句）之前，為詳談科。<br>
 此處之上、下半部，實則指此詳談科之上、下兩部分。其分界線即是全經二部分者。</p>
 
-<table class="mywork" border="0" cellspacing="3px" cellpadding="0px" width="650px">
+<table class="mywork" border=0 cellspacing="3px" cellpadding=0 width="650px">
 <tr><td width="30px"></td>
 <td width="450px" align="center" style="border-bottom:1px brown solid">上半部</td>
 <td rowspan="7"></td>
@@ -560,7 +560,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="离四句"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center" valign="top">
 <h3>离四句，绝百非</h3>
 
@@ -610,7 +610,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="者則非是名"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center">
 <h3>者-則非-是名句型<br>
 <font style="font-size:14px">（江味農居士《講義（上）》「<font class="quote">不也，世尊！何以故？莊嚴佛土者，則非莊嚴，是名莊嚴。</font>」句後面部分。）</font></h3>
@@ -627,7 +627,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="江居士體會"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center">
 <h3>如夢幻泡影之觀想修行體會<br>
 <font style="font-size:14px">（江味農居士《講義（下）》「<font class="quote">何以故？一切有為法，如夢幻泡影，如露亦如電，應作如是觀。</font>」句一部。）</font></h3>
@@ -638,7 +638,7 @@ writeBookLink('/books/0868.htm',  '淨空法師述《金剛般若研習報告》
 
 
 <a name="持誦金剛經得定要訣"></a><hr width="920px">
-<table border="0" cellspacing="0px" cellpadding="0px" width="920px">
+<table border=0 cellspacing=0 cellpadding=0 width="920px">
 <tr><td align="center" colspan="2">
 <h3>　　　　　　　　　　　　　　　　　　耕雲先生講述《持誦金剛經得定要訣》　　　　　　　　　　<span style="font-size:14px">（<script>writeBookLink("/books2/1565.htm", "原文", null, true)</script>）</span></h3>
 </td></tr>
