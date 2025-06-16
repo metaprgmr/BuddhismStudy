@@ -8,13 +8,29 @@
 <script src="../../env.js"></script>
 <script src="../../util/utils.js"></script>
 <script src="../../util/slideshow.js"></script>
+<script>
+function toAttr(a,v) { return !v ? '' : ` ${a}="${v}"`; }
+function imgTag(imgName, height, cls) {
+  var idx = imgName.indexOf('/');
+  if (idx < 0) imgName = '../../images/' + imgName;
+  return `<img src="${imgName}"${toAttr('height',height)}${toAttr('class',cls)}>`;
+}
+const saky = '釋迦牟尼佛.jpg',
+      amtb = '南無阿彌陀佛.jpg',
+      dzng = '南無地藏王菩薩1.jpg';
+</script>
 <style>
+namoAMTB { font-family:"KaiTi","Kaiti TC","楷体",STKaiti,"华文楷体"; color:red; font-size:96px; font-weight:bold }
+  namoAMTB::before { content:"南無阿彌陀佛！" }
 #msgbar { color:white; font-size:30px; margin-top:-25px }
+.mainttl { margin-top:-5px }
+.subttl { opacity:0.4; margin-bottom:0px; margin-top:-20px }
 a      { text-decoration:none }
 u      { text-decoration-color:red }
 instr  { color:green }
 yourname { color:green; opacity:0.3; text-decoration:underline; text-decoration-color:red  }
 red    { color:red }
+blue   { color:blue }
 inv    { opacity:0 }
 #clock { color:white; font-size:28px }
 nian   { background-color:#ff8 }
@@ -46,13 +62,13 @@ dong::after  { content: '）' }
 </head>
 <body style="background-color:#553; margin:0px"><center>
 <table border="0" cellspacing="0" cellpadding="5px" bgcolor="#ffd">
-<tr><td width="1000px" align="center">
-<h1>《占察善惡業報經》<red>正脩懺法</red></h1>
-<h4 style="margin-bottom:0px">懺法儀軌 明•古吳比丘 <u title="淨宗九祖蕅益大師">智旭</u> 集&nbsp;&nbsp;&nbsp;
-懺悔法會 <u>定弘法師</u> 主持</h4>
+<tr><td width="1000px" align="center" style="border-bottom:1px solid black">
+<h1 class="mainttl">《占察善惡業報經》<red>正脩懺法</red>&nbsp;</h1>
+<h4 class=subttl>懺法儀軌 明 <u title="淨宗九祖蕅益大師">智旭</u> 集
+　　　　　　懺悔法會 <u>定弘法師</u> 主持</h4>
 </td></tr>
-<tr><td id="divContent" height="700px" align="center" style="font-size:28px">
-<img src="../../images/釋迦牟尼佛.jpg " height="500px">
+<tr><td id="divContent" height="710px" align="center" style="font-size:28px;padding-top:20px">
+<script>w(imgTag(saky, 500));</script>
 <h3>◎供養三寶</h3>
 <p><dong>供水、問訊；上香、問訊；禮佛三拜</dong></p>
 </td></tr>
@@ -64,7 +80,8 @@ dong::after  { content: '）' }
 <button id="btnMan" onclick="letsgo()">手工模式</button>&nbsp;&nbsp;&nbsp;&nbsp;
 <span id="msgbar">《占察善惡業報經》正脩懺法　</span>
 <button id="btnAuto" onclick="letsgo(1)">自動模式</button>
-<audio id="audiop" controls style="margin-top:-25px; width:900px; display:none"></audio>
+<audio id="audiop" controls style="margin-top:-25px; width:900px; display:none"
+       title="若隨機跳轉，HTML5 Audio的聲音及時間可能有誤差。"></audio>
 </div>
 
 </center></body></html>
@@ -78,26 +95,32 @@ function letsgo(auto) {
 }
 
 function getSlideShow() {
+  const dz200 = imgTag(dzng,200), dz450 = imgTag(dzng,450),
+        sk200 = imgTag(saky,200), sk450 = imgTag(saky,450),
+        am200 = imgTag(amtb,200);
   var ss = new SlideShow({
+    stageHeight:   700,
     contentElid:   'divContent',
     audioElid:     'audiop',
     msgbarElid:    'msgbar',
     btnManualElid: 'btnMan',
     btnAutoElid:   'btnAuto',
     singleAudio:   '占察懺儀軌-定弘法師-簡版改.mp3' })
-  .add('<img src="../../images/南無地藏王菩薩1.jpg" height="500px">' +
-       '<p><instr>（專秉一心，念所脩法。' +
+  .add('<p><instr>（專秉一心，念所脩法。' +
        '<u>不得剎那念世雜事</u>，<br>當思生死事大，無常迅速，堅精努力，乃剋有濟。<br>' +
-       '倘稍違淨法，則唐喪劬勞，不可不慎。）</instr></p>', 0)
+       '倘稍違淨法，則唐喪劬勞，不可不慎。）</instr></p>', 0, sk450)
+    .setToLast({id:'專秉一心，'})
   .add('<p><dong>正身、合掌</dong></p>' +
-       '<p><instr>（應先緣念，一切三寶，體常徧滿，　<br>' +
-       '　無所不在。衆生迷惑，流轉可哀。　<br>' +
-       '　我為衆生，翻迷歸悟，禮敬三寶。）</instr></p>', 29)
-  .add('<p><nian>一切恭敬，一心敬禮，<br>十方常住三寶。</nian><br>' +
-       '<dong>一拜</dong>　</p>', '1:33')
+       '<p><instr>（應先緣念，一切三寶，體常徧滿，無所不在。<br>' +
+       '　衆生迷惑，流轉可哀。我為衆生，翻迷歸悟，禮敬三寶。）</instr></p>', 29, sk450)
+    .setToLast({id:'應先緣念，'})
+  .add('<p><nian>一切恭敬，一心敬禮，十方常住三寶。</nian><br>' +
+       '<dong>一拜</dong>　</p>', '1:33', sk450)
+    .setToLast({id:'一切恭敬，'})
   .add('<p><nian>嚴持香華，如法供養。<br>' +
        '願此香華雲，徧滿十方界，供養一切佛。<br>' +
-       '尊法諸賢聖，無邊佛土中，受用作佛事。</nian></p>', '1:46')
+       '尊法諸賢聖，無邊佛土中，受用作佛事。</nian></p>', '1:46', sk450)
+    .setToLast({id:'嚴持香華，'})
   .add('<p><nian>一切佛法僧寶，體常徧滿，無所不在。<br>' +
        '願令以此香華，等同法性，<br>' +
        '普熏一切諸佛剎土，施作佛事。<br>' +
@@ -107,78 +130,85 @@ function getSlideShow() {
        '乃至盡十方所有一切種種莊嚴供養之具。<br>' +
        '憶想遙擬，普共衆生奉獻供養。</nian></p>' +
        '<p><nian>一切世界中有脩供養者，我今隨喜。<br>' +
-       '若未脩供養者，願得開導，令脩供養。</nian></p>', '2:04') // '2:52')
+       '若未脩供養者，願得開導，令脩供養。</nian></p>', '2:04', sk200) // '2:52')
+    .setToLast({id:'一切佛法僧寶，'})
   .add('<p><nian>又願我身，速能徧至一切剎土，<br>' +
        '於一一佛法僧所，各以一切種種<br>' +
        '莊嚴供養之具，共一切衆生等持奉獻，<br>' +
  　　  '供養一切諸佛法身、色身、舍利、<br>' +
        '形像、浮圖、廟塔、一切佛事，<br>' +
  　　  '供養一切所有法藏及說法處，<br>' +
- 　　  '供養一切賢聖僧衆。</nian></p>', '3:04')
+ 　　  '供養一切賢聖僧衆。</nian></p>', '3:04', sk200)
+    .setToLast({id:'又願我身，'})
   .add('<p><nian>願共一切衆生，脩行如是供養已，<br>' +
        '漸得成就六波羅蜜、四無量心。<br>' +
        '深知一切法本來寂靜、無生無滅、<br>' +
        '一味平等，離念清淨，畢竟圓滿。<br>&nbsp;<br>' +
        '供養已，一切恭敬。</nian><br>' +
-       '<dong>一拜</dong>　</p>', '3:38')
+       '<dong>一拜</dong>　</p>', '3:38', sk200)
+    .setToLast({id:'願共一切衆生，'})
   .addSlideGroup('一心奉請', null, [
-       '4:10,本師<u>釋迦牟尼佛</u>,三稱、一拜',
-       '4:33,<u>毘婆尸</u>等過去七佛,三稱、一拜',
-       '4:56,<u>普光佛</u>等五十三佛,三稱、一拜',
-       '5:19,一切諸佛所有色身、舍利、形象、<br>浮圖、廟塔、一切佛事<br>,三稱、一拜',
-       '5:54,十方三世一切諸佛,三稱、一拜'
+       '奉請:釋迦佛#   4:10,本師<u>釋迦牟尼佛</u>　　　,三稱、一拜',
+       '奉請:過去七佛# 4:33,<u>毘婆尸</u>等過去七佛　　,三稱、一拜',
+       '奉請:五十三佛# 4:56,<u>普光佛</u>等五十三佛　　,三稱、一拜',
+       '奉請:一切佛事# 5:19,一切諸佛所有色身、舍利、形象、<br>浮圖、廟塔、一切佛事,三稱、一拜',
+       '奉請:一切諸佛# 5:54,十方三世一切諸佛　　,三稱、一拜'
      ],
      '<h3>◎啟請三寶諸天</h3>' +
-     '<p><instr>（三寶雖無所不在，而衆生久積迷惑，<br>' +
-     '背覺合塵，念與悲隔。<br>' +
-     '今既翻迷歸悟，應須緣念三寶，<br>' +
-     '充滿虛空，應物現形，如水中月。）</instr></p>')
+     '<p><instr>（三寶雖無所不在，而衆生久積迷惑，背覺合塵，念與悲隔。<br>' +
+     '今既翻迷歸悟，應須緣念三寶，充滿虛空，應物現形，如水中月。）</instr></p>', sk200)
   .addSlideGroup('一心奉請', null, [
-     '6:14,<red>占察善惡業報經</red>微妙法藏<br>,三稱、一拜',
-     '6:42,十方一切法藏,三稱、一拜',
-     '7:03,請十方一切賢聖,三稱、一拜',
-     '7:24,<u>堅淨信菩薩摩訶薩</u>,三稱、一拜',
-     '7:48,<u title="即普賢菩薩">徧吉菩薩</u>、<u>觀世音菩薩摩訶薩</u><br>,三稱、一拜',
-     '8:12,<red>地藏菩薩摩訶薩</red>,三稱、三拜',
-     '8:47,梵釋四王、天龍八部、<br>僧伽藍內護正法者一切聖衆<br>,三稱、一拜'
-     ])
-  .add('<h3><dong>長跪</dong></h3>', '9:20')
-  .add('<nian>唯願<red>釋迦</red>慈父、七佛世尊、五十三佛、<br>' +
+     '奉請:占察經#     6:17,<red>占察善惡業報經</red>微妙法藏<br>,三稱、一拜',
+     '奉請:一切法藏#   6:42,十方一切法藏,三稱、一拜',
+     '奉請:一切賢聖#   7:03,請十方一切賢聖,三稱、一拜',
+     '奉請:堅淨信菩薩# 7:24,<u>堅淨信菩薩摩訶薩</u>,三稱、一拜',
+     '奉請:徧吉觀音#   7:46,<u title="即普賢菩薩">徧吉菩薩</u>、<u>觀世音菩薩摩訶薩</u><br>,三稱、一拜',
+     '奉請:地藏菩薩#   8:12,<red>地藏菩薩摩訶薩</red>,三稱、三拜',
+     '奉請:護正法者#   8:47,梵釋四王、天龍八部、<br>僧伽藍內護正法者一切聖衆<br>,三稱、一拜'
+     ], '', sk200)
+  .add('<h3><dong>長跪</dong></h3><br>' +
+       '<nian>唯願<red>釋迦</red>慈父、七佛世尊、五十三佛、<br>' +
        '一切覺者、他心道眼、無礙見聞、身通自在，<br>' +
        '來降道場，攝取我等，令成淨信。</nian><br>' +
-       '<dong>三稱後跪拜</dong><br>', '9:24')
+       '<dong>三稱後跪拜</dong><br>', '9:20', sk200)
+    .setToLast({id:'唯願...來降道場'})
   .add('<nian><red>占察善惡業報尊經</red>，<br>' +
        '十方一切清淨法藏，<br>' +
        '等真法性，充滿虛空，<br>' +
        '顯現道場，受我供養。</nian><br>' +
-       '<dong>三稱後跪拜</dong>　<br>', '10:22')
+       '<dong>三稱後跪拜</dong>　<br>', '10:22', sk200)
+    .setToLast({id:'占察經，顯現道場'})
   .add('<nian><u>堅淨信菩薩</u>、<u>徧吉菩薩</u>、</nian>　<br>' +
        '<nian><u>觀世音菩薩</u>等，十方一切賢聖，<br>' +
        '不捨大慈，來臨法座，<br>' +
        '哀憐覆護，證我行法。</nian><br>' +
-       '<dong>三稱後跪拜</dong>　<br>', '11:04')
+       '<dong>三稱後跪拜</dong>　<br>', '11:04', sk200)
+    .setToLast({id:'一切賢聖，來臨法座'})
   .add('<nian><red>地藏菩薩摩訶薩</red>，</nian><br>' +
        '　<nian>救世真士、大智開士，善安慰說者、<br>' +
        '速除諸障、增淨信者，大慈大悲，<br>' +
        '不違本誓，放大光明，滿我所願。</nian><br>' +
-       '<dong>三稱後跪拜　起身</dong><br>', '11:53')
+       '<dong>三稱後跪拜　起身</dong><br>', '11:53', dz200)
+    .setToLast({id:'地藏菩薩，滿我所願'})
   .add('<nian>護法天龍，伽藍真宰，<br>' +
        '隨我請來，堅守道場，<br>' +
        '卻諸魔障，示現吉祥，<br>' +
        '令我所脩，自在成就。</nian><br>' +
-       '<dong>三稱、一拜</dong>　', '12:53')
+       '<dong>三稱、一拜</dong>　', '12:53', sk200)
+    .setToLast({id:'護法，示現吉祥'})
   .add('<h3>◎讚禮三寶</h3>' +
        '<p><nian>我聞徧知海，真實德無邊，<br>' +
        '度脫諸有情，心歡喜敬禮，<br>' +
        '曾脩無量福，今得禮尊足，<br>' +
        '願無量劫中，常脩多供養。</nian></p>',
-       '13:36')
+       '13:36', sk200)
+    .setToLast({id:'◎讚禮三寶'});
 
   var i, lines;
 
-if (TEST_SPEED < 100) {
+  if (TEST_SPEED < 100) {
   lines = `
-  13:56,毘婆尸佛
+  13:55,毘婆尸佛
   14:06,尸棄佛
   14:16,毘舍浮佛
   14:26,拘留孫佛
@@ -192,7 +222,7 @@ if (TEST_SPEED < 100) {
   15:51,旃檀光佛
   16:01,摩尼幢佛
   16:11,歡喜藏摩尼寶積佛
-  16:20,一切世間樂見上大精進佛
+  16:22,一切世間樂見上大精進佛
   16:34,摩尼幢燈光佛
   16:45,慧炬照佛
   16:55,海德光明佛
@@ -253,7 +283,7 @@ if (TEST_SPEED < 100) {
       else
         txt += `<tr><td>&nbsp;</td><td style="opacity:0.4">${prefix}${l[1]}</td></tr>`;
     }
-    ss.add(txt + '</table>', ts);
+    ss.add(txt + '</table>', ts, sk200).setToLast({id:`敬禮:${fo}`});
   }
 
   lines = [ '24:35,東　方', '24:51,東南方', '25:07,南　方', '25:23,西南方',
@@ -266,45 +296,46 @@ if (TEST_SPEED < 100) {
       l = lines[j].split(',');
       if (l[1] == dir)
         txt += '<tr><td valign="top"><nian>一心敬禮</nian></td>' +
-               '<td valign="top"><nian><red>' + dir + '</red></nian></td>' +
+               `<td valign="top"><nian><red>${dir}</red></nian></td>` +
                '<td><nian>一切諸佛所有色身、舍利、形象、<br>' +
                '浮圖、廟塔、一切佛事</nian>' +
                '<dong>一拜</dong></td></tr>';
       else
-        txt += '<tr><td>&nbsp;</td><td style="opacity:0.4">' + l[1] + '</td><td>&nbsp;</td></tr>';
+        txt += `<tr><td>&nbsp;</td><td style="opacity:0.4">${l[1]}</td><td>&nbsp;</td></tr>`;
     }
-    ss.add(txt + '</table>', ts);
+    ss.add(txt + '</table>', ts, sk200).setToLast({id:`敬禮:${dir.replace('　','')}一切佛事`});
   }
 
   ss.addSlideGroup('一心敬禮', null, [
-     '27:15,十方三世一切諸佛,三稱、三拜',
-     '27:52,十方一切法藏,三稱、三拜',
-     '28:25,<red>占察善惡業報經</red>微妙法藏,一拜',
-     '28:38,十方一切賢聖,三稱、三拜',
-     '29:11,<u>堅淨信菩薩摩訶薩</u>,一拜',
-     '29:23,<u>徧吉菩薩</u>、<u>觀世音菩薩摩訶薩</u><br>,一拜',
-     '29:36,<red>地藏菩薩摩訶薩</red>,三稱、三拜'
-     ]);
-} // TEST_SPEED >= 100
+     '敬禮:一切諸佛#  27:15,十方三世一切諸佛,三稱、三拜',
+     '敬禮:一切法藏#  27:52,十方一切法藏,三稱、三拜',
+     '敬禮:占察經#    28:25,<red>占察善惡業報經</red>微妙法藏,一拜',
+     '敬禮:一切賢聖#  28:37,十方一切賢聖,三稱、三拜',
+     '敬禮:堅淨信菩薩#29:11,<u>堅淨信菩薩摩訶薩</u>,一拜',
+     '敬禮:徧吉觀音#  29:23,<u>徧吉菩薩</u>、<u>觀世音菩薩摩訶薩</u><br>,一拜',
+     '敬禮:地藏菩薩#  29:36,<red>地藏菩薩摩訶薩</red>,三稱、三拜'
+     ], '', sk200);
+  } // TEST_SPEED >= 100
 
-function lastPray(decorated) {
-  var sp = decorated ? '</nian>　<nian>' : '　';
-  var x =
-    `我弟子<yourname>某甲</yourname>，至心發願，${sp}<br>` +
-    `願十方三寶、<red>地藏</red>慈尊，${sp}<br>` +
-    '哀愍護持，救拔拯濟，令此國土，災亂消除，<br>' +
-    '正法流通，咸生淨信，無諸障礙，永斷魔邪，<br>' +
-    '我及衆生，重罪速滅，現離衰惱，充足資生，<br>' +
-    '三聚戒根，畢竟清淨。二種觀道，應念現前。<br>' +
-    '三昧總持，神通方便。四攝六度，無不圓成。<br>' +
-    '了悟自心，一實境界。捨身他世，生在佛前。<br>' +
-    '面奉<red>彌陀</red>，歷侍諸佛，親蒙受記。<br>' +
-    '回入塵勞，普會群迷，同歸密藏。';
-  return x;
-}
+  function lastPray(decorated) {
+    var sp = decorated ? '</nian>　<nian>' : '　';
+    var x =
+      `我弟子<yourname>某甲</yourname>，至心發願，${sp}<br>` +
+      `願十方三寶、<red>地藏</red>慈尊，${sp}<br>` +
+      '哀愍護持，救拔拯濟，令此國土，災亂消除，<br>' +
+      '正法流通，咸生淨信，無諸障礙，永斷魔邪，<br>' +
+      '我及衆生，重罪速滅，現離衰惱，充足資生，<br>' +
+      '三聚戒根，畢竟清淨。二種觀道，應念現前。<br>' +
+      '三昧總持，神通方便。四攝六度，無不圓成。<br>' +
+      '了悟自心，一實境界。捨身他世，生在佛前。<br>' +
+      '面奉<red>彌陀</red>，歷侍諸佛，親蒙受記。<br>' +
+      '回入塵勞，普會群迷，同歸密藏。';
+    return x;
+  }
 
   ss
-  .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11')
+  .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11', dz450)
+    .setToLast({id:'◎脩行懺悔'})
   .add('<p><nian>我弟子<yourname>某甲</yourname>，<br>' +
        '一心仰吿<red>地藏</red>慈尊、十方三寶，<br>' +
 　　   '弟子過去曾犯殺生、偷盜、邪淫、<br>'+
@@ -312,22 +343,26 @@ function lastPray(decorated) {
 　　   '慳吝、嫉妒、嗔恚、邪見、毀謗三寶，<br>' +
        '種種罪惡，至心懺悔，<br>' +
        '殷勤悔過，即令消滅。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '30:26')
+       '<dong>跪拜</dong>　</p>', '30:25', dz200)
+    .setToLast({id:'一心仰吿地藏慈尊'})
   .add('<p><nian>我及衆生，無始常為三業六根重罪所障，<br>' +
        '不見諸佛，不知出要，但順生死，不知妙理。<br>' +
        '我今雖知，猶與衆生，同為一切重罪所障。<br>' +
        '今對<red>地藏</red>，十方佛前，普為衆生歸命懺悔，<br>' +
        '惟願加護，令障消滅。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '31:05')
+       '<dong>跪拜</dong>　</p>', '31:04', dz200)
+    .setToLast({id:'我...常為..所障'})
   .add('<p><nian>普為法界一切衆生，<br>' +
        '悉願斷除三障，歸命懺悔。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '31:43')
+       '<dong>跪拜</dong>　</p>', '31:43', dz200)
+    .setToLast({id:'普為..斷除三障，'})
   .add('<p><nian>我與衆生，無始來今，由愛見故，<br>' +
        '內計我人，外加惡友，不隨喜他</nian>　<br>' +
        '<nian>一毫之善，惟徧三業，廣造衆罪。<br>' +
        '事雖不廣，惡心徧布，晝夜相續，<br>' +
        '無有間斷。覆諱過失，不欲人知，<br>' +
-       '不畏惡道，無慚無愧，撥無因果。<br>', '31:59')
+       '不畏惡道，無慚無愧，撥無因果。<br>', '31:59', dz200)
+    .setToLast({id:'我...不隨喜他'})
   .add('<nian>故於今日，深信因果，<br>' +
        '生重慚愧，生大怖畏，<br>' +
        '發露懺悔。斷相續心，<br>' +
@@ -336,15 +371,17 @@ function lastPray(decorated) {
        '隨喜凡聖一毫之善，<br>' +
        '念十方佛有大福慧，<br>' +
        '能救拔我及諸衆生，<br>' +
-       '從二死海，置三德岸。</nian>', '32:29')
+       '從二死海，置三德岸。</nian>', '32:29', dz200)
+    .setToLast({id:'發露懺悔'})
   .add('<nian>從無始來，<br>' +
        '不知諸法　本性空寂，<br>' +
        '廣造衆惡。今知空寂。<br>' +
        '為求菩提，為衆生故，<br>' +
        '廣脩諸善，徧斷衆惡。<br>' +
-       '惟願一切三寶、<red>地藏菩薩</red>，</nian>　　<br>' +
+       '一切三寶、<red>地藏菩薩</red>，</nian>　　<br>' +
        '<nian>慈悲攝受，聽我懺悔。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '33:00')
+       '<dong>跪拜</dong>　</p>', '33:00', dz200)
+    .setToLast({id:'惟願...聽我懺悔'})
   .add('<nian>我弟子<yourname>某甲</yourname>，至心懺悔。</nian>　<br>' +
        '<nian>我及衆生，自性清淨。一實境界，諸佛體同。<br>' +
        '無明癡暗，熏習因緣，現妄境界，令生念著，<br>' +
@@ -353,11 +390,13 @@ function lastPray(decorated) {
        '致使長淪苦海，永無出期。</nian>　　<br>' +
        '<nian>設欲脩行，多諸疑障，<br>' +
        '或擾外魔，或遭邪見，<br>' +
-       '助緣缺乏，淨信不成。</nian>', '33:32')
+       '助緣缺乏，淨信不成。</nian>', '33:31', dz200)
+    .setToLast({id:'我...聽我懺悔'})
   .add('<nian>今遇<red>地藏菩薩</red>摩訶薩，善安慰說，<br>' +
        '開我迷雲，滌慮洗心，求哀悔過。<br>' +
        '</nian>　<nian>惟願十方諸大慈尊，證知護念。<br>' +
-       '我今懺悔，不復更造。</nian>', '34:24')
+       '我今懺悔，不復更造。</nian>', '34:23', dz200)
+    .setToLast({id:'，不復更造'})
   .add('<nian>願我及一切衆生，<br>' +
        '速得除滅無量劫來，<br>' +
        '十惡、四重、五逆、顛倒、<br>' +
@@ -366,7 +405,8 @@ function lastPray(decorated) {
        '顛倒心起，無有定實，而可得者。<br>&nbsp;<br>' +
        '願一切衆生，速達心本，永滅罪根。<br>&nbsp;<br>' +
        '懺悔已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '34:45')
+       '<dong>跪拜</dong>　</p>', '34:44', dz200)
+    .setToLast({id:'願...永滅罪根'})
   .add('<h3>◎發勸請願</h3>' +
        '<p><nian>我弟子<yourname>某甲</yourname>，至心勸請。</nian>　<br>' +
        '<nian>願令十方一切菩薩，<br>' +
@@ -374,50 +414,50 @@ function lastPray(decorated) {
        '若已成正覺者，願常住在世，</nian>　<br>' +
        '<nian>轉正法輪，不入涅槃。<br>&nbsp;<br>' +
        '勸請已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '35:26')
+       '<dong>跪拜</dong>　</p>', '35:25', dz200)
+    .setToLast({id:'◎發勸請願'})
   .add('<h3>◎發隨喜願</h3>' +
        '<p><nian>我弟子<yourname>某甲</yourname>，至心隨喜。<br>' +
-       '願我及一切衆生，<br>' +
-       '畢竟永捨嫉妒之心，<br>' +
-       '於三世中，一切剎土，<br>' +
-       '所有脩學一切功德，<br>' +
+       '願我及一切衆生，畢竟永捨嫉妒之心，<br>' +
+       '於三世中，一切剎土，所有脩學一切功德，<br>' +
        '及成就者，悉皆隨喜。<br>&nbsp;<br>' +
        '隨喜已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '35:57')
+       '<dong>跪拜</dong>　</p>', '35:57', dz200)
+    .setToLast({id:'◎發隨喜願'})
   .add('<h3>◎發迴向願</h3>' +
        '<p><nian>我弟子<yourname>某甲</yourname>，至心迴向。<br>' +
        '願我所脩一切功德，<br>' +
        '資益一切諸衆生等，<br>' +
        '同趣佛智，至涅槃城。<br>&nbsp;<br>' +
        '迴向已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '36:28')
+       '<dong>跪拜</dong>　</p>', '36:28', dz200)
+    .setToLast({id:'◎發迴向願'})
   .add('<h3>◎補發願</h3><p><nian>' + lastPray(true) + '<br>&nbsp;<br>' +
        '發願已，歸命禮三寶。<br>' +
        '<dong>跪拜　起身</dong></nian></p>', '36:52')
+    .setToLast({id:'◎補發願'})
   .addSlideGroup(null, '一拜', [
-       '38:09,自皈依佛，當願衆生，體解大道，發無上心。',
-       '38:24,自皈依法，當願衆生，深入經藏，智慧如海。',
-       '38:40,自皈依僧，當願衆生，統理大衆，一切無礙。<br>和南聖衆。'
-     ], '<h3>◎三皈依</h3>')
-  .add('<h3>◎拜懺畢</h3>' +
-       '<p>&nbsp;<br>&nbsp;<br>' +
-       '<instr>（次往餘靜室，端坐一心，<br>' +
-       '若稱誦，若默念，<red>地藏菩薩</red>。<br>' +
-       '其惛蓋多者，應於道場中旋遶誦念。）</instr></p>', '38:58');
-  var cls1 = isReal() ? ' class="fadein"'  : '',
-      cls2 = isReal() ? ' class="fadeout"' : '';
-  var amtb = '../../images/南無阿彌陀佛.jpg',
-      dzng = '../../images/南無地藏王菩薩1.jpg';
-  var finalSrn =
-`<table><tr><td style="padding-right:20px" valign=top><img src="${dzng}" height="200px"></td>
-<td align=center style="color:blue">${lastPray()}</td>
-<td style="padding-left:20px" valign=top><img src="${amtb}" height="200px"></td></tr></table>`;
-
+       '自皈依佛# 38:09,自皈依佛，當願衆生，體解大道，發無上心。',
+       '自皈依法# 38:24,自皈依法，當願衆生，深入經藏，智慧如海。',
+       '自皈依僧# 38:40,自皈依僧，當願衆生，統理大衆，一切無礙。<br>' +
+                       '和南聖衆。　　　　　　　　　　　　　　　'
+     ], '<h3>◎三皈依</h3>', sk200);
+  var cls1 = isReal() ? 'fadein' : '', cls2 = isReal() ? 'fadeout' : '',
+      endInstr = '<instr>（次往餘靜室，端坐一心，若稱誦、若默念<red>地藏菩薩</red>。' +
+                 '<br>其惛蓋多者，應於道場中旋遶誦念。）</instr></p>';
   ss
-  .add(`<img src="${amtb}" height="614px"${cls1}></a>`, '39:49')
-  .add(`<img src="${amtb}" height="614px"${cls2}></a>`, '40:47')
-  .add(`<a href="javascript:curShow.showNext()"><img src="${dzng}"${cls1}></a>`, '40:49')
-  .add(finalSrn, '55:00');
+  .add('<h3>◎拜懺畢</h3>' + endInstr, '38:58', dz450)
+    .setToLast({id:'◎拜懺畢'})
+  .add(`<inv>${endInstr}</inv>`, '39:48', imgTag(amtb, '550px', cls1))
+    .setToLast({id:'(佛像:in)'})
+  .add(`<inv>${endInstr}</inv>`, '40:47', imgTag(amtb, '550px', cls2))
+    .setToLast({id:'(佛像:out)'})
+  .add(endInstr, '40:49', imgTag(dzng, '550px', cls1))
+    .setToLast({id:'(大衆自修)'})
+  .add(`<blue>${lastPray()}</blue>`,'45:00', `${dz200}　　　　${am200}`)
+    .setToLast({id:'(ultimo)'})
+  .add('<namoAMTB></namoAMTB>', '59:59.7')
+    .setToLast({id:'(fin)',stopClock:1})
 
   ss.setSlideCallback(showSections);
 }

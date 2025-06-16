@@ -3,14 +3,17 @@ var TEST_SPEED = 1;
 
 function isReal() { return TEST_SPEED == 1; }
 
-function toTimeDisp(secs) {
-  secs = secs % 3600; // only mins:secs
-  var mins = Math.floor(secs / 60);
-  secs = Math.floor(secs - mins * 60);
+function toTimeDisp(secs, plain) {
   var ret = '';
-  if (mins < 10) ret += '<inv>0</inv>';
+  var hrs = Math.floor(secs / 3600);
+  if (hrs > 0) ret = hrs + ':';
+  else secs = secs % 3600;
+  var mins = Math.floor(secs / 60).toFixed(0);
+  if (mins < 10) ret += plain ? '0' : '<inv>0</inv>';
   ret += mins + ':';
-  if (secs < 10) ret += '0';
+  secs = (secs % 60).toFixed(0);
+  if (secs == 60) secs = '59';
+  else if (secs < 10) ret += '0';
   return ret + secs;
 }
 
@@ -28,6 +31,7 @@ function toSecs(time) {
 class SlideShow {
   constructor(cfg) {
     // environment
+    this.stageHeight = cfg.stageHeight || 500;
     this.contentId   = cfg.contentElid;
     this.audioId     = cfg.audioElid;
     this.singleAudio = cfg.singleAudio;
@@ -50,22 +54,40 @@ class SlideShow {
     }
 
     curShow = this; // global single to this.
+
+    // silently default to manual started mode
+    this._startShow();
+    this.addKeyHandler();
   }
 
   setSlideCallback(cb) { this.slideCallback = cb; return this; }
 
-  add(content, time) { return this.addSlide(content, time ); } // alias
+  addSlide(content, time, topPortion) { return this.add(content, time, topPortion); } // alias
 
-  addSlide(content, time) { // content: can be string (as HTML) or function(this)
-                            //    time: from the start, in seconds
+  add(content, time, topPortion, stopClock) {
+    // content: can be string (as HTML) or function(this)
+    //    time: from the start, in seconds
     if (!time || time < 0 || this.slides.length == 0) time = 0;
-    this.slides.push({ content, at:toSecs(time) });
+    this.slides.push({ content, at:toSecs(time), topPortion, stopClock });
     return this;
   }
 
-  addSlideGroup(before, action, list, leading) {
+  setToLast(vals) {
+    if (typeof vals == 'object') {
+      var n = this.slides[this.slides.length-1];
+      n && Object.assign(n, vals);
+    }
+    return this;
+  }
+
+  addSlideGroup(before, action, list, leading, topPortion) {
     for (var i=0; i<list.length; ++i) {
-      var l = list[i].split(',');
+      var l = list[i], id, idx = l.indexOf('#');
+      if (idx >= 0) {
+        id = l.substring(0,idx).trim();
+        l = l.substring(idx+1).trim();
+      }
+      l = l.split(',');
       var ts = l[0], fo = l[1], txt = (leading || '') + '<table>';
       for (var j=0; j<list.length; ++j) {
         l = list[j];
@@ -75,7 +97,8 @@ class SlideShow {
           if (!before)
             txt += `<tr><td nowrap width="460px"><nian><red>${l[1]}</red></nian><dong>${todo}</dong></td></tr>`;
           else
-            txt += `<tr><td valign="top"><nian>${before}</nian></td><td nowrap width="460px"><nian><red>${l[1]}</red></nian><dong>${todo}</dong></td></tr>`;
+            txt += `<tr><td valign="top"><nian>${before}</nian></td><td nowrap width="460px">` +
+                   `<nian><red>${l[1]}</red></nian><dong>${todo}</dong></td></tr>`;
         } else {
           if (!before)
             txt += `<tr><td nowrap style="opacity:0.4">${l[1]}</td></tr>`;
@@ -83,22 +106,44 @@ class SlideShow {
             txt += `<tr><td>&nbsp;</td><td nowrap style="opacity:0.4">${l[1]}</td></tr>`;
         }
       }
-      this.add(txt + '</table>', ts);
+      this.add(txt + '</table>', ts, topPortion);
+      id && this.setToLast({id});
     }
     return this;
   }
 
   showNext(delta) {
+    var len = this.slides.length;
     if (!delta) delta = 1;
+    if (delta < 0 && this.showPtr <= 0) {
+      this.showPtr = len-1;
+      delta = 0;
+    }
     var next = this.slides[this.showPtr+delta];
     if (!next) return;
+    if (next.stopClock) this.stopClock = true;
     this.showPtr += delta;
-    console.log(' >>> Showing slide', this.showPtr, '/', this.slides.length);
+    {
+      var txt = toTimeDisp(this.slides[this.showPtr].at,true) + ',';
+      if (this.showPtr < len-1)
+        txt += toTimeDisp(this.slides[this.showPtr+1].at,true);
+      else
+        txt += '     ';
+      console.log(`[${txt})【第${this.showPtr+1}/${len}步】${next.id||''}`);
+    }
     if (typeof next.content == 'function')
       e(this.contentId).innerHTML = next.content();
     else {
+      const pillar = '<td height="${this.stageHeight}" rowspan="2" style="opacity:0">1</td>';
       var c = next.content;
-      if (c) e(this.contentId).innerHTML = c;
+      if (c) {
+        if (next.topPortion)
+          c = `<table border=0 cellspacing=0 cellpadding=0>` +
+              `<tr>${pillar}<td align=center valign=top nowrap height="1">${next.topPortion}</td>` +
+              `${pillar}</tr>` +
+              `<tr><td align=center nowrap>${c}</td></tr></table>`;
+        e(this.contentId).innerHTML = c;
+      }
     }
     if (this.slideCallback) this.slideCallback(next);
   }
@@ -107,7 +152,7 @@ class SlideShow {
 
   _checkShowPtrFromAudio(curSecs) {
     var len = this.slides.length, ptr = this.showPtr;
-    if (ptr < 0 || ptr>=len) ptr = len/2;
+    if (ptr < 0 || ptr>=len) ptr = Math.floor(len/2);
     var cur = this.slides[ptr], nxt;
     if (!cur) return -1;
     if (curSecs >= cur.at) {
@@ -120,19 +165,34 @@ class SlideShow {
     else {
       for (; ptr>0; --ptr) {
         nxt = this.slides[ptr-1];
-        if (!nxt || nxt.at < curSecs) return ptr;
+        if (!nxt) return 0;
+        if (nxt.at < curSecs) return ptr-1;
       }
       return -1;
     }
   }
 
-  _checkAndShowNext() { // only used in automatic mode
-    var next = this.slides[this.showPtr+1];
-    var durSecs = this.audioTime;
-    if (!this.audioStarted) // audio has ended; continue with timer
-      durSecs += (Date.now() - this.timerStart) / 1000;
+  _getDurSecs() {
+    if (this.audioStarted) return this.audioTime;
+    // audio has ended; continue with timer
+    return this.audioTime + (Date.now() - this.timerStart) / 1000;
+  }
 
-    var ptr = this._checkShowPtrFromAudio(durSecs);
+  _checkAndShowNext() { // only used in automatic mode
+    var next = this.slides[this.showPtr+1],
+        durSecs = this._getDurSecs(),
+        ptr = this._checkShowPtrFromAudio(durSecs);
+    if (this.VERBOSE) {
+      var intvl = '[', txt;
+      var n = curShow.slides[ptr];
+      var txt = n && n.id || '';
+      if (n) intvl += toTimeDisp(n.at,1);
+      intvl += ' - ';
+      n = curShow.slides[ptr+1];
+      if (n) intvl += toTimeDisp(n.at,1);
+      intvl += '] ' + txt;
+      console.log(toTimeDisp(durSecs,1), 'ptr:', ptr, 'showPtr:', this.showPtr, intvl);
+    }
     if ((ptr != this.showPtr) && (ptr >= 0)) {
       this.showPtr = ptr-1;
       this.showNext();
@@ -141,6 +201,9 @@ class SlideShow {
     var el = e(this.msgbarId);
     if (el && (el.style.display == 'block')) {
       var tm = toTimeDisp(durSecs);
+      var pad = '';
+      for (var i=tm.length; i<7; ++i) pad += ' ';
+      if (pad.length > 0) tm = `<inv>${pad}</inv>${tm}`;
       el.innerHTML = `${tm}　　　　　　　占察懺畢。大衆自修。　　　　　　${tm}`;
     }
   }
@@ -151,6 +214,7 @@ class SlideShow {
   startManual() {
     this._stopTimer();
     this._startShow();
+    this.showNext();
     this.addKeyHandler();
     var el = e(this.msgbarId);
     if (el)
@@ -199,16 +263,16 @@ class SlideShow {
     this.audioStarted = false;
   }
 
-  _startShow() {
-    this.showPtr = -1;
-    this.showNext();
-  }
+  _startShow() { this.showPtr = -1; }
 
-  _timerHandler() { if (!this.audioStarted) curShow._checkAndShowNext(); }
+  _timerHandler() {
+    if (curShow.stopClock) curShow._stopTimer();
+    else if (!curShow.audioStarted) curShow._checkAndShowNext();
+  }
 
   _startTimer() {
     if (!this.timer) {
-      this.timer = setInterval(this._timerHandler, 500);
+      this.timer = setInterval(this._timerHandler, 300);
       console.log("Timer started.");
     }
     this.timerStart = Date.now();
@@ -218,6 +282,7 @@ class SlideShow {
       clearInterval(this.timer);
       delete this.timer;
       delete this.timerStart;
+      delete this.stopClock;
       console.log("Timer cleared.");
     }
   }
