@@ -444,13 +444,14 @@ function getSlideShow() {
      ], '<h3>◎三皈依</h3>', sk200);
   var cls1 = isReal() ? 'fadein' : '', cls2 = isReal() ? 'fadeout' : '',
       endInstr = '<instr>（次往餘靜室，端坐一心，若稱誦、若默念<red>地藏菩薩</red>。' +
-                 '<br>其惛蓋多者，應於道場中旋遶誦念。）</instr></p>';
+                 '<br>其惛蓋多者，應於道場中旋遶誦念。）</instr></p>',
+      nianFoInstr = '<instr>（淨土學人當時時以持念<red>阿彌陀佛</red>為要。）</instr></p>';
   ss
   .add('<h3>◎拜懺畢</h3>' + endInstr, '38:58', imgTag(dzng,450))
     .setToLast({id:'◎拜懺畢'})
-  .add(`<inv>${endInstr}</inv>`, '39:48', imgTag(amtb, '550px', cls1))
+  .add(nianFoInstr, '39:48', imgTag(amtb, '550px', cls1))
     .setToLast({id:'(佛像:in)'})
-  .add(`<inv>${endInstr}</inv>`, '40:47', imgTag(amtb, '550px', cls2))
+  .add(nianFoInstr, '40:47', imgTag(amtb, '550px', cls2))
     .setToLast({id:'(佛像:out)'})
   .add(endInstr, '40:49', imgTag(dzng, '550px', cls1))
     .setToLast({id:'(大衆自修)'})
