@@ -134,13 +134,12 @@ class SlideShow {
     if (typeof next.content == 'function')
       e(this.contentId).innerHTML = next.content();
     else {
-      const pillar = '<td height="${this.stageHeight}" rowspan="2" style="opacity:0">1</td>';
+      const pillar = `<td height="${this.stageHeight}" rowspan="2" style="opacity:0">1</td>`;
       var c = next.content;
       if (c) {
         if (next.topPortion)
-          c = `<table border=0 cellspacing=0 cellpadding=0>` +
-              `<tr>${pillar}<td align=center valign=top nowrap height="1">${next.topPortion}</td>` +
-              `${pillar}</tr>` +
+          c = `<table border=0 cellspacing=0 cellpadding=0><tr>${pillar}` +
+              `<td align=center valign=top nowrap height="1">${next.topPortion}</td>${pillar}</tr>` +
               `<tr><td align=center nowrap>${c}</td></tr></table>`;
         e(this.contentId).innerHTML = c;
       }
