@@ -53,7 +53,7 @@ const MIN_LEN = 40;
 const VERY_LONG = 120;
 const MED_LONG = 110;
 const LONG = 90;
-const DEBUG = get('debug');
+var DEBUG = get('debug');
 
 var readerHost; // singleton
 

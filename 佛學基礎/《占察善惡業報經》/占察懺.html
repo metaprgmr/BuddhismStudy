@@ -95,7 +95,7 @@ function letsgo(auto) {
 }
 
 function getSlideShow() {
-  const dz200 = imgTag(dzng,200), dz450 = imgTag(dzng,450),
+  const dz200 = imgTag(dzng,200),
         sk200 = imgTag(saky,200), sk450 = imgTag(saky,450),
         am200 = imgTag(amtb,200);
   var ss = new SlideShow({
@@ -334,7 +334,7 @@ function getSlideShow() {
   }
 
   ss
-  .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11', dz450)
+  .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11', imgTag(dzng,550))
     .setToLast({id:'◎脩行懺悔'})
   .add('<p><nian>我弟子<yourname>某甲</yourname>，<br>' +
        '一心仰吿<red>地藏</red>慈尊、十方三寶，<br>' +
@@ -446,7 +446,7 @@ function getSlideShow() {
       endInstr = '<instr>（次往餘靜室，端坐一心，若稱誦、若默念<red>地藏菩薩</red>。' +
                  '<br>其惛蓋多者，應於道場中旋遶誦念。）</instr></p>';
   ss
-  .add('<h3>◎拜懺畢</h3>' + endInstr, '38:58', dz450)
+  .add('<h3>◎拜懺畢</h3>' + endInstr, '38:58', imgTag(dzng,450))
     .setToLast({id:'◎拜懺畢'})
   .add(`<inv>${endInstr}</inv>`, '39:48', imgTag(amtb, '550px', cls1))
     .setToLast({id:'(佛像:in)'})

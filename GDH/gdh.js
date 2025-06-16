@@ -1,8 +1,3 @@
-const zpuncs   = '▹，、；：。？！—─…「『《（　）》』」';
-const REGEX_ZI = /[\u3300-\u4dbf]|[\u4e00-\u9fff]|[\uf900-\ufaff]|[\ufe30-\ufe4f]|[\u20000-\u2a6df]|[\u2a700-\u2ceaf]|[\u2f800-\u2fa1f]/;
-function isPunc(z)    { return zpuncs.indexOf(z) >= 0; }
-function isHanZi(x)   { return REGEX_ZI.test(x) && !isPunc(x) && !isASCII(x); }
-function isASCII(str) { return /^[\x00-\xFF]*$/.test(str); }
 
 // crux
 var ypcolor, yptone = 'yptone'; // CSS class names, if any
@@ -134,7 +129,7 @@ class YPDict {
 
   lookup(zi, hint) {
     zi = zi.trim();
-    if (!zi.length || (PUNCS.indexOf(zi) >= 0))
+    if (!zi.length || isPunc(zi))
       return null;
     var zinfo = this.store[zi];
     if (zinfo) {

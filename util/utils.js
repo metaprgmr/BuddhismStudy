@@ -38,6 +38,7 @@ function toEl(x)              { return (typeof x=='string')?e(x):x; }
 function e(id)                { return document.getElementById(id) }
 function showEl(id)           { var el=toEl(id); el && (el.style.display='block'); }
 function hideEl(id)           { var el=toEl(id); el && (el.style.display='none'); }
+function enableEl(id, set)    { var c = e(id); if (set) c.removeAttribute('disabled'); else c.setAttribute('disabled', ''); }
 function w()                  { for(var i in arguments)document.write(arguments[i]); }
 function showTop(id)          { var el=toEl(id); el && el.scrollIntoView(); }
 function renderText(id, txt)  { var el=toEl(id); el && (el.innerHTML=txt); }
@@ -85,6 +86,19 @@ function findFirst() {
     }
   }
   return (foundIdx > host.length) ? -1 : foundIdx;
+}
+
+function toW(n, w) {
+  n = '' + n;
+  while (n.length < w) n = ' ' + n;
+  return n;
+}
+
+function toInt(n) { return (typeof n === 'string') ? parseInt(n) : n; }
+
+function toLines(txt) { // ending \ concats the next line
+  if (Array.isArray(txt)) return txt;
+  return txt && txt.replaceAll('\\\n', '').split('\n');
 }
 
 // Aligned lists
@@ -172,6 +186,27 @@ function isPunc1(z) { return zpuncs1.indexOf(z) >= 0; }
 function isHanZi(x)       { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncsAll.indexOf(x) < 0); }
 function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncs.indexOf(x) < 0); }
 function isASCII(str) { return /^[\x00-\xFF]*$/.test(str) }
+function isWhite(c) { return c && c.length && !c.trim().length; }
+function isDigit(c) {
+  switch(c) {
+  case '0': case '1': case '2': case '3': case '4':
+  case '5': case '6': case '7': case '8': case '9': return true;
+  }
+  return false;
+}
+function getKeysOrdered(obj) {
+  if (!obj) return null;
+  var a = Object.keys(obj);
+  a.sort();
+  return a;
+}
+function dumpKeys(obj) { console.log(getKeysOrdered(obj)) }
+function toSet(s, val) {
+  val = val || true;
+  var set = {};
+  for (var i in s) set[s[i]] = val;
+  return set;
+}
 
 var allHanZi = {};
 function countHanZi(txt) {
@@ -253,3 +288,5 @@ function writingRedir(name, ttl) {
   w(`<meta http-equiv="Refresh" content="1;url=../個人文集/${name}.html">`,
     `</head><body><h2>${ttl}</h2></body></html>`);
 }
+
+function getYourName() { return window['MYNAME']; }

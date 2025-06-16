@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html charset="utf-8">
+<head>
+<meta charset="utf-8">
+<style>
+a { text-decoration:none }
+li { font-family: "KaiTi", "楷体", STKaiti, "华文楷体"; font-size:24px; color:red; padding-bottom:10px }
+.big { background-color:#ffd0d0 }
+.major { background-color:#ff0; color:red }
+</style>
+<title>佛修道場</title>
+<script src="../env.js"></script>
+<script src="../util/utils.js"></script>
+<script src="../淨土宗/西方二聖開示/JK-teachings.js"></script>
+<script>
+const TARGET = 'view';
+const LEVEL = '1';
+const EXT = 'xview';
+const 十小咒 = '../陀羅尼/十小咒.html';
+var curEID = 0, lastEId = null, lastLink = null;
+class ImageMap {
+  constructor() {
+    this.imgMap = {
+          '爐香讚.png': '釋迦牟尼佛.jpg',
+          '三寶佛.png': '釋迦牟尼佛.jpg',
+  '普賢菩薩十大願.jpg': '釋迦牟尼佛.jpg',
+  '普賢懺悔滅罪偈.png': '釋迦牟尼佛.jpg',
+        '四宏誓願.jpg': '釋迦牟尼佛.jpg',
+          '回向偈.png': '釋迦牟尼佛.jpg',
+      '極樂世界圖.png': '極樂世界三聖.jpg',
+    };
+  }
+  getImgW(img) {
+    var x = window['MY_IMAGES'] ? img : this.imgMap[img];
+    switch (x || img) {
+    case '釋迦牟尼佛.jpg':  return '500px';
+    case '觀世音菩薩1.jpg': return '450px';
+    }
+    return '600px';
+  }
+  getImgSrc(img) {
+    if (img.indexOf('/') > 0) return img;
+    var myimgs = window['MY_IMAGES'], mapped = this.imgMap[img];
+    if (!myimgs)
+      return `../images/${mapped || img}`;
+    else
+      return mapped ? `${myimgs}${img}` : `../images/${img}`;
+  }
+}
+var im = new ImageMap();
+function xlnk(name, url, img) {
+  var eid = '_' + (++curEID);
+  img = !img ? '' : `, '${img}'`;
+  return `<div id="${eid}" class="big"><a href="javascript:openURL('${url}'${img})">${name}</a></div>`;
+}
+function mainlnk(name, js, anchor, img) {
+  return lnk(name, js, anchor, img, true);
+}
+function lnk(name, js, anchor, img, isMain) {
+  img = !img ? '' : `, '${img}'`;
+  js = !js ? 'null' : `'${js}'`;
+  anchor = !anchor ? ', null' : `, '${anchor}'`;
+  var eid = '_' + (++curEID), cls = isMain ? ' class="big"' : '';
+  return `<div id="${eid}"${cls}><a href="javascript:openLnk('${eid}',${js}${anchor}${img})">${name}</a></div>`;
+}
+var diff = 0;
+function openURL(url, img, imgw) {
+  e('picture').innerHTML = `<img src="${im.getImgSrc(img)}" style="max-width:${im.getImgW(img)}">`;
+  window.open(url, EXT);
+}
+function openLnk(eid, js, anchor, img, imgw) {
+  if (js) {
+    var lnk;
+    if (js.indexOf('/') < 0) {
+      anchor = !anchor ? '' : ('#' + anchor);
+      lnk = `gdhreader.html?s=content/${js}${anchor}`;
+    } else {
+      if (anchor == 'jingyu') anchor = '?i=random&ts=' + (++diff); // to force iframe to reload.
+      else anchor = !anchor ? '' : ('?' + anchor);
+      lnk = js + anchor;
+    }
+    if (lnk != lastLink) {
+      console.log(lnk);
+      window.open(lnk, TARGET);
+      lastLink = lnk;
+    }
+  }
+  var el;
+  if (img) {
+    el = e('picture');
+    el && (el.innerHTML = `<img src="${im.getImgSrc(img)}" style="max-width:${im.getImgW(img)}">`);
+  }
+  if (lastEId) { el = e(lastEId); el && (el.style.border = 'none'); }
+  if (eid) { el = e(eid); el && (el.style.border = '2px red solid'); }
+  lastEId = eid;
+}
+function PureLandSession() {
+  new Buffer()
+  .w('<ol>',
+    '<li>', lnk('《香讚》', 'various.js', '_1', '爐香讚.png'), '</li>',
+    '<li>', lnk('南無三寶', 'various.js', '_3', '三寶佛.png'), '</li>',
+    '<li>', lnk('南無 釋迦牟尼佛', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《蓮池讚》', 'various.js', '_6', '極樂世界圖.png'), '</li>',
+    '<li>', lnk('南無 極樂三聖', 'various.js', '_6', '極樂世界三聖.jpg'), '</li>',
+    '<li>', mainlnk('《佛說阿彌陀經》', 'amtb.js', null, '極樂世界圖.png'), '</li>',
+    '<li>', '', '拔一切業障根本<br>得生淨土陀羅尼</li>',
+    '<li>', lnk('《阿彌陀佛頌》', 'various.js', '_7', '南無阿彌陀佛.jpg'), '</li>',
+    '<li>', mainlnk('《發願文》', 'vow.js', null, '南無阿彌陀佛.jpg'), '</li>',
+    '<li>', lnk('《無量壽佛讚》', 'various.js', '_8', '南無阿彌陀佛.jpg'), '</li>',
+    '<li>', '', '彌陀十念</li>',
+    '<li>', lnk('《西方迴向偈》', 'various.js', '_9', '極樂世界圖.png'), '</li>',
+    '<li>', lnk('《普賢十願》', 'various.js', '_10', '普賢菩薩十大願.jpg'), '</li>',
+    '<li>', lnk('《懺悔滅罪偈》', 'various.js', '_10', '普賢懺悔滅罪偈.png'), '</li>',
+    '<li>', lnk('《發四宏願》', 'various.js', '_10', '四宏誓願.jpg'), '</li>',
+    '<li>', mainlnk('《心經》', 'xinjing.js', null, '真誠清淨平等正覺慈悲看破放下自在隨緣念佛.jpg'), '</li>',
+    '<li>', lnk('十咒語', 十小咒, null, '三寶佛.jpg'), '</li>',
+    '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '<li>', lnk('《普願文》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '<li>', lnk('《三自皈依》', 'various.js', '_10', '三寶佛.png'), '</li>',
+    '<li>', lnk('◎地藏菩薩論念佛號◎', 'various.js', '_38', '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', lnk('◎淨明空誨法言師教◎', '../淨土宗/西方二聖開示/JK-teachings.html', 'jingyu', '慈悲看破自在念佛.jpg'), '</li>',
+    '<li>', lnk('◎印光大師文鈔精錄◎', '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.html', 'm=r', '慈悲看破自在念佛.jpg'), '</li>',
+    '</ol>'
+  ).render('prgm');
+}
+function AmtbSession() {
+  new Buffer()
+  .w('<p>&nbsp;</p>',
+    '<ol>',
+    '<li>', lnk('《香讚》', 'various.js', '_1', '爐香讚.png'), '</li>',
+    '<li>', lnk('南無三寶', 'various.js', '_3', '三寶佛.png'), '</li>',
+    '<li>', lnk('南無 釋迦牟尼佛', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《蓮池讚》', 'various.js', '_6', '極樂世界圖.png'), '</li>',
+    '<li>', lnk('南無 極樂三聖', 'various.js', '_6', '極樂世界三聖.jpg'), '</li>',
+    '<li>', mainlnk('《佛說大乘無量壽<br>莊嚴清淨平等覺經》', `wlsj.js?level=${LEVEL}&noaudio=1`, '_1', '極樂世界圖.png'),
+                 '拔一切業障根本<br>得生淨土陀羅尼</li>',
+    '<li>', lnk('《阿彌陀佛頌》', 'various.js', '_7', '南無阿彌陀佛.jpg'), '</li>',
+    '<li>', mainlnk('《發願文》', 'vow.js', null, '南無阿彌陀佛.jpg'), '</li>',
+    '<li>', lnk('《西方迴向偈》', 'various.js', '_9', '極樂世界圖.png'), '</li>',
+    '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '<li>', lnk('《普願文》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '<li>', lnk('◎淨明空誨法言師教◎', '../淨土宗/西方二聖開示/JK-teachings.html', 'jingyu', '../JingKong淨空法師/慈悲看破自在念佛.jpg'), '</li>',
+    '<li>', lnk('◎印光大師文鈔精錄◎', '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.html', 'm=r', '../JingKong淨空法師/慈悲看破自在念佛.jpg'), '</li>',
+    '</ol>'
+  ).render('prgm');
+}
+function VajraSession() {
+  new Buffer()
+  .w('<p>&nbsp;</p>',
+    '<ol>',
+    '<li>', lnk('《香讚》', 'various.js', '_1', '爐香讚.png'), '</li>',
+    '<li>', lnk('南無三寶', 'various.js', '_3', '三寶佛.png'), '</li>',
+    '<li>', lnk('《奉請八金剛》', 'various.js', '_33', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《奉請四金剛菩薩》', 'various.js', '_33', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《金剛經發願文》', 'various.js', '_35', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《云何梵》', 'various.js', '_35', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('南無 大悲觀世音菩薩', null, null, '觀世音菩薩1.jpg'), '</li>',
+    '<li>', lnk('南無 大願地藏王菩薩<br>南無 護法　諸天菩薩', null, null, '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《金剛般若波羅蜜經》', 'jingangjing.js', null, '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《般若無盡藏真言》<br>《金剛心真言》<br>《普迴向真言》<br>《法華補闕真⾔》<br>《補闕圓滿真⾔》',
+            '../陀羅尼/諸真言.html', null, '回向偈.png'), '</li>',
+    '<li>', lnk('《金剛讚》', 'various.js', '_37', '回向偈.png'), '</li>',
+    '<li>', lnk('《十小咒》', 十小咒, null, '三寶佛.png'), '</li>',
+    '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '</ol>'
+  ).render('prgm');
+}
+function DiZangSession() {
+  new Buffer()
+  .w('<p>&nbsp;</p>',
+    '<ol>',
+    '<li>', lnk('《香讚》', 'various.js', '_1', '爐香讚.png'), '</li>',
+    '<li>', lnk('南無三寶', 'various.js', '_3', '三寶佛.png'), '</li>',
+    '<li>', lnk('南無 釋迦牟尼佛', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《覺林菩薩偈》', 'various.js', '_19', '三寶佛.png'), '</li>',
+    '<li>', lnk('《地藏菩薩讚》', 'various.js', '_27', '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《地藏菩薩本願經》', 'dzj.js', null, '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《占察善惡業報經》', 'ZhanCha-2nd-part.js', null, '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', lnk('《普賢十願》', 'various.js', '_11', '普賢菩薩十大願.jpg'), '</li>',
+    '<li>', lnk('《懺悔滅罪偈》', 'various.js', '_11', '普賢懺悔滅罪偈.png'), '</li>',
+    '<li>', lnk('《發四宏願》', 'various.js', '_11', '四宏誓願.jpg'), '</li>',
+    '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '<li>', lnk('《地藏王讚》', 'various.js', '_28', '南無地藏王菩薩1.jpg'), '</li>',
+    '</ol>'
+  ).render('prgm');
+}
+function GuanShiYinSession() {
+  new Buffer()
+  .w('<p>&nbsp;</p>',
+    '<ol>',
+    '<li>', lnk('《香讚》', 'various.js', '_1', '爐香讚.png'), '</li>',
+    '<li>', lnk('南無三寶', 'various.js', '_3', '三寶佛.png'), '</li>',
+    '<li>', lnk('南無 釋迦牟尼佛', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', mainlnk('《觀世音菩薩普門品》', 'guanshiyin.js', null, '觀世音菩薩1.jpg'), '</li>',
+    '<li>', lnk('《大悲咒發願文》', 'various.js', '_30', '觀世音菩薩1.jpg'), '</li>',
+    '<li>', lnk('《大悲咒》','../陀羅尼/大悲咒.html', null, '觀世音菩薩1.jpg'), '</li>',
+    '<li>', lnk('《發四宏願》', 'various.js', '_11', '四宏誓願.jpg'), '</li>',
+    '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
+    '<li>', lnk('《觀世音菩薩讚》', 'various.js', '_29', '觀世音菩薩1.jpg'), '</li>',
+    '<li>', lnk('咒語，祈禱', 十小咒, null, '極樂世界三聖.jpg'), '</li>',
+    '</ol>'
+  ).render('prgm');
+}
+function StartSession(refresh) {
+  new Buffer('<p style="font-size:24px; margin-top:90px">')
+  .w('<a href="javascript:PureLandSession()" class="major">淨土日課</a><br>&nbsp;<br>',
+     '<a href="javascript:AmtbSession()" class="major">無量壽經</a><br>&nbsp;<br>',
+     '<a href="javascript:DiZangSession()">地藏法門</a><br>&nbsp;<br>',
+     '<a href="javascript:GuanShiYinSession()">觀音法門</a><br>&nbsp;<br>',
+     '<a href="javascript:VajraSession()">金剛經誦</a><br>&nbsp;<br>',
+     '<a href="../../../metaprgmr/BuddhismStudy/佛學基礎/《占察善惡業報經》/占察懺.html" class="major">占察懺法</a>',
+     '</p>'
+  ).render('prgm');
+  if (refresh)
+    openLnk(null, '../陀羅尼/諸真言.html', null, '爐香讚.png');
+}
+setTimeout(() => openLnk(null, '../陀羅尼/諸真言.html'), 500); // iframe issue?
+</script>
+</head>
+<body bgcolor="#ffe680" style="margin:0px" title="佛修道場">
+
+<div id="main">
+<table cellpadding="0" cellspacing="0">
+<tr>
+<td nowrap style="padding-right:15px; min-width:280px; background-color:#ffd" align="center" valign="top">
+<h2 style="background-color:red; color:yellow; margin-top:0px; margin-right:-15px"><a
+ href="javascript:StartSession(true)" style="color:yellow">直心道場</a></h2>
+<div id="prgm">
+<script>
+var sess = get('type')||'';
+if (sess.startsWith('dz'))
+  DiZangSession(); // 地藏菩薩
+else if (sess.startsWith('amtb'))
+  AmtbSession();  // 佛說大乘無量壽莊嚴清淨平等覺
+else if (sess.startsWith('vaj'))
+  VajraSession();  // 金剛經
+else if (sess.startsWith('guan'))
+  GuanShiYinSession();
+else if (sess.startsWith('daily'))
+  PureLandSession(); // 淨土
+else
+  StartSession();
+w('</div></td>');
+w(`<td id="picture" style="padding-left:15px; padding-right:15px; min-width:600px" align="center">`,
+  `<img src="${im.getImgSrc('爐香讚.png')}"></td>`);
+</script>
+<td id="ifrm">
+  <iframe name="view" width="950px" height="900px" style="vertical-align:center; background-color:#ffd">
+</td>
+</tr>
+</table>
+</div>
+
+</body></html>
+

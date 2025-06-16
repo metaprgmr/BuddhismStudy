@@ -15,7 +15,8 @@ extra {color:blue}
 .fa { color:red }
 .ypDisp { font-size:24px; color:black; opacity:0.5; margin-bottom:-10px }
 </style>
-<script src="utils.js"></script>
+<script src="../env.js"></script>
+<script src="../util/utils.js"></script>
 <script src="gdh.js"></script>
 <script src="gdh-reader.js"></script>
 <script>
@@ -24,7 +25,7 @@ extra {color:blue}
     alert('On the URL, append ?s=<script.js>')
   } else {
     lookuptool = new LookupTool(dict.setIgnoreLevel(get('level')), get('first'));
-    js(uri);
+    addjs(uri);
   }
 </script>
 </head>

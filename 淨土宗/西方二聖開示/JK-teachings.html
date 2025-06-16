@@ -16,15 +16,9 @@ em.edu { background-color:eef }
 .critical { background-color:yellow }
 .good { background-color:#ffb}
 </style>
+<script src="../../util/utils.js"></script>
 <script src="JK-teachings.js"></script>
 <script>
-function get(name) {
-  if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-    return decodeURIComponent(name[1]);
-}
-function w() {
-  for (var i in arguments) { var a = arguments[i]; a && document.write(a) }
-}
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

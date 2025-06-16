@@ -25,18 +25,11 @@ v4 { color:blue }
 dot { font-size:12px }
 dot::before { content:"。" }
 </style>
-<script src="utils.js"></script>
+<script src="../util/utils.js"></script>
 <script src="gdh-reader.js"></script>
 <script src="gdh.js"></script>
 <script src="content/ddj-compare.js"></script>
 <script>
-function e(elid) { return document.getElementById(elid) }
-function w() { for (var i in arguments) document.write(arguments[i]) }
-function get(name) {
- if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
-   return decodeURIComponent(name[1]);
-}
-
 function decoCh(srcs, i, infos, disps, plains) {
   var cs = [], j, tag = '';
   for (j=0; j<srcs.length; ++j) {

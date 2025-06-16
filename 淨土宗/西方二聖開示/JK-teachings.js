@@ -1,9 +1,3 @@
-const zpuncs  = '　，、；：。？！…─—「」《》『』（）';
-const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u20000-\u2a6df]|[\u2a700-\u2b73f]|[\u2b740-\u2b81f]|[\u2b820-\u2ceaf]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u2f800-\u2fa1f]/;
-const nonHanZi = '·,:!?"\' ';
-function isHanZi(x) { return (nonHanZi.indexOf(x)<0) && REGEX_CHINESE.test(x) && !isZPunc(x); }
-function isZPunc(z) { return zpuncs.indexOf(z) >= 0; }
-function countZis(txt) { var cnt=0; for (var i in txt) if (isHanZi(txt[i])) ++cnt; return cnt }
 
 const JKPSTeachings = [];
 const JKPSTeachingsDict = {};
@@ -21,7 +15,6 @@ function sortJKPSTeachings() {
     JKPSTeachings_sorted = true;
   }
 }
-
 
 const CRITICAL = 'critical';
 const GOOD     = 'good';
