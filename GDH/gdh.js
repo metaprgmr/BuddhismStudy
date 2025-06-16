@@ -578,14 +578,14 @@ wai2 paa3 zaak6 luk1 fok3 syun1 seon4 jiu1 haap6 jyu4 sin1 taat3 maan4 kau1 saan
 wai2 cyun1 nik6 hang4 han6 gon1 paau1 hei1 seon3 soek3 ling4 gai3 jung2 king4 jau6 gwai1 aai1
 錫振裡宛紺澄洪爐乍遙摘壇惹搖只打愆
 sek3 zan3 lei5 jyun2 gam3 cing4 hung4 lou4 zaa3 jiu4 zaak6 taan4 je5 jiu4 zi2 daa2 hin1
-翹披瀝憫詳
-kiu4 pei1 lik6 man5 coeng4
+翹披瀝憫詳遶瞬炬芽遷移按
+kiu4 pei1 lik6 man5 coeng4 jiu2 seon3 geoi6 ngaa4 cin1 ji4 on3
 絺㝹馱桓玻曼祴鶴鸚鵡頻鞞跋沮統勉攀
 ci1 nau4 to4 wun4 bo1 maan6 goi1 hok2 jing1 mou5 pan4 bing2 bat6 zeoi1/zeoi2 tung2 min5 paan1
 區展怯錯謬曀旨占促裹擬虔航淩祝徬徨憑閦
 keoi1 zin2 hip3 co3 mau6 ai3 zi2 zim3 cuk1 gwo2 ji5 kin4 hong4 ling4 zuk1 pong4 wong4 pang4 cuk1
-伴侶工姻畔
-bun6 leoi5 gung1 jan1 bun6
+伴侶工姻畔剖呼傍朗誕隔垣覓巖縈蓊
+bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaam4 jing4 jung2
 `.split('\n');
 
   function _getIgnoreLevel(zi) {
