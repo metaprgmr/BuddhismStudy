@@ -64,7 +64,7 @@ class BfnnWork {
         a[i] = `《<a class="${this.isSutra?'sutra':'orig'}" href="book/${this.getSubfolder()}/${this.idDisp()}.htm">${a[i]}</a>》`;
       buf.w(`<td>${a.join('又名')}`, this.note || '', '</td>');
     }
-    buf.w(`<td valign=top>${(this.author||this.translator||'').replaceAll('|','，')}</td></tr>`);
+    buf.w(`<td valign=top align=right>${(this.author||this.translator||'').replaceAll('|','，')}</td></tr>`);
     nxtln && buf.w(`<tr><td></td><td colspan=2>${nxtln}</td></tr>`);
   }
 
@@ -139,7 +139,7 @@ const BFNN_WORKS = [];
 淨土法門#871 佛說阿彌陀經要解 蕅益智旭
 　　　　#875=sutra 妙法蓮華經 鳩摩羅什譯
 金剛經　#868 金剛般若研習報告 淨空法師 // (經文加anchor。標題上加9868鏈接)
-楞嚴經　#880~90 大佛頂如來密因修證了義諸菩薩萬行首楞嚴經文句 蕅益智旭 // TODO: 玄義 ...
+楞嚴經　#880~90 大佛頂如來密因修證了義諸菩薩萬行首楞嚴經文句 蕅益智旭 // TODO
 淨土法門#900~3 佛說阿彌陀經疏鈔演義會本 淨空法師
 地藏經　#904 地藏菩薩本願經演孝疏 知性法師
 淨土法門#906 彌陀疏鈔 蓮池大師
