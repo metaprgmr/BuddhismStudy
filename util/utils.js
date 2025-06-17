@@ -88,9 +88,10 @@ function findFirst() {
   return (foundIdx > host.length) ? -1 : foundIdx;
 }
 
-function toW(n, w) {
+function toW(n, w, c) {
   n = '' + n;
-  while (n.length < w) n = ' ' + n;
+  if (!c) c = ' ';
+  while (n.length < w) n = c + n;
   return n;
 }
 
@@ -100,6 +101,8 @@ function toLines(txt) { // ending \ concats the next line
   if (Array.isArray(txt)) return txt;
   return txt && txt.replaceAll('\\\n', '').split('\n');
 }
+
+function toAttr(a,v) { return !v ? '' : ` ${a}="${v}"`; }
 
 // Aligned lists
 /*

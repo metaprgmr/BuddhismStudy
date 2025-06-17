@@ -20,7 +20,7 @@ inv { opacity:0 }
 .simplified  { color:#00b }
 .epithet     { color:red; font-family:FangSong,仿宋,STFangsong,华文仿宋; line-height:20pt; margin-top:-15px; FOR:h3 }
 
-.copyright { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:14px }
+.copyright { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:14px; text-align:center }
 .copyright::before {
   content: '信裹（油碗、礬水、一〇）居士自然版權所有。無限制使用、更改、轉發。若有改動並且公布，請自註明，文責自負。';
 }

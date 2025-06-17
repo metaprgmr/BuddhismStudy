@@ -6,688 +6,87 @@
 <style>
 h3  { font-size:30px }
 sup { font-size:14px }
-td .listing { border-top:2px solid gray }
 code { color:blue }
 a { text-decoration:none }
+cur { color:red; background-color:yellow; font-weight:bold }
 .sutra { background-color:#FF9 }
 .orig  { background-color:#DFD }
 .extra { font-style:italic; color:brown }
 .todo  { background-color:pink }
 .WORKING { background-color:orange }
 </style>
-<script>
-function item(title, srcname, prefix, suffix, urlExtra) {
-  if (!prefix) prefix = '《';
-  if (!suffix) suffix = '》';
-  if (!urlExtra) urlExtra = '';
-  if (srcname.endsWith('.js')) srcname = 'gdhreader.html?s=content/' + srcname;
-  var LEVEL = 'level=-1&first=6';
-      LEVEL = 'level=1';
-  document.write(`<li>${prefix}<a href="${srcname}?${LEVEL}${urlExtra}">${title}${suffix}</li>`);
-}
-</script>
+<script src="../util/utils.js"></script>
+<script src="bfnn-works.js"></script>
 </head>
-<body><div align="center">
-
-<table width="1200px"><tr>
-<td style="padding-left:20px"><a href="https://book.bfnn.org" target="ext" title="book.bfnn.org"><img
- src="bfnn_title2.gif" width="200px" style="margin-top:-30px"></a></td>
-<td width="35%"><h3 style="color:blue">選讀</h3></td>
-<td width="55%" nowrap align=center>「般若文海」載有大量佛經和文章資料，且可以全套下載，功德無量！非常感恩！<br>
-收錄此處者，皆已改換編碼、多少有所糾錯。另有外加者。<a href="#toutf">轉換編碼操作見下</a>。</td></tr></table>
-
-
-<table border=0 width="1200"><!-- into 2 columns (if 3, 1600) -->
-<tr><td bgcolor="#f8f8f8" valign=top class="listing" style="border-top:2px solid black; border-bottom:2px solid black"><!-- LEFT table -->
-<table style="margin-left:10px; font-size:14px" border="0px" cellspacing="0" cellpadding="2px">
-
-<tr>
-<td valign=top>0003</td><td>《<a class="orig" href="book/books/0003.htm">龍舒淨土文</a>》</td><td>王日休居士譔</td></tr>
-
-<tr>
-<td valign=top>0015</td><td>《<a class="sutra" href="book/books/0015.htm">大方廣圓覺修多羅了義經</a>》</td><td>唐佛陀多羅譯</td></tr>
-
-<tr>
-<td valign=top>0056</td><td>《<a class="orig" href="book/books/0056.htm">淨土十疑論</a>》</td><td>智者大師</td></tr>
-
-<tr>
-<td valign=top>0057</td><td>《<a class="sutra" href="book/books/0057.htm">佛說四十二章經</a>》</td><td>摩騰、竺法蘭共譯</td></tr>
-
-<tr>
-<td valign=top>0060</td><td>《<a class="orig" href="book/books/0060.htm">無住生心集</a>》</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0070</td><td>《<a class="orig" href="book/books/0070.htm">飭終須知</a>》</td><td>釋世了敬述</td></tr>
-
-<tr>
-<td valign=top>0077</td><td>《<a href="book/books/0077.htm">金剛經講義節要</a>》（對應0868.htm）</td><td>淨空法師</td></tr>
-
-
-<tr>
-<td valign=top>0078</td><td>《<a class="orig" href="book/books/0078.htm">認識佛教—幸福美滿的教育</a>》（一九九一年邁阿密）</td><td>淨空法師會本</td></tr>
-
-<tr>
-<td valign=top>0082</td><td>《<a class="sutra" href="book/books/0082.htm">大佛頂首楞嚴經</a>》</td><td>般剌密帝譯</td></tr>
-
-<tr>
-<td valign=top>0083</td><td>《<a class="sutra" href="book/books/0083.htm">阿難問事佛吉凶經</a>》</td><td>安世高譯</td></tr>
-
-<tr>
-<td valign=top>0084</td><td>《<a class="sutra" href="book/books/0084.htm">佛遺教經</a>》</td><td>鳩摩羅什譯</td></tr>
-
-<tr>
-<td valign=top>0085</td><td>《<a class="sutra" href="book/books/0085.htm">佛說八大人覺經</a>》</td><td>安世高譯</td></tr>
-
-<tr>
-<td valign=top>0086</td><td>《<a class="sutra" href="book/books/0086.htm">佛說阿彌陀經</a>》</td><td>鳩摩羅什譯</td></tr>
-
-<tr>
-<td valign=top>0089</td><td>《<a class="sutra" href="book/books/0089.htm">佛說無量壽經</a>》</td><td>康僧鎧譯</td></tr>
-
-<tr>
-<td valign=top>0115</td><td>《<a class="orig" href="book/books/0115.htm">八識規矩頌講記</a>》</td><td>于凌波居士</td></tr>
-
-<tr>
-<td valign=top>0117</td><td>《<a class="orig" href="book/books/0117.htm">唯識三十頌講記</a>》</td><td>于凌波居士</td></tr>
-
-<tr>
-<td valign=top>0145~54</td><td>《<font class="orig">大佛頂首楞嚴經譯解</font>》<a
- href="book/books/0145.htm">一</a> <a
- href="book/books/0146.htm">二</a> <a
- href="book/books/0147.htm">三</a> <a
- href="book/books/0148.htm">四</a> <a
- href="book/books/0149.htm">五</a> <a
- href="book/books/0150.htm">六</a> <a
- href="book/books/0151.htm">七</a> <a
- href="book/books/0152.htm">八</a> <a
- href="book/books/0153.htm">九</a> <a
- href="book/books/0154.htm">十</a></td><td>王治平居士</td></tr>
-
-<tr>
-<td valign=top>0166~216</td><td>《<font class="orig">地藏菩薩本願經講記</font>》</td>
-<td valign=top>淨空法師主講</td></tr>
-<tr><td></td><td colspan=2>
- <a href="book/books/0166.htm">一</a>
- <a href="book/books/0167.htm">二</a>
- <a href="book/books/0168.htm">三</a>
- <a href="book/books/0169.htm">四</a>
- <a href="book/books/0170.htm">五</a>
- <a href="book/books/0171.htm">六</a>
- <a href="book/books/0172.htm">七</a>
- <a href="book/books/0173.htm">八</a>
- <a href="book/books/0174.htm">九</a>
- <a href="book/books/0175.htm">十</a>
- <a href="book/books/0176.htm">11</a>
- <a href="book/books/0177.htm">12</a>
- <a href="book/books/0178.htm">13</a>
- <a href="book/books/0179.htm">14</a>
- <a href="book/books/0180.htm">15</a>
- <a href="book/books/0181.htm">16</a>
- <a href="book/books/0182.htm">17</a>
- <a href="book/books/0183.htm">18</a>
- <a href="book/books/0184.htm">19</a>
- <a href="book/books/0185.htm">20</a>
- <a href="book/books/0186.htm">21</a>
- <a href="book/books/0187.htm">22</a>
- <a href="book/books/0188.htm">23</a>
- <a href="book/books/0189.htm">24</a>
- <a href="book/books/0190.htm">25</a><br>
- <a href="book/books/0191.htm">26</a>
- <a href="book/books/0192.htm">27</a>
- <a href="book/books/0193.htm">28</a>
- <a href="book/books/0194.htm">29</a>
- <a href="book/books/0195.htm">30</a>
- <a href="book/books/0196.htm">31</a>
- <a href="book/books/0197.htm">32</a>
- <a href="book/books/0198.htm">33</a>
- <a href="book/books/0199.htm">34</a>
- <a href="book/books/0200.htm">35</a>
- <a href="book/books/0201.htm">36</a>
- <a href="book/books/0202.htm">37</a>
- <a href="book/books/0203.htm">38</a>
- <a href="book/books/0204.htm">39</a>
- <a href="book/books/0205.htm">40</a>
- <a href="book/books/0206.htm">41</a>
- <a href="book/books/0207.htm">42</a>
- <a href="book/books/0208.htm">43</a>
- <a href="book/books/0209.htm">44</a>
- <a href="book/books/0210.htm">45</a>
- <a href="book/books/0211.htm">46</a>
- <a href="book/books/0212.htm">47</a>
- <a href="book/books/0213.htm">48</a>
- <a href="book/books/0214.htm">49</a>
- <a href="book/books/0215.htm">50</a>
- <a href="book/books/0216.htm">51</a>
-</td></tr>
-
-<tr>
-<td valign=top>0229</td>
-<td>《<a class="orig" href="book/books/0229.htm">金剛般若波羅蜜經講記</a>》</td><td>智諭法師</td></tr>
-
-<tr>
-<td valign=top>0241</td>
-<td>《<a class="orig" href="book/books/0241.htm">憨山大師的一生</a>》</td><td>宋智明編述</td></tr>
-
-<tr>
-<tr>
-<td valign=top>0360</td>
-<td>《<a class="sutra" href="book/books/0360.htm">佛說大乘無量壽莊嚴清淨平等覺經</a>》</td><td>夏蓮居居士會集</td></tr>
-
-<tr>
-<td valign=top>0362</td>
-<td>《<a class="orig" href="book/books/0362.htm">印光大師文鈔菁華錄</a>》</td><td>印光大師</td></tr>
-
-<tr>
-<td valign=top>0363</td>
-<td>《<a class="orig" href="book/books/0363.htm">認識佛教</a>》（一九九〇年講于新加坡）</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0364</td>
-<td>《<a class="orig" href="book/books/0364.htm">因果報應錄</a>》</td><td>唐湘清居士</td></tr>
-
-<tr>
-<td valign=top>0383~99</td>
-<td>《<font class="orig">恒河大手印</font>》<br>
-　<a orig" href="book/books/0383.htm">一</a>
-<a orig" href="book/books/0384.htm">二</a>
-<a orig" href="book/books/0385.htm">三</a>
-<a orig" href="book/books/0386.htm">四</a>
-<a orig" href="book/books/0387.htm">五</a>
-<a orig" href="book/books/0388.htm">六</a>
-<a orig" href="book/books/0389.htm">七</a>
-<a orig" href="book/books/0390.htm">八</a>
-<a orig" href="book/books/0391.htm">九</a>
-<a orig" href="book/books/0392.htm">十</a>
-<a orig" href="book/books/0393.htm">11</a>
-<a orig" href="book/books/0394.htm">12</a>
-<a orig" href="book/books/0395.htm">13</a>
-<a orig" href="book/books/0396.htm">14</a>
-<a orig" href="book/books/0397.htm">15</a>
-<a orig" href="book/books/0398.htm">16</a>
-<a orig" href="book/books/0399.htm">17</a>
-</td>
-<td valign=top>元音老人</td></tr>
-
-<tr>
-<td valign=top>0477</td>
-<td>《<a class="orig" href="book/books/0477.htm">太上感應篇</a>》</td><td></td></tr>
-
-<tr>
-<td valign=top>0482~4</td>
-<td>《<font class="orig">學為人師 行為世範</font>》
-<a href="book/books/0482.htm">一</a>
-<a href="book/books/0483.htm">二</a>
-<a href="book/books/0484.htm">三</a>
-</td><td valign=top>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0485~6</td>
-<td>《<font class="orig">淨空法師嘉言錄</font>》
-<a href="book/books/0485.htm">一</a>
-<a href="book/books/0486.htm">二</a>
-</td><td valign=top>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0506</td>
-<td>《<a class="orig" href="book/books/0506.htm">太上感應篇感應選錄</a>》</td><td>林園佛教堂節錄</td></tr>
-
-<tr>
-<td valign=top>0507</td>
-<td>《<a class="orig" href="book/books/0507.htm">太上感應篇直講</a>》</td><td>&nbsp;</td></tr>
-
-<tr>
-<td valign=top>0510</td>
-<td>《<a class="orig" href="book/books/0510.htm">太上感應篇大意</a>》</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0514</td>
-<td>《<a class="orig" href="book/books/0514.htm">永嘉大師證道歌淺釋</a>》</td><td>宣化上人</td></tr>
-
-<tr>
-<td valign=top>0541</td>
-<td>《<a class="orig" href="book/books/0541.htm">論地藏經是佛對在家弟子的遺教</a>》<br>（經文引用已加色）</td><td valign=top>朱鏡宙居士</td></tr>
-
-<tr>
-<td valign=top>0608~11</td>
-<td>《<font class="orig">太上感應篇例證語譯</font>》<a
- href="book/books/0608.htm">一</a> <a
- href="book/books/0609.htm">二</a> <a
- href="book/books/0610.htm">三</a> <a
- href="book/books/0611.htm">四</a>
-</td><td>釋海山等</td></tr>
-
-<tr>
-<td valign=top>0614</td>
-<td>《<a class="orig" href="book/books/0614.htm">往生論節要</a>》</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0842</td>
-<td>《<a class="orig" href="book/books/0842.htm">入香光室</a>》</td><td>了然法師</td></tr>
-
-<tr>
-<td valign=top>0868</td>
-<td> 《<a class="orig" href="book/books/0868.htm">金剛般若研習報告</a>》<br>
-     為逐條經文加&lt;a name="x123">&lt;/a&gt;。<br>
-     在全文標題上加一個0868-xg.htm“信裹”鏈接。
-</td><td valign=top>淨空法師</td></tr>
-
-<tr>
-<td valign=top class=extra>0868-xg</td>
-<td> 我依淨空法師《金剛般若研習報告》所作<a href="book/books/0868-xg.htm">新頁</a>，羅列<br>
-     《金剛般若波羅密經》經文，按 0868.htm 經文序號標題。<br>
-     諸經文鏈接到 <a href="book/books/0868.htm">0868.htm</a> 與
-     <a href="book/books2/1227.htm">1227.htm</a> 相應解釋。</td><td valign=top>信裹居士</td></tr>
-
-<tr>
-<td valign=top>0871</td>
-<td>《<a class="orig" href="book/books/0871.htm">佛說阿彌陀經要解</a>》</td><td>蕅益智旭</td></tr>
-
-<tr>
-<td valign=top>0875</td>
-<td>《<a class="sutra" href="book/books/0875.htm">妙法蓮華經</a>》</td><td>鳩摩羅什譯</td></tr>
-
-<tr>
-<td valign=top>0880</td>
-<td>《大佛頂如來密因修證了義諸菩薩萬行首楞嚴經文句》<br>
-　<a href="book/books/0880.htm">玄義</a>
-<a href="book/books/0881.htm">一</a>
-<a href="book/books/0882.htm">二</a>
-<a href="book/books/0883.htm">三</a>
-<a href="book/books/0884.htm">四</a>
-<a href="book/books/0885.htm">五</a>
-<a href="book/books/0886.htm">六</a>
-<a href="book/books/0887.htm">七</a>
-<a href="book/books/0888.htm">八</a>
-<a href="book/books/0889.htm">九</a>
-<a href="book/books/0890.htm">十</a>
-</td><td valign=top>蕅益智旭</td></tr>
-
-
-<tr>
-<td valign=top>0900~3</td>
-<td>《<font class="orig">佛說阿彌陀經疏鈔演義會本</font>》<a
- href="book/books/0900.htm">一</a> <a
- href="book/books/0901.htm">二</a> <a
- href="book/books/0902.htm">三</a> <a
- href="book/books/0903.htm">四</a>
-</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>0904</td>
-<td>《<a class="orig" href="book/books/0904.htm">地藏菩薩本願經演孝疏</a>》</td><td>知性法師</td></tr>
-
-<tr>
-<td valign=top>0906</td>
-<td>《<a class="orig" href="book/books/0906.htm">彌陀疏鈔</a>》</td><td>蓮池大師</td></tr>
-
-<tr>
-<td valign=top>0943</td>
-<td>《<a class=orig href="book/books/0943.htm">圓覺經略釋</a>》</td><td>太虛大師講述</td></tr>
-
-</table>
-
-</td><td>&nbsp;&nbsp;</td>
-
-<td bgcolor="#f8f8f8" valign=top class="listing" style="border-top:2px solid black; border-bottom:2px solid black"><!-- RIGHT table -->
-<table style="margin-left:10px; font-size:14px" border="0px" cellspacing="0" cellpadding="2px">
-
-<tr>
-<td valign=top>1028</td>
-<td>《<a class="orig" href="book/books2/1028.htm">優婆塞戒經講錄</a>》</td><td>太虛大師</td></tr>
-
-<tr>
-<td valign=top>1108~10</td>
-<td>《<font class="orig">金剛般若波羅蜜經講義</font>》<a
- href="book/books2/1108.htm">上</a> <a
- href="book/books2/1109.htm">中</a> <a
- href="book/books2/1110.htm">下</a><br>
-　所有經文引用皆加上序號；我之經文亦對應加上。</td><td valign=top>江味農居士</td></tr>
-
-<tr>
-<td valign=top>1112</td>
-<td>《<a class="orig" href="book/books2/1112.htm">禪宗大意</a>》</td><td>正果法師</td></tr>
-
-<tr>
-<td valign=top>1113</td>
-<td>《<a class="orig" href="book/books2/1113.htm">虛雲老和尚十難四十八奇</a>》</td><td>蘇芬居士</td></tr>
-
-<tr>
-<td valign=top>1146</td>
-<td>《<a class="orig" href="book/books2/1146.htm">大乘起信論</a>》</td><td>馬鳴菩薩</td></tr>
-
-<tr>
-<td valign=top>1119</td>
-<td>《<a class="orig" href="book/books2/1119.htm">大勢至菩薩念佛圓通章釋—錄楞嚴經文句卷五</a>》</td><td>靈峰蕅益大師</td></tr>
-
-<tr>
-<td valign=top>1162</td>
-<td>《<a class="orig" href="book/books2/1162.htm">大乘起信論直解</a>》</td><td>明德清直解</td></tr>
-
-<tr>
-<tr>
-<td valign=top>1217</td>
-<td>《<a class="orig" href="book/books2/1217.htm">般若波羅蜜多心經直說</a>》</td><td valign=top>憨山大師</td></tr>
-
-<tr>
-<td valign=top>1227</td>
-<td>《<a class="orig" href="book/books2/1227.htm">金剛般若波羅密經講義</a>》<br>
-　為逐條經文加&lt;a name="x123">，對應0868.htm。</td><td valign=top>圓瑛大師</td></tr>
-
-<tr>
-<td valign=top>1244</td>
-<td>《<a class="orig" href="book/books2/1244.htm">印光大師文鈔論集</a>》</td><td>印光大師</td></tr>
-
-<tr>
-<td valign=top>1245</td>
-<td>《<a class="orig" href="book/books2/1245.htm">占察善惡業報經講記</a>》</td><td>夢參老和尚</td></tr>
-
-<tr>
-<td valign=top>1246</td>
-<td>《<a class="orig" href="book/books2/1246.htm">占察善惡業報經論</a>》</td><td>默如論師</td></tr>
-
-<tr>
-<td valign=top>1452~3</td>
-<td valign=top>《<font class="orig">淨土探究</font>》<a
-  class="orig" href="book/books2/1452.htm">上</a> <a
-  class="orig" href="book/books2/1453.htm">下</a></td><td valign=top>大寂法師</td></tr>
-
-<tr>
-<td valign=top>1454</td>
-<td>《<a class="orig" href="book/books2/1454.htm">地藏菩薩本願經唯識觀</a>》</td><td>趙亮杰居士</td></tr>
-
-<tr>
-<td valign=top>1455</td>
-<td>《<a class="orig" href="book/books2/1455.htm">金剛經持驗錄</a>》</td><td>許添誠</td></tr>
-
-<tr>
-<td valign=top>1471</td>
-<td>《<a class="orig" href="book/books2/1471.htm">玉歷寶鈔</a>》</td><td></td></tr>
-
-<tr>
-<td valign=top>1472~95</td>
-<td valign=top>《<font class="orig">大佛頂首楞嚴經講義</font>》</td>
-<td valign=top>圓瑛大師</td></tr>
-<tr><td></td><td colspan=2>　
-<a href="book/books2/1472.htm">一</a>
-<a href="book/books2/1473.htm">二</a>
-<a href="book/books2/1474.htm">三</a>
-<a href="book/books2/1475.htm">四</a>
-<a href="book/books2/1476.htm">五</a>
-<a href="book/books2/1477.htm">六</a>
-<a href="book/books2/1478.htm">七</a>
-<a href="book/books2/1479.htm">八</a>
-<a href="book/books2/1480.htm">九</a>
-<a href="book/books2/1481.htm">十</a>
-<a href="book/books2/1482.htm">11</a>
-<a href="book/books2/1483.htm">12</a>
-<a href="book/books2/1484.htm">13</a>
-<a href="book/books2/1485.htm">14</a>
-<a href="book/books2/1486.htm">15</a>
-<a href="book/books2/1487.htm">16</a>
-<a href="book/books2/1488.htm">17</a>
-<a href="book/books2/1489.htm">18</a>
-<a href="book/books2/1490.htm">19</a>
-<a href="book/books2/1491.htm">20</a>
-<a href="book/books2/1492.htm">21</a>
-<a href="book/books2/1493.htm">22</a>
-<a href="book/books2/1494.htm">23</a>
-<a href="book/books2/1495.htm">24</a></td></tr>
-
-<tr>
-<td valign=top>1561</td>
-<td>《<a class="orig" href="book/books2/1561.htm">杜漏</a>》</td><td>耕雲先生</td></tr>
-
-<tr>
-<td valign=top>1562</td>
-<td>《<a class="orig" href="book/books2/1562.htm">不二法門</a>》</td><td>耕雲先生</td></tr>
-
-<tr>
-<td valign=top>1565</td>
-<td>《<a class="orig" href="book/books2/1565.htm">持誦金剛經得定要訣</a>》</td><td>耕雲先生</td></tr>
-
-<tr>
-<td valign=top>1566</td>
-<td>《<a class="orig" href="book/books2/1566.htm">摩訶般若的要義與入門</a>》</td><td>耕雲先生</td></tr>
-
-<tr>
-<td valign=top>1643</td>
-<td>《<a class="orig" href="book/books2/1643.htm">楞嚴經懸鏡</a>》</td><td>憨山大師</td></tr>
-
-<tr>
-<td valign=top>1644~53</td>
-<td valign=top>《<font class="orig">楞嚴經通議</font>》
-<a href="book/books2/1644.htm">一</a>
-<a href="book/books2/1645.htm">二</a>
-<a href="book/books2/1646.htm">三</a>
-<a href="book/books2/1647.htm">四</a>
-<a href="book/books2/1648.htm">五</a>
-<a href="book/books2/1649.htm">六</a>
-<a href="book/books2/1650.htm">七</a>
-<a href="book/books2/1651.htm">八</a>
-<a href="book/books2/1652.htm">九</a>
-<a href="book/books2/1653.htm">十</a>
-</td>
-<td valign=top>憨山大師</td></tr>
-
-<tr>
-<td valign=top>1712</td>
-<td>《<a class="orig" href="book/books2/1712.htm">佛學常識課本</a>》</td><td>李炳南居士</td></tr>
-
-<tr>
-<td valign=top>1715</td>
-<td>《<a class="orig" href="book/books2/1715.htm">叩鳴集</a>》</td><td>李炳南居士</td></tr>
-
-<tr>
-<td valign=top>1721</td>
-<td>《<a class="orig" href="book/books2/1721.htm">念佛速證菩提心要</a>》</td><td>廖榮尉居士</td></tr>
-
-<tr>
-<td valign=top>1722</td>
-<td>《<a class="orig" href="book/books2/1722.htm">弟子規易解</a>》</td><td></td></tr>
-
-<tr>
-<td valign=top>1725</td>
-<td>《<a class="orig" href="book/books2/1725.htm">三字經易解</a>》</td><td>章炳麟</td></tr>
-
-<tr>
-<td valign=top>1729</td>
-<td>《<a class="sutra" href="book/books2/1729.htm">佛所行讚》</a>亦云《<a class="sutra" href="book/books2/1729.htm">佛本行經</a>》</td><td>馬鳴菩薩</td></tr>
-
-<tr>
-<td valign=top>1731</td>
-<td>《<a class="orig" href="book/books2/1731.htm">老子道德經憨山註</a>》</td><td>憨山大師</td></tr>
-
-<tr>
-<td valign=top>1733</td>
-<td>《<a class="orig" href="book/books2/1733.htm">2002年參訪韓日專刊</a>》</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>1736</td>
-<td>《<a class="orig" href="book/books2/1736.htm">金剛般若波羅蜜經分段注解</a>》</td><td>黃昆山居士</td></tr>
-
-<tr>
-<td valign=top>1741</td>
-<td>《<a class="orig" href="book/books2/1741.htm">佛教各宗派源流</a>》</td><td>太虛大師</td></tr>
-
-<tr>
-<td valign=top>1743</td>
-<td>《<a class="orig" href="book/books2/1743.htm">黃石公素書註釋彙編</a>》</td><td>黃石公</td></tr>
-
-<tr>
-<td valign=top>1746~8</td>
-<td>《<font class=orig>流浪者群歌—聖者的生命故事</font>》<br>
-　<a href="book/books2/1746.htm">佛陀的一生</a>
-&nbsp;&nbsp;<a href="book/books2/1747.htm">佛陀的十大弟子</a>
-&nbsp;&nbsp;<a href="book/books2/1748.htm">五大菩薩</a>
-</td>
-</td><td valign=top>明暘法師</td></tr>
-
-<tr>
-<td valign=top>1755</td>
-<td>《<a class="orig" href="book/books2/1755.htm">學佛淺說</a>》</td><td>王博謙居士</td></tr>
-
-<tr>
-<td valign=top>1762</td>
-<td>《<a class="orig" href="book/books2/1762.htm">大佛頂首楞嚴經正脈疏序</a>》</td><td>交光真鑑；朱俊柵</td></tr>
-
-<tr>
-<td valign=top>1814</td>
-<td>《<a class="orig" href="book/books2/1814.htm">金剛般若波羅蜜經講義</a>》</td><td>吳潤江上師述</td></tr>
-
-<tr>
-<td valign=top>1889</td>
-<td>《<a class="orig" href="book/books2/1889.htm">金剛般若波羅密經講義</a>》</td><td>文珠法師述</td></tr>
-
-<tr>
-<td valign=top>1875~84</td>
-<td>《<font class="orig">大佛頂首楞嚴經講記</font>》<a
- href="book/books2/1875.htm">一</a> <a
- href="book/books2/1876.htm">二</a> <a
- href="book/books2/1877.htm">三</a> <a
- href="book/books2/1878.htm">四</a> <a
- href="book/books2/1879.htm">五</a> <a
- href="book/books2/1880.htm">六</a> <a
- href="book/books2/1881.htm">七</a> <a
- href="book/books2/1882.htm">八</a> <a
- href="book/books2/1883.htm">九</a> <a
- href="book/books2/1884.htm">十</a><br>
-　所有經文引用皆加上序號。提取了科判。
-</td>
-<td valign=top>海仁法師</td></tr>
-
-<tr>
-<td valign=top>1938</td>
-<td>《<a class="orig" href="book/books2/1938.htm">超度的理论与事实</a>》</td><td>淨空法師</td></tr>
-
-<tr>
-<td valign=top>1974</td>
-<td>《<a class="orig" href="book/books2/1974.htm">金剛經靈異錄</a>》</td><td>張少齊居士</td></tr>
-
-<tr>
-<td valign=top>1977</td>
-<td>《<a class="orig" href="book/books2/1977.htm">醫學博士為什麼要素食</a>》</td><td>奧雲伯列博士等</td></tr>
-
-<!--
-<tr>
-<td valign=top>1978~80</td>
-<td>《畫佛因緣》
-  <a class="WORKING orig" href="book/books2/1978.htm">一</a>
-  <a class="WORKING orig" href="book/books2/1979.htm">二</a>
-  <a class="WORKING orig" href="book/books2/1980.htm">三</a>
-</td><td>道證法師</td></tr>
-
-<tr>
-<td valign=top>1981~94</td>
-<td>《朝聖之旅》（<a class="WORKING orig" href="book/books2/1981.htm">序</a>）
-（<a class="WORKING orig" href="book/books2/1982.htm">遲到的印度朝聖之旅</a>）<br>
-　 （<a class="WORKING orig" href="book/books2/1983.htm">飛抵加爾各答</a>）（<a
-        class="orig" href="book/books2/1984.htm">邁向靈鷲山</a>）（<a
-        class="orig" href="book/books2/1985.htm">靈鷲山</a>）<br>
-　 （<a class="WORKING orig" href="book/books2/1986.htm">七葉窟</a>）（<a
-        class="orig" href="book/books2/1987.htm">竹林精舍</a>）（<a
-        class="orig" href="book/books2/1988.htm">王舍城</a>）<br>
-　 （<a class="WORKING orig" href="book/books2/1989.htm">那爛陀寺</a>）（<a
-        class="orig" href="book/books2/1990.htm">邁向迎佛塔</a>）（<a
-        class="orig" href="book/books2/1991.htm">恆河</a>）<br>
-　 （<a class="WORKING orig" href="book/books2/1992.htm">涅槃城</a>）（<a
-        class="orig" href="book/books2/1993.htm">往藍毘尼園</a>）（<a
-        class="orig" href="book/books2/1994.htm">祇樹給孤獨園</a>）
-</td><td valign=top>道證法師</td></tr>
-
-<tr>
-<td valign=top>1995~2015</td>
-<td>《金蓮盛開水月清西想集》</td>
-<td valign=top>道證法師</td></tr>
-<tr><td></td><td colspan=2>
-　<a class="WORKING orig" href="book/books2/1995.htm">序</a>
-<a class="WORKING orig" href="book/books2/1996.htm">一</a>
-<a class="WORKING orig" href="book/books2/1997.htm">二</a>
-<a class="WORKING orig" href="book/books2/1998.htm">三</a>
-<a class="WORKING orig" href="book/books2/1999.htm">四</a>
-<a class="WORKING orig" href="book/books2/2000.htm">五</a>
-<a class="WORKING orig" href="book/books2/2001.htm">六</a>
-<a class="WORKING orig" href="book/books2/2002.htm">七</a>
-<a class="WORKING orig" href="book/books2/2003.htm">八</a>
-<a class="WORKING orig" href="book/books2/2004.htm">九</a>
-<a class="WORKING orig" href="book/books2/2005.htm">十</a>
-<a class="WORKING orig" href="book/books2/2006.htm">11</a>
-<a class="WORKING orig" href="book/books2/2007.htm">12</a>
-<a class="WORKING orig" href="book/books2/2008.htm">13</a>
-<a class="WORKING orig" href="book/books2/2009.htm">14</a>
-<a class="WORKING orig" href="book/books2/2010.htm">15</a>
-<a class="WORKING orig" href="book/books2/2011.htm">16</a>
-<a class="WORKING orig" href="book/books2/2012.htm">17</a>
-<a class="WORKING orig" href="book/books2/2013.htm">18</a>
-<a class="WORKING orig" href="book/books2/2014.htm">19</a>
- <a class="WORKING orig" href="book/books2/2015.htm">20</a>
-</td></tr>
--->
-
-<tr>
-<td valign=top>2049</td>
-<td><a href="book/books3/2049.htm">《<font class="orig">淨宗法要</font>》</a>
-</td><td valign=top>憨山大師</td></tr>
-
-<tr>
-<td valign=top>2051</td>
-<td>《<a class="orig" href="book/books3/2051.htm">慈悲施食手冊</a>》
-</td><td valign=top>海濤法師選輯</td></tr>
-
-<tr>
-<td valign=top>2088~93</td>
-<td>《<font class="orig">簡明成唯識論白話講記</font>》<a
- href="book/books3/2088.htm">一</a> <a
- href="book/books3/2089.htm">二</a> <a
- href="book/books3/2090.htm">三</a> <a
- href="book/books3/2091.htm">四</a> <a
- href="book/books3/2092.htm">五</a> <a
- href="book/books3/2093.htm">六</a>
-</td><td valign=top>于凌波居士</td></tr>
-
-<tr>
-<td valign=top>2142</td>
-<td>《<a class="orig" href="book/books3/2142.htm">金剛般若波羅密經親聞記</a>》</td><td>倓虛大師述</td></tr>
-
-<tr>
-<td valign=top>2154</td>
-<td>《<a class="orig" href="book/books3/2154.htm">永嘉玄覺禪師証道歌略解</a>》</td><td>倓虛大師</td></tr>
-
-<tr>
-<td valign=top class=extra>9000</td>
-<td>《<a class="sutra" href="book/books9/9000.htm">無量壽經優波提舍願生偈</a>》</td><td>婆藪槃豆菩薩</td></tr>
-
-<tr>
-<td valign=top class=extra>9001</td>
-<td>《<a class="orig" href="book/books9/9001.htm">往生論註</a>》</td><td>釋曇鸞</td></tr>
-
-<tr>
-<td valign=top class=extra>9002</td>
-<td>《<a class="orig" href="book/books9/9002.htm">佛法非宗教非哲學</a><br>　　　<a
-class="orig" href="book/books9/9002.htm#p2">而為今時所必需</a>》</td><td>歐陽竟無，<br>王恩洋</td></tr>
-
-<tr>
-<td valign=top class=extra>9003~9</td>
-<td>《<a class="orig" href="book/books9/9003.htm">地藏菩薩本願經科註</a>》<a
-<a href="book/books9/9004.htm">一</a>
-<a href="book/books9/9005.htm">二</a>
-<a href="book/books9/9006.htm">三</a>
-<a href="book/books9/9007.htm">四</a>
-<a href="book/books9/9008.htm">五</a>
-<a href="book/books9/9009.htm">六</a>
-</td><td>青蓮大師</td></tr>
-
-<tr>
-<td valign=top class=extra>9010</td>
-<td>《<a class="sutra" href="book/books9/9010.htm">佛說救拔焰口餓鬼陀羅尼經</a>》</td><td>唐三藏沙門不空譯</td></tr>
-
-</table>
-
-</td></tr></table><!-- END OF into 2 columns -->
-
-
-
-<a name="toutf"></a><h4 style="font-size:25px; margin-bottom:0px">文字處理操作</h4>
-
+<body><center>
+<div align=center>
+  <table width="1200px"><tr>
+  <td width="200px" style="padding-left:0px"><a href="https://book.bfnn.org" target="ext" title="book.bfnn.org"><img
+   src="bfnn_title2.gif" width="200px" style="margin-top:-30px"></a></td>
+  <td><h3 style="color:blue">選讀</h3></td>
+  <td id="nav" align=center nowrap></td>
+  <td nowrap align=right>「般若文海」載有大量佛經和文章資料，<br>
+  且可以全套下載，功德無量！非常感恩！<br>
+  所收者已改編碼、多少糾錯。另有新加。</td>
+  </tr></table>
+</div>
+<div id="stg" align=center></div>
+<div class="copyright"></div>
+</center></body></html>
+
+<script>
+const topics = '淨土法門 心經 金剛經 楞嚴經 唯識論 地藏經 占察經 全部內容|' +
+               '圓覺經 佛學基礎 佛理 其他佛經 善書 人生 人物故事 文字處理';
+function showNav(topic) {
+  var a = topics.split('|'), buf = new Buffer();
+  for (var i=0; i<a.length; ++i) {
+    if (i>0) buf.w('<br>');
+    var b = a[i].split(' ');
+    for (var j in b) {
+      var tpc = b[j];
+      var pad = (tpc == '全部內容') || (tpc == '文字處理') ? '•' : '';
+      if (tpc == topic) b[j] = `${pad}<cur>${tpc}</cur>`;
+      else b[j] = `${pad}<a href="javascript:showList('${tpc}')">${tpc}</a>${pad}`;
+    }
+    buf.w(b.join('　'));
+  }
+  buf.render('nav');
+}
+
+const TOP = '<td bgcolor="#f8f8f8" valign=top style="border-top:2px solid gray; border-top:2px solid black; border-bottom:2px solid black" height="500px">' +
+            '<table border=0 style="margin-left:10px; font-size:14px" cellspacing=0 cellpadding="2px">';
+const MID = '</table></td><!-- LEFT --><td>&nbsp;&nbsp;</td>' + TOP;
+
+function showList(topic) {
+  showNav(topic);
+  if (topic == '全部內容') { showAllArticles(); return; }
+  if (topic == '文字處理') { showTextProcessing(); return; }
+  var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
+  for (var i in BFNN_WORKS) {
+    var wk = BFNN_WORKS[i];
+    if (wk.isTopic(topic)) wk.render(buf);
+  }
+  buf.w('</table></td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>')
+     .render('stg');
+}
+
+function showAllArticles() {
+  var isLeft = true,
+      buf = new Buffer(`<table border=0 width="1200"><tr>`, TOP);
+  for (var i in BFNN_WORKS) {
+    var wk = BFNN_WORKS[i];
+    if (isLeft && (wk.id >= 1000)) { isLeft = false; buf.w(MID); }
+    wk.render(buf);
+  }
+  buf.w('</table></td><!-- RIGHT --></tr>',
+        '<tr><td colspan=3><p>&nbsp;</p><hr color=gray></td></tr></table>')
+     .render('stg');
+}
+
+function showTextProcessing() {
+  var textproc =
+`<a name="toutf"></a>
+<h4 style="font-size:25px; margin-bottom:0px">文字處理操作</h4>
 <table border=1 bordercolor=red cellpadding="10px" bgcolor="white" style="margin-top:10px">
 <tr><td>
 <h4 style="color:blue; margin-bottom:-10px">轉Big5為UTF8</h4>
@@ -721,10 +120,10 @@ Once text is pasted, just save with utf-8 in step (d), and run BfnnCommon, redir
     book/books3/    2<i>xxx</i>.htm （但 2000-2016.htm 落在book2/，由於文章系列關係）
     book/books9/    <font class=extra>9xxx</font>.htm （不屬於「般若文海」的其他文章）
 </pre>
-</td></tr></table>
+</td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>`;
 
+  new Buffer(textproc).render('stg');
+}
 
-<p>&nbsp;</p>
-<hr width="1200px" color="gray">
-<span class="copyright"></span>
-</div></body></html>
+showList('淨土法門');
+</script>
