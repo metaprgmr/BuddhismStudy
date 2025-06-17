@@ -1257,8 +1257,8 @@ readerHost.postRender = () => {
     '<table border=0 cellpadding=0 cellspacing=0>');
   for (i=0; i<len; ++i) {
     var x = readerHost.partStats[i].title.split('（');
-    w('<tr><td>第', toZiNumber(i+1), '會&nbsp;&nbsp;</td><td>', x[0], '</td><td>（', x[1], '</tr>');
-    //w('<a href="#hui_', i+1, '">第', toZiNumber(i+1), '會</a> ', readerHost.partStats[i].title, '\n');
+    w('<tr><td>第', zNumber(i+1), '會&nbsp;&nbsp;</td><td>', x[0], '</td><td>（', x[1], '</tr>');
+    //w('<a href="#hui_', i+1, '">第', zNumber(i+1), '會</a> ', readerHost.partStats[i].title, '\n');
   }
   w('</table><pre>');
   w('\n　　一部大經 ＝ 當感師恩&nbsp;＋&nbsp;依教奉行 ＝ 大慈大悲',
@@ -1273,7 +1273,7 @@ readerHost.postRender = () => {
     cumuPins += ps.cntPins;
     cumuSegs += ps.cntSegs;
     cumuZis += ps.cntZis;
-    w('　　第', toZiNumber(i+1), '會　', toW(ps.cntPins,2), '品 ', toW(ps.cntSegs,3), '段 ',
+    w('　　第', zNumber(i+1), '會　', toW(ps.cntPins,2), '品 ', toW(ps.cntSegs,3), '段 ',
       toW(ps.cntZis,5), '字　　', partAnno[i], '\n');
   }
   w('　　總共：　', cumuPins, '品 ', cumuSegs, '段 ', cumuZis, '字 （平均', (cumuZis/cumuSegs).toFixed(0), '字/段）',

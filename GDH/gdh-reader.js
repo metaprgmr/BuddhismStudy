@@ -263,7 +263,7 @@ class GDHReader {
 /*
           if (!this.hasAudio)
             w('<tr class="pagebr"><td colspan="3" align="center"><h3><a name="hui_', this.partStats.length, '">第',
-              toZiNumber(this.partStats.length), '會 ', this._tmp_.curPart.title, '</a></h3></td></tr>');
+              zNumber(this.partStats.length), '會 ', this._tmp_.curPart.title, '</a></h3></td></tr>');
 */
           continue;
         } else if (ln.startsWith('#=')) {

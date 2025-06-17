@@ -76,13 +76,9 @@ class BfnnWorkSpecial extends BfnnWork {
   }
   renderMutlPiece(buf) {
     if (this.id == 880) { // 880~90 大佛頂如來密因修證了義諸菩薩萬行首楞嚴經文句 蕅益智旭
-      buf.w(`<br>　<a href="book/${this.getSubfolder()}/${toW(this.id,4,'0')}.htm">玄義</a>`);
-      var len = this.idEnd - this.id + 1;
-      for (var i=1; i<len; ++i) {
-        var n = i;
-        if (n <= 10) n = zNumber(n);
-        buf.w(` <a href="book/books/${toW(this.id+i,4,'0')}.htm">${n}</a>`);
-      }
+      buf.w(`<br>　<a href="book/books/0880.htm">玄義</a>`);
+      for (var i=1; i<=10; ++i)
+        buf.w(` <a href="book/books/${toW(880+i,4,'0')}.htm">${zNumber(i)}</a>`);
       return null;
     }
     if (this.id == 1746) { // 1746~8 流浪者群歌—聖者的生命故事 明暘法師
