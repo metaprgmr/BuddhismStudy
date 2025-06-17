@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+#left  { opacity:0.3; color:white; font-size:48px }
+#right { opacity:0.3; color:white; font-size:48px }
+</style>
+<script src="utils.js"></script>
+</head>
+<body bgcolor="black"><center>
+<table width="100%"><tr>
+<td id="left" valign=bottom></td>
+<td align=center><a href="javascript:!started&&ender()"><img
+    src="../images/南無阿彌陀佛.jpg" title="Click to start."></a></a>
+<td id="right" align=right valign=bottom></td>
+</tr></table>
+<audio id="a" src="../images/阿彌陀佛四字四音輕快版22_19.mp3">
+</center></body></html>
+
+<script>
+var n=get('n')||1, a=e('a'), started, cnt=0;
+a.addEventListener('ended', ender);
+function ender() {
+  if (!started) {
+    started = true;
+    document.documentElement.requestFullscreen();
+  }
+  if (cnt >= n) return;
+  a.play();
+  renderText('left', ++cnt);
+  renderText('right', cnt);
+}
+</script>

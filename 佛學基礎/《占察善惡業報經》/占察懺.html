@@ -93,6 +93,8 @@ function letsgo(auto) {
   else      curShow.startManual();
 }
 
+function getName() { return getYourName('instr', 'yourname'); }
+
 function getSlideShow() {
   const dz200 = imgTag(dzng,200),
         sk200 = imgTag(saky,200), sk450 = imgTag(saky,450),
@@ -319,7 +321,7 @@ function getSlideShow() {
   function lastPray(decorated) {
     var sp = decorated ? '</nian>　<nian>' : '　';
     var x =
-      `我弟子<yourname>某甲</yourname>，至心發願，${sp}<br>` +
+      `我弟子${getName()}，至心發願，${sp}<br>` +
       `願十方三寶、<red>地藏</red>慈尊，${sp}<br>` +
       '哀愍護持，救拔拯濟，令此國土，災亂消除，<br>' +
       '正法流通，咸生淨信，無諸障礙，永斷魔邪，<br>' +
@@ -335,7 +337,7 @@ function getSlideShow() {
   ss
   .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11', imgTag(dzng,550))
     .setToLast({id:'◎脩行懺悔'})
-  .add('<p><nian>我弟子<yourname>某甲</yourname>，<br>' +
+  .add('<p><nian>我弟子${getName()}，<br>' +
        '一心仰吿<red>地藏</red>慈尊、十方三寶，<br>' +
 　　   '弟子過去曾犯殺生、偷盜、邪淫、<br>'+
        '妄語、沽酒、說四衆過、自讚毀他、<br>' +
@@ -377,11 +379,11 @@ function getSlideShow() {
        '廣造衆惡。今知空寂。<br>' +
        '為求菩提，為衆生故，<br>' +
        '廣脩諸善，徧斷衆惡。<br>' +
-       '一切三寶、<red>地藏菩薩</red>，</nian>　　<br>' +
+       '唯願一切三寶、<red>地藏菩薩</red>，</nian>　　<br>' +
        '<nian>慈悲攝受，聽我懺悔。</nian><br>' +
        '<dong>跪拜</dong>　</p>', '33:00', dz200)
     .setToLast({id:'惟願...聽我懺悔'})
-  .add('<nian>我弟子<yourname>某甲</yourname>，至心懺悔。</nian>　<br>' +
+  .add('<nian>我弟子${getName()}，至心懺悔。</nian>　<br>' +
        '<nian>我及衆生，自性清淨。一實境界，諸佛體同。<br>' +
        '無明癡暗，熏習因緣，現妄境界，令生念著，<br>' +
        '計我我所，習諸惡法，三業六根，廣造重罪，<br>' +
@@ -407,7 +409,7 @@ function getSlideShow() {
        '<dong>跪拜</dong>　</p>', '34:44', dz200)
     .setToLast({id:'願...永滅罪根'})
   .add('<h3>◎發勸請願</h3>' +
-       '<p><nian>我弟子<yourname>某甲</yourname>，至心勸請。</nian>　<br>' +
+       '<p><nian>我弟子${getName()}，至心勸請。</nian>　<br>' +
        '<nian>願令十方一切菩薩，<br>' +
        '未成正覺者，願速成正覺。<br>' +
        '若已成正覺者，願常住在世，</nian>　<br>' +
@@ -416,7 +418,7 @@ function getSlideShow() {
        '<dong>跪拜</dong>　</p>', '35:25', dz200)
     .setToLast({id:'◎發勸請願'})
   .add('<h3>◎發隨喜願</h3>' +
-       '<p><nian>我弟子<yourname>某甲</yourname>，至心隨喜。<br>' +
+       '<p><nian>我弟子${getName()}，至心隨喜。<br>' +
        '願我及一切衆生，畢竟永捨嫉妒之心，<br>' +
        '於三世中，一切剎土，所有脩學一切功德，<br>' +
        '及成就者，悉皆隨喜。<br>&nbsp;<br>' +
@@ -424,7 +426,7 @@ function getSlideShow() {
        '<dong>跪拜</dong>　</p>', '35:57', dz200)
     .setToLast({id:'◎發隨喜願'})
   .add('<h3>◎發迴向願</h3>' +
-       '<p><nian>我弟子<yourname>某甲</yourname>，至心迴向。<br>' +
+       '<p><nian>我弟子${getName()}，至心迴向。<br>' +
        '願我所脩一切功德，<br>' +
        '資益一切諸衆生等，<br>' +
        '同趣佛智，至涅槃城。<br>&nbsp;<br>' +

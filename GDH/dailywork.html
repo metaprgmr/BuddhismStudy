@@ -14,7 +14,7 @@ li { font-family: "KaiTi", "楷体", STKaiti, "华文楷体"; font-size:24px; co
 <script src="../淨土宗/西方二聖開示/JK-teachings.js"></script>
 <script>
 const TARGET = 'view';
-const LEVEL = '1';
+const LEVEL = 1;
 const EXT = 'xview';
 const 十小咒 = '../陀羅尼/十小咒.html';
 var curEID = 0, lastEId = null, lastLink = null;
@@ -141,8 +141,8 @@ function AmtbSession() {
     '<li>', lnk('《西方迴向偈》', 'various.js', '_9', '極樂世界圖.png'), '</li>',
     '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
     '<li>', lnk('《普願文》', 'various.js', '_14', '回向偈.png'), '</li>',
-    '<li>', lnk('◎淨明空誨法言師教◎', '../淨土宗/西方二聖開示/JK-teachings.html', 'jingyu', '../JingKong淨空法師/慈悲看破自在念佛.jpg'), '</li>',
-    '<li>', lnk('◎印光大師文鈔精錄◎', '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.html', 'm=r', '../JingKong淨空法師/慈悲看破自在念佛.jpg'), '</li>',
+    '<li>', lnk('◎淨明空誨法言師教◎', '../淨土宗/西方二聖開示/JK-teachings.html', 'jingyu', '慈悲看破自在念佛.jpg'), '</li>',
+    '<li>', lnk('◎印光大師文鈔精錄◎', '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.html', 'm=r', '慈悲看破自在念佛.jpg'), '</li>',
     '</ol>'
   ).render('prgm');
 }
@@ -159,7 +159,7 @@ function VajraSession() {
     '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
     '<li>', lnk('南無 大悲觀世音菩薩', null, null, '觀世音菩薩1.jpg'), '</li>',
     '<li>', lnk('南無 大願地藏王菩薩<br>南無 護法　諸天菩薩', null, null, '南無地藏王菩薩1.jpg'), '</li>',
-    '<li>', mainlnk('《金剛般若波羅蜜經》', 'jingangjing.js', null, '釋迦牟尼佛.jpg'), '</li>',
+    '<li>', mainlnk('《金剛般若波羅蜜經》', `jingangjing.js&level=${LEVEL}`, null, '釋迦牟尼佛.jpg'), '</li>',
     '<li>', lnk('《般若無盡藏真言》<br>《金剛心真言》<br>《普迴向真言》<br>《法華補闕真⾔》<br>《補闕圓滿真⾔》',
             '../陀羅尼/諸真言.html', null, '回向偈.png'), '</li>',
     '<li>', lnk('《金剛讚》', 'various.js', '_37', '回向偈.png'), '</li>',
@@ -178,8 +178,8 @@ function DiZangSession() {
     '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
     '<li>', lnk('《覺林菩薩偈》', 'various.js', '_19', '三寶佛.png'), '</li>',
     '<li>', lnk('《地藏菩薩讚》', 'various.js', '_27', '南無地藏王菩薩1.jpg'), '</li>',
-    '<li>', mainlnk('《地藏菩薩本願經》', 'dzj.js', null, '南無地藏王菩薩1.jpg'), '</li>',
-    '<li>', mainlnk('《占察善惡業報經》', 'ZhanCha-2nd-part.js', null, '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《地藏菩薩本願經》', `dzj.js&level=${LEVEL}`, null, '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《占察善惡業報經》', `ZhanCha-2nd-part.js&level=${LEVEL}`, null, '南無地藏王菩薩1.jpg'), '</li>',
     '<li>', lnk('《普賢十願》', 'various.js', '_11', '普賢菩薩十大願.jpg'), '</li>',
     '<li>', lnk('《懺悔滅罪偈》', 'various.js', '_11', '普賢懺悔滅罪偈.png'), '</li>',
     '<li>', lnk('《發四宏願》', 'various.js', '_11', '四宏誓願.jpg'), '</li>',
@@ -196,9 +196,9 @@ function GuanShiYinSession() {
     '<li>', lnk('南無三寶', 'various.js', '_3', '三寶佛.png'), '</li>',
     '<li>', lnk('南無 釋迦牟尼佛', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
     '<li>', lnk('《開經偈》', 'various.js', '_4', '釋迦牟尼佛.jpg'), '</li>',
-    '<li>', mainlnk('《普門品》', 'guanshiyin.js', null, '觀世音菩薩1.jpg'), '</li>',
-    '<li>', mainlnk('《耳根圓通章》', 'guanshiyin2.js', null, '觀世音菩薩1.jpg'), '</li>',
-    '<li>', mainlnk('《善財童子<font style="font-size:19px">第二十七參</font>》', 'guanshiyin3.js', null, '觀世音菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《普門品》', `guanshiyin.js&level=${LEVEL}`, null, '觀世音菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《耳根圓通章》', `guanshiyin2.js&level=${LEVEL}`, null, '觀世音菩薩1.jpg'), '</li>',
+    '<li>', mainlnk('《善財童子<font style="font-size:18px">第二十七參</font>》', `guanshiyin3.js&level=${LEVEL}`, null, '觀世音菩薩1.jpg'), '</li>',
     '<li>', lnk('《大悲咒發願文》', 'various.js', '_30', '觀世音菩薩1.jpg'), '</li>',
     '<li>', lnk('《大悲咒》','../陀羅尼/大悲咒.html', null, '觀世音菩薩1.jpg'), '</li>',
     '<li>', lnk('《發四宏願》', 'various.js', '_11', '四宏誓願.jpg'), '</li>',
@@ -215,7 +215,11 @@ function StartSession(refresh) {
      '<a href="javascript:DiZangSession()">地藏法門</a><br>&nbsp;<br>',
      '<a href="javascript:GuanShiYinSession()">觀音法門</a><br>&nbsp;<br>',
      '<a href="javascript:VajraSession()">金剛經誦</a><br>&nbsp;<br>',
-     '<a href="../佛學基礎/《占察善惡業報經》/占察懺.html" class="major">占察懺法</a>',
+     '<a href="../佛學基礎/《占察善惡業報經》/占察懺.html" class="major">占察懺法</a><br>&nbsp;<br>',
+     '<a href="../util/BaiFo.html">拜佛一節</a><br>',
+     '<a href="../util/BaiFo.html?n=2">拜佛二節</a><br>',
+     '<a href="../util/BaiFo.html?n=3">拜佛三節</a><br>',
+     '<a href="../util/BaiFo.html?n=4">拜佛四節</a>',
      '</p>'
   ).render('prgm');
   if (refresh)

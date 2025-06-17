@@ -292,4 +292,9 @@ function writingRedir(name, ttl) {
     `</head><body><h2>${ttl}</h2></body></html>`);
 }
 
-function getYourName() { return window['MYNAME']; }
+function getYourName(yourTag, anyTag) {
+  var ret = window['MYNAME'];
+  if (ret) return !yourTag ? ret : `<${yourTag}>${ret}</${yourTag}>`;
+  const help = "To set your name, in env.js: var MYNAME='&#24373;&#19977;';";
+  return !anyTag ? '某甲' : `<${anyTag} title="${help}">某甲</${anyTag}>`;
+}

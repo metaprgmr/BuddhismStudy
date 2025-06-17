@@ -1,15 +1,11 @@
 (() => {
-  function getName() {
-    var n = getYourName();
-    return n ? `<extra>${n}</extra>` : '<yourname>某甲</yourname>';
-  }
 new GDHReader('西方發願文‧原作蓮池大師，吾略<extra>增文</extra>',
 `@2
 稽首西方安樂國，|接引衆生大導師，
 我今發願願往生，|唯願慈悲哀攝受。
 @/
 
-弟子${getName()}，普為四恩三有、法界衆生求於諸佛一乘無上菩提道故，
+弟子${getYourName('extra','yourname')}，普為四恩三有、法界衆生求於諸佛一乘無上菩提道故，
 專心持念阿彌陀佛萬德洪名，期生淨土。
 
 又以業重福輕，障深慧淺，染心易熾，淨德難成。今於佛前，翹勤五體，披瀝一心，投誠懺悔。
