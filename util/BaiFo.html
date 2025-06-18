@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <style>
-#left  { opacity:0.3; color:white; font-size:48px }
-#right { opacity:0.3; color:white; font-size:48px }
+#left  { opacity:0.3; color:white; font-size:96px }
+#right { opacity:0.3; color:white; font-size:96px }
 </style>
 <script src="utils.js"></script>
 </head>
 <body bgcolor="black"><center>
 <table width="100%"><tr>
 <td id="left" valign=bottom></td>
-<td align=center><a href="javascript:!started&&ender()"><img
+<td align=center><a href="javascript:ender('Clicked')"><img
     src="../images/南無阿彌陀佛.jpg" title="Click to start."></a></a>
 <td id="right" align=right valign=bottom></td>
 </tr></table>
@@ -21,14 +21,16 @@
 <script>
 var n=get('n')||1, a=e('a'), started, cnt=0;
 a.addEventListener('ended', ender);
-function ender() {
-  if (!started) {
-    started = true;
+function ender(e) {
+  if (e == 'Clicked') {
     document.documentElement.requestFullscreen();
+    if (started) return;
+    started = true;
   }
-  if (cnt >= n) return;
-  a.play();
-  renderText('left', ++cnt);
-  renderText('right', cnt);
+  if (cnt < n) {
+    a.play();
+    renderText('left', ++cnt);
+    renderText('right', cnt);
+  }
 }
 </script>

@@ -1649,8 +1649,3 @@ function getHaiRenVerses() {
   }
   return HaiRenVersesObj;
 }
-
-function trimLead0s(n) {
-  while (n.length > 1 && n[0] == '0') n = n.substring(1);
-  return n;
-}

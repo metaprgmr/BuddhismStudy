@@ -14,6 +14,7 @@ a { text-decoration:none }
 .bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px }
 BODY {SCROLLBAR-FACE-COLOR: #0099FF; SCROLLBAR-HIGHLIGHT-COLOR: #0099FF; SCROLLBAR-SHADOW-COLOR: #006699; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: 
 #00354F; } 
+.endBar { text-align:center }
 
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
 my   { }
@@ -38,6 +39,7 @@ black { color:black }
 purple { color:purple }
 label { font-weight:normal; color:purple }
 inv { opacity:0 }
+cur { background-color:yellow; color:red; font-weight:bold }
 
 /* for paragraphs */
 LNSP {margin:0cm; font-size:9.0pt; font-family:細明體;}

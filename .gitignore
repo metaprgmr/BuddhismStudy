@@ -1,6 +1,7 @@
 env.js
 YTViewing.js
 .DS_Store
+*.class
 *~
 alfa*
 beta*

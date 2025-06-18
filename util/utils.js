@@ -34,7 +34,7 @@ function get(name) {
 }
 
 function addjs(uri)           { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
-function toEl(x)              { return (typeof x=='string')?e(x):x; }
+function toEl(x)              { return (typeof x=='string')?document.getElementById(x):x; }
 function e(id)                { return document.getElementById(id) }
 function showEl(id)           { var el=toEl(id); el && (el.style.display='block'); }
 function hideEl(id)           { var el=toEl(id); el && (el.style.display='none'); }
@@ -196,6 +196,11 @@ function isDigit(c) {
   case '5': case '6': case '7': case '8': case '9': return true;
   }
   return false;
+}
+function trimLead0s(n) {
+  if (typeof n != 'string') return n;
+  for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
+  return (i==0) ? n : n.substring(i);
 }
 function getKeysOrdered(obj) {
   if (!obj) return null;
