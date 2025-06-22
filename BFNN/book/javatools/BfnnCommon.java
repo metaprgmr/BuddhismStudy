@@ -46,6 +46,8 @@ public class BfnnCommon {
     return line;
   }
 
+  private static final String END_REACHED = "!END!FIN!";
+
   // first makes <p></p> on a single line, then delegate to a StateMachine.
   public static void concatParaTag(String[] args, StateMachine sm) throws Exception {
     if (sm == null)
@@ -54,7 +56,6 @@ public class BfnnCommon {
     try (BufferedReader br = openFile(args[0])) {
       String line;
       boolean inStyle = false;
-      boolean inEndBlock = false;
       while ((line = br.readLine()) != null) {
         int i;
         if (!inStyle) {
@@ -78,20 +79,11 @@ public class BfnnCommon {
           line = line.trim();
         }
 
-        if (inEndBlock) {
-          if (line.endsWith("</body>")) {
-            out.println("<div class=endImage title=\"UTF-8 encoded\"></div>\n</body>");
-            inEndBlock = false;
-          }
-          continue;
-        }
-        if ((line != null) && (line.indexOf("DO NOT MODIFY") > 0)) {
-          if (line.contains("Hotrank")) {
-            inEndBlock = true;
-            continue;
-          }
-        }
         line = sm.proc(line);
+        if (END_REACHED.equals(line)) {
+          out.println("\n<script> writeBfnnEnd(); </script>");
+          break;
+        }
         if ((line != null) && !line.equals("<script language=\"JavaScript\" src=\"\"></script>"))
           out.println(line);
       }
@@ -120,7 +112,6 @@ public class BfnnCommon {
 
     boolean doneBig5 = false;
     boolean doneBookClean = false;
-    boolean inEndSection = false;
     boolean inBody = false;
     boolean hasEndImage = false;
 
@@ -164,17 +155,21 @@ public class BfnnCommon {
           doneBookClean = true;
         }
       }
+      if (line.startsWith("</head>"))
+        return "<script src=\"../mybfnn.js\"></script>\n</head>";
+      if (line.toLowerCase().startsWith("<body "))
+        return "";
       if (!doneBookClean) {
         int idx = line.indexOf("class=book ");
-        if (idx > 0)
-          line = line.substring(0, idx) + "class=bookClean " + line.substring(idx+"class=book ".length());
-      }
-      if (!inEndSection) {
-        if (line.startsWith(pat2) || line.indexOf("Begin of Hotrank") > 0) {
-          inEndSection = true;
-          return null;
+        if (idx > 0) {
+          // line = line.substring(0, idx) + "class=bookClean " + line.substring(idx+"class=book ".length());
+          return "\n<script>\nwriteBfnnStart();\n</script>";
         }
-      } else if (!hasEndImage) {
+      }
+      if (line.startsWith(pat2) || line.indexOf("Begin of Hotrank") > 0) {
+        return END_REACHED;
+      }
+      if (!hasEndImage) {
         if (line.startsWith("<div class=endImage "))
           hasEndImage = true;
       }

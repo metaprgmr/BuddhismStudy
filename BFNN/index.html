@@ -13,21 +13,26 @@ cur { color:red; background-color:yellow; font-weight:bold }
 .orig  { background-color:#DFD }
 .extra { font-style:italic; color:brown }
 .todo  { background-color:pink }
-.WORKING { background-color:orange }
+FOSSIL  { text-decoration:underline; text-decoration-style:double }
+WORKING { background-color:#ccc }
 </style>
+<script src="../env.js"></script>
 <script src="../util/utils.js"></script>
 <script src="bfnn-works.js"></script>
+<map name="makarte">
+  <area shape="rect" coords="0,0,5,20" href="javascript:showThem()">
+  <area shape="rect" coords="5,0,200,50" href="https://book.bfnn.org" title="「般若文海」網站">
+</map>
 </head>
-<body><center>
+<body style="background-color:#ced"><center>
 <div align=center>
   <table width="1200px"><tr>
-  <td width="200px" style="padding-left:0px"><a href="https://book.bfnn.org" target="ext" title="book.bfnn.org"><img
-   src="bfnn_title2.gif" width="200px" style="margin-top:-30px"></a></td>
+  <td width="200px" style="padding-left:0px"><img src="bfnn_title2.gif" width="200px" style="margin-top:-30px" usemap="#makarte"></td>
   <td><h3 style="color:blue">選讀</h3></td>
   <td id="nav" align=center nowrap></td>
   <td nowrap align=right>「般若文海」載有大量佛經和文章資料，<br>
   且可以全套下載，功德無量！非常感恩！<br>
-  所收者已改編碼、多少糾錯。另有新加。</td>
+  所收者已改編碼、常有補正。另有新加。</td>
   </tr></table>
 </div>
 <div id="stg" align=center></div>
@@ -35,22 +40,69 @@ cur { color:red; background-color:yellow; font-weight:bold }
 </center></body></html>
 
 <script>
-const topics = '淨土法門 心經 金剛經 楞嚴經 唯識論 地藏經 占察經 全部內容|' +
-               '圓覺經 佛學基礎 佛理 其他佛經 善書 人生 人物故事 文字處理';
+const topics = '淨土　心經　金剛經　楞嚴經　法華經　唯識論　地藏經　占察經　全部內容|' +
+               '圓覺經　其他佛經　佛學基礎　佛理〇　善書　人生　人物　故事　文字處理';
 function showNav(topic) {
   var a = topics.split('|'), buf = new Buffer();
   for (var i=0; i<a.length; ++i) {
     if (i>0) buf.w('<br>');
-    var b = a[i].split(' ');
+    var b = a[i].split('　');
     for (var j in b) {
-      var tpc = b[j];
+      var tpc = b[j], filler = tpc.endsWith('〇') ? '　' : '';
+      tpc = tpc.replace('〇','');
       var pad = (tpc == '全部內容') || (tpc == '文字處理') ? '•' : '';
-      if (tpc == topic) b[j] = `${pad}<cur>${tpc}</cur>`;
-      else b[j] = `${pad}<a href="javascript:showList('${tpc}')">${tpc}</a>${pad}`;
+      if (tpc == topic) b[j] = `${pad}<cur>${tpc}</cur>${filler}${pad}`;
+      else b[j] = `${pad}<a href="javascript:showList('${tpc}')">${tpc}</a>${filler}${pad}`;
     }
     buf.w(b.join('　'));
   }
   buf.render('nav');
+}
+
+function showThem() {
+  showNav();
+  function getAnkor(id) {
+    switch(id) {
+    case  998: return '<a name="_s1000"></a>';
+    case 1978: return '<a name="_s2000"></a>';
+    default:   return '';
+    }
+  }
+  var TOP = `<tr><td colspan=4 align=center style="border-bottom:1px solid blue">` +
+            `<a href="#_s1000">1000</a>&nbsp; &nbsp;<a href="#_s2000">2000</a></td></tr>`;
+  var END = `<tr><td colspan=4 style="border-top:1px solid blue">&nbsp;</td></tr>`;
+  var buf = new Buffer(`<table cellspacing=1 border=0 width="1000px">`, TOP);
+  var lastId = 0;
+  for (var i in BFNN_WORKS) {
+    var wk = BFNN_WORKS[i];
+    if (wk.id >= 9000) continue;
+    var d = wk.getSimpleData(),
+        ankor = getAnkor(wk.id),
+        bgc = wk.isAvail() ? ' bgcolor="white"' : ' bgcolor="lightgray"',
+        styl = wk.isAvail() ? ` style="color:red"` : '',
+        note, ttl = wk.getTitleDisp();
+    for (var j=lastId+1; j<wk.id; ++j) 
+      buf.w(`<tr><td></td><td>&nbsp;<i>${toW(j,4,'0')}</i></td><td colspan=2></td></tr>`);
+    note = !wk.note ? '' : `<font style="opacity:0.4">${wk.note}</font>`;
+    if (!wk.isAvail() && window['MY_BFNN']) {
+      if (wk.isMulti()) {
+        ttl += note;
+        var len = wk.idEnd - wk.id;
+        for (j=0; j<=len; ++j)
+          ttl += ` <a href="${MY_BFNN}/${wk.getURI(j)}" target=ext>${j+1}</a>`;
+      } else {
+        ttl = `<a href="${MY_BFNN}/${wk.getURI()}" target=ext>${ttl}</a>${note}`;
+      }
+    } else { // simple display
+      ttl += note;
+    }
+    buf.w(`<tr${bgc}>`,
+          `<td nowrap>&nbsp;${d.topic||''}&nbsp;</td><td${styl}>&nbsp;${ankor}${d.id}</td>`,
+          `<td>${ttl}</td><td nowrap align=right>${d.maker||''}&nbsp;</td></tr>`);
+    lastId = wk.idEnd || wk.id;
+  }
+  buf.w(END, `</table><p>${STATS}</p><hr width="1200px">`)
+     .render('stg');
 }
 
 const TOP = '<td bgcolor="#f8f8f8" valign=top style="border-top:2px solid gray; border-top:2px solid black; border-bottom:2px solid black" height="500px">' +
@@ -64,7 +116,7 @@ function showList(topic) {
   var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    if (wk.isTopic(topic)) wk.render(buf);
+    if (wk.isAvail() && wk.isTopic(topic)) wk.render(buf);
   }
   buf.w('</table></td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>')
      .render('stg');
@@ -75,8 +127,10 @@ function showAllArticles() {
       buf = new Buffer(`<table border=0 width="1200"><tr>`, TOP);
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    if (isLeft && (wk.id >= 1000)) { isLeft = false; buf.w(MID); }
-    wk.render(buf);
+    if (wk.isAvail()) {
+      if (isLeft && (wk.id >= 1000)) { isLeft = false; buf.w(MID); }
+      wk.render(buf);
+    }
   }
   buf.w('</table></td><!-- RIGHT --></tr>',
         '<tr><td colspan=3><p>&nbsp;</p><hr color=gray></td></tr></table>')
@@ -95,7 +149,7 @@ function showTextProcessing() {
 <p>　<b>The following works&mdash;<i>reliably!</i></b>&mdash;albeit a manual process.</p>
 <ol>
 <li>Make a backup copy of <code><i>9999</i>.htm</code>, say, into <code><i>9999</i>big5.htm</code>.<br>
-    Then (1) open <code><i>9999</i>.htm</code> in <i style="color:red">Firefox</i>,  (2) view source, and  (3) copy all.</li>
+    Then <i>(1)</i> open <code><i>9999</i>.htm</code> in <i style="color:red">Firefox</i>,  <i>(2)</i> view source, and  <i>(3)</i> copy all.</li>
 <li>Open the original <code><i>9999</i>.htm</code> file in vim, replace the content from above, and modify as follows:
 <ol type="a">
 <li>Change <code>charset=utf-8</code> (from <code>Big5</code> or <code>big5</code>);</li>
@@ -107,7 +161,9 @@ if present, remove all up to <code>&lt;/body></code>, and add this:<br>
 Better exit vim right away.</li>
 </ol>
 The <code>BfnnCommon</code> tool does the first three steps.<br>
-Once text is pasted, just save with utf-8 in step (d), and run BfnnCommon, redirecting into a file.
+Once text is pasted, just save with utf-8 in step (d), and run BfnnCommon, redirecting into a file.<br>
+As it evolves, more are packed into <code>mybfnn.js</code>, so text processing is simplified.<br>
+Alternatively, copy browser text and create a new page in the writeDoc mode.
 </li></ol>
 
 <h4 style="color:blue; margin-bottom:-10px">增加新文</h4>
@@ -125,5 +181,5 @@ Once text is pasted, just save with utf-8 in step (d), and run BfnnCommon, redir
   new Buffer(textproc).render('stg');
 }
 
-showList('淨土法門');
+showList('全部內容');
 </script>
