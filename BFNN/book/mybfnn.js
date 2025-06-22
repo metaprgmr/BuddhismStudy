@@ -13,6 +13,12 @@ function zNumber(n) { // 0 to 999
   if (d1 > 0) ret += zdigits[d1];
   return ret;
 }
+function toW(n, w, c) {
+  n = '' + n;
+  if (!c) c = ' ';
+  while (n.length < w) n = c + n;
+  return n;
+}
 function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
@@ -85,7 +91,7 @@ class DocInfo {
     document.title = docTtl || ttl;
     return this;
   }
-  writeEnd() {
+  writeEnd(links) {
     if (this.firstVolNum) {
       function fname(pnum) {
         if (pnum < 1000) pnum = '0' + pnum;
@@ -104,6 +110,7 @@ class DocInfo {
       }
       if (this.volNum >= this.totalVols) w('&nbsp;<inv>&raquo;</inv>');
       else w(`&nbsp;<a href="${fname(this.firstVolNum+this.volNum)}">&raquo;</a>`);
+      if (links) w('　', links);
       w('</div>');
     }
     w('</div>'); // ...content ends
@@ -138,7 +145,7 @@ class DocInfo {
     //   9. Override writeln() to support ad hoc syntax.
     //      Don't forget to call super.writeln() for regular content.
 
-    this.inHtml = false;
+    this.inHtml = this.inJS = false;
     var a = txt.split('\n'), len = a.length;
     for (var i=0; i<len; ++i) {
       var ln = a[i];
@@ -160,40 +167,66 @@ class DocInfo {
     if (this.inHtml) {
       if (ln.endsWith('</html>')) {
         this.inHtml = false;
-        w(ln.substring(0, ln.length-7), '\n');
-      } else {
-        w(ln, '\n');
+        ln = ln.substring(0, ln.length-7);
       }
+      w(ln, '\n');
       return;
-    } else {
-      if (ln.startsWith('<html>')) {
-        ln = ln.substring(6);
-        if (ln.endsWith('</html>'))
-          ln = ln.substring(0, ln.length-7);
-        else
-          this.inHtml = true;
-        w(ln, '\n');
-        return;
-      }
     }
+
+    if (this.inJS) {
+      if (ln.endsWith('</html:js>')) {
+        this.inJS = false;
+        ln = ln.substring(0, ln.length-10) + '</script>';
+      }
+      w(ln.replaceAll('\\`', '`'), '\n');
+      return;
+    }
+
+    if (ln.startsWith('<html>')) { // e.g. 0117, 0875
+      ln = ln.substring(6);
+      if (ln.endsWith('</html>'))
+        ln = ln.substring(0, ln.length-7);
+      else
+        this.inHtml = true;
+      w(ln, '\n');
+      return;
+    }
+
+    if (ln.startsWith('<html:js>')) { // e.g. 0875, 1731
+      ln = ln.substring(9);
+      if (ln.endsWith('</html:js>'))
+        ln = '<script>' + ln.substring(0, ln.length-10) + '</script>';
+      else {
+        this.inJS = true;
+        ln = '<script>' + ln;
+      }
+      w(ln.replaceAll('\\`', '`'), '\n');
+      return;
+    }
+
+    // process <a!999>; e.g. 0010
+    ln = ln.replace(/<a!\d+>/g,
+            (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
+
     if (ln[0] != this.metaLeft) {
       w(`<p class=${this.defaultClass}>${ln}</p>`);
-    } else {
-      var idx = ln.indexOf(this.metaRight, 1);
-      if (idx < 0) throw `Missing meta closing delimiter ${this.metaRight} at line ${lnnum}.`;
-      var cls = ln.substring(1,idx).split(':');
-      ln = ln.substring(idx+1);
-      if (cls.length > 1) {
-        var anchors = cls[1].split(',');
-        for (var k in anchors)
-          ln = `<a name="${anchors[k]}"></a>${ln}`;
-      }
-      cls = cls[0];
-      if (cls == 'TEXTR') cls = 'TEXT align=right';
-      if (cls.endsWith('align=right') && !ln.endsWith('　'))
-        ln += '　';
-      w(`<p class=${cls}>${ln}</p>`);
+      return;
     }
+
+    var idx = ln.indexOf(this.metaRight, 1);
+    if (idx < 0) throw `Missing meta closing delimiter ${this.metaRight} at line ${lnnum}.`;
+    var cls = ln.substring(1,idx).split(':');
+    ln = ln.substring(idx+1);
+    if (cls.length > 1) {
+      var anchors = cls[1].split(',');
+      for (var k in anchors)
+        ln = `<a name="${anchors[k]}"></a>${ln}`;
+    }
+    cls = cls[0] || this.defaultClass;
+    if (cls == 'TEXTR') cls = 'TEXT align=right';
+    if (cls.endsWith('align=right') && !ln.endsWith('　'))
+      ln += '　';
+    w(`<p class=${cls}>${ln}</p>`);
   }
 
   writeDoc(ttl) { // convenience method for writing the whole doc
@@ -217,6 +250,17 @@ function setDocInfo(firstVol, totalVols, cur, labels) {
 function writeBfnnStart(t,s) { docInfo.writeStart(t,s); }
 function writeBfnnEnd()      { docInfo.writeEnd(); }
 function writeXgEnd(center)  { docInfo.setXG(center).writeEnd(); }
+
+function xref(num) {
+  function subfolder(num) {
+    if (num <= 1000) return 'books';
+    if (num <= 2016) return 'books2';
+    if (num <= 2999) return 'books3';
+    if (num >= 9000) return 'books9';
+    return '';
+  }
+  window.open(`../${subfolder(num)}/${toW(num,4,'0')}.htm`, 'ext');
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 // The following are for series, typically used for >3 in size.
@@ -269,7 +313,7 @@ function write0881(n, body) {
     `<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經 【文句卷第${zn}】</p>`, SP,
     '<p class=TEXT align=right>唐天竺沙門般剌密諦譯經　<br>明菩薩沙彌古吳智旭文句　',
     n<7 ? '</p>' : '<br>菩薩比丘溫陵道昉參訂　</p>', SP);
-  body && docInfo.writeBody(body).writeEnd();
+  body && docInfo.writeBody(body).writeEnd('<a href="0880.htm">玄義</a>');
 }
 
 //  -- 彌陀疏鈔演義 淨空會本 --
@@ -295,7 +339,7 @@ function write1644(n, body) {
       '烏萇國沙門釋迦彌伽譯語　<br>',
       '菩薩戒弟子清河房融筆受　<br>',
       '明南嶽沙門憨山釋德清述　</p>', SP);
-  body && docInfo.writeBody(body).writeEnd();
+  body && docInfo.writeBody(body).writeEnd('<a href="1643.htm">懸鏡</a>');
 }
 
 // -- 簡明成唯識論白話講記 于凌波居士 --

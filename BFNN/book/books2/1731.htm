@@ -7,18 +7,6 @@ num { font-weight:normal; color:black }
 </style>
 <link rel="stylesheet" href="../books/book.css">
 <script src="../mybfnn.js"></script>
-<script>
-var embed = '';
-const R=4, C=20;
-for (var i=0; i<R; ++i) {
-  for (var j=1; j<=C; ++j) {
-    var n = i*C+j;
-    if (n >= 10) embed += '<a href="#a' + n + '">' + n + '</a>　';
-    else embed += '<font style="opacity:0">0</font><a href="#a0' + n + '">' + n + '</a>　';
-  }
-  embed += '<br>';
-}
-</script>
 </head>
 
 <script>
@@ -28,9 +16,19 @@ docInfo.writeDoc('老子道德經憨山註',
 
 
 /TEXTC/<a href="#a001">敘意</a>　<a href="#a002">論教源</a>　<a href="#a003">論心法</a>　<a href="#a004">論去取</a>　<a href="#a005">論學問</a>　<a href="#a006">論教乘</a>　<a href="#a007">論工夫</a>　<a href="#a008">論行本</a>　<a href="#a009">論宗趣</a><br><a href="#a010">註道德經序</a>　<a href="#a011">老子傳</a>　<a href="#a012">發明宗旨</a>　<a href="#a013">發明趣向</a>　<a href="#a014">發明工夫</a>　<a href="#a015">發明體用</a>　<a href="#a016">發明歸趣</a>
-<html><center><table>
-<tr><td>${embed}<a href="#a81">81</a></td></tr>
-</table></center></html>
+<html:js>
+  w('<center><table><tr><td>');
+  const R=4, C=20;
+  for (var i=0; i<R; ++i) {
+    for (var j=1; j<=C; ++j) {
+      var n = i*C+j;
+      if (n >= 10) w('<a href="#a' + n + '">' + n + '</a>　');
+      else w('<font style="opacity:0">0</font><a href="#a0' + n + '">' + n + '</a>　');
+    }
+    w('<br>');
+  }
+  w('<a href="#a81">81</a></td></tr></table></center>');
+</html:js>
 
 /TEXT339:a001/敘意
 

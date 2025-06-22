@@ -58,8 +58,7 @@ LNSP::before {content: '　';}
 subtitle  { font-size:24.0pt }
 .VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
-.VERSESEG {font-weight:bold; color:teal}
-verse     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:teal;}
+verse     { font-family:細明體; color:teal;}
 quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:#000077;}
 .bglightyellow { background-color:lightyellow }
 .COMPONENT{margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
