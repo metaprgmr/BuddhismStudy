@@ -85,7 +85,7 @@ function showThem() {
             `<a href="#_s1800">1800</a>&nbsp; &nbsp; <a href="#_s2000">2000</a>&nbsp; &nbsp; ` +
             `<a href="#_s2100">2100</a></td></tr>`;
   var END = `<tr><td colspan=4 style="border-top:1px solid blue">&nbsp;</td></tr>`;
-  var buf = new Buffer(`<table cellspacing=1 border=0 width="1000px">`, TOP);
+  var buf = new Buffer(`<table border=0 width="1000px">`, TOP);
   var lastId = 0;
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
@@ -101,8 +101,8 @@ function showThem() {
     if (!wk.isAvail() && window['MY_BFNN']) {
       if (wk.isMulti()) {
         ttl += note;
-        var len = wk.idEnd - wk.id;
-        for (j=0; j<=len; ++j)
+        var len = wk.numOfParts();
+        for (j=0; j<len; ++j)
           ttl += ` <a href="${MY_BFNN}/${wk.getURI(j)}" target=ext>${j+1}</a>`;
       } else {
         ttl = `<a href="${MY_BFNN}/${wk.getURI()}" target=ext>${ttl}</a>${note}`;
@@ -130,7 +130,7 @@ function showList(topic) {
   var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    if (wk.isAvail() && wk.isTopic(topic)) wk.render(buf);
+    if ((wk.isAvail() || wk.isToGet()) && wk.isTopic(topic)) wk.render(buf);
   }
   buf.w('</table></td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>')
      .render('stg');

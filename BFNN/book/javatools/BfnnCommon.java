@@ -1,5 +1,7 @@
 import java.io.*;
+import java.util.regex.Pattern;
 import static java.lang.System.out;
+import static java.lang.System.err;
 
 public class BfnnCommon {
 
@@ -61,12 +63,12 @@ public class BfnnCommon {
         if (!inStyle) {
           if (line.startsWith("<style>")) {
             inStyle = true;
-            System.err.println("IGNORED: " + line);
+            err.println("IGNORED: " + line);
             continue;
           }
         } else {
           if (line.startsWith("</style>")) inStyle = false;
-          System.err.println("IGNORED: " + line);
+          err.println("IGNORED: " + line);
           continue;
         }
         i = line.indexOf("<p ");
@@ -74,7 +76,9 @@ public class BfnnCommon {
           while (!line.endsWith("</p>")) {
             if (!line.endsWith(">"))
               line += ' ';
-            line += br.readLine();
+            String tmp = br.readLine();
+            if (tmp == null) break;
+            line += tmp;
           }
           line = line.trim();
         }
@@ -92,40 +96,24 @@ public class BfnnCommon {
 
   public static class BasicStateMachine implements StateMachine {
     public final String SPACE = "<LNSP></LNSP>";
-    public final String pat1  = "<p class=MsoPlainText style='text-indent:24.0pt;' align='center'>";
-    public final String pat2  = "<font color=\"#FFFFFF\" size=\"2\"><font color=\"#FFFFFF\" size=\"2\"><font color=\"#FFFFFF\" size=\"2\">";
-    public final String pat5  = "<p class=MsoPlainText style='text-indent:24.0pt;'>";
-    public final String pat3  = pat5 + "<b><span style='color:teal'>";
-    public final String pat3_ = "</span></b></p>";
-    public final String pat4a = pat5 + "<span class=kepan>";
-    public final String pat4b = pat5 + "<span style='color:#333399'>";
-    public final String pat4c = "<p class=TEXT><font color=\"#333399\">";
-    public final String pat4c_ = "</font></p>";
-    public final String pat4_ = "</span></p>";
-    public final String pat6  = "style='font-size:36.0pt;font-family:標楷體;color:#FF6600'"; // into "class=caption"
-    public final String pat7  = "<b><span lang=EN-US style='font-size:36.0pt;font-family:\"Times New Roman\"; color:#FF6600'></span></b>"; // into ""
-    public final String pat8  = "<p class=MsoPlainText align=center style='text-align:center'><span lang=EN-US>";
-    public final String pat9  = "<p class=MsoPlainText align=center style='text-align:center'><span style='color:#003300'>";
-    public final String pat10 = "<p class=MsoPlainText align=center style='text-align:center'><b><span class=caption>";
-    public final String pat10_= "</span></b></p>";
-    public final String pat11 = "<p class=MsoPlainText align=right style='text-align:right;text-indent:24.0pt; word-break:break-all'>";
+    public final String _span_p = "</span></p>";
 
     boolean doneBig5 = false;
-    boolean doneBookClean = false;
     boolean inBody = false;
     boolean hasEndImage = false;
 
     public static String getFirstTag(String ln) {
       int idx = ln.indexOf('>');
-      if (idx > 0) return ln.substring(0, idx+1);
+      if (idx > 0) return ln.substring(0, idx+1).trim();
       return "";
     }
     public static String getLastTag(String ln) {
       int idx = ln.lastIndexOf("</");
-      if (idx > 0) return ln.substring(idx);
+      if (idx > 0) return ln.substring(idx).trim();
       return "";
     }
     public static boolean isSP(String ln) {
+      ln = ln.trim();
       while (true) {
         if (ln.equals("&nbsp;")) return true;
         String first = getFirstTag(ln);
@@ -142,76 +130,89 @@ public class BfnnCommon {
       else
         return null;
     }
+    public static String getTitle(String ln) {
+      String fs36 = "style='font-size:36.0pt;font-family:標楷體;color:#FF6600'>";
+      int idx = ln.indexOf(fs36);
+      return idx < 0 ? null : ln.substring(idx+fs36.length()).replaceAll("<[^>]*>", "");
+    }
 
     public String proc(String line) {
-      if (!doneBig5) {
-        int idx = line.indexOf("Big5");
-        if (idx < 0)
-          idx = line.indexOf("big5");
-        if (idx > 0)
-          line = line.substring(0, idx) + "utf-8" + line.substring(idx+4);
-        else if (line.indexOf("utf-8") > 0) { // already done.
-          doneBig5 = true;
-          doneBookClean = true;
-        }
-      }
-      if (line.startsWith("</head>"))
-        return "<script src=\"../mybfnn.js\"></script>\n</head>";
-      if (line.toLowerCase().startsWith("<body "))
-        return "";
-      if (!doneBookClean) {
-        int idx = line.indexOf("class=book ");
-        if (idx > 0) {
-          // line = line.substring(0, idx) + "class=bookClean " + line.substring(idx+"class=book ".length());
-          return "\n<script>\nwriteBfnnStart();\n</script>";
-        }
-      }
-      if (line.startsWith(pat2) || line.indexOf("Begin of Hotrank") > 0) {
-        return END_REACHED;
-      }
-      if (!hasEndImage) {
-        if (line.startsWith("<div class=endImage "))
-          hasEndImage = true;
-      }
-
       if (!inBody) {
-        line = line.replace(pat6, "class=caption");
-        if (line.startsWith("<body"))
+        if (!doneBig5) {
+          int idx = line.indexOf("Big5");
+          if (idx < 0)
+            idx = line.indexOf("big5");
+          if (idx > 0) {
+            doneBig5 = true;
+            return line.substring(0, idx) + "utf-8" + line.substring(idx+4);
+          }
+        }
+        if (line.startsWith("<link") && line.endsWith(".mso\">"))
+          return null;
+        if (line.startsWith("</head>"))
+          return "<script src=\"../mybfnn.js\"></script>\n</head>";
+        if (line.startsWith("<title>"))
+          return null;
+        if (line.startsWith("<body")) {
           inBody = true;
+          return null; // "\n<script> writeBfnnStart(); </script>";
+        }
         return line;
-      } else if (line.startsWith("</html>")) {
+      }
+      if (line.startsWith("</html>")) {
         inBody = false; // print as-is, again.
         return line;
-      } else {
-        // moderate post-processing before sending to the StateMachine, if any.
-        String ln;
-        ln = changeParaClass(line, pat3,  pat3_, "VERSE"); if (ln != null) return ln;
-        ln = changeParaClass(line, pat4a, pat4_, "KEPAN"); if (ln != null) return ln;
-        ln = changeParaClass(line, pat4b, pat4_, "KEPAN"); if (ln != null) return ln;
-        ln = changeParaClass(line, pat4c, pat4_, "KEPAN"); if (ln != null) return ln;
-        line = line.replace(pat6, "class=caption")
-                   .replace(pat5, "<p class=TEXT>")
-                   .replace(pat1, "<p class=TEXT align=center>")
-                   .replace(pat11, "<p class=TEXT align=right>")
-                   .replaceAll("<span style='font-size: *10.0pt; *'>", "<span class=inlineAnno>");
-        ln = changeParaClass(line, pat10, pat10_,"TITLE"); if (ln != null) return ln;
-        if (line.contains("<span style='color:#333399'>") && line.endsWith(pat4_)) {
-          line = line.replace("<span style='color:#333399'>", "")
-                     .replace("<p class=TEXT>", "<p class=TEXT339>")
-                     .replace(pat4_, "</p>");
-        } else if (line.startsWith(pat8) && line.endsWith(pat4_)) {
-          line = "<p class=TEXTC>" + line.substring(pat8.length(), line.length() - pat4_.length()) + "</p>";
-        } else if (line.startsWith(pat9) && line.endsWith(pat4_)) {
-          line = "<p class=TEXT030C>" + line.substring(pat9.length(), line.length() - pat4_.length()) + "</p>";
-        }
-        line = line.replaceAll("<p class=MsoPlainText align=center style='text-align:center; ?color:#003300'>", "<p class=TEXT030C>")
-                   .replaceAll("<p class=MsoPlainText align=center style='text-align:center; ?color:#333399'>", "<p class=TEXT339C>")
-//                 .replaceAll("<span lang=EN-US></span>|<span>&nbsp; *</span>|" + pat7, "");
-                   .replace("<span lang=EN-US></span>", "");
-        if (line.endsWith("</body>"))
-          return "<div class=endImage title=\"UTF-8 encoded\"></div>\n</body>";
-        return isSP(line) ? SPACE : line;
       }
+      if (line.startsWith("<div class=book"))
+        return "";
+      if (line.startsWith("<font color=\"#FFFFFF\" size=\"2\"><font color=\"#FFFFFF\" size=\"2\">") ||
+          line.startsWith("<img src=\"../books/sign.gif\"") ||
+          line.contains("Begin of Hotrank"))
+        return END_REACHED;
+      if (!hasEndImage && line.startsWith("<div class=endImage "))
+        hasEndImage = true;
+
+      String ln;
+      ln = getTitle(line);
+      if (ln != null) return "\n<script> writeBfnnStart('" + ln + "'); </script>";
+
+      // moderate post-processing before sending to the StateMachine, if any.
+      line = line.replace("<span lang=EN-US></span>", "")
+                 .replace("<span>&nbsp; </span>", "");
+      ln = changeParaClass(line,
+                           "<p class=MsoPlainText style='text-indent:24.0pt;'><b><span style='color:teal'>",
+                           "</span></b></p>", "VERSE");
+      if (ln != null) return ln;
+      ln = changeParaClass(line, "<p class=MsoPlainText style='text-indent:24.0pt;'><span class=kepan>", _span_p, "KEPAN");
+      if (ln != null) return ln;
+      ln = changeParaClass(line, "<p class=MsoPlainText style='text-indent:24.0pt;'><span style='color:#333399'>", _span_p, "KEPAN");
+      if (ln != null) return ln;
+      ln = changeParaClass(line, "<p class=TEXT><font color=\"#333399\">", _span_p, "KEPAN");
+      if (ln != null) return ln;
+      line = line.replace("<p class=MsoPlainText style='text-indent:24.0pt;'>",
+                          "<p class=TEXT>")
+                 .replace("<p class=MsoPlainText style='text-indent:24.0pt;' align='center'>",
+                          "<p class=TEXT align=center>")
+                 .replace("<p class=MsoPlainText align=right style='text-align:right;text-indent:24.0pt; word-break:break-all'>",
+                          "<p class=TEXT align=right>")
+                 .replaceAll("<span style='font-size: *10.0pt; *'>", "<ail>");
+      if (line.contains("<span style='color:#333399'>") && line.endsWith(_span_p)) {
+        line = line.replace("<span style='color:#333399'>", "")
+                   .replace("<p class=TEXT>", "<p class=TEXT339>")
+                   .replace(_span_p, "</p>");
+      } else {
+        String pat8  = "<p class=MsoPlainText align=center style='text-align:center'><span lang=EN-US>";
+        String pat9  = "<p class=MsoPlainText align=center style='text-align:center'><span style='color:#003300'>";
+        if (line.startsWith(pat8) && line.endsWith(_span_p))
+          line = "<p class=TEXTC>" + line.substring(pat8.length(), line.length() - _span_p.length()) + "</p>";
+        else if (line.startsWith(pat9) && line.endsWith(_span_p))
+          line = "<p class=TEXT030C>" + line.substring(pat9.length(), line.length() - _span_p.length()) + "</p>";
+      }
+      line = line.replaceAll("<p class=MsoPlainText align=center style='text-align:center; ?color:#003300'>", "<p class=TEXT030C>")
+                 .replaceAll("<p class=MsoPlainText align=center style='text-align:center; ?color:#333399'>", "<p class=TEXT339C>");
+      if (line.endsWith("</body>"))
+        return "<div class=endImage title=\"UTF-8 encoded\"></div>\n</body>";
+      return isSP(line) ? SPACE : line;
     }
   }
 

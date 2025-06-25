@@ -50,6 +50,14 @@ function getFileName() {
 const SP = '<LNSP></LNSP>', ASIS = 'asis';
 var terse = get('terse');
 
+const FA_HUA_PINS = [
+  '序品', '方便品', '譬喻品', '信解品', '藥草喻品', '授記品', '化城喻品',
+  '五百弟子授記品', '授學無學人記品', '法師品', '見寶塔品', '提婆達多品', '勸持品',
+  '安樂行品', '從地涌出品', '如來壽量品', '分別功德品', '隨喜功德品', '法師功德品',
+  '常不輕菩薩品', '如來神力品', '囑累品', '藥王菩薩本事品', '妙音菩薩品',
+  '觀世音菩薩普門品', '陀羅尼品', '妙莊嚴王本事品', '普賢菩薩勸發品',
+];
+
 class DocInfo {
   constructor() {
     this.defaultClass = 'TEXT';
@@ -62,9 +70,17 @@ class DocInfo {
     this.volNum = vol || 1;
     return this;
   }
+  getIdAt(i/*1-based*/) { return this.firstVolNum + (i||1) - 1; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
   setXG(endCenter) { this.isXG = true; this.endCenter = endCenter; return this; }
+  setHints(hints) { this.hints = hints; return this; }
   set(k,v) { k && v && (this[k]=v); return this; }
+  w() { for(var i in arguments) document.write(arguments[i]); return this; }
+  wIf() {
+    if (arguments.length > 1 && arguments[0])
+      for(var i=1; i<arguments.length; ++i) document.write(arguments[i]);
+    return this;
+  }
   writeStart(ttl, docTtl) {
     // ttl can have | indicating subtitle; or || for subtitle with line break
 
@@ -93,25 +109,11 @@ class DocInfo {
   }
   writeEnd(links) {
     if (this.firstVolNum) {
-      function fname(pnum) {
-        if (pnum < 1000) pnum = '0' + pnum;
-        return terse ? `${pnum}.htm?terse` : `${pnum}.htm`;
-      }
       w(SP, '<div class=endBar>');
-      if (this.volNum <= 1) w('<inv>&laquo;</inv>');
-      else w(`<a href="${fname(this.firstVolNum+this.volNum-2)}">&laquo;</a>`);
-      for (var i=1; i<=this.totalVols; ++i) {
-        var lbl = i;
-        if (this.labels) lbl = this.labels[i-1];
-        else if (this.totalVols <= 10) lbl = zdigits[i]; // 漢字數字
-        else if (i<10) lbl = '&nbsp;' + i;
-        if (i == this.volNum) w(`&nbsp;<cur>${lbl}</cur>`);
-        else w(`&nbsp;<a href="${fname(this.firstVolNum+i-1)}">${lbl}</a>`);
-      }
-      if (this.volNum >= this.totalVols) w('&nbsp;<inv>&raquo;</inv>');
-      else w(`&nbsp;<a href="${fname(this.firstVolNum+this.volNum)}">&raquo;</a>`);
-      if (links) w('　', links);
+      this.writeSeriesNav(links);
       w('</div>');
+    } else if (links) {
+      w(SP, '<div class=endBar>', links, '</div>');
     }
     w('</div>'); // ...content ends
     if (this.isXG)
@@ -122,6 +124,25 @@ class DocInfo {
       w('<div class=endImage title="本頁經信裹居士重新編碼、清理、補正"></div>');
     w('</body></html>');
     return this;
+  }
+  writeSeriesNav(links) {
+    function fname(pnum) {
+      pnum = toW(pnum, 4, '0');
+      return terse ? `${pnum}.htm?terse` : `${pnum}.htm`;
+    }
+    if (this.volNum <= 1) w('<inv>&laquo;</inv>');
+    else w(`<a href="${fname(this.getIdAt(this.volNum-1))}">&laquo;</a>`);
+    for (var i=1; i<=this.totalVols; ++i) {
+      var lbl = i, hint = '';
+      if (this.labels) lbl = this.labels[i-1];
+      if (this.hints) hint = ` title="${this.hints[i-1]}"`;
+      else if (i <= 10) lbl = zdigits[i]; // 漢字數字
+      if (i == this.volNum) w(`&nbsp;<cur${hint}>${lbl}</cur>`);
+      else w(`&nbsp;<a class="seriesnav" href="${fname(this.getIdAt(i))}"${hint}>${lbl}</a>`);
+    }
+    if (this.volNum >= this.totalVols) w('&nbsp;<inv>&raquo;</inv>');
+    else w(`&nbsp;<a href="${fname(this.getIdAt(this.volNum+1))}">&raquo;</a>`);
+    if (links) w('　', links);
   }
   writeBody(txt) {
     // The features are:
@@ -145,7 +166,7 @@ class DocInfo {
     //   9. Override writeln() to support ad hoc syntax.
     //      Don't forget to call super.writeln() for regular content.
 
-    this.inHtml = this.inJS = false;
+    this.inHtml = this.inJS = this.inGatha = false;
     var a = txt.split('\n'), len = a.length;
     for (var i=0; i<len; ++i) {
       var ln = a[i];
@@ -182,6 +203,18 @@ class DocInfo {
       return;
     }
 
+    if (this.inGatha) {
+      if (ln.startsWith('//')) {
+        this.gatha();
+        this.inGatha = false;
+      }
+      else if (this.gathaText)
+        this.gathaText += '\n' + ln;
+      else
+        this.gathaText = ln;
+      return;
+    }
+
     if (ln.startsWith('<html>')) { // e.g. 0117, 0875
       ln = ln.substring(6);
       if (ln.endsWith('</html>'))
@@ -192,7 +225,7 @@ class DocInfo {
       return;
     }
 
-    if (ln.startsWith('<html:js>')) { // e.g. 0875, 1731
+    if (ln.startsWith('<html:js>')) { // e.g. 1731
       ln = ln.substring(9);
       if (ln.endsWith('</html:js>'))
         ln = '<script>' + ln.substring(0, ln.length-10) + '</script>';
@@ -201,6 +234,11 @@ class DocInfo {
         ln = '<script>' + ln;
       }
       w(ln.replaceAll('\\`', '`'), '\n');
+      return;
+    }
+
+    if (ln.startsWith('/gatha/')) { // e.g. 0875
+      this.inGatha = true;
       return;
     }
 
@@ -227,6 +265,32 @@ class DocInfo {
     if (cls.endsWith('align=right') && !ln.endsWith('　'))
       ln += '　';
     w(`<p class=${cls}>${ln}</p>`);
+  }
+
+  gatha() {
+    const sp = '　', sp3 = '　　　';
+    var a = this.gathaText.trim().split('\n'),
+        len = a.length, num = 1;
+    for (var i=0; i<len; ++i) {
+      var ln = a[i];
+      var idx = ln.indexOf('|'), anno;
+      if (idx > 0) {
+        anno = ln.substring(idx+1).trim();
+        ln = ln.substring(0, idx).trim();
+      } else {
+        anno = null;
+      }
+      if (!ln) {
+        w('<LNSP></LNSP>');
+      } else {
+        w(`<p class="TEXT gatha"><span class="gathanum">`,
+          (len > 5) ? (num++) : '',
+          `&nbsp;</span>${ln.replaceAll(' ', sp)}`);
+        if (anno) w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
+        w(`</p>`);
+      }
+    }
+    delete this.gathaText;
   }
 
   writeDoc(ttl) { // convenience method for writing the whole doc
@@ -265,89 +329,144 @@ function xref(num) {
 //////////////////////////////////////////////////////////////////////////////////////
 // The following are for series, typically used for >3 in size.
 
+// -- 妙法蓮華經淺釋 宣化上人` --
+function write0119(filenum, body) {
+  var pinInfo = [
+    { id:119, vol:1 }, { id: 34, vol:1 }, { id:120, vol:2 }, { id:121, vol:2 },
+    { id:122, vol:3 }, { id:123, vol:3 }, { id:124, vol:3 }, { id:125, vol:4 },
+    { id:126, vol:4 }, { id:127, vol:4 }, { id:128, vol:4 }, { id:129, vol:4 },
+    { id:130, vol:4 }, { id: 35, vol:5 }, { id:131, vol:5 }, { id:132, vol:5 },
+    { id:133, vol:5 }, { id:134, vol:6 }, { id:135, vol:6 }, { id:136, vol:6 },
+    { id:137, vol:6 }, { id:138, vol:6 }, { id:139, vol:6 }, { id:140, vol:7 },
+    { id: 73, vol:7 }, { id:141, vol:7 }, { id:142, vol:7 }, { id:143, vol:7 },
+  ];
+  function getInfo() {
+    for (var i=0; i<pinInfo.length; ++i) {
+      var info = pinInfo[i];
+      info.volNum = i+1;
+      if (info.id == filenum) return info;
+    }
+    throw `No file found: ${filenum} for the 0119 series.`;
+  }
+  new (class extends DocInfo {
+    constructor() {
+      super();
+      this.pinInfo = pinInfo;
+      var info = getInfo();
+      this.setHints(FA_HUA_PINS)
+          .reInit(119, 28, info.volNum)
+          .writeStart(`妙法蓮華經${FA_HUA_PINS[info.volNum-1]}淺釋`)
+          .w(SP, '<p class=TEXT030C>姚秦三藏法師鳩摩羅什譯</p>',
+                 '<p class=TEXT030C>美國萬佛聖城宣化上人講述</p>')
+          .writeBody(body).writeEnd();
+    }
+    getIdAt(i) { return this.pinInfo[(i||1)-1].id; }
+  })();
+}
+
 // -- 大佛頂首楞嚴經譯解 王治平 --
 function write0145(n, body) {
-  setDocInfo(145, 10, n);
   var zn = zNumber(n);
-  writeBfnnStart(`大佛頂首楞嚴經|（卷${zn}譯解）`, `楞嚴經譯解 卷${n}`);
-  w(SP, '<p class=TEXT030C>唐天竺沙門般剌密帝　譯<br>',
-                          '烏萇國沙門彌伽釋迦　譯語<br>',
-                          '菩薩戒弟子前正議大夫同中書門下平章事清河房融　筆受</p>', SP);
-  if (n>1) w(`<p class=TEXT339>卷${zn}</p>`, SP);
-  body && docInfo.writeBody(body).writeEnd();
+  docInfo.reInit(145, 10, n)
+         .writeStart(`大佛頂首楞嚴經|（卷${zn}譯解）`, `楞嚴經譯解 卷${n}`)
+         .w(SP, '<p class=TEXT030C>唐天竺沙門般剌密帝　譯<br>',
+                '烏萇國沙門彌伽釋迦　譯語<br>',
+                '菩薩戒弟子前正議大夫同中書門下平章事清河房融　筆受</p>', SP)
+         .wIf(n>1,
+              `<p class=TEXT339>卷${zn}</p>`, SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 // -- 地藏菩薩本願經講記 淨空法師 --
 function write0166(n, body) {
-  setDocInfo(166, 51, n);
-  writeBfnnStart(`地藏菩薩本願經講記||（第${zNumber(n)}卷）`, `地藏經講記 卷${n}`);
-  w(SP, '<p class=TEXT030C>淨空法師主講<br>新加坡淨宗學會錄影室</p>', SP);
-  body && docInfo.writeBody(body).writeEnd();
+  docInfo.reInit(166, 51, n)
+         .writeStart(`地藏菩薩本願經講記||（第${zNumber(n)}卷）`, `地藏經講記 卷${n}`)
+         .w(SP, '<p class=TEXT030C>淨空法師主講<br>新加坡淨宗學會錄影室</p>', SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 // -- 恆河大手印 元音老人 --
 function write0383(n, body) {
-  setDocInfo(383, 17, n);
   var zn = zNumber(n);
-  writeBfnnStart(`恆河大手印||（第${zn}講）`, `恆河大手印 第${n}講`);
-  w(SP, '<p class=TEXT030C>元音老人 著</p>', SP);
-  if (n>1) w(`<p class=KEPAN>第${zn}講</p>`, SP);
-  body && docInfo.writeBody(body).writeEnd();
+  docInfo.reInit(383, 17, n)
+         .writeStart(`恆河大手印||（第${zn}講）`, `恆河大手印 第${n}講`)
+         .w(SP, '<p class=TEXT030C>元音老人 著</p>', SP)
+         .wIf(n>1,
+              `<p class=KEPAN>第${zn}講</p>`, SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 // -- 太上感應篇例證語譯 釋海山‧釋大恩‧釋昌臻主編 --
 function write0608(n, body) {
-  setDocInfo(608, 4, n);
   var zn = zNumber(n);
-  writeBfnnStart(`太上感應篇例證語譯|| 卷${zn}`, `太上感應篇例證 卷${n}`);
-  w(SP, '<p class=TEXT030C>釋海山‧釋大恩‧釋昌臻主編</p>', SP);
-  body && docInfo.writeBody(body).writeEnd();
+  docInfo.reInit(608, 4, n)
+         .writeStart(`太上感應篇例證語譯|| 卷${zn}`, `太上感應篇例證 卷${n}`)
+         .w(SP, '<p class=TEXT030C>釋海山‧釋大恩‧釋昌臻主編</p>', SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 // -- 佛頂文句 智旭大師 --
 function write0881(n, body) {
-  setDocInfo(881, 10, n);
   var zn = zNumber(n);
-  writeBfnnStart(`大佛頂如來密因修證了義<br>諸菩薩萬行首楞嚴經文句||（卷第${zn}）`, `佛頂文句 卷${n}`);
-  w(SP, '<p class=TEXT030C>智旭大師著<p>', SP, 
-    `<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經 【文句卷第${zn}】</p>`, SP,
-    '<p class=TEXT align=right>唐天竺沙門般剌密諦譯經　<br>明菩薩沙彌古吳智旭文句　',
-    n<7 ? '</p>' : '<br>菩薩比丘溫陵道昉參訂　</p>', SP);
-  body && docInfo.writeBody(body).writeEnd('<a href="0880.htm">玄義</a>');
+  var subttl = (n==0) ? '玄義' : `卷第${zn}`;
+  docInfo.reInit(880, 11, n+1, ['玄義','一','二','三','四','五','六','七','八','九','十'])
+         .writeStart(`大佛頂如來密因修證了義<br>諸菩薩萬行首楞嚴經文句||（${subttl}）`, `佛頂文句${subttl}`)
+         .w(SP, '<p class=TEXT030C>智旭大師著<p>', SP)
+         .w(n>0,
+            `<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經 【文句卷第${zn}】</p>`, SP)
+         .w('<p class=TEXT align=right>唐天竺沙門般剌密諦譯經　<br>明菩薩沙彌古吳智旭文句　',
+            n<7 ? '</p>' : '<br>菩薩比丘溫陵道昉參訂　</p>', SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 //  -- 彌陀疏鈔演義 淨空會本 --
 function write0900(n, body) {
-  setDocInfo(900, 4, n);
   var zn = zNumber(n);
-  writeBfnnStart(`佛說阿彌陀經疏鈔演義會本|（卷第${zn}）`, `彌陀疏鈔演義會本 第${n}`);
-  w(SP, '<p class=TEXT030C>明古杭雲棲寺 沙門袾宏述<br>',
-                          '明古杭雲棲寺 　古德演義<br>',
-                          '民國華藏蓮社 　淨空會本</p>', SP,
-    `<p class=KEPAN>佛說阿彌陀經疏鈔演義本卷第${zn}</p>`, SP);
-  body && docInfo.writeBody(body).writeEnd();
+  docInfo.reInit(900, 4, n)
+         .writeStart(`佛說阿彌陀經疏鈔演義會本|（卷第${zn}）`, `彌陀疏鈔演義會本 第${n}`)
+         .w(SP, '<p class=TEXT030C>明古杭雲棲寺 沙門袾宏述<br>',
+                '明古杭雲棲寺 　古德演義<br>',
+                '民國華藏蓮社 　淨空會本</p>', SP,
+                `<p class=KEPAN>佛說阿彌陀經疏鈔演義本卷第${zn}</p>`, SP)
+         .writeBody(body)
+         .writeEnd();
+}
+
+// -- 法華經講演錄 太虛大師 --
+function write1037(n, body) {
+  docInfo.setHints(FA_HUA_PINS)
+         .reInit(1037, 28, n)
+         .writeStart(`楞嚴經通議||（${FA_HUA_PINS[n-1]}第${zNumber(n)}）`)
+         .w(SP, '<p class=TEXT030C>太虛大師講述<br>民國十年秋在北京</p>', SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 // -- 楞嚴經通議 憨山大師 --
 function write1644(n, body) {
-  setDocInfo(1644, 10, n);
-  writeBfnnStart(`楞嚴經通議| 卷${zNumber(n)}`);
-  w(SP, '<p class=TEXT030C>明‧憨山大師著</p>', SP);
-
-  if (n>1)
-    w('<p class=TEXT align=right>唐天竺沙門般剌密帝譯　<br>',
-      '烏萇國沙門釋迦彌伽譯語　<br>',
-      '菩薩戒弟子清河房融筆受　<br>',
-      '明南嶽沙門憨山釋德清述　</p>', SP);
-  body && docInfo.writeBody(body).writeEnd('<a href="1643.htm">懸鏡</a>');
+  docInfo.reInit(1644, 10, n)
+         .writeStart(`楞嚴經通議| 卷${zNumber(n)}`)
+         .w(SP, '<p class=TEXT030C>明‧憨山大師著</p>', SP)
+         .wIf(n>1,
+              '<p class=TEXT align=right>唐天竺沙門般剌密帝譯　<br>',
+                    '烏萇國沙門釋迦彌伽譯語　<br>',
+                    '菩薩戒弟子清河房融筆受　<br>',
+                    '明南嶽沙門憨山釋德清述　</p>', SP)
+         .writeBody(body)
+         .writeEnd();
 }
 
 // -- 簡明成唯識論白話講記 于凌波居士 --
 function write2088(n, subttl, body) {
-  setDocInfo(2088, 6, n);
   var zn = zNumber(n);
-  writeBfnnStart(`簡明成唯識論白話講記||（第${zn}篇 ${subttl}）`, `成唯識論白話講記 篇${zn}`);
-  w(SP, '<p class=TEXT030C>于凌波居士講授<br>佛光山叢林學院．臺中慈明佛學研究所佛學講義</p>', SP);
+  docInfo.reInit(2088, 6, n)
+         .writeStart(`簡明成唯識論白話講記||（第${zn}篇 ${subttl}）`, `成唯識論白話講記 篇${zn}`)
+         .w(SP, '<p class=TEXT030C>于凌波居士講授<br>佛光山叢林學院．臺中慈明佛學研究所佛學講義</p>', SP);
   body && docInfo.writeBody(body).writeEnd();
 }
 
@@ -360,11 +479,11 @@ function write1875(n, body) {
     constructor() {
       super();
       this.VERSES = getHaiRenVerses();
-      this.reInit(1875, 10, n);
-      this.writeStart(`大佛頂首楞嚴經講記||（卷第${zNumber(n)}）`, `楞嚴經 海仁講記 卷${n}`);
-      w(SP, '<p class=TEXT030C>海仁老法師主講<br>受業弟子釋文珠筆記</p>');
-      if (n>1) w(SP);
-      this.writeBody(body).writeEnd();
+      this.reInit(1875, 10, n)
+          .writeStart(`大佛頂首楞嚴經講記||（卷第${zNumber(n)}）`, `楞嚴經 海仁講記 卷${n}`)
+          .w(SP, '<p class=TEXT030C>海仁老法師主講<br>受業弟子釋文珠筆記</p>', n>1 ? SP : '')
+          .writeBody(body)
+          .writeEnd();
     }
     writeln(ln, lnnum) {
       if (ln.startsWith('#HR:')) {
@@ -384,13 +503,14 @@ function write1472(n, body) {
   new (class extends DocInfo {
     constructor() {
       super();
-      this.reInit(1472, 24, n);
-      this.writeStart(`大佛頂首楞嚴經講義||第${zNumber(n)}卷`, `楞嚴經 圓瑛講義 卷${n}`);
-      w(SP, '<p class=TEXT030C>圓瑛大師著</p>');
-      if (n>1)
-        w('<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經講義</p>', SP,
-          '<p class=TEXT align=right>福州鼓山湧泉禪寺圓瑛弘悟述受法弟子明暘日新敬校　</p>', SP);
-      this.writeBody(body).writeEnd();
+      this.reInit(1472, 24, n)
+          .writeStart(`大佛頂首楞嚴經講義||第${zNumber(n)}卷`, `楞嚴經 圓瑛講義 卷${n}`)
+          .w(SP, '<p class=TEXT030C>圓瑛大師著</p>')
+          .wIf(n>1,
+               '<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經講義</p>', SP,
+               '<p class=TEXT align=right>福州鼓山湧泉禪寺圓瑛弘悟述受法弟子明暘日新敬校　</p>', SP)
+          .writeBody(body)
+          .writeEnd();
     }
     writeln(ln, lnnum) {
       if (ln.startsWith('#YY:')) {
@@ -405,6 +525,113 @@ function write1472(n, body) {
         return;
       }
       super.writeln(ln, lnnum);
+    }
+    writeSeriesNav(links) {
+      if (this.volNum <= 1) w('<inv>&laquo;</inv>');
+      else w(`<a href="${this.getIdAt(this.volNum-1)}.htm">&laquo;</a>`);
+      for (var i=1; i<=this.totalVols; ++i) {
+        var sutraVol = null, lbl = i;
+        if (this.labels) lbl = this.labels[i-1];
+        else if (i <= 10) lbl = zdigits[i]; // 漢字數字
+        switch(i) {
+        case  1: sutraVol = '經'; break;
+        case  3: sutraVol = '二'; break;
+        case  6: sutraVol = '三'; break;
+        case  9: sutraVol = '四'; break;
+        case 12: sutraVol = '五'; break;
+        case 14: sutraVol = '六'; break;
+        case 17: sutraVol = '七'; break;
+        case 19: sutraVol = '八'; break;
+        case 21: sutraVol = '九'; break;
+        case 23: sutraVol = '十'; break;
+        }
+        if (sutraVol)
+          lbl = `<ruby style="ruby-position:under">${lbl}` +
+                `<rt style="font-size:16px; margin-top:10px">${sutraVol}</rt></ruby>`;
+        if (i == this.volNum) w(`&nbsp;<cur>${lbl}</cur>`);
+        else w(`&nbsp;<a class="seriesnav" href="${this.getIdAt(i)}.htm">${lbl}</a>`);
+      }
+      if (this.volNum >= this.totalVols) w('&nbsp;<inv>&raquo;</inv>');
+      else w(`&nbsp;<a href="${this.getIdAt(this.volNum+1)}.htm">&raquo;</a>`);
+      if (links) w('　', links);
+    }
+  })();
+}
+
+// -- 大佛頂首楞嚴經正脈疏 交光大師 --
+function write1762(n, body) {
+  new (class extends DocInfo {
+    constructor() {
+      super();
+      this.reInit(1762, 38, n);
+      if (n == 1) {
+        this.writeStart(`大佛頂首楞嚴經正脈疏||序`, `楞嚴經正脈疏序`)
+            .w(SP, '<p class=TEXT030C>明 交光大師 述</p>');
+      } else {
+        var subttl = this.getSubTitle(), zn = zNumber(n+2);
+        this.writeStart(`大佛頂首楞嚴經正脈疏||第${zn}卷（${subttl}）`, `楞嚴經正脈疏卷${n+2}`)
+            .w(SP, '<p class=TEXT030C>明 交光大師 述</p>')
+            .wIf(n==38,
+                 SP, '<p class=TEXTC><a href="#a01">大佛頂首楞嚴經正脈疏卷四十</a></p>',
+                 '<p class=TEXTC><a href="#a02">刊楞嚴正脈後跋</a></p>')
+            .w(`<p class=TEXT339><p class=KEPAN>大佛頂首楞嚴經正脈疏卷${zn}（${subttl}）</p>`,
+               '<p class=TEXT align=right>明京都西湖沙門交光真鑑述</p>',
+               '<p class=TEXT align=right>蒲州萬固沙門妙峰福登校</p>', SP);
+      }
+      this.writeBody(body).writeEnd();
+    }
+    getSubTitle() {
+                   // 懸示 一 二 三 四 五 六 七 八 九 十
+      var sutraInfo = [ 3, 3, 4, 3, 5, 3, 4, 2, 4, 3, 3 ];
+      var v2sutra = [], vn = 3;
+      for (var i=0; i<sutraInfo.length; ++i) {
+        var pts = sutraInfo[i];
+        for (var j=1; j<=pts; ++j)
+          v2sutra.push({v:vn++, sutraV:i, sutraNum:j});
+      }
+      var info = v2sutra[this.volNum-2];
+      var base = (info.sutraV<1) ? '懸示' : '經文卷';
+      var part;
+      if (info.sutraV < 1) part = '上中下'[info.sutraNum-1];
+      else part = `${zNumber(info.sutraV)}之${zNumber(info.sutraNum)}`;
+      return base + part;
+    }
+    writeSeriesNav(links) {
+      var SEP = '&nbsp;', me = this;
+      function a(sutra) {
+        if (!sutra) { // 序
+          if (me.volNum == 1) w('<cur>序</cur>');
+          else w('<a class=seriesnav href="1762.htm">序</a>');
+          return;
+        }
+        w(SEP, `<ruby style="ruby-position:under; text-decoration:underline; text-decoration-style:double">`);
+        if (sutra == '科判圖表') {
+          w('<dim>一&nbsp;二&nbsp;三</dim>');
+          sutra = '<dim>科判圖表</dim>';
+        } else {
+          for (var i=1; i<arguments.length; ++i) {
+            if (i>1) w(SEP);
+            var vn = arguments[i], ndisp = (vn<10) ? zNumber(vn) : vn;
+            if (me.volNum == vn-2) w(`<cur>${ndisp}</cur>`);
+            else w(`<a class=seriesnav href="${1762+vn-3}.htm">${ndisp}</a>`);
+          }
+        }
+        w(`<rt style="font-size:16px; margin-top:5px">${sutra}</rt></ruby>`);
+      }
+      w('<p class=TEXT>&nbsp;</p>');
+      a(null); w(SEP);
+      a('科判圖表');
+      a('懸示', 4, 5, 6);
+      a('經卷一', 7, 8, 9);
+      a('卷二', 10, 11, 12, 13);
+      a('卷三', 14, 15, 16);
+      a('卷四', 17, 18, 19, 20, 21);
+      a('卷五', 22, 23, 24);
+      a('卷六', 25, 26, 27, 28);
+      a('卷七',   29, 30);
+      a('卷八', 31, 32, 33, 34);
+      a('卷九', 35, 36, 37);
+      a('經卷十', 38, 39, 40);
     }
   })();
 }

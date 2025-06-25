@@ -23,10 +23,11 @@ my_1 { }
 .kepan { color:#333399 }
 kpDone { color:#333399 }
 .volend { color:brown }
+.seriesnav { background:#cec }
 .endImage { width:300px; height:30px; background-size:300px 30px; background-image:url('../books/sign.gif'); }
 .endImageXG { width:300px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); }
 .gathanum { float:left; color:black; opacity:0.4; font-size:10px; width:25pt; padding-top:3pt }
-.gatha { color:teal }
+.gatha { color:#003388 }
 verseNum { color:#333399; font-weight:normal }
  verseNum::before { content:'【' }
  verseNum::after  { content:'】 ' }
@@ -39,6 +40,7 @@ black { color:black }
 purple { color:purple }
 label { font-weight:normal; color:purple }
 inv { opacity:0 }
+dim { opacity:0.4 }
 cur { background-color:yellow; color:red; font-weight:bold }
 
 /* for paragraphs */
