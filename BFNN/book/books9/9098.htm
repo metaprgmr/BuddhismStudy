@@ -1,0 +1,88 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>地藏菩薩本願經科註</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../../../佛學基礎/《地藏菩薩本願經》/QingLian/dzjkz-common.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body lang=ZH-TW link=blue vlink=purple background="../books/textbackground.jpg" class="Normal" bgcolor="#ffffff">
+<div id="stg"></div>
+</body></html>
+
+<script>
+const TOCContent = 
+`卷一　　忉利天宮神通品　<a href="9003.htm?vol=1">第一</a>　<br>
+　　　　分身集會品　　　<a href="9003.htm?vol=1&pin=品二">第二</a>　<br>
+卷二　　觀眾生業緣品　　<a href="9003.htm?vol=2">第三</a>　<br>
+　　　　閻浮眾生業感品　<a href="9003.htm?vol=2&pin=品四">第四</a>　<br>
+卷三　　地獄名號品　　　<a href="9003.htm?vol=3">第五</a>　<br>
+　　　　如來讚歎品　　　<a href="9003.htm?vol=3&pin=品六">第六</a>　<br>
+卷四　　利益存亡品　　　<a href="9003.htm?vol=4">第七</a>　<br>
+　　　　閻羅王眾讚歎品　<a href="9003.htm?vol=4&pin=品八">第八</a>　<br>
+　　　　稱佛名號品　　　<a href="9003.htm?vol=4&pin=品九">第九</a>　<br>
+卷五　　較量布施功德緣品<a href="9003.htm?vol=5">第十</a>　<br>
+　　　　地神護法品　　　<a href="9003.htm?vol=5&pin=品十一">第十一</a><br>
+卷六　　見聞利益品　　　<a href="9003.htm?vol=6">第十二</a><br>
+　　　　囑累人天品　　　<a href="9003.htm?vol=6&pin=品十三">第十三</a>`;
+
+function showTOC() {
+  var buf = new Buffer();
+  docInfo.setBuffer(buf).set('defaultClass', 'TEXTC').setXG(true)
+         .writeDoc('地藏菩薩本願經科注', `
+/TEXT030C/古鹽匡菴 青蓮苾芻　靈椉父 輯
+
+<span title="TODO">序</span>　　　　　　　　　　　　　　<br><br>
+
+${TOCContent}<br><br>
+
+<span title="TODO">跋</span>　　　　　　　　　　　　　　<p/>
+
+`);
+  buf.render('stg');
+} // showTOC().
+
+function showVol(vol, pin) {
+  addjs(`../../../佛學基礎/《地藏菩薩本願經》/QingLian/dzjkz${vol}.js`);
+  var timer = setInterval(() => {
+    if (VOLUMES.length == 0) return; // not ready yet
+    for (var i in VOLUMES) bfnnShow(VOLUMES[i], pin);
+    clearInterval(timer);
+  }, 300);
+  return true;
+}
+
+function bfnnShow(volume, pin) {
+  var buf = new Buffer();
+  new (class extends DocInfo {
+    constructor() {
+      super();
+      this.setBuffer(buf)
+          .setXG()
+          .reInit(9003, 6, volume.volNum)
+          .writeStart(`地藏菩薩本願經科注||卷${volume.volNum}`, `地藏經科注 卷${volume.volNum}`)
+          .w(SP, '<p class=TEXT030C>古鹽匡菴 青蓮苾芻　靈椉父 輯</p>', SP);
+      for (var i in volume.pins) {
+        var p = volume.pins[i];
+        for (var k in p.lines) {
+          var li = p.lines[k];
+          if (!(nokp && li.isKePan())) buf.w(li.toDisp(), SP);
+        }
+      }
+      this.w(`<p class=TEXT030 align=right>地藏菩薩本願經科注 卷${volume.volNum}　</p>`, SP)
+          .writeEnd();
+      buf.render('stg');
+      pin && showTop(pin);
+    }
+
+    writeSeriesNav(links) {
+      var id = '卷' + this.volNum;
+      this.w('<center><hr class=volsep>', TOCContent.replace(id, `<cur>${id}</cur>`), '</center>');
+    }
+  })();
+}
+
+var nokp = get('nokp'), vol = get('vol'), pin = get('pin');
+vol && showVol(vol, pin) || showTOC();
+</script>

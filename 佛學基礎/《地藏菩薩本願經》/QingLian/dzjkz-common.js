@@ -27,7 +27,10 @@ class LineInfo {
   toDisp() {
     var vnum = this.isVerse() ? ('【' + this.pin + '.' + this.verseNum + '】&nbsp;') : '';
     var ret = '<p class=' + this.type + '>' + vnum + this.txt + '</p>';
-    if (this.isPinTitle) ret = '<a name="品' + this.pin + '">' + ret + '</a>';
+    if (this.isPinTitle) {
+      var anchor = `品${this.pin}`;
+      ret = `<a name="${anchor}" id="${anchor}">${ret}</a>`;
+    }
     return ret;
   }
   addToVerseView(obj) { if (this.isVerse() && this.pin) obj.addForView(this.pin, this.verseNum, this.txt); }

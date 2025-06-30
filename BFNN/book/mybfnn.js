@@ -1,5 +1,5 @@
-const zdigits = '〇一二三四五六七八九十';
 function zNumber(n) { // 0 to 999
+  const zdigits = '〇一二三四五六七八九十';
   if (typeof n == 'string') n = parseInt(n);
   if (n <= 10) return zdigits[n];
   if (n > 10 && n < 20) return '十' + zdigits[n-10];
@@ -56,6 +56,7 @@ const FA_HUA_PINS = [
 class DocInfo {
   constructor() {
     this.defaultClass = 'TEXT';
+    this.zdigits = '〇一二三四五六七八九十';
     docInfo = this; // singleton
   }
   reInit(firstVol, totalVols, vol, labels) {
@@ -69,24 +70,33 @@ class DocInfo {
     var idx = (i || 1) - 1;
     return this.idMap ? this.idMap[idx] : this.firstVolNum + idx;
   }
+  setBuffer(buf) { this.buf = buf; return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
   setXG(endCenter) { this.isXG = true; this.endCenter = endCenter; return this; }
   setHints(hints) { this.hints = hints; return this; }
   set(k,v) { k && v && (this[k]=v); return this; }
-  w() { for(var i in arguments) document.write(arguments[i]); return this; }
+  w() {
+    for(var i in arguments)
+      if (this.buf) this.buf.w(arguments[i]);
+      else document.write(arguments[i]);
+    return this;
+  }
   wIf() {
-    if (arguments.length > 1 && arguments[0])
-      for(var i=1; i<arguments.length; ++i) document.write(arguments[i]);
+    if (arguments.length > 1 && arguments[0]) {
+      arguments[0] = '';
+      this.w.apply(this, arguments);
+    }
     return this;
   }
   writeStart(ttl, docTtl) {
     // ttl can have | indicating subtitle; or || for subtitle with line break
 
-    w(`<body lang=ZH-TW link=blue vlink=purple background="../books/textbackground.jpg"
-       class="Normal" bgcolor="#ffffff">`,
-      `<div class=bookClean style='layout-grid:18.0pt'>`); // content starts...
+    if (!this.buf)
+      this.w(`<body lang=ZH-TW link=blue vlink=purple background="../books/textbackground.jpg"
+             class="Normal" bgcolor="#ffffff">`);
+    this.w(`<div class=bookClean style='layout-grid:18.0pt'>`); // content starts...
     if (this.isXG && this.endCenter)
-      w('<table><tr><td>');
+      this.w('<table><tr><td>');
 
     var idx = ttl.indexOf('|');
     if (idx > 0) {
@@ -101,26 +111,26 @@ class DocInfo {
         ttl += `<subtitle>${sub}</subtitle>`;
       }
     }
-    w(`<p class=TITLE>${ttl}</p>`);
+    this.w(`<p class=TITLE>${ttl}</p>`);
     document.title = docTtl || ttl;
     return this;
   }
   writeEnd(links) {
     if (this.firstVolNum) {
-      w(SP, '<div class=endBar>');
+      this.w(SP, '<div class=endBar>');
       this.writeSeriesNav(links);
-      w('</div>');
+      this.w('</div>');
     } else if (links) {
-      w(SP, '<div class=endBar>', links, '</div>');
+      this.w(SP, '<div class=endBar>', links, '</div>');
     }
-    w('</div>'); // ...content ends
+    this.w('</div>'); // ...content ends
     if (this.isXG)
-      w(this.endCenter
+      this.w(this.endCenter
         ? '</td></tr><tr><td><div class=endImageXG></div></td></tr></table>'
         : '<div class=endImageXG></div>');
     else
-      w('<div class=endImage title="本頁經信裹居士重新編碼、清理、補正"></div>');
-    w('</body></html>');
+      this.w('<div class=endImage title="本頁經信裹居士重新編碼、清理、補正"></div>');
+    this.w('</body></html>');
     return this;
   }
   writeSeriesNav(links) {
@@ -128,19 +138,19 @@ class DocInfo {
       pnum = to4d(pnum);
       return terse ? `${pnum}.htm?terse` : `${pnum}.htm`;
     }
-    if (this.volNum <= 1) w('<inv>&laquo;</inv>');
-    else w(`<a href="${fname(this.getIdAt(this.volNum-1))}">&laquo;</a>`);
+    if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
+    else this.w(`<a href="${fname(this.getIdAt(this.volNum-1))}">&laquo;</a>`);
     for (var i=1; i<=this.totalVols; ++i) {
       var lbl = i, hint = '';
       if (this.labels) lbl = this.labels[i-1];
       if (this.hints) hint = ` title="${this.hints[i-1]}"`;
-      else if (i <= 10) lbl = zdigits[i]; // 漢字數字
-      if (i == this.volNum) w(`&nbsp;<cur${hint}>${lbl}</cur>`);
-      else w(`&nbsp;<a class="seriesnav" href="${fname(this.getIdAt(i))}"${hint}>${lbl}</a>`);
+      else if (i <= 10) lbl = this.zdigits[i]; // 漢字數字
+      if (i == this.volNum) this.w(`&nbsp;<cur${hint}>${lbl}</cur>`);
+      else this.w(`&nbsp;<a class="seriesnav" href="${fname(this.getIdAt(i))}"${hint}>${lbl}</a>`);
     }
-    if (this.volNum >= this.totalVols) w('&nbsp;<inv>&raquo;</inv>');
-    else w(`&nbsp;<a href="${fname(this.getIdAt(this.volNum+1))}">&raquo;</a>`);
-    if (links) w('　', links);
+    if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
+    else this.w(`&nbsp;<a href="${fname(this.getIdAt(this.volNum+1))}">&raquo;</a>`);
+    if (links) this.w('　', links);
   }
   writeBody(txt) {
     // The features are:
@@ -170,7 +180,7 @@ class DocInfo {
       var ln = a[i];
       while (ln.endsWith('\\') && i<len)
         ln = ln.substring(0,ln.length-1) + '<br>' + a[++i];
-      if (!ln || (ln.trim().length == 0)) { w(SP); continue; }
+      if (!ln || (ln.trim().length == 0)) { this.w(SP); continue; }
       if (ln.endsWith('|')) ln = ln.substring(0, ln.length-1); // trailing | is just visual
       this.writeln(ln, i+1);
     }
@@ -188,7 +198,7 @@ class DocInfo {
         this.inHtml = false;
         ln = ln.substring(0, ln.length-7);
       }
-      w(ln, '\n');
+      this.w(ln, '\n');
       return;
     }
 
@@ -197,7 +207,7 @@ class DocInfo {
         this.inJS = false;
         ln = ln.substring(0, ln.length-10) + '</script>';
       }
-      w(ln.replaceAll('\\`', '`'), '\n');
+      this.w(ln.replaceAll('\\`', '`'), '\n');
       return;
     }
 
@@ -219,7 +229,7 @@ class DocInfo {
         ln = ln.substring(0, ln.length-7);
       else
         this.inHtml = true;
-      w(ln, '\n');
+      this.w(ln, '\n');
       return;
     }
 
@@ -231,7 +241,7 @@ class DocInfo {
         this.inJS = true;
         ln = '<script>' + ln;
       }
-      w(ln.replaceAll('\\`', '`'), '\n');
+      this.w(ln.replaceAll('\\`', '`'), '\n');
       return;
     }
 
@@ -241,7 +251,7 @@ class DocInfo {
     }
 
     if (ln.startsWith('/VOLSEP/')) { // e.g. 9011
-      w('<hr class=volsep>');
+      this.w('<hr class=volsep>');
       return;
     }
 
@@ -250,7 +260,7 @@ class DocInfo {
             (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
 
     if (ln[0] != this.metaLeft) {
-      w(`<p class=${this.defaultClass}>${ln}</p>`);
+      this.w(`<p class=${this.defaultClass}>${ln}</p>`);
       return;
     }
 
@@ -261,13 +271,13 @@ class DocInfo {
     if (cls.length > 1) {
       var anchors = cls[1].split(',');
       for (var k in anchors)
-        ln = `<a name="${anchors[k]}"></a>${ln}`;
+        ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
     }
     cls = cls[0] || this.defaultClass;
     if (cls == 'TEXTR') cls = 'TEXT align=right';
     if (cls.endsWith('align=right') && !ln.endsWith('　'))
       ln += '　';
-    w(`<p class=${cls}>${ln}</p>`);
+    this.w(`<p class=${cls}>${ln}</p>`);
   }
 
   gatha() {
@@ -284,13 +294,13 @@ class DocInfo {
         anno = null;
       }
       if (!ln) {
-        w('<LNSP></LNSP>');
+        this.w('<LNSP></LNSP>');
       } else {
-        w(`<p class="TEXTL gatha"><span class="gathanum">`,
+        this.w(`<p class="TEXTL gatha"><span class="gathanum">`,
           (len > 5) ? (num++) : '',
           `&nbsp;</span>${ln.replaceAll(' ', sp)}`);
-        if (anno) w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
-        w(`</p>`);
+        if (anno) this.w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
+        this.w(`</p>`);
       }
     }
     delete this.gathaText;
@@ -532,7 +542,7 @@ function write1472(n, body) {
       for (var i=1; i<=this.totalVols; ++i) {
         var sutraVol = null, lbl = i;
         if (this.labels) lbl = this.labels[i-1];
-        else if (i <= 10) lbl = zdigits[i]; // 漢字數字
+        else if (i <= 10) lbl = this.zdigits[i]; // 漢字數字
         switch(i) {
         case  1: sutraVol = '經'; break;
         case  3: sutraVol = '二'; break;

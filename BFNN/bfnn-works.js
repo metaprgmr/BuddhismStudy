@@ -124,35 +124,6 @@ class BfnnWorkSpecial extends BfnnWork {
         buf1.w(' ', this.getLinkDisp(i, (vol<=10) ? zNumber(vol) : vol));
       }
       return buf1.render();
-    case 9004:  // 9004~9 地藏菩薩本願經科註 青蓮大師
-      return `
-　卷一　<a href="book/books9/9004.htm">忉利天宮神通品第一</a>　　<a href="book/books9/9004.htm#品二">分身集會品第二</a><br>
-　卷二　<a href="book/books9/9005.htm">觀眾生業緣品第三</a>　　　<a href="book/books9/9005.htm#品四">閻浮眾生業感品第四</a><br>
-　卷三　<a href="book/books9/9006.htm">地獄名號品第五</a>　　　　<a href="book/books9/9006.htm#品六">如來讚歎品第六</a><br>
-　卷四　<a href="book/books9/9007.htm">利益存亡品第七</a>　　　　<a href="book/books9/9007.htm#品八">閻羅王眾讚歎品第八</a>　　<a href="book/books9/9007.htm#品九">稱佛名號品第九</a>　<br>
-　卷五　<a href="book/books9/9008.htm">較量布施功德緣品第十</a>　<a href="book/books9/9008.htm#品十一">地神護法品第十一</a><br>
-　卷六　<a href="book/books9/9009.htm">見聞利益品第十二</a>　　　<a href="book/books9/9009.htm#品十三">囑累人天品第十三</a>`;
-    case 9101: // 9101~80 大方廣佛華嚴經
-      var len = this.numOfParts(), buf1 = new Buffer(' ');
-      for (var i=0; i<len; ++i) {
-        var n = i+1;
-        switch (n) {
-        case  1: buf1.w(    '　初會菩提場：　　'); break;
-        case 12: buf1.w('　(六品)<br>　二會普光明殿：　'); break;
-        case 16: buf1.w('　(六品)<br>　三會忉利天宮：　'); break;
-        case 19: buf1.w('　(六品)<br>　四會夜摩天宮：　'); break;
-        case 22: buf1.w('　(四品)<br>　五會兜率天宮：　'); break;
-        case 34: buf1.w('　(三品)<br>　六會他化自在天：'); break;
-        case 40: buf1.w('　《十地品》<br>　七再會重普光殿：'); break;
-        case 53: buf1.w('　(十一品)<br>　八三會普光明殿：'); break;
-        case 60: buf1.w('　《離世間品》<br>　九會逝多林：　　'); break;
-        }
-        if (n <= 10) n = zNumber(n);
-        buf1.w(' <i>', n, '</i>');
-        //buf1.w(' ', this.getLinkDisp(i, n)); // TODO: get'em
-      }
-      buf1.w('　《入法界品》');
-      return buf1.render();
     }
     return super.renderMultiPiece(buf);
   }
@@ -226,14 +197,20 @@ function parseBfnnWorks(data) {
         isSutra = false;
     if (author && (author.indexOf('譯')>0)) { translator = author; author = null; }
     if (nums.endsWith('=!')) { isSutra = true; nums = nums.substring(0,nums.length-2); }
-    var nums = nums.split('~');
-    if (nums.length == 1) nums = parseInt(nums[0]);
-    else {
-      var len1 = nums[0].length, len2 = nums[1].length;
-      if (len2 < len1)
-        nums[1] = nums[0].substring(0, len1-len2) + nums[1];
-      nums[0] = parseInt(nums[0]);
-      nums[1] = parseInt(nums[1]);
+    if (nums.endsWith('~')) {
+      nums = parseInt(nums.substring(0, nums.length-1));
+      nums = [ nums, nums ]; // single container htm for multiple pages
+    } else {
+      var nums = nums.split('~');
+      if (nums.length == 1) // a single page
+        nums = parseInt(nums[0]);
+      else { // a series of a few pages
+        var len1 = nums[0].length, len2 = nums[1].length;
+        if (len2 < len1)
+          nums[1] = nums[0].substring(0, len1-len2) + nums[1];
+        nums[0] = parseInt(nums[0]);
+        nums[1] = parseInt(nums[1]);
+      }
     }
 
     const ADHOC = 'ADHOC';
@@ -1471,9 +1448,7 @@ f善書　　#510 太上感應篇大意|淨空法師
 -人物　　#2161 倓虛大師追思錄|受法弟子等敬印
 ?楞嚴經　#2162~72 大佛頂首楞嚴經講記|湛山倓虛大師述 // ADHOC
  淨土　　#9000=! 無量壽經優波提舍願生偈|婆藪槃豆菩薩
- 淨土　　#9001 往生論註|釋曇鸞
- 佛學基礎#9002 佛法非宗教非哲學，而為今時所必需|歐陽竟無，王恩洋
- 地藏經　#9004~9 地藏菩薩本願經科註|青蓮大師 // ADHOC
+ 華嚴經　#9010=! 大方廣佛華嚴經|唐于闐實叉難陀譯 // (共80卷)
  　　　　#9011=! 悲華經|北涼天竺三藏曇無讖譯
  　　　　#9012=! 千手千眼觀世音菩薩廣大圓滿無礙大悲心陀羅尼經|唐西天竺沙門伽梵達摩譯
  　　　　#9013=! 佛說觀世音三昧經
@@ -1482,5 +1457,7 @@ f善書　　#510 太上感應篇大意|淨空法師
  　　　　#9016=! 佛說大乘莊嚴寶王經|中印度惹爛馱囉國密林寺三藏賜紫沙門臣天息災奉　制譯
  唯識論　#9017=! 解深密經|大唐三藏法師玄奘奉　詔譯
  施食　　#9018=! 佛說救拔焰口餓鬼陀羅尼經|唐三藏沙門 不空譯
- 華嚴經　#9101~80=! 大方廣佛華嚴經|唐于闐實叉難陀譯 // ADHOC
+ 淨土　　#9097 往生論註|釋曇鸞
+ 地藏經　#9098 地藏菩薩本願經科註|青蓮大師 // (共6卷)
+ 佛學基礎#9099 佛法非宗教非哲學，而為今時所必需|歐陽竟無，王恩洋
 s金剛經　#9868=! 金剛般若波羅密經|信裹居士編輯 // (經文特殊排版)<br>　諸經文鏈接到 0868.htm 與 1227.htm 相應解釋。`);
