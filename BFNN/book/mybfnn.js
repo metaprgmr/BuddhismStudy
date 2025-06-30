@@ -13,12 +13,7 @@ function zNumber(n) { // 0 to 999
   if (d1 > 0) ret += zdigits[d1];
   return ret;
 }
-function toW(n, w, c) {
-  n = '' + n;
-  if (!c) c = ' ';
-  while (n.length < w) n = c + n;
-  return n;
-}
+function to4d(n) { for (n =''+n; n.length<4; n='0'+n); return n; }
 function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
@@ -70,7 +65,10 @@ class DocInfo {
     this.volNum = vol || 1;
     return this;
   }
-  getIdAt(i/*1-based*/) { return this.firstVolNum + (i||1) - 1; }
+  getIdAt(i/*1-based*/) {
+    var idx = (i || 1) - 1;
+    return this.idMap ? this.idMap[idx] : this.firstVolNum + idx;
+  }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
   setXG(endCenter) { this.isXG = true; this.endCenter = endCenter; return this; }
   setHints(hints) { this.hints = hints; return this; }
@@ -127,7 +125,7 @@ class DocInfo {
   }
   writeSeriesNav(links) {
     function fname(pnum) {
-      pnum = toW(pnum, 4, '0');
+      pnum = to4d(pnum);
       return terse ? `${pnum}.htm?terse` : `${pnum}.htm`;
     }
     if (this.volNum <= 1) w('<inv>&laquo;</inv>');
@@ -242,6 +240,11 @@ class DocInfo {
       return;
     }
 
+    if (ln.startsWith('/VOLSEP/')) { // e.g. 9011
+      w('<hr class=volsep>');
+      return;
+    }
+
     // process <a!999>; e.g. 0010
     ln = ln.replace(/<a!\d+>/g,
             (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
@@ -283,7 +286,7 @@ class DocInfo {
       if (!ln) {
         w('<LNSP></LNSP>');
       } else {
-        w(`<p class="TEXT gatha"><span class="gathanum">`,
+        w(`<p class="TEXTL gatha"><span class="gathanum">`,
           (len > 5) ? (num++) : '',
           `&nbsp;</span>${ln.replaceAll(' ', sp)}`);
         if (anno) w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
@@ -323,7 +326,7 @@ function xref(num) {
     if (num >= 9000) return 'books9';
     return '';
   }
-  window.open(`../${subfolder(num)}/${toW(num,4,'0')}.htm`, 'ext');
+  window.open(`../${subfolder(num)}/${to4d(num)}.htm`, 'ext');
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -340,27 +343,24 @@ function write0119(filenum, body) {
     { id:137, vol:6 }, { id:138, vol:6 }, { id:139, vol:6 }, { id:140, vol:7 },
     { id: 73, vol:7 }, { id:141, vol:7 }, { id:142, vol:7 }, { id:143, vol:7 },
   ];
-  function getInfo() {
-    for (var i=0; i<pinInfo.length; ++i) {
-      var info = pinInfo[i];
-      info.volNum = i+1;
-      if (info.id == filenum) return info;
-    }
-    throw `No file found: ${filenum} for the 0119 series.`;
-  }
   new (class extends DocInfo {
     constructor() {
       super();
-      this.pinInfo = pinInfo;
-      var info = getInfo();
+      this.idMap = [];
+      var curIdx;
+      for (var i=0; i<pinInfo.length; ++i) {
+        var pi = pinInfo[i];
+        this.idMap[i] = pi.id;
+        pi.volNum = i+1;
+        if (pi.id == filenum) curIdx = i;
+      }
       this.setHints(FA_HUA_PINS)
-          .reInit(119, 28, info.volNum)
-          .writeStart(`妙法蓮華經${FA_HUA_PINS[info.volNum-1]}淺釋`)
+          .reInit(119, 28, cur.volNum)
+          .writeStart(`妙法蓮華經${FA_HUA_PINS[curIdx]}淺釋`)
           .w(SP, '<p class=TEXT030C>姚秦三藏法師鳩摩羅什譯</p>',
                  '<p class=TEXT030C>美國萬佛聖城宣化上人講述</p>')
           .writeBody(body).writeEnd();
     }
-    getIdAt(i) { return this.pinInfo[(i||1)-1].id; }
   })();
 }
 
@@ -458,7 +458,7 @@ function write1644(n, body) {
                     '菩薩戒弟子清河房融筆受　<br>',
                     '明南嶽沙門憨山釋德清述　</p>', SP)
          .writeBody(body)
-         .writeEnd();
+         .writeEnd('<a href="1643.htm">懸鏡</a>');
 }
 
 // -- 簡明成唯識論白話講記 于凌波居士 --

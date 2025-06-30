@@ -94,7 +94,7 @@ class JKPSLesson {
 
   ziCount() {
     var cnt = 0;
-    for (var i in this.text) cnt += countZis(this.text[i]);
+    for (var i in this.text) cnt += countHanZi(this.text[i]);
     return cnt;
   }
 

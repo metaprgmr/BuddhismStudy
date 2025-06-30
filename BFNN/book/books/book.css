@@ -15,6 +15,7 @@ a { text-decoration:none }
 BODY {SCROLLBAR-FACE-COLOR: #0099FF; SCROLLBAR-HIGHLIGHT-COLOR: #0099FF; SCROLLBAR-SHADOW-COLOR: #006699; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: 
 #00354F; } 
 .endBar { text-align:center }
+hr.volsep { border: none; height: 1px; background: rgba(255, 0, 0, 0.3); }
 
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
 my   { }
@@ -46,10 +47,11 @@ cur { background-color:yellow; color:red; font-weight:bold }
 /* for paragraphs */
 LNSP {margin:0cm; font-size:9.0pt; font-family:細明體;}
 LNSP::before {content: '　';}
+.MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal }
 .TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}
 .TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}
 .TEXTC    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center}
-.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#333399}
+.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#333399}
 .TEXT339L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#333399}
 .TEXT339C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#333399}
 .TEXT030  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#003300}

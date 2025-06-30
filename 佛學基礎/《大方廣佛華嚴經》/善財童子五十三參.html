@@ -1,0 +1,441 @@
+<html>
+<!-- https://sites.google.com/site/shanshuge/xian-shang-yue-du/shi-jia-jing-dian/shancaitongziwushisancan -->
+<!-- https://baike.baidu.hk/item/五十三參/7068264 -->
+<head>
+<meta charset="utf-8">
+<title>善財童子五十三參</title>
+<link rel="stylesheet" href="../../util/article.css">
+<script>
+const lst = [
+  { teacher:[ '德雲比丘', '功德雲比丘', '吉祥雲比丘' ], sanskrit:'Meghaśrī-bhikşu', where:'勝樂國妙峯山',
+    numInSutra: 3, // 入法界品第三十九之三
+    teaching:'“憶念一切諸佛境界智慧光明普見法門”'
+  },
+  { teacher:'海雲比丘', sanskrit:'Sāgara-megha', where:'海門國',
+    numInSutra: 3, // 入法界品第三十九之三
+    teaching:'“諸佛菩薩行光明普眼法門”'
+  },
+  { teacher:'善住比丘', sanskrit:'Supratişthita', where:'楞伽道邊海岸聚落',
+    numInSutra: 3, // 入法界品第三十九之三
+    teaching:'“普速疾供養諸佛成就眾生無礙解脱法門”'
+  },
+  { teacher:'彌伽大士', sanskrit:'Megha-dramida', where:'達裏鼻茶國自在城',
+    numInSutra: 4, // 入法界品第三十九之四
+    teaching:'“妙音陀羅尼光明法門”'
+  },
+  { teacher:'解脱長者', sanskrit:'Vimuktika-śreşthin', where:'遊行十二年至住林城',
+    numInSutra: 4, // 入法界品第三十九之四
+    teaching:'“如來無礙莊嚴解脱法門”'
+  },
+  { teacher:'海幢比丘', sanskrit:'Sāgara-dhvaja', where:'閻浮提畔利伽羅國',
+    numInSutra: 4, // 入法界品第三十九之四
+    teaching:'“般若波羅蜜三昧光明”'
+  },
+  { teacher:'休舍優婆夷', sanskrit:'Ashā', where:'海潮處普莊嚴國',
+    numInSutra: 5, // 入法界品第三十九之五
+    teaching:'“離憂安穩幢解脱法門”'
+  },
+  { teacher:[ '毗目瞿沙仙人', '毗目多羅仙人' ], sanskrit:'Bhīşmottara-nirghoşa', where:'那羅素國',
+    numInSutra: 5, // 入法界品第三十九之五
+    teaching:'“菩薩無勝幢解脱”'
+  },
+  { teacher:[ '勝熱婆羅門', '方便命婆羅門' ], sanskrit:'Jayoşmāya', where:'伊沙那聚落',
+    numInSutra: 5, // 入法界品第三十九之五
+    teaching:'承其教，於登刀山、投火聚時，證得菩薩善住三昧及菩薩寂靜樂神通三昧。',
+  },
+  { teacher:'慈行童女', sanskrit:'Maitreyanī', where:'獅子奮迅城',
+    numInSutra: 6, // 入法界品第三十九之六
+    teaching:'“般若波羅蜜普莊嚴法門”'
+  },
+  { teacher:'善見比丘', sanskrit:'Su-darshana', where:'三眼國',
+    numInSutra: 6, // 入法界品第三十九之六
+    teaching:'“菩薩隨順燈解脱法門”'
+  },
+  { teacher:[ '自在主童子', '釋天主童子' ], sanskrit:'Indriyeśvara', where:'名聞國河渚中',
+    numInSutra: 6, // 入法界品第三十九之六
+    teaching:'“一切工巧大神通智光明法門”'
+  },
+  { teacher:[ '具足優婆夷', '自在優婆夷' ], sanskrit:'Prabhūtā', where:'海住大城',
+    numInSutra: 6, // 入法界品第三十九之六
+    teaching:'“菩薩無盡福德藏解脱法門”'
+  },
+  { teacher:[ '明智居士', '甘露頂長者' ], sanskrit:'Vidvan', where:'大興城',
+    numInSutra: 7, // 入法界品第三十九之七
+    teaching:'“隨意出生福德藏解脱法門”'
+  },
+  { teacher:[ '法寶髻長者', '法寶周羅長者' ], sanskrit:'Ratna-cūda', where:'獅子大城',
+    numInSutra: 7, // 入法界品第三十九之七
+    teaching:'“菩薩無量福德寶藏解脱法門”'
+  },
+  { teacher:'普眼長者', sanskrit:'Samanta-netra', where:'藤根國普門城',
+    numInSutra: 7, // 入法界品第三十九之七
+    teaching:'“令一切眾生普見諸佛歡喜法門”'
+  },
+  { teacher:[ '無厭足王', '滿足王' ], sanskrit:'Anala', where:'多羅幢城',
+    numInSutra: 7, // 入法界品第三十九之七
+    teaching:'“菩薩如幻解脱”'
+  },
+  { teacher:'大光王', sanskrit:'Mahāprabha', where:'妙光城',
+    numInSutra: 7, // 入法界品第三十九之七
+    teaching:'“菩薩大慈為首隨順世間三昧法門”'
+  },
+  { teacher:'不動優婆夷', sanskrit:'Acalā', where:'安住國',
+    numInSutra: 7, // 入法界品第三十九之七
+    teaching:'“求一切法無厭足三昧光明”'
+  },
+  { teacher:[ '遍行外道', '隨順一切眾生外道' ], sanskrit:'Sarvagāmin', where:'都薩羅城',
+    numInSutra: 8, // 入法界品第三十九之八
+    teaching:'“至一切處菩薩行”'
+  },
+  { teacher:[ '鬻香長者', '青蓮華香長者', '優缽羅華香長者' ], sanskrit:'Utpalabhūti', where:'廣大國',
+    numInSutra: 8, // 入法界品第三十九之八
+    teaching:'“調和一切香法”'
+  },
+  { teacher:[ '婆施羅船師', '自在海師' ], sanskrit:'Vairocana', where:'樓閣大城',
+    numInSutra: 8, // 入法界品第三十九之八
+    teaching:'“大悲幢行”'
+  },
+  { teacher:'無上勝長者', sanskrit:'Jayottama', where:'可樂城',
+    numInSutra: 8, // 入法界品第三十九之八
+    teaching:'“至一切處修菩薩行清淨法門”'
+  },
+  { teacher:[ '師子頻申比丘尼', '獅子奮迅比丘尼' ], sanskrit:'Simha-vijrimbhitā', where:'輸那國迦陵迦林城',
+    numInSutra: 8, // 入法界品第三十九之八
+    teaching:'“成就一切智解脱”'
+  },
+  { teacher:[ '婆須蜜多女', '婆須彌多女' ], sanskrit:'Vasumitrā', where:'險難國寶莊嚴城',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“菩薩離貪際解脱”'
+  },
+  { teacher:'鞞瑟胝羅居士', sanskrit:'Veşthila', where:'善度城',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“菩薩所得不般涅槃際解脱”'
+  },
+  { teacher:'觀自在菩薩', sanskrit:'Avalokiteśvara', where:'補怛洛迦山',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“大悲行法門”'
+  },
+  { teacher:'正趣菩薩', sanskrit:'Ananyagāmin', where:'觀自在菩薩處',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“菩薩普疾行解脱”'
+  },
+  { teacher:'大天神', sanskrit:'Mahādeva', where:'墯羅缽底城',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“菩薩雲網解脱”'
+  },
+  { teacher:'安住地神', sanskrit:'Sthāvarā', where:'摩竭提國菩提場',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“不可壞智慧藏法門”'
+  },
+  { teacher:[ '婆珊婆演底主夜神', '婆娑陀夜天', '婆珊那演底主夜神' ], sanskrit:'Vasantī', where:'摩竭提國迦毗羅城',
+    numInSutra: 9, // 入法界品第三十九之九
+    teaching:'“菩薩破一切眾生暗法光明解脱法門”'
+  },
+  { teacher:[ '普德淨光主夜神', '甚深妙德離垢光明夜天' ], sanskrit:'Samanta-gambhīraśrī-vimala-prabhā', where:'摩竭提國菩提場',
+    numInSutra: 10, // 入法界品第三十九之十
+    teaching:'“菩薩寂靜禪定樂普遊步解脱法門”'
+  },
+  { teacher:[ '喜目觀察眾生主夜神', '喜目觀察眾生夜天' ], sanskrit:'Pramudita-nayana-jagad-virocanā', where:'菩提場右邊',
+    numInSutra: 10, // 入法界品第三十九之十
+    teaching:'“大勢力普喜幢解脱法門”'
+  },
+  { teacher:[ '普救眾生妙德夜神', '妙德救護眾生夜天' ], sanskrit:'Samanta-sattva-trānojah-śrī', where:'',
+    numInSutra: 11, // 入法界品第三十九之十一
+    teaching:'“普現一切世間調伏眾生解脱法門”'
+  },
+  { teacher:[ '寂靜音海主夜神', '寂靜音夜天' ], sanskrit:'Prashānta-ruta-sāgaravatī', where:'',
+    numInSutra: 12, // 入法界品第三十九之十二
+    teaching:'“念念出生廣大喜莊嚴解脱法門”'
+  },
+  { teacher:[ '守護一切眾生主夜神', '妙德守護諸城夜天' ], sanskrit:'Sarva-nagara-rakşā-sambhava-tejah-śrī', where:'菩提場如來會中',
+    numInSutra: 12, // 入法界品第三十九之十二
+    teaching:'“甚深自在妙音解脱法門”'
+  },
+  { teacher:[ '開敷一切樹花主夜神', '開敷樹華夜天' ], sanskrit:'Sarva-vrikşa-praphullana-sukha-samvāsā', where:'',
+    numInSutra: 13, // 入法界品第三十九之十三
+    teaching:'“出生廣大光明解脱法門”'
+  },
+  { teacher:[ '大願精進力救護一切眾生夜神', '願勇光明守護眾生夜天' ], sanskrit:'Sarva-jagad-rakşī-pranidhāna-vīrya-prabhā', where:'',
+    numInSutra: 14, // 入法界品第三十九之十四
+    teaching:'“教化眾生令生善根解脱法門”'
+  },
+  { teacher:[ '妙德圓滿神', '妙德圓滿天' ], sanskrit:'Sutejo-mandnalarati-śrī', where:'嵐毗尼園',
+    numInSutra: 15, // 入法界品第三十九之十五
+    teaching:'“菩薩於無量劫遍一切處示現受生自在解脱法門”'
+  },
+  { teacher:[ '釋迦瞿波女', '瞿夷女' ], sanskrit:'Gopā', where:'迦毗羅城',
+    numInSutra: 16, // 入法界品第三十九之十六
+    teaching:'“觀察菩薩三昧海解脱法門”'
+  },
+  { teacher:'摩耶夫人', sanskrit:'Māyā', where:'大寶蓮華座上',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“菩薩大願智幻解脱法門”'
+  },
+  { teacher:[ '王女天主光', '天主光童女', '正念光童女' ], sanskrit:'Surendrābhā', where:'天宮',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“無礙念清淨莊嚴解脱”'
+  },
+  { teacher:[ '遍友童子師', '遍友童子' ], sanskrit:'Viśvā-mitra', where:'迦毗羅城',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'別無指示'
+  },
+  { teacher:'善知眾藝童子', sanskrit:'Śilpābhijna', where:'',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“四十二字母法門”'
+  },
+  { teacher:'賢勝優婆夷', sanskrit:'Bhadrottamā', where:'摩竭提國婆怛那城',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“無依處道場解脱法門”'
+  },
+  { teacher:[ '堅固解脱長者', '堅固長者' ], sanskrit:'Muktā-sāra', where:'沃田城',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“無著念清淨莊嚴解脱”'
+  },
+  { teacher:'妙月長者', sanskrit:'Sucandra', where:'',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“淨智光明解脱法門”'
+  },
+  { teacher:'無勝軍長者', sanskrit:'Ajita-sena', where:'出生城',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“菩薩無盡相解脱”'
+  },
+  { teacher:[ '最寂靜婆羅門', '屍毗最勝婆羅門' ], sanskrit:'Śiva-rāgra', where:'城南法聚落',
+    numInSutra: 17, // 入法界品第三十九之十七
+    teaching:'“菩薩誠願語解脱”'
+  },
+  { teacher:'德生童子及有德童女', sanskrit:'Śrī-sambhava, Śrī-matī', where:'妙意華門城',
+    numInSutra: 18, // 入法界品第三十九之十八
+    teaching:'“菩薩幻住解脱”'
+  },
+  { teacher:'彌勒菩薩', sanskrit:'Maitreya', where:'海岸國大莊嚴園中',
+    numInSutra: 18, // 入法界品第三十九之十八
+    teaching:'無量諸總持門，住菩薩不可思議自在解脱'
+  },
+  { teacher:'文殊師利菩薩', sanskrit:'Manjuśrī', where:'普門國蘇摩那城',
+    numInSutra: 21, // 入法界品第三十九之二十一
+    teaching:'成就阿僧祇法門，具足無量大光明'
+  },
+  { teacher:'普賢菩薩', sanskrit:'Samantabhadra', where:'如來前眾會',
+    numInSutra: 21, // 入法界品第三十九之二十一
+    teaching:'一切佛剎微塵數三昧門'
+  },
+];
+
+const ziCounts = [
+    3882, // 01.js
+    2070, // 02.js
+    1521, // 03.js
+    1377, // 04.js
+    2656, // 05.js
+    4026, // 06.js
+    3151, // 07.js
+    1596, // 08.js
+    2710, // 09.js
+    1905, // 10.js
+    1540, // 11.js
+    1120, // 12.js
+    1582, // 13.js
+    1589, // 14.js
+    1107, // 15.js
+    1123, // 16.js
+    1362, // 17.js
+    2746, // 18.js
+    2721, // 19.js
+    1021, // 20.js
+    1202, // 21.js
+    1113, // 22.js
+    1123, // 23.js
+    3004, // 24.js
+    1388, // 25.js
+     727, // 26.js
+    1165, // 27.js
+     587, // 28.js
+     927, // 29.js
+     770, // 30.js
+    3722, // 31.js
+    1466, // 32.js
+    5844, // 33.js
+    7559, // 34.js
+    5427, // 35.js
+    4100, // 36.js
+    6671, // 37.js
+    7394, // 38.js
+    5088, // 39.js
+    9377, // 40.js
+    5442, // 41.js
+     649, // 42.js
+     134, // 43.js
+    1338, // 44.js
+     319, // 45.js
+     218, // 46.js
+     172, // 47.js
+     198, // 48.js
+     281, // 49.js
+    3891, // 50.js
+   22164, // 51.js
+    2609, // 52.js
+   12387  // 53.js
+];
+</script>
+</head>
+<body><center>
+<h2>善財童子五十三參</h2>
+
+<div class="content" style="width:880px; text-align:left">
+<p>《華嚴經·入法界品第三十九》（《八十華嚴》之卷六十二至八十；品第三十九始於卷六十）説：善財童子最初從文殊菩薩處發菩提心，次第南行，先後向菩薩、佛母、比丘、比丘尼、優婆塞、天神、地神、主夜神、王者、城主、長者、居士、童子、天女、童女、外道、婆羅門等五十三位善知識參訪請教，並依教奉行，終於獲證善果。這個故事在民間流傳甚廣，善財童子因此成為佛教虛心求法，廣學多聞的典範。如明·高濂《玉簪記·鬧會》：“這壁廂是什麼菩薩？這是五十三參形容改。”</p>
+
+<table border="1" cellspacing="0" cellpadding="2px" bgcolor="white">
+<tr bgcolor="lightgray"><th>參</th><th>品之</th>
+<th colspan="2">善知識</th><th>地方</th><th>善知識教</th><th>字數</th></tr>
+<script>
+function w() { for (var i in arguments)document.write(arguments[i]); }
+
+  var total = 0, r;
+  for (var i=0; i<lst.length; ++i) {
+    var r = lst[i];
+    r.rowspan = 1;
+    for (var j=i+1; j<lst.length; ++j) {
+      var r1 = lst[j];
+      if (r1.numInSutra != r.numInSutra) break;
+      ++i;
+      r.rowspan++;
+      r1.rowspan = -1;
+    }
+  }
+  for (var i=1; i<=lst.length; ++i) {
+    var r    = lst[i-1],
+        t    = r.teacher,
+        name = (typeof t === 'string') ? t : t.join('<br>'),
+        url  = '', // TODO
+        cnt  = ziCounts[i-1];
+    total += cnt;
+    w(`<tr><td align="center">${i}</td>`,
+      r.rowspan > 0 ? `<td rowspan=${r.rowspan} align=center>${r.numInSutra}</td>` : '',
+      `<td align="center" nowrap><a href="${url}">${name}</a></td>`,
+      `<td align="center">${r.sanskrit}</td>`,
+      `<td align="center" nowrap>${r.where}</td>`,
+      `<td>${r.teaching}</td>`,
+      `<td align="right">${cnt}</td></tr>`);
+  }
+  w(`<tr bgcolor="lightgray"><td colspan="7" align="right">總字數：${total}</td></tr>`)
+</script>
+</table>
+</div>
+
+<p>&nbsp;</p>
+<hr width="900px">
+<div class=copyright></div>
+</center></body></html>
+
+
+
+<!--
+https://baike.baidu.hk/item/五十三參/7068264
+
+(一) 參德雲比丘
+（梵 Meghashrī-bhikşu，又稱功德雲比丘、吉祥雲比丘），善財最初受文殊指教，往勝樂國妙峯山，參詣德雲比丘，請教如何學菩薩行，及如何於普賢行疾得圓滿，德雲比丘乃為其解説“憶念一切諸佛境界智慧光明普見法門”。
+(二) 參海雲比丘
+（梵 Sāgara-megha），善財至海門國，參詣海雲比丘，海云為其解説“諸佛菩薩行光明普眼法門”。
+(三) 參善住比丘
+（梵 Supratişthita），善財至楞伽道邊海岸聚落，參詣善住比丘，善住即為其解説“普速疾供養諸佛成就眾生無礙解脱法門”。
+(四) 參彌伽大士
+（梵 Megha-dramida，又稱彌伽良醫），善財至達裏鼻茶國自在城，參詣彌伽大士，彌伽為其解説“妙音陀羅尼光明法門”。
+(五) 參解脱長者
+（梵 Vimuktika-shreşthin），善財漸次遊行十二年，至住林城，參詣解脱長者，長者為其解説“如來無礙莊嚴解脱法門”。
+(六) 參海幢比丘
+（梵 Sāgara-dhvaja），善財至閻浮提畔利伽羅國，參詣海幢比丘，海幢為其解説“般若波羅蜜三昧光明”。
+(七) 參休舍優婆夷
+（梵 Ashā），善財至海潮處普莊嚴國，參詣休舍優婆夷，休舍優婆夷為其解説“離憂安穩幢解脱法門”。
+(八) 參毗目瞿沙仙人
+（梵 Bhīşmottara-nirghoşa，又稱毗目多羅仙人），善財至那羅素國，參詣毗目瞿沙仙人，仙人為其解説“菩薩無勝幢解脱”。
+(九) 參勝熱婆羅門
+（梵 Jayoşmāya，又稱方便命婆羅門），善財至伊沙那聚落，參詣勝熱婆羅門。勝熱平素修諸苦行，求一切智。善財承其教，於登刀山、投火聚時，證得菩薩善住三昧及菩薩寂靜樂神通三昧。
+(十) 參慈行童女
+（梵 Maitreyanī，又稱彌多羅尼童女），善財至獅子奮迅城，參詣慈行童女，慈行為其解説“般若波羅蜜普莊嚴法門”。
+(十一) 參善見比丘
+（梵 Su-darshana，又稱善現比丘），善財至三眼國，參詣善見比丘，善見為其解説“菩薩隨順燈解脱法門”。
+(十二) 參自在主童子
+（梵 Indriyeshvara，又稱釋天主童子），善財至名聞國河渚中，參詣自在主童子，自在主為其解説“一切工巧大神通智光明法門”。
+(十三) 參具足優婆夷
+（梵 Prabhūtā，又稱自在優婆夷），善財至海住大城，參詣具足優婆夷，具足為其解説“菩薩無盡福德藏解脱法門”。
+(十四) 參明智居士
+（梵 Vidvan，又稱甘露頂長者），善財至大興城，參詣明智居士，明智為其解説“隨意出生福德藏解脱法門”。
+(十五) 參法寶髻長者
+（梵 Ratna-cūda，又稱法寶周羅長者），善財至獅子大城，參詣法寶髻長者，法寶髻為其解説“菩薩無量福德寶藏解脱法門”。
+(十六) 參普眼長者
+（梵 Samanta-netra，又稱普眼妙香長者），善財至藤根國普門城，參詣普眼長者，普眼為其解説“令一切眾生普見諸佛歡喜法門”。
+(十七) 參無厭足王
+（梵 Anala，又稱滿足王），善財至多羅幢城，參詣無厭足王，無厭足王為其解説“菩薩如幻解脱”。
+(十八) 參大光王
+（梵 Mahāprabha），善財至妙光城，參詣大光王，大光王為其解説“菩薩大慈為首隨順世間三昧法門”。
+(十九) 參不動優婆夷
+（梵 Acalā），善財至安住國，參詣不動優婆夷，不動為其解説“求一切法無厭足三昧光明”。
+(二十) 參遍行外道
+（梵 Sarvagāmin，又稱隨順一切眾生外道），善財至都薩羅城，參詣遍行外道，遍行外道為其解説“至一切處菩薩行”。
+(二一) 參鬻香長者
+（梵 Utpalabhūti，又稱青蓮華香長者、優缽羅華香長者），善財至廣大國，參詣鬻香長者，鬻香為其解説“調和一切香法”。
+(二二) 參婆施羅船師
+（梵 Vairocana，又稱自在海師），善財至樓閣大城，參詣婆施羅船師，婆施羅為其解説“大悲幢行”。
+(二三) 參無上勝長者
+（梵 Jayottama），善財至可樂城，參詣無上勝長者，無上勝為其解説“至一切處修菩薩行清淨法門”。
+(二四) 參獅子頻申比丘尼
+（梵 Simha-vijrimbhitā，又稱獅子奮迅比丘尼），善財至輸那國迦陵迦林城，參詣獅子頻申比丘尼，比丘尼為其解説“成就一切智解脱”。
+(二五) 參婆須蜜多女
+（梵 Vasumitrā，又稱婆須彌多女），善財至險難國寶莊嚴城，參詣婆須蜜多女，婆須蜜多為其解説“菩薩離貪際解脱”。
+(二六) 參鞞瑟胝羅居士
+（梵 Veşthila，又稱安住長者），善財至善度城，參詣鞞瑟胝羅居士，鞞瑟胝羅為其解説“菩薩所得不般涅槃際解脱”。
+(二七) 參觀自在菩薩
+（梵 Avalokiteshvara，又稱觀世音菩薩），善財至補怛洛迦山，參詣觀自在菩薩，菩薩為其解説“大悲行法門”。
+(二八) 參正趣菩薩
+（梵 Ananyagāmin），善財於觀自在菩薩處參詣正趣菩薩，正趣為其解説“菩薩普疾行解脱”。
+(二九) 參大天神
+（梵 Mahādeva），善財至墯羅缽底城，參詣大天神，大天神為其解説“菩薩雲網解脱”。
+(三十) 參安住地神
+（梵 Sthāvarā），善財至摩竭提國菩提場，參詣安住地神，安住為其解説“不可壞智慧藏法門”。
+(三一) 參婆珊婆演底主夜神
+（梵 Vasantī，又稱婆娑陀夜天、婆珊那演底主夜神），善財至摩竭提國迦毗羅城，參詣婆珊婆演底主夜神，主夜神為其解説“菩薩破一切眾生暗法光明解脱法門”。
+(三二) 參普德淨光主夜神
+（梵 Samanta-gambhīrashrī-vimala-prabhā，又稱甚深妙德離垢光明夜天），善財至摩竭提國菩提場，參詣普德淨光主夜神，普德淨光為其解説“菩薩寂靜禪定樂普遊步解脱法門”。
+(三三) 參喜目觀察眾生主夜神
+（梵 Pramudita-nayana-jagad-virocanā，又稱喜目觀察眾生夜天），善財於菩提場右邊參詣喜目觀察眾生主夜神，喜目為其解説“大勢力普喜幢解脱法門”。
+(三四) 參普救眾生妙德夜神
+（梵 Samanta-sattva-trānojah-shrī，又稱妙德救護眾生夜天），善財於會中參詣普救眾生妙德夜神，夜神為其解説“普現一切世間調伏眾生解脱法門”。
+(三五) 參寂靜音海主夜神
+（梵 Prashānta-ruta-sāgaravatī，又稱寂靜音夜天），善財參詣寂靜音海主夜神，主夜神為其解説“念念出生廣大喜莊嚴解脱法門”。
+(三六) 參守護一切眾生主夜神
+（梵 Sarva-nagara-rakşā-sambhava-tejah-shrī，又稱妙德守護諸城夜天），善財於菩提場如來會中參詣守護一切眾生主夜神，主夜神為其解説“甚深自在妙音解脱法門”。
+(三七) 參開敷一切樹花主夜神
+（梵 Sarva-vrikşa-praphullana-sukha-samvāsā，又稱開敷樹華夜天），善財參詣開敷一切樹花主夜神，主夜神為其解説“出生廣大光明解脱法門”。
+(三八) 參大願精進力救護一切眾生夜神
+（梵 Sarva-jagad-rakşī-pranidhāna-vīrya-prabhā，又稱願勇光明守護眾生夜天），善財參詣大願精進力救護一切眾生夜神，夜神為其解説“教化眾生令生善根解脱法門”。
+(三九) 參妙德圓滿神
+（梵 Sutejo-mandnalarati-shrī，又稱妙德圓滿天），善財至嵐毗尼園，參詣妙德圓滿神，妙德為其解説“菩薩於無量劫遍一切處示現受生自在解脱法門”。
+(四十) 參釋迦瞿波女
+（梵 Gopā，又稱瞿夷女），善財至迦毗羅城，參詣釋迦瞿波女，瞿波女為其解説“觀察菩薩三昧海解脱法門”。
+(四十一) 參摩耶夫人
+（梵 Māyā），善財于大寶蓮華座上參詣摩耶夫人，摩耶為其解説“菩薩大願智幻解脱法門”。
+(四十二) 參王女天主光
+（梵 Surendrābhā，又稱天主光童女、正念光童女），善財往天宮參詣王女天主光，王女為其解説“無礙念清淨莊嚴解脱”。
+(四十三) 參遍友童子師
+（梵 Vishvā-mitra，又稱遍友童子），善財從天宮下，至迦毗羅城，參詣遍友童子師，別無指示，但言可參善知眾藝童子。
+(四十四) 參善知眾藝童子
+（梵 Śilpābhijna），善財參詣善知眾藝童子，童子為其解説“四十二字母法門”。
+(四十五) 參賢勝優婆夷
+（梵 Bhadrottamā），善財至摩竭提國婆怛那城，參詣賢勝優婆夷，賢勝為其解説“無依處道場解脱法門”。
+(四十六) 參堅固解脱長者
+（梵 Muktā-sāra，又稱堅固長者），善財至沃田城，參詣堅固解脱長者，長者為其解説“無著念清淨莊嚴解脱”。
+(四十七) 參妙月長者
+（梵 Sucandra），善財參詣妙月長者，妙月為其解説“淨智光明解脱法門”。
+(四十八) 參無勝軍長者
+（梵 Ajita-sena），善財至出生城，參詣無勝軍長者，長者為其解説“菩薩無盡相解脱”。
+(四十九) 參最寂靜婆羅門
+（梵 Śiva-rāgra，又稱屍毗最勝婆羅門），善財至城南法聚落，參詣最寂靜婆羅門，最寂靜為其解説“菩薩誠願語解脱”。
+(五十) 參德生童子及有德童女
+（梵 Śrī-sambhava, Śrī-matī），善財至妙意華門城，參詣德生童子及有德童女二人，二人為其解説“菩薩幻住解脱”。
+(五十一) 參彌勒菩薩
+（梵 Maitreya），善財至海岸國大莊嚴園中，於毗盧遮那莊嚴藏樓閣前參詣彌勒菩薩，彌勒為其解説種種法要，復開樓閣門，命善財入內。此樓閣廣博無量，同於虛空，善財於此聞不可思議微妙法音，即得無量諸總持門，住菩薩不可思議自在解脱，彌勒復令其參文殊師利菩薩。
+(五十二) 參文殊師利菩薩
+（梵 Manjushrī），善財至普門國蘇摩那城時，文殊師利遙伸右手，過一百一十由旬，按善財頂，為其解説妙法，令得成就阿僧祇法門，具足無量大光明，復令入普賢行道場，於是善財渴仰欲參普賢菩薩。
+(五十三)參普賢菩薩
+（梵 Samantabhadra），善財於文殊師利所得三昧已，普攝諸根，一心求見普賢菩薩，於如來前眾會之中，見普賢菩薩坐寶蓮花獅子之座，身上諸毛孔出光明雲，普賢菩薩即伸右手摩觸其頂，為其解説諸法，善財即得一切佛剎微塵數三昧門。
+-->

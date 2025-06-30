@@ -40,8 +40,8 @@ WORKING { background-color:#ccc }
 </center></body></html>
 
 <script>
-const topics = '淨土　心經　金剛經　楞嚴經　法華經　唯識論　佛理　戒律　人生　全部內容|' +
-               '其他佛經　佛學基礎　地藏經　占察經　圓覺經　人物　故事　善書　文字處理';
+const topics = '淨土　心經　金剛經　楞嚴經　法華經　華嚴經　佛理　戒律　人生　全部內容|' +
+               '所有佛經　佛學基礎　地藏經　占察經　唯識論　人物　故事　善書　文字處理';
 function showNav(topic) {
   var a = topics.split('|'), buf = new Buffer();
   for (var i=0; i<a.length; ++i) {
@@ -112,7 +112,7 @@ function showThem() {
     }
     buf.w(`<tr${bgc}>`,
           `<td nowrap>&nbsp;${d.topic||''}&nbsp;</td><td${styl}>&nbsp;${ankor}${d.id}</td>`,
-          `<td>${ttl}</td><td nowrap align=right>${d.maker||''}&nbsp;</td></tr>`);
+          `<td>${ttl}</td><td align=right>${d.maker||''}&nbsp;</td></tr>`);
     lastId = wk.idEnd || wk.id;
   }
   buf.w(END, `</table><p>${STATS}</p><hr width="1200px">`)
@@ -130,7 +130,9 @@ function showList(topic) {
   var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    if ((wk.isAvail() || wk.isToGet()) && wk.isTopic(topic)) wk.render(buf);
+    if (wk.isAvail() || wk.isToGet())
+      if (wk.isTopic(topic) || (topic == '所有佛經' && wk.isSutra))
+        wk.render(buf);
   }
   buf.w('</table></td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>')
      .render('stg');

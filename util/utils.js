@@ -94,6 +94,8 @@ function toW(n, w, c) {
   while (n.length < w) n = c + n;
   return n;
 }
+function to4d(n) { return toW(n, 4, '0'); }
+function to2d(n) { return toW(n, 2, '0'); }
 
 function toInt(n) { return (typeof n === 'string') ? parseInt(n) : n; }
 
@@ -135,6 +137,16 @@ class Buffer {
     if (ret) this.bufList.push(ret);
     return (this.bufList.length < 1024) ? this : this.condense();
   }
+
+  wIf() {
+    if (arguments[0]) {
+      arguments[0] = '';
+      this.w.apply(this, arguments);
+    }
+    return this;
+  }
+
+  wIfElse(cond, a, b) { this.w(cond ? a : b); return this; }
 
   append(s) { // for performance
     this.bufList.push(s);
@@ -303,3 +315,20 @@ function getYourName(yourTag, anyTag) {
   const help = "To set your name, in env.js: var MYNAME='&#24373;&#19977;';";
   return !anyTag ? '某甲' : `<${anyTag} title="${help}">某甲</${anyTag}>`;
 }
+
+function formatTime(tm) {
+  if (tm == 0) return '';
+  function fmt2Digits(x, min) {
+    if (min && (x < min)) return '<inv>0</inv>0';
+    return (x<10) ? ('<inv>0</inv>'+x) : x;
+  }
+  var hrs = Math.floor(tm / 3600);
+  var secs = tm - hrs*3600;
+  var mins = Math.floor(secs / 60);
+  secs -= mins*60;
+  var res = '';
+  if (hrs <= 0)
+    return fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
+  return '<b>' + hrs + ':</b>' + fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
+}
+
