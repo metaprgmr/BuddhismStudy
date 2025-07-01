@@ -28,7 +28,7 @@ WORKING { background-color:#ccc }
 <div align=center>
   <table width="1200px"><tr>
   <td width="200px" style="padding-left:0px"><img src="bfnn_title2.gif" width="200px" style="margin-top:-30px" usemap="#makarte"></td>
-  <td><h3 style="color:blue">選讀</h3></td>
+  <td><h3 style="color:blue"><a href="javascript:showList('全部內容')">選讀</a></h3></td>
   <td id="nav" align=center nowrap></td>
   <td nowrap align=right>「般若文海」載有大量佛經和文章資料，<br>
   且可以全套下載，功德無量！非常感恩！<br>
@@ -40,7 +40,7 @@ WORKING { background-color:#ccc }
 </center></body></html>
 
 <script>
-const topics = '淨土　心經　金剛經　楞嚴經　法華經　華嚴經　佛理　戒律　人生　全部內容|' +
+const topics = '淨土　心經　金剛經　楞嚴經　法華經　華嚴經　佛理　戒律　人生　外加內容|' +
                '所有佛經　佛學基礎　地藏經　占察經　唯識論　人物　故事　善書　文字處理';
 function showNav(topic) {
   var a = topics.split('|'), buf = new Buffer();
@@ -50,7 +50,7 @@ function showNav(topic) {
     for (var j in b) {
       var tpc = b[j], filler = tpc.endsWith('〇') ? '　' : '';
       tpc = tpc.replace('〇','');
-      var pad = (tpc == '全部內容') || (tpc == '文字處理') ? '•' : '';
+      var pad = (tpc == '外加內容') || (tpc == '文字處理') ? '•' : '';
       if (tpc == topic) b[j] = `${pad}<cur>${tpc}</cur>${filler}${pad}`;
       else b[j] = `${pad}<a href="javascript:showList('${tpc}')">${tpc}</a>${filler}${pad}`;
     }
@@ -127,12 +127,18 @@ function showList(topic) {
   showNav(topic);
   if (topic == '全部內容') { showAllArticles(); return; }
   if (topic == '文字處理') { showTextProcessing(); return; }
+  var isAdded = (topic == '外加內容');
   var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    if (wk.isAvail() || wk.isToGet())
+    if (isAdded) {
+      if (wk.id >= 9000)
+        wk.render(buf);
+    }
+    else if (wk.isAvail() || wk.isToGet()) {
       if (wk.isTopic(topic) || (topic == '所有佛經' && wk.isSutra))
         wk.render(buf);
+    }
   }
   buf.w('</table></td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>')
      .render('stg');

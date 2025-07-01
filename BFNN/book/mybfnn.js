@@ -282,7 +282,7 @@ class DocInfo {
 
   gatha() {
     const sp = '　', sp3 = '　　　';
-    var a = this.gathaText.trim().split('\n'),
+    var a = this.gathaText.split('\n'),
         len = a.length, num = 1;
     for (var i=0; i<len; ++i) {
       var ln = a[i];
