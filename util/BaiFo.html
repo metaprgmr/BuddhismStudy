@@ -8,22 +8,39 @@
 </style>
 <script src="utils.js"></script>
 </head>
-<body bgcolor="black"><center>
+<body bgcolor="#333"><center>
 <table width="100%"><tr>
 <td id="left" valign=bottom></td>
-<td align=center><a href="javascript:ender('Clicked')"><img
-    src="../images/南無阿彌陀佛.jpg" title="Click to start."></a></a>
+<td align=center id=stg></td>
+<script>
+var n = get('n') || 1, buf = new Buffer();
+if (n == 'sk') {
+  buf.w('<h1 style="color:gold">Namo Bhagavate Śākyamunaye<br>',
+        `Tathāgatāyārhate Samyaksaṃbuddhāya</h1><a href="javascript:ender('Clicked')">`,
+        '<img src="../images/釋迦牟尼佛.jpg" title="Click switch full screen." height="940px"></a>');
+  n = 0;
+} else {
+  buf.w(`<a href="javascript:ender('Clicked')">`,
+        `<img src="../images/南無阿彌陀佛.jpg" title="Click to start."></a>`);
+}
+buf.render('stg');
+</script>
 <td id="right" align=right valign=bottom></td>
 </tr></table>
 <audio id="a" src="../images/阿彌陀佛四字四音輕快版22_19.mp3">
+</script>
 </center></body></html>
 
 <script>
-var n=get('n')||1, a=e('a'), started, cnt=0;
+var a=e('a'), started, cnt=0;
 a.addEventListener('ended', ender);
+
 function ender(e) {
   if (e == 'Clicked') {
-    document.documentElement.requestFullscreen();
+    if (started)
+      exitFullScreenMode();
+    else
+      document.documentElement.requestFullscreen();
     if (started) return;
     started = true;
   }

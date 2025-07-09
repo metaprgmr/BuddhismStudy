@@ -332,3 +332,14 @@ function formatTime(tm) {
   return '<b>' + hrs + ':</b>' + fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
 }
 
+function exitFullScreenMode() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { // For Safari
+    document.webkitExitFullscreen();
+  } else if (document.mozCancelFullScreen) { // For Firefox
+    document.mozCancelFullScreen();
+  } else if (document.msExitFullscreen) { // For IE/Edge
+    document.msExitFullscreen();
+  }
+}

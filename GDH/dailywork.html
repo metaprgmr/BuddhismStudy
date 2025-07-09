@@ -29,6 +29,10 @@ class ImageMap {
           '回向偈.png': '釋迦牟尼佛.jpg',
       '極樂世界圖.png': '極樂世界三聖.jpg',
     };
+    this.notes = {
+      '極樂世界三聖.jpg': '邱麗華老師 恭繪',
+      '極樂世界圖.png': '作者待查',
+    };
   }
   getImgW(img) {
     var x = window['MY_IMAGES'] ? img : this.imgMap[img];
@@ -45,6 +49,11 @@ class ImageMap {
       return `../images/${mapped || img}`;
     else
       return mapped ? `${myimgs}${img}` : `../images/${img}`;
+  }
+  toImgTag(img) {
+    var note = this.notes[img];
+    if (note) note = ` title="${note}"`;
+    return `<img src="${this.getImgSrc(img)}" style="max-width:${this.getImgW(img)}"${note}>`;
   }
 }
 var im = new ImageMap();
@@ -65,7 +74,7 @@ function lnk(name, js, anchor, img, isMain) {
 }
 var diff = 0;
 function openURL(url, img, imgw) {
-  e('picture').innerHTML = `<img src="${im.getImgSrc(img)}" style="max-width:${im.getImgW(img)}">`;
+  e('picture').innerHTML = im.toImgTag(img);
   window.open(url, EXT);
 }
 function openLnk(eid, js, anchor, img, imgw) {
@@ -88,7 +97,7 @@ function openLnk(eid, js, anchor, img, imgw) {
   var el;
   if (img) {
     el = e('picture');
-    el && (el.innerHTML = `<img src="${im.getImgSrc(img)}" style="max-width:${im.getImgW(img)}">`);
+    el && (el.innerHTML = im.toImgTag(img));
   }
   if (lastEId) { el = e(lastEId); el && (el.style.border = 'none'); }
   if (eid) { el = e(eid); el && (el.style.border = '2px red solid'); }
@@ -114,7 +123,7 @@ function PureLandSession() {
     '<li>', lnk('《懺悔滅罪偈》', 'various.js', '_10', '普賢懺悔滅罪偈.png'), '</li>',
     '<li>', lnk('《發四宏願》', 'various.js', '_10', '四宏誓願.jpg'), '</li>',
     '<li>', mainlnk('《心經》', 'xinjing.js', null, '真誠清淨平等正覺慈悲看破放下自在隨緣念佛.jpg'), '</li>',
-    '<li>', lnk('十咒語', 十小咒, null, '三寶佛.jpg'), '</li>',
+    '<li>', lnk('十咒語', 十小咒, null, '三寶佛.png'), '</li>',
     '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
     '<li>', lnk('《普願文》', 'various.js', '_14', '回向偈.png'), '</li>',
     '<li>', lnk('《三自皈依》', 'various.js', '_10', '三寶佛.png'), '</li>',
@@ -216,6 +225,8 @@ function StartSession(refresh) {
      '<a href="javascript:GuanShiYinSession()">觀音法門</a><br>&nbsp;<br>',
      '<a href="javascript:VajraSession()">金剛經誦</a><br>&nbsp;<br>',
      '<a href="../佛學基礎/《占察善惡業報經》/占察懺.html" class="major">占察懺法</a><br>&nbsp;<br>',
+     '<a href="../util/BaiFo.html?n=sk">釋迦如來</a><br>',
+     '<a href="../util/BaiFo.html?n=0">阿彌陀佛</a><br>',
      '<a href="../util/BaiFo.html">拜佛一節</a><br>',
      '<a href="../util/BaiFo.html?n=2">拜佛二節</a><br>',
      '<a href="../util/BaiFo.html?n=3">拜佛三節</a><br>',

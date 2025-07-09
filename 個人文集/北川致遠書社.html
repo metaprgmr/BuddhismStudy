@@ -18,6 +18,7 @@
 <p>　　所列為當下收集到的內容，時有更新。至於最新作品，請自參看YouTube上的<a href="https://www.youtube.com/@beichuan2019" target="ext">本尊</a>。</p>
 
 <div id="stg"></div>
+<div id="perlist"></div>
 
 <p class="noprint"><a href="index.html">返回《個人文集》目錄</a></p>
 <hr>
@@ -129,11 +130,16 @@ var list7 = new YTList('7-禪修入門·實修', 'PLV7U7SMsXQUMxWLC1jCDUn-4usXaM
   .add('7:11',  'XJ3HXtZuDX8', '每天聽雨5分鐘，耳根禪洗滌焦慮和疲憊')
   .add('27:22', 'w4zbKjOcUEI', '5分鐘專業禪修，每天堅持，擺脫焦慮和疲憊', '毗盧七支坐｜長生酒｜呼吸｜心法｜實修');
 
-new YTCollection('《北川致遠書社》節目系列選集')
+var ytcoll = new YTCollection('《北川致遠書社》節目系列選集')
     .setTOCNoNumber(true)
-    .add(list1, list2, list3, list4, list5, list6, list7)
-    .renderAll()
-    .render('stg');
+    .add(list1, list2, list3, list4, list5, list6, list7);
+ytcoll.renderTOC('showMyList').render('stg');
 
+function showMyList(i) {
+  var buf = new Buffer('<center>');
+  ytcoll.renderList(i, buf)
+        .w('<hr color=lightgray></center>')
+        .render('perlist');
+}
 </script>
 

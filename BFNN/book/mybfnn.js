@@ -56,6 +56,7 @@ const FA_HUA_PINS = [
 class DocInfo {
   constructor() {
     this.defaultClass = 'TEXT';
+    this.gathaClass = 'gatha';
     this.zdigits = '〇一二三四五六七八九十';
     docInfo = this; // singleton
   }
@@ -72,6 +73,7 @@ class DocInfo {
   }
   setBuffer(buf) { this.buf = buf; return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
+  setGathaClass(cls) { this.gathaClass = cls; return this; }
   setXG(endCenter) { this.isXG = true; this.endCenter = endCenter; return this; }
   setHints(hints) { this.hints = hints; return this; }
   set(k,v) { k && v && (this[k]=v); return this; }
@@ -180,7 +182,10 @@ class DocInfo {
       var ln = a[i];
       while (ln.endsWith('\\') && i<len)
         ln = ln.substring(0,ln.length-1) + '<br>' + a[++i];
-      if (!ln || (ln.trim().length == 0)) { this.w(SP); continue; }
+      if ((!ln || ln.trim().length == 0) && !this.inHtml && !this.inGatha) {
+        this.w(SP);
+        continue;
+      }
       if (ln.endsWith('|')) ln = ln.substring(0, ln.length-1); // trailing | is just visual
       this.writeln(ln, i+1);
     }
@@ -282,8 +287,7 @@ class DocInfo {
 
   gatha() {
     const sp = '　', sp3 = '　　　';
-    var a = this.gathaText.split('\n'),
-        len = a.length, num = 1;
+    var a = this.gathaText.split('\n'), len = a.length, num = 1;
     for (var i=0; i<len; ++i) {
       var ln = a[i];
       var idx = ln.indexOf('|'), anno;
@@ -293,10 +297,10 @@ class DocInfo {
       } else {
         anno = null;
       }
-      if (!ln) {
+      if (ln.trim().length == 0) {
         this.w('<LNSP></LNSP>');
       } else {
-        this.w(`<p class="TEXTL gatha"><span class="gathanum">`,
+        this.w(`<p class="TEXTL ${this.gathaClass}"><span class="gathanum">`,
           (len > 5) ? (num++) : '',
           `&nbsp;</span>${ln.replaceAll(' ', sp)}`);
         if (anno) this.w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
@@ -365,7 +369,7 @@ function write0119(filenum, body) {
         if (pi.id == filenum) curIdx = i;
       }
       this.setHints(FA_HUA_PINS)
-          .reInit(119, 28, cur.volNum)
+          .reInit(119, 28, this.volNum)
           .writeStart(`妙法蓮華經${FA_HUA_PINS[curIdx]}淺釋`)
           .w(SP, '<p class=TEXT030C>姚秦三藏法師鳩摩羅什譯</p>',
                  '<p class=TEXT030C>美國萬佛聖城宣化上人講述</p>')
@@ -451,7 +455,7 @@ function write0900(n, body) {
 function write1037(n, body) {
   docInfo.setHints(FA_HUA_PINS)
          .reInit(1037, 28, n)
-         .writeStart(`楞嚴經通議||（${FA_HUA_PINS[n-1]}第${zNumber(n)}）`)
+         .writeStart(`法華經通議||（${FA_HUA_PINS[n-1]}第${zNumber(n)}）`)
          .w(SP, '<p class=TEXT030C>太虛大師講述<br>民國十年秋在北京</p>', SP)
          .writeBody(body)
          .writeEnd();

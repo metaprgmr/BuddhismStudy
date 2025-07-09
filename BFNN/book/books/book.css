@@ -20,6 +20,8 @@ hr.volsep { border: none; height: 1px; background: rgba(255, 0, 0, 0.3); }
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
 my   { }
 my_1 { }
+.topbar { border-top:1px solid gray }
+.bottombar { border-bottom:1px solid gray }
 .caption { font-size:36.0pt;font-family:標楷體;color:#FF6600;font-weight:bold; text-align:center }
 .kepan { color:#333399 }
 kpDone { color:#333399 }
@@ -29,6 +31,7 @@ kpDone { color:#333399 }
 .endImageXG { width:300px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); }
 .gathanum { float:left; color:black; opacity:0.4; font-size:10px; width:25pt; padding-top:3pt }
 .gatha { color:#003388 }
+.gatha2 { color:teal }
 verseNum { color:#333399; font-weight:normal }
  verseNum::before { content:'【' }
  verseNum::after  { content:'】 ' }
@@ -37,12 +40,18 @@ dcirc  { color:purple }
 small { color:brown }
 cil { color:#777; font-weight:normal } /* comment in-line */
 ail { color:#003300 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+red { color:red }
 black { color:black }
 purple { color:purple }
 label { font-weight:normal; color:purple }
 inv { opacity:0 }
 dim { opacity:0.4 }
 cur { background-color:yellow; color:red; font-weight:bold }
+pt4 { font-size:4px } pt4:before { content:' ' }
+pt6 { font-size:6px } pt6:before { content:' ' }
+pt8 { font-size:8px } pt8:before { content:' ' }
+pt10 { font-size:10.5px } pt10:before { content:' ' }
+pt12 { font-size:12px } pt12:before { content:' ' }
 
 /* for paragraphs */
 LNSP {margin:0cm; font-size:9.0pt; font-family:細明體;}
@@ -61,6 +70,7 @@ LNSP::before {content: '　';}
 .TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#FF6600;}
 subtitle  { font-size:24.0pt }
 .VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
+.VERSEL   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; font-weight:bold; color:teal;}
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
 verse     { font-family:細明體; color:teal;}
 quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:#000077;}

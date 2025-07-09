@@ -2,6 +2,7 @@ env.js
 YTViewing.js
 .DS_Store
 *.class
+*.swp
 *.tmp
 *~
 alfa*

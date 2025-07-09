@@ -41,10 +41,9 @@ if (!isOrig) sortJKPSTeachings();
 if (idx && !isOrig) { // passage display
   lsn = JKPSTeachingsDict[idx];
   w('<table width="900px">',
-    '<tr><td align="center"><h2>', lsn.title, '</h2>',
-    '<p class="subttl">【', lsn.source, ' ', lsn.srcVol, '】&nbsp;&nbsp;<font class="ytid">',
-    lsn.ytid, '</font></p></td></tr>',
-    '<tr><td>');
+    '<tr><td align="center"><h2>', lsn.title, '</h2>');
+  lsn.source && w('<p class="subttl">【', lsn.source, ' ', lsn.srcVol || '', '】&nbsp;&nbsp;');
+  w('<font class="ytid">', lsn.ytid, '</font></p></td></tr>\n<tr><td>');
   for (var i in lsn.text) {
     var txt = lsn.text[i];
     if (!txt.startsWith('　　')) txt = '　　' + txt;
@@ -73,7 +72,7 @@ if (idx && !isOrig) { // passage display
       '<td class="toc" width="20">&nbsp;</td>',
       '<td class="info" align="right">', lsn.ziCount(), '字&nbsp;&nbsp;</td>');
     if (isOrig)
-      w('<td class="toc">', lsn.source, ' ', lsn.srcVol, '&nbsp;</td>',
+      w('<td class="toc">', lsn.source || '', ' ', lsn.srcVol || '', '&nbsp;</td>',
         '<td class="ytid">', lsn.ytid || '&nbsp;', '</td>');
     w('</tr>');
   }
