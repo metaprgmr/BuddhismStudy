@@ -9,6 +9,10 @@ a:focus  { color:blue }
 a:active { color:blue }
 
 term  { color:brown }
+red   { color:red }
+blue  { color:blue }
+brown { color:brown }
+teal  { color:teal }
 verse { color:teal }
 .verse { color:teal }
 inv { opacity:0 }
