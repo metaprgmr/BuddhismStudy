@@ -16,8 +16,6 @@
 </head>
 <body><div align=center>
 <script>
-function w() { for (var i in arguments) document.write(arguments[i]) }
-
 var consonantCptr = (a,b) => (a.getFirstConsonant() == b.getFirstConsonant()) ? 0 : (a.getFirstConsonant() < b.getFirstConsonant()) ? -1 : 1;
 var vowelCptr = (a,b) => (a.getFirstVowel() == b.getFirstVowel()) ? 0 : (a.getFirstVowel() < b.getFirstVowel()) ? -1 : 1;
 

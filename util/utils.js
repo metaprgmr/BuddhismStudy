@@ -34,6 +34,7 @@ function get(name) {
 }
 
 function addjs(uri)           { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
+function addStyleTag(s)       { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); }
 function toEl(x)              { return (typeof x=='string')?document.getElementById(x):x; }
 function e(id)                { return document.getElementById(id) }
 function showEl(id)           { var el=toEl(id); el && (el.style.display='block'); }
@@ -95,6 +96,7 @@ function toW(n, w, c) {
   return n;
 }
 function to4d(n) { return toW(n, 4, '0'); }
+function to3d(n) { return toW(n, 3, '0'); }
 function to2d(n) { return toW(n, 2, '0'); }
 
 function toInt(n) { return (typeof n === 'string') ? parseInt(n) : n; }
@@ -104,7 +106,92 @@ function toLines(txt) { // ending \ concats the next line
   return txt && txt.replaceAll('\\\n', '').split('\n');
 }
 
-function toAttr(a,v) { return !v ? '' : ` ${a}="${v}"`; }
+function toSet(lst) {
+  var ret = {};
+  if (typeof lst == 'string') {
+    var ast = new Astral(lst), len = ast.getLength();
+    for (var i=0; i<len; ++i) ret[ast.charAt(i)] = true;
+  }
+  else if (lst.length)
+    for (var i=0; i<lst.length; ++i) ret[lst[i]] = true;
+  else
+    ret[lst] = true;
+  return ret;
+}
+
+function getUniqueHanZisAsSet(str) {
+  var ret = {}, ast = str.isAstral ? str : new Astral(str), len = ast.getLength();
+  for (var i=0; i<len; ++i) {
+    var z = ast.charAt(i);
+    (z.length > 1 || isHanZi(z)) && (ret[z] = true);
+  }
+  return ret;
+}
+
+function getUniqueHanZisAsList(str) { return Object.keys(getUniqueHanZisAsSet(str)); }
+
+function toAttr(a,v) { return v && a && (` ${a}="${v}"`) || ''; }
+
+function setToString(s, sep) { return Object.keys(s).join(sep||''); }
+
+function setsIntersect(a, b) { // a ∩ b
+  var ret = Object.assign({}, a);
+  for (var k in b) if (!a[k]) delete ret[k];
+  return ret;
+}
+
+function setsAdd() {
+  var ret = {}, len = arguments.length;
+  for (var i=0; i<len; ++i)
+    ret = Object.assign(ret, arguments[i]);
+  return ret;
+}
+
+function setsSub() { // [0] - [1...]
+  var ret = {}, len = arguments.length;
+  if (len > 0) ret = Object.assign(ret, arguments[0]);
+  for (var j=1; j<len; ++j) {
+    var b = arguments[j];
+    for (var k in b) delete ret[k];
+  }
+  return ret;
+}
+
+function setsDiff() { // for 2:  { aOnly, bOnly, both }
+                      // for >2: { inAll, notInAll:{ zi:[] }* }
+  var args = [];
+  for (var i in arguments) if (arguments[i]) args.push(arguments[i]);
+  var common = {}, len = args.length;
+  if (len <= 1) return common;
+  if (len == 2) { // 2 sets to compare, ad hoc treatment
+    var a = args[0], b = args[1], aOnly = {}, bOnly = Object.assign({}, b);
+    for (var i in a) {
+      if (b[i]) { common[i] = true; delete bOnly[i]; }
+      else aOnly[i] = true;
+    }
+    return { aOnly, bOnly, both:common };
+  }
+
+  // more than 2
+  var i, stats = {};
+  for (i=0; i<len; ++i) {
+    var arg = args[i];
+    for (var z in arg) {
+      var zstats = stats[z];
+      if (zstats) zstats.push(i);
+      else stats[z] = [ i ];
+    }
+  }
+  var a = Object.keys(stats);
+  for (i=0; i<a.length; ++i) {
+    var z = a[i], zstats = stats[z];
+    if (zstats.length == len) {
+      delete stats[z];
+      common[z] = true;
+    }
+  }
+  return { inAll:common, notInAll:stats };
+}
 
 // Aligned lists
 /*
@@ -167,8 +254,13 @@ class Buffer {
   render() {
     var ret = this.text();
     for (var i in arguments) {
-      var el = e(arguments[i]);
-      el && (el.innerHTML = ret);
+      var k = arguments[i];
+      if (typeof k == 'function')
+        k(ret);
+      else {
+        var el = k.hasOwnProperty('innerHTML') ? k : e(k);
+        el && (el.innerHTML = ret);
+      }
     }
     this.bufList = [];
     return ret;
@@ -187,6 +279,53 @@ class Buffer {
   }
 
 } // end of Buffer.
+
+class Astral {
+  constructor(str) {
+    this.isAstral = true;
+    this.original = str.isAstral ? str.getAll() : str;
+    this.indices = [];
+    var idx = 0;
+    for (var i=0; i<this.original.length; ++i, ++idx) {
+      this.indices.push(idx);
+      var code = this.original.charCodeAt(i);
+      if (code >= 0xd800 && code <= 0xdbff) { // skip the 2nd
+        ++i;
+        ++idx;
+      }
+    }
+    this.length = this.indices.length;
+  }
+  append(s) {
+    var ast = (s.original && s.indices) ? s : new Astral(s),
+        olen = this.original.length;
+    this.original += ast.original;
+    for (var i=0; i<ast.length; ++i)
+      this.indices.push(olen + ast.indices[i]);
+    this.length = this.indices.length;
+    return this;
+  }
+  getLength() { return this.indices.length; } // safer than this.length
+  toString() { return this.original; }
+  charAt(idx) {
+    var idcs = this.indices, len = idcs.length;
+    if (idx < 0 || idx >= len) return '';
+    return (idx == len-1)
+           ? this.original.substring(idcs[len-1])
+           : this.original.substring(idcs[idx], idcs[idx+1]);
+  }
+  substring(startIdx, endIdx) {
+    var idcs = this.indices, orig = this.original, ret = '';
+    if (idcs.length == 0) return '';
+    if (startIdx < 0) startIdx = 0;
+    if (endIdx == null || endIdx < 0 || endIdx > idcs.length) endIdx = idcs.length;
+    for (var i=startIdx; i<endIdx; i++)
+      ret += orig.substring(idcs[i], idcs[i+1]);
+    return ret;
+  }
+  substr(startIdx, endIdx) { return this.substring(startIdx, endIdx); }
+  forEach (fn) { for (var i=0; i<this.length; i++) fn(this.charAt(i), i); }
+}
 
 const zpuncs = '，、；：。？！';
 const zpuncs1L = '「『《（';

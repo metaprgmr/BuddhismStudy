@@ -4,23 +4,26 @@ const ytVideoURL = (id) => `https://www.youtube.com/watch?v=${id}`;
 var YTViewing = {};
 
 class YTCollection {
-  constructor(title) { this.title = title; this.lists = []; }
+  constructor(title) { this.title=title; this.lists=[]; }
   add() { for (var i in arguments) this.lists.push(arguments[i]); return this; }
   setTOCNoNumber(yes) { this.tocNoNumber = yes; return this; }
   renderTOC(fxnName, buf) {
     if (!buf) buf = new Buffer();
     buf.w('<center><hr color="lightgray"><table style="margin-left:20px" border=0>',
           `<h2>${this.title}</h2>`);
-    var totalD = 0;
-    for (var i=0; i<this.lists.length; ++i) {
+    var totalD = 0, len = this.lists.length;
+    for (var i=0; i<len; ++i) {
       var lst = this.lists[i];
-      totalD += lst.totalDur;
-      buf.w(`<tr><td>${this.tocNoNumber?'':(i+1)}&nbsp;</td>`,
-//          `<td><b><a href="javascript:showTop('_${i}')">${lst.name}</a></b>`,
-            `<td><b><a href="javascript:${fxnName}(${i})">${lst.name}</a></b>`,
-            '&nbsp;&nbsp;&nbsp;</td>',
-            `<td align="right"><code>${formatTime(lst.totalDur)}</code></td>`,
-            `<td align="right">&nbsp;&nbsp;&nbsp;${lst.videos.length}</td><td>集</td></tr>`);
+      buf.w(`<tr><td align=right>${this.tocNoNumber?'':((i+1)+'.')}&nbsp;</td>`);
+      if (Array.isArray(lst) && lst.length > 1) { // a simple link
+        buf.w(`<td colspan=3><a href="javascript:${fxnName}(${i})">${lst[0]}</a></b></td></tr>`);
+      } else {
+        totalD += lst.totalDur;
+        buf.w(`<td><b><a href="javascript:${fxnName}(${i})">${lst.name}</a></b>`,
+              '&nbsp;&nbsp;&nbsp;</td>',
+              `<td align="right"><code>${formatTime(lst.totalDur)}</code></td>`,
+              `<td align="right">&nbsp;&nbsp;&nbsp;${lst.videos.length}</td><td>集</td></tr>`);
+      }
     }
     buf.w('<tr><td colspan="2">&nbsp;</td>',
           `<td align="right" style="border-top:1px solid black"><code>${formatTime(totalD)}</code></td>`,
@@ -28,7 +31,14 @@ class YTCollection {
     return buf;
   }
 
-  renderList(i, buf) { return this.lists[i].render(buf || new Buffer()); }
+  renderList(i, buf) {
+    if (!buf) buf = new Buffer();
+    var lst = this.lists[i];
+    if (Array.isArray(lst) && lst.length > 1)
+      return buf.w(lst[1]); // [0] is caption, [1] content
+    else
+      return lst.render(buf);
+  }
 
   renderAll(buf) {
     if (!buf) buf = new Buffer();

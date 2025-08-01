@@ -10,7 +10,11 @@
         font-family:細明體;}
 
 .book      { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; background-color: #BBFFBB }
-a { text-decoration:none }
+ol.cjk { margin-left:0px; list-style-type: cjk-ideographic; }
+li.cjk { margin-bottom:3.0pt; }
+blockquote.quote { color:teal; }
+ul { margin-left:-16.0pt; }
+a { text-decoration:none; }
 .bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px }
 BODY {SCROLLBAR-FACE-COLOR: #0099FF; SCROLLBAR-HIGHLIGHT-COLOR: #0099FF; SCROLLBAR-SHADOW-COLOR: #006699; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: 
 #00354F; } 
@@ -56,6 +60,9 @@ pt12 { font-size:12px } pt12:before { content:' ' }
 /* for paragraphs */
 LNSP {margin:0cm; font-size:9.0pt; font-family:細明體;}
 LNSP::before {content: '　';}
+.BQ2  { margin-left:24.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
+.BQ3  { margin-left:36.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
+.BQ4  { margin-left:48.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal }
 .TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}
 .TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}

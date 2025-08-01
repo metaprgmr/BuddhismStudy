@@ -8,10 +8,14 @@ a:hover  { color:blue }
 a:focus  { color:blue }
 a:active { color:blue }
 
+term  { color:brown }
+verse { color:teal }
+.verse { color:teal }
 inv { opacity:0 }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }
 .contentW { border:0px red solid; width:900px; text-align:left; font-size:19px }
 .gatha   { text-align:center }
+ol.cjk   { list-style-type: cjk-ideographic; }
 
 .zKaiTi      { font-family: "KaiTi", "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .zFangSongTi { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋" }

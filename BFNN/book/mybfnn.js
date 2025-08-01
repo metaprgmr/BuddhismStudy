@@ -42,7 +42,7 @@ function getFileName() {
   return (i>0) ? x.substring(i+1) : x;
 }
 
-const SP = '<LNSP></LNSP>', ASIS = 'asis';
+const LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
 var terse = get('terse');
 
 const FA_HUA_PINS = [
@@ -58,6 +58,7 @@ class DocInfo {
     this.defaultClass = 'TEXT';
     this.gathaClass = 'gatha';
     this.zdigits = '〇一二三四五六七八九十';
+    this.setMetaDelim('/');
     docInfo = this; // singleton
   }
   reInit(firstVol, totalVols, vol, labels) {
@@ -161,7 +162,7 @@ class DocInfo {
     //      The content will be rendered as-is, decorated by <p>...</p>.
     //   2. For each line, the CSS class name is in the leading /.../.
     //      The default CSS class is "TEXT".
-    //   3. Pseudo class "TEXTR" is rendered as <p class=TEXT align=right>.
+    //   3. Pseudo class "TEXT*R" is rendered as <p class=TEXT align=right>.
     //   4. If a page uses / as a regular leading character, [...] can be
     //      used instead. This is global, so either /.../ or [...].
     // <Anchor>
@@ -170,19 +171,19 @@ class DocInfo {
     //      Regular <a name=""></a> works, but not as elegant.
     // <Multi-Line>
     //   6. Lines ending with \ are concatenated with <br>.
-    //   7. An empty line serves as a <LNSP></LNSP>.
+    //   7. An empty line serves as a SP.
     //   8. <html>...</html> enclosed blocks are rendered as-is.
     // <Extension>
     //   9. Override writeln() to support ad hoc syntax.
     //      Don't forget to call super.writeln() for regular content.
 
-    this.inHtml = this.inJS = this.inGatha = false;
+    this.inHtml = this.inJS = this.inGatha = this.inLst = false;
     var a = txt.split('\n'), len = a.length;
     for (var i=0; i<len; ++i) {
       var ln = a[i];
       while (ln.endsWith('\\') && i<len)
         ln = ln.substring(0,ln.length-1) + '<br>' + a[++i];
-      if ((!ln || ln.trim().length == 0) && !this.inHtml && !this.inGatha) {
+      if ((!ln || ln.trim().length == 0) && !this.inHtml && !this.inGatha && !this.inLst) {
         this.w(SP);
         continue;
       }
@@ -192,32 +193,53 @@ class DocInfo {
     return this;
   }
   writeln(ln, lnnum) {
-    if (!this.metaLeft) {
-      // first guess the meta left/right, using // or []
-      if (ln[0] == '/') this.setMetaDelim('/');
-      else if (ln[0] == '[') this.setMetaDelim('[',']');
+    var ln1 = ln && ln.trim();
+    if (ln1[0] == '/') {
+      if ((ln1[1] == '<') && ln1.endsWith('>/')) { // vanilla HTML code. e.g. 0875
+        this.w(ln1.substring(1, ln1.length-1));
+        return;
+      }
+      if (ln1.startsWith('/bq')) { // shortcut. e.g. 9020/028.js
+        this.w(`<blockquote${ln1.substring(3, ln1.length-1)}>`);
+        return;
+      }
+      if (ln1.startsWith('/_bq')) { // shortcut. e.g. 9020/028.js
+        this.w('</blockquote>');
+        return;
+      }
+      if (ln1.startsWith('/quote')) { // shortcut. e.g. 9020/003.js
+        this.w(`<blockquote class="quote"${ln1.substring(6, ln1.length-1)}>`);
+        this.savedDefaultClass = this.defaultClass;
+        this.defaultClass = 'TEXTL';
+        return;
+      }
+      if (ln1.startsWith('/_quote')) { // shortcut. e.g. 9020/003.js
+        this.w('</blockquote>');
+        this.defaultClass = this.savedDefaultClass;
+        return;
+      }
     }
 
     if (this.inHtml) {
-      if (ln.endsWith('</html>')) {
+      if (ln1.endsWith('</html>')) {
         this.inHtml = false;
-        ln = ln.substring(0, ln.length-7);
+        ln = ln1.substring(0, ln.length-7);
       }
       this.w(ln, '\n');
       return;
     }
 
     if (this.inJS) {
-      if (ln.endsWith('</html:js>')) {
+      if (ln1.endsWith('</html:js>')) {
         this.inJS = false;
-        ln = ln.substring(0, ln.length-10) + '</script>';
+        ln = ln1.substring(0, ln.length-10) + '</script>';
       }
       this.w(ln.replaceAll('\\`', '`'), '\n');
       return;
     }
 
     if (this.inGatha) {
-      if (ln.startsWith('//')) {
+      if (ln1.startsWith('//')) {
         this.gatha();
         this.inGatha = false;
       }
@@ -228,8 +250,19 @@ class DocInfo {
       return;
     }
 
+    if (this.inLst) {
+      if (ln1.startsWith('//')) {
+        this.inLst = false;
+        this.w(`</${this.lstTag}>`);
+        return;
+      }
+      if (ln1.length > 0)
+        this.w(`<li class=cjk>${ln}</li>`);
+      return;
+    }
+
     if (ln.startsWith('<html>')) { // e.g. 0117, 0875
-      ln = ln.substring(6);
+      ln = ln1.substring(6).trim();
       if (ln.endsWith('</html>'))
         ln = ln.substring(0, ln.length-7);
       else
@@ -238,8 +271,8 @@ class DocInfo {
       return;
     }
 
-    if (ln.startsWith('<html:js>')) { // e.g. 1731
-      ln = ln.substring(9);
+    if (ln1.startsWith('<html:js>')) { // e.g. 1731
+      ln = ln1.substring(9).trim();
       if (ln.endsWith('</html:js>'))
         ln = '<script>' + ln.substring(0, ln.length-10) + '</script>';
       else {
@@ -250,12 +283,26 @@ class DocInfo {
       return;
     }
 
-    if (ln.startsWith('/gatha/')) { // e.g. 0875
+    if (ln1.startsWith('/gatha/')) { // e.g. 0875
       this.inGatha = true;
       return;
     }
 
-    if (ln.startsWith('/VOLSEP/')) { // e.g. 9011
+    if (ln1.startsWith('/olzh')) { // e.g. 9020/*.js
+      this.inLst = true;
+      this.lstTag = 'ol';
+      this.w(ln.replaceAll('/olzh', '<ol class=cjk').replace('/', '>'));
+      return;
+    }
+
+    if (ln1.startsWith('/ul')) {
+      this.inLst = true;
+      this.lstTag = 'ul';
+      this.w(ln.replaceAll('/ul', '<ul').replace('/', '>'));
+      return;
+    }
+
+    if (ln1.startsWith('/VOLSEP/')) { // e.g. 9011
       this.w('<hr class=volsep>');
       return;
     }
@@ -264,7 +311,7 @@ class DocInfo {
     ln = ln.replace(/<a!\d+>/g,
             (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
 
-    if (ln[0] != this.metaLeft) {
+    if (ln1[0] != this.metaLeft) {
       this.w(`<p class=${this.defaultClass}>${ln}</p>`);
       return;
     }
@@ -279,7 +326,10 @@ class DocInfo {
         ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
     }
     cls = cls[0] || this.defaultClass;
-    if (cls == 'TEXTR') cls = 'TEXT align=right';
+    if (cls == 'L' || cls == 'R' || cls == 'C')
+      cls = 'TEXT' + cls;
+    if (cls.startsWith('TEXT') && cls.endsWith('R'))
+      cls = cls.substring(0, cls.length-1) + ' align=right';
     if (cls.endsWith('align=right') && !ln.endsWith('　'))
       ln += '　';
     this.w(`<p class=${cls}>${ln}</p>`);
@@ -298,7 +348,7 @@ class DocInfo {
         anno = null;
       }
       if (ln.trim().length == 0) {
-        this.w('<LNSP></LNSP>');
+        this.w(LNSP);
       } else {
         this.w(`<p class="TEXTL ${this.gathaClass}"><span class="gathanum">`,
           (len > 5) ? (num++) : '',
@@ -341,6 +391,30 @@ function xref(num) {
     return '';
   }
   window.open(`../${subfolder(num)}/${to4d(num)}.htm`, 'ext');
+}
+
+// typically for long series, where preloading all js files is a waste.
+class SeriesContainer { // prototype: 9010
+  constructor() {
+    this.volNum = undefined; // default impl
+    this.text   = undefined; // default impl
+    this.loadWait = 300;
+  }
+  setLoadWait(msecs) { this.loadWait = msecs; return this; }
+
+  isReady() { return !!this.text; } // default impl
+  loadJS(vol) { throw 'Must implement SeriesContainer.loadJS()'; }
+  showPage() { throw 'Must implement SeriesContainer.showPage()'; }
+
+  show(vol, anchor) {
+    this.loadJS(vol);
+    this.timer = setInterval(() => {
+      if (!this.isReady()) return;
+      this.showPage();
+      clearInterval(this.timer);
+      anchor && showTop(anchor);
+    }, this.loadWait);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

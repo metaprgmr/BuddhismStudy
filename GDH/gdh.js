@@ -598,7 +598,7 @@ bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaa
     var zis = a[i].replaceAll(' ', '');
     var yps = a[i+1].trim().split(' ');
     if (zis.length != yps.length) {
-      console.log(zis, zis.length, 'phonetics:', yps.length, 'PLEASE FIX AND REDO.');
+      throw `"${zis}" ${zis.length}; phonetics: ${yps.length}. PLEASE FIX AND REDO.`;
       continue;
     }
 

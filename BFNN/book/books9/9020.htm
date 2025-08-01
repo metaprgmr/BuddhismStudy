@@ -1,0 +1,272 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>宗鏡錄</title>
+<link rel="stylesheet" href="../books/book.css">
+<style>
+dim { font-style:italic; opacity:0.3 }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../../../util/sutrasastra.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body lang=ZH-TW link=blue vlink=purple background="../books/textbackground.jpg" class="Normal" bgcolor="#ffffff">
+<div id="stg"></div>
+</body></html>
+
+<script>
+initSutraSastra();
+
+class DocStats {
+  constructor(volNum, pdfPages, text) {
+    this.volNum = volNum;
+    this.pdfPages = pdfPages;
+    this.refs = SSRepo.getRefStats(text);
+  }
+}
+
+var ZJL = new (class extends SeriesContainer {
+  constructor() {
+    super();
+    this.allStats = {};
+    this.printNotes = [];
+
+    this.printNotes[7]  =
+    this.printNotes[9]  =
+    this.printNotes[14] = ' ';
+
+    this.printNotes[1]  =
+    this.printNotes[8]  =
+    this.printNotes[10] =
+    this.printNotes[17] =
+    this.printNotes[19] =
+    this.printNotes[26] =
+                          '丙午歲分司大藏都監開板';
+
+    this.printNotes[6]  =
+    this.printNotes[15] =
+    this.printNotes[18] =
+    this.printNotes[25] =
+    this.printNotes[30] =
+    this.printNotes[33] =
+    this.printNotes[36] =
+                          '丁未歲分司大藏都監開板';
+
+    this.printNotes[32] = '丁未歲分司大藏都監彫造';
+
+    this.printNotes[16] =
+    this.printNotes[22] =
+    this.printNotes[24] =
+    this.printNotes[34] =
+                          '丁未歲高麗國分司大藏都監奉勅彫造';
+
+    this.printNotes[27] = '丁未歲高麗國分司南海大藏都監開板';
+
+    this.printNotes[61] = '戊申歲分司大藏都監開板';
+
+    this.studyLog = [];
+    this.studyLog[1] =
+    this.studyLog[2] =
+    this.studyLog[3] =
+    this.studyLog[4] =
+    this.studyLog[17] =
+    this.studyLog[24] =
+    this.studyLog[25] =
+    this.studyLog[26] =
+    this.studyLog[27] =
+    this.studyLog[28] =
+    this.studyLog[29] =
+    this.studyLog[31] = true;
+  }
+
+  is彌陀法門(n) { return n==17 || n==24 || n==25; }
+
+  getPrintNote(n) {
+    for (; n>0; n--) {
+      var pn = this.printNotes[n];
+      if (pn) return pn;
+    }
+    return null;
+  }
+
+  add(volNum, pdfPages, text) {
+    this.volNum = volNum;
+    this.pdfPages = pdfPages ;
+    this.text = text;
+    this.allStats[volNum] = new DocStats(volNum, pdfPages, text);
+  }
+
+  getVolRefs(n) {
+    var a = ZJL.allStats[n];
+    if (!a) return '';
+    a = Object.values(a.refs);
+    for (var i=0; i<a.length; ++i) {
+      var data = a[i], tag = data[1], disp = `<${tag}>${data[0]}</${tag}>`;
+      if (data[2]>1) disp += `<sup>${data[2]}</sup>`;
+      a[i] = disp;
+    }
+    return a.join(', ');
+  }
+
+  getRefsList() {
+    var ret = {};
+    for (var i=1; i<=100; ++i) {
+      var refs = this.allStats[i].refs;
+      for (var k in refs) {
+        var ref = refs[k];
+        var key = SSRepo.altNames[k];
+        if (key) k = key;
+        var info = ret[k];
+        if (!info)
+          ret[k] = info = {
+            name:k,
+            type:ref[1],
+            volCnt:1,
+            allRefs:ref[2],
+            volRefs:{}
+          };
+        else {
+          ++info.volCnt;
+          info.allRefs += ref[2];
+        }
+        info.volRefs[i] = ref[2];
+      }
+    }
+    return ret;
+  }
+
+  loadJS(vol) {
+    if (vol == 'allrefs') {
+      this.isAllRefs = true;
+      for (var i=1; i<=100; ++i) addjs(`9020/${to3d(i)}.js`);
+    } else
+      addjs(`9020/${to3d(vol||0)}.js`);
+  }
+  isReady() {
+    return this.isAllRefs
+           ? (Object.keys(ZJL.allStats).length == 100)
+           : super.isReady();
+  }
+
+  showPage() {
+    var buf = new Buffer(), en = this.getPrintNote(this.volNum);
+    if (en) en = `\n/TEXT339R/${en}`;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setBuffer(buf).setXG().setGathaClass('gatha2').reInit(9020, 100);
+        var subj='宗鏡錄', sub=subj, body;
+        if (ZJL.isAllRefs) {
+          subj = '宗鏡錄||經論引用總覽';
+          sub  = '宗鏡錄經論引用';
+          body = ZJL.showAllRefs();
+        } else {
+          this.volNum = ZJL.volNum;
+          var zn = zNumber(ZJL.volNum);
+          body = ZJL.text;
+          if      (!this.volNum)       subj += '|自序';
+          else if (this.volNum == 999) subj += '|二序';
+          else if (this.volNum <= 100) {
+            subj += `|卷${zn}`;
+            sub  += `卷${ZJL.volNum}`;
+            body = `/TEXT339/宗鏡錄卷第${zn}\n\n${body}\n/TEXT339/宗鏡錄卷第${zn}${en}` +
+                   '\n/VOLSEP/\n' + this.getRefsDisplay();
+          }
+        }
+        this.writeStart(subj, sub)
+            .writeBody(`\n/TEXT030C/宋 延壽集\n\n${body}\n\n/VOLSEP/`)
+            .writeEnd();
+      }
+
+      getRefsDisplay() {
+        var a = ZJL.getVolRefs(ZJL.volNum);
+        return `<table><tr><td nowrap valign=top>經論引用：</td><td>${a}</td></tr></table>`;
+      }
+
+      writeln(ln, n) {
+        ln = processSutraSastra(ln);
+        if (ln.startsWith('!ASK!')) {
+          var idx = ln.indexOf('。');
+          ln = `/TEXT339/<b>${ln.substring(5,idx)}</b>${ln.substring(idx)}`;
+        }
+        else if (ln.startsWith('!ANS!')) {
+          var idx = ln.indexOf('。');
+          ln = `/TEXTL/<b>${ln.substring(5,idx)}</b>${ln.substring(idx)}`;
+        }
+        else if (ln[0] == '答') {
+          if (ln.startsWith('答。'))   ln = `/TEXTL/<b>答</b>。${ln.substring(2)}`;
+          else if (ln.startsWith('答曰。')) ln = `/TEXTL/<b>答曰</b>。${ln.substring(3)}`;
+          else if (ln.startsWith('答云。')) ln = `/TEXTL/<b>答云</b>。${ln.substring(3)}`;
+          else if (ln.startsWith('答言。')) ln = `/TEXTL/<b>答言</b>。${ln.substring(3)}`;
+        }
+        else if (ln[0] == '問' || ln[1] == '問') {
+          var prefix = '';
+          if (ln[1] == '問') { prefix = ln[0]; ln = ln.substring(1); }
+          if (ln.startsWith('問。'))        ln = `/TEXT339/<b>${prefix}問</b>。${ln.substring(2)}`;
+          else if (ln.startsWith('問曰。')) ln = `/TEXT339/<b>${prefix}問曰</b>。${ln.substring(3)}`;
+          else if (ln.startsWith('問云。')) ln = `/TEXT339/<b>${prefix}問云</b>。${ln.substring(3)}`;
+        }
+        super.writeln(ln, n);
+      }
+
+      writeSeriesNav(links) {
+        var n, me = this;
+        function entry(name, num, is61b) {
+          var uri = num ? `?vol=${num}` : '?';
+          var start = is61b ? '&start=a02' : '';
+          return (!ZJL.volNum && !num) || (ZJL.volNum == num)
+                 ? `<cur>${name}</cur>` : `<a href="${uri}${start}">${name}</a>`;
+        }
+        function write(n, is61b) {
+          me.w(' ')
+            .wIf(!ZJL.studyLog[n], '<i>')
+            .w(entry((n<=10) ? zNumber(n) : n, n, is61b))
+            .wIf(!ZJL.studyLog[n], '</i>')
+            .wIf(n==25 || n==50 || n==85, '<br>');
+        }
+        var allRefsLink = ZJL.isAllRefs ? '' : '【<a href="?vol=allrefs">經論引用總覽</a>】';
+        this.w('<center><table><tr><td></td><td>',
+               `${entry('二序',999)}&nbsp;${entry('自序')}</td>`,
+               `<td align=right>${allRefsLink}</td></tr>`,
+               '<tr><td valign=top>標宗章第一&nbsp;</td><td colspan=2>');
+        for (n=1; n<=61; ++n) write(n);
+        this.w('</td></tr><tr><td valign=top>問答章第二&nbsp;</td><td colspan=2>');
+        for (n=61; n<=93; ++n) write(n, n==61);
+        this.w('</td></tr><tr><td valign=top>引證章第三&nbsp;</td><td colspan=2>');
+        for (n=94; n<=100; ++n) write(n);
+        this.w('</td></tr></table></center>');
+      }
+    } // class extends DocInfo
+    )();
+    buf.render('stg');
+  }
+
+  showAllRefs() {
+    var allRefs = Object.values(ZJL.getRefsList()), buf = new Buffer();
+    buf.w('<table border=1 cellspacing=0 cellpadding="2px" bgcolor=white>');
+    allRefs.sort((a,b)=>{
+      if (a.allRefs > b.allRefs) return -1;
+      if (a.allRefs < b.allRefs) return 1;
+      return 0;
+    });
+    for (var i=0; i<allRefs.length; ++i) {
+      var doc = allRefs[i], tag = doc.type;
+      buf.w(`<tr><td align=right>${i+1}.</td><td nowrap><${tag}>${doc.name}</${tag}></td>`,
+            `<td align=right>${doc.volCnt}</td><td align=right>${doc.allRefs}</td><td>`);
+      var refs = Object.keys(doc.volRefs);
+      for (var j=0; j<refs.length; ++j) {
+        var v = refs[j], n = doc.volRefs[v];
+        var x = `<b>${(v<=10 ? zNumber(v) : v)}</b>`;
+        if (n > 1) x += `<sup>${n}</sup>`;
+        refs[j] = x;
+      }
+      buf.w(refs.join(', '), '</td></tr>');
+    }
+    buf.w('</table>');
+    return buf.render();
+  }
+
+})(); // ZJL
+
+ZJL.show(get('vol'), get('start'));
+</script>
