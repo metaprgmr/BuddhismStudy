@@ -144,9 +144,9 @@ function getSlideShow() {
   .add('<p><nian>願共一切衆生，脩行如是供養已，<br>' +
        '漸得成就六波羅蜜、四無量心。<br>' +
        '深知一切法本來寂靜、無生無滅、<br>' +
-       '一味平等，離念清淨，畢竟圓滿。<br>&nbsp;<br>' +
-       '供養已，一切恭敬。</nian><br>' +
-       '<dong>一拜</dong>　</p>', '3:38', sk200)
+       '一味平等，離念清淨，畢竟圓滿。</nian><br>&nbsp;<br>' +
+       '<nian>供養已，一切恭敬。<br>' +
+       '<dong>一拜</dong>　</nian></p>', '3:38', sk200)
     .setToLast({id:'願共一切衆生，'})
   .addSlideGroup('一心奉請', null, [
        '奉請:釋迦佛#   4:10,本師<u>釋迦牟尼佛</u>　　　,三稱、一拜',
@@ -337,7 +337,7 @@ function getSlideShow() {
   ss
   .add('<h3>◎脩行懺悔<dong>長跪</dong></h3>', '30:11', imgTag(dzng,550))
     .setToLast({id:'◎脩行懺悔'})
-  .add('<p><nian>我弟子${getName()}，<br>' +
+  .add(`<p><nian>我弟子${getName()}，<br>` +
        '一心仰吿<red>地藏</red>慈尊、十方三寶，<br>' +
 　　   '弟子過去曾犯殺生、偷盜、邪淫、<br>'+
        '妄語、沽酒、說四衆過、自讚毀他、<br>' +
@@ -349,7 +349,7 @@ function getSlideShow() {
   .add('<p><nian>我及衆生，無始常為三業六根重罪所障，<br>' +
        '不見諸佛，不知出要，但順生死，不知妙理。<br>' +
        '我今雖知，猶與衆生，同為一切重罪所障。<br>' +
-       '今對<red>地藏</red>，十方佛前，普為衆生歸命懺悔，<br>' +
+       '今對<red>地藏</red>、十方佛前，普為衆生歸命懺悔，<br>' +
        '惟願加護，令障消滅。</nian><br>' +
        '<dong>跪拜</dong>　</p>', '31:04', dz200)
     .setToLast({id:'我...常為..所障'})
@@ -383,7 +383,7 @@ function getSlideShow() {
        '<nian>慈悲攝受，聽我懺悔。</nian><br>' +
        '<dong>跪拜</dong>　</p>', '33:00', dz200)
     .setToLast({id:'惟願...聽我懺悔'})
-  .add('<nian>我弟子${getName()}，至心懺悔。</nian>　<br>' +
+  .add(`<nian>我弟子${getName()}，至心懺悔。</nian>　<br>` +
        '<nian>我及衆生，自性清淨。一實境界，諸佛體同。<br>' +
        '無明癡暗，熏習因緣，現妄境界，令生念著，<br>' +
        '計我我所，習諸惡法，三業六根，廣造重罪，<br>' +
@@ -403,38 +403,38 @@ function getSlideShow() {
        '十惡、四重、五逆、顛倒、<br>' +
        '謗毀三寶、一闡提罪。<br>' +
        '如是罪性，本惟空寂，但從虛妄，<br>' +
-       '顛倒心起，無有定實，而可得者。<br>&nbsp;<br>' +
-       '願一切衆生，速達心本，永滅罪根。<br>&nbsp;<br>' +
+       '顛倒心起，無有定實，而可得者。</nian><br>&nbsp;<br>' +
+       '<nian>願一切衆生，速達心本，永滅罪根。</nian><br>&nbsp;<br>' +
        '懺悔已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '34:44', dz200)
+       '<nian><dong>跪拜</dong>　</nian></p>', '34:44', dz200)
     .setToLast({id:'願...永滅罪根'})
   .add('<h3>◎發勸請願</h3>' +
-       '<p><nian>我弟子${getName()}，至心勸請。</nian>　<br>' +
+       `<p><nian>我弟子${getName()}，至心勸請。</nian>　<br>` +
        '<nian>願令十方一切菩薩，<br>' +
        '未成正覺者，願速成正覺。<br>' +
        '若已成正覺者，願常住在世，</nian>　<br>' +
-       '<nian>轉正法輪，不入涅槃。<br>&nbsp;<br>' +
-       '勸請已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '35:25', dz200)
+       '<nian>轉正法輪，不入涅槃。</nian><br>&nbsp;<br>' +
+       '<nian>勸請已，歸命禮三寶。</nian><br>' +
+       '<nian><dong>跪拜</dong>　</p>', '35:25', dz200)
     .setToLast({id:'◎發勸請願'})
   .add('<h3>◎發隨喜願</h3>' +
-       '<p><nian>我弟子${getName()}，至心隨喜。<br>' +
+       `<p><nian>我弟子${getName()}，至心隨喜。<br>` +
        '願我及一切衆生，畢竟永捨嫉妒之心，<br>' +
        '於三世中，一切剎土，所有脩學一切功德，<br>' +
-       '及成就者，悉皆隨喜。<br>&nbsp;<br>' +
-       '隨喜已，歸命禮三寶。</nian><br>' +
+       '及成就者，悉皆隨喜。</nian><br>&nbsp;<br>' +
+       '<nian>隨喜已，歸命禮三寶。</nian><br>' +
        '<dong>跪拜</dong>　</p>', '35:57', dz200)
     .setToLast({id:'◎發隨喜願'})
   .add('<h3>◎發迴向願</h3>' +
-       '<p><nian>我弟子${getName()}，至心迴向。<br>' +
+       `<p><nian>我弟子${getName()}，至心迴向。<br>` +
        '願我所脩一切功德，<br>' +
        '資益一切諸衆生等，<br>' +
-       '同趣佛智，至涅槃城。<br>&nbsp;<br>' +
-       '迴向已，歸命禮三寶。</nian><br>' +
-       '<dong>跪拜</dong>　</p>', '36:28', dz200)
+       '同趣佛智，至涅槃城。</nian><br>&nbsp;<br>' +
+       '<nian>迴向已，歸命禮三寶。</nian><br>' +
+       '<dong>跪拜</dong>　</nian></p>', '36:28', dz200)
     .setToLast({id:'◎發迴向願'})
-  .add('<h3>◎補發願</h3><p><nian>' + lastPray(true) + '<br>&nbsp;<br>' +
-       '發願已，歸命禮三寶。<br>' +
+  .add('<h3>◎補發願</h3><p><nian>' + lastPray(true) + '</nian><br>&nbsp;<br>' +
+       '<nian>發願已，歸命禮三寶。<br>' +
        '<dong>跪拜　起身</dong></nian></p>', '36:52')
     .setToLast({id:'◎補發願'})
   .addSlideGroup(null, '一拜', [
