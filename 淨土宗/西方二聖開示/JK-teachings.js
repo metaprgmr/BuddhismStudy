@@ -72,6 +72,7 @@ class JKPSLesson {
     JKPSTeachings.push(this);
     this.id = '_' + JKPSTeachings.length;
     JKPSTeachingsDict[this.id] = this;
+    if (this.ytid) JKPSTeachingsDict[this.ytid] = this;
     if (this.anchor) JKPSTeachingsDict[this.anchor] = this;
   }
 

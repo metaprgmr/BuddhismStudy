@@ -16,6 +16,7 @@ teal  { color:teal }
 verse { color:teal }
 .verse { color:teal }
 inv { opacity:0 }
+dim { opacity:0.3 }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }
 .contentW { border:0px red solid; width:900px; text-align:left; font-size:19px }
 .gatha   { text-align:center }
