@@ -1,4 +1,4 @@
-var TheGrandTOC =
+HYJ.text =
 `/TEXTC/Mahāvaipulya Buddhāvataṃsaka Sūtra
 
 /TEXT030C/唐于闐實叉難陀譯

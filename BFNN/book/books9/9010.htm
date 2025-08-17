@@ -24,7 +24,7 @@ var HYJ = new (class extends SeriesContainer {
         this.setBuffer(buf).setXG().reInit(9010, 80);
         this.volNum = HYJ.volNum;
         var zn = zNumber(HYJ.volNum);
-        if (HYJ.text) // write the volume content
+        if (HYJ.volNum) // write the volume content
           this.writeStart(`大方廣佛華嚴經||卷${zn}`, `華嚴經 卷${HYJ.volNum}`)
               .writeBody('\n\n/TEXT030C/唐于闐實叉難陀譯\n\n' +
                          `/TEXT339/大方廣佛華嚴經卷${zn}\n\n` +
@@ -32,7 +32,7 @@ var HYJ = new (class extends SeriesContainer {
                          `\n/TEXTR/大方廣佛華嚴經卷${zn}\n\n/VOLSEP/\n`);
         else // write the grand TOC
           this.writeStart(`大方廣佛華嚴經`, `華嚴經`)
-              .writeBody(TheGrandTOC);
+              .writeBody(HYJ.text);
         this.writeEnd();
       }
 

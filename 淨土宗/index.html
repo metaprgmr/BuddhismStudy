@@ -12,13 +12,13 @@
 var BOOKS9 = window['BOOKS9_BFNN'];
 function w() { for (var i in arguments) document.write(arguments[i]) }
 function writeBfnn9Link(uri9, extURL, title) { w('<a href="' + (BOOKS9 ? (BOOKS9 + uri9) : extURL) + '">' + title + '</a>') }
-function writeWLSJVersion(withPref, vers, name, ttl, zicnt) {
+function writeWLSJVersion(withPref, vers, name, ttl, zicnt, vowcnt) {
   w(withPref ? '<br>　　　　　' : '',
-    `<a href="../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/${vers}.js">${name}</a><font style="font-size:14px">（${zicnt}字）</font>${ttl||''}`);
+    `<a href="../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/${vers}.js">${name}</a><font style="font-size:14px">（${vowcnt}願，${zicnt}字）</font>${ttl||''}`);
 }
 function writeWLSJWang() {
   w(`宋王日休<a href="../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/Wang.js">校輯本</a>`,
-    '<font style="font-size:14px">（17739字）</font>《大阿彌陀經》');
+    '<font style="font-size:14px">（48願，17739字）</font>《大阿彌陀經》');
 }
 </script>
 </head>
@@ -44,12 +44,12 @@ style="font-size:14px">（16171字）</font>內容導引<br>
   href="《無量壽經》/sutra_as_mantra.html">咒誦版</a>
   <ul>
   <li>諸原譯本：<script>
-    writeWLSJVersion(0, 'HAN-trans',  '漢譯', '《無量清淨平等覺經》後漢月氏沙門支婁迦讖譯', 28224)
+    writeWLSJVersion(0, 'HAN-trans',  '漢譯', '《無量清淨平等覺經》後漢月氏沙門支婁迦讖譯', 28224, 24)
     writeWLSJVersion(1, 'WU-trans',   '吳譯', '《佛說阿彌陀三耶三佛薩樓佛檀過度人道經》<br>' +
-                        '　　　　　　　　　　　吳月氏優婆塞支謙字恭明譯', 25124)
-    writeWLSJVersion(1, 'WEI-trans',  '魏譯', '《無量壽經》曹魏印度沙門康僧鎧譯', 17381)
-    writeWLSJVersion(1, 'TANG-trans', '唐譯', '《無量壽如來會》唐南印度三藏菩提流志譯', 14003)
-    writeWLSJVersion(1, 'SONG-trans', '宋譯', '《佛說大乘無量壽莊嚴經》宋西域沙門法賢譯', 11661)
+                        '　　　　　　　　　　　　　　　　　　　　　　吳月氏優婆塞支謙字恭明譯', 25124, 24)
+    writeWLSJVersion(1, 'WEI-trans',  '魏譯', '《無量壽經》　　　　　曹魏印度沙門康僧鎧譯', 17381, 48)
+    writeWLSJVersion(1, 'TANG-trans', '唐譯', '《無量壽如來會》　　唐南印度三藏菩提流志譯', 14003, 48)
+    writeWLSJVersion(1, 'SONG-trans', '宋譯', '《佛說大乘無量壽莊嚴經》　宋西域沙門法賢譯', 11661, 36)
   </script></li>
   <li><script> writeWLSJWang()</script>
   </ul>

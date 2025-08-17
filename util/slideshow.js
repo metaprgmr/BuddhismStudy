@@ -10,6 +10,7 @@ function toTimeDisp(secs, plain) {
   else secs = secs % 3600;
   var mins = Math.floor(secs / 60).toFixed(0);
   if (mins < 10) ret += plain ? '0' : '<inv>0</inv>';
+  if (mins == '60') mins = '00';
   ret += mins + ':';
   secs = (secs % 60).toFixed(0);
   if (secs == 60) secs = '59';
