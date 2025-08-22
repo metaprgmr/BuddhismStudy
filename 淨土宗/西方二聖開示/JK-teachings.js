@@ -1,21 +1,4 @@
 
-const JKPSTeachings = [];
-const JKPSTeachingsDict = {};
-var JKPSTeachings_sorted = false;
-
-function sortJKPSTeachings() {
-  if (!JKPSTeachings_sorted) {
-    JKPSTeachings.sort((a,b) => {
-      a = a && a.type;
-      b = b && b.type;
-      if (!a) return !b ? 0 : 1;
-      if (!b) return -1;
-      return a - b;
-    });
-    JKPSTeachings_sorted = true;
-  }
-}
-
 const CRITICAL = 'critical';
 const GOOD     = 'good';
 const DISABLED = 'DISABLED:';
@@ -48,6 +31,49 @@ const TYPES = [
   }
 })();
 
+class JKFSTeachings {
+  constructor() {
+    this.teachings = [];
+    this.dict = {};
+    this.sorted = false;
+  }
+  getLesson(id) { return this.dict[id]; }
+  getCount() { return this.teachings.length; }
+  add(lsn) {
+    this.teachings.push(lsn);
+    lsn.id = '_' + this.teachings.length;
+    var info = [];
+    info.push(lsn.id);
+    this.dict[lsn.id] = lsn;
+    if (lsn.ytid)   { this.dict[lsn.ytid] = lsn; info.push(lsn.ytid); }
+    if (lsn.anchor) { this.dict[lsn.anchor] = lsn; info.push(lsn.anchor); }
+    console.log(info.join(', '));
+  }
+  sort() {
+    if (this.sorted) return;
+    this.teachings.sort((a,b) => {
+      a = a && a.type;
+      b = b && b.type;
+      if (!a) return !b ? 0 : 1;
+      if (!b) return -1;
+      return a - b;
+    });
+    this.sorted = true;
+  }
+  getRandomID() {
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    var max = this.teachings.length;
+    var num = getRandomInt(1, max);
+    return '_' + num;
+  }
+}
+
+var JK = new JKFSTeachings();
+
 class JKPSLesson {
   constructor(ytid_url, origTitle, title, source, srcVol, more) {
     if (ytid_url === DISABLED) return;
@@ -69,11 +95,7 @@ class JKPSLesson {
     if (srcVol)    this.srcVol = srcVol;
     if (more)      this.more = more;
 
-    JKPSTeachings.push(this);
-    this.id = '_' + JKPSTeachings.length;
-    JKPSTeachingsDict[this.id] = this;
-    if (this.ytid) JKPSTeachingsDict[this.ytid] = this;
-    if (this.anchor) JKPSTeachingsDict[this.anchor] = this;
+    JK.add(this);
   }
 
   content() {

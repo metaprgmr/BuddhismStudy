@@ -18,28 +18,16 @@ em.edu { background-color:eef }
 </style>
 <script src="../../util/utils.js"></script>
 <script src="JK-teachings.js"></script>
-<script>
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function getJingYuID() {
-  var max = JKPSTeachings.length;
-  var num = getRandomInt(1, max);
-  return '_' + num;
-}
-</script>
 </head>
 <body style="margin:20px; background:#dfd">
 <center>
 
 <script>
 var lsn, idx = get('i'), isOrig = (idx === 'orig');
-if (idx == 'random') idx = getJingYuID();
-if (!isOrig) sortJKPSTeachings();
+if (idx == 'random') idx = JK.getRandomID();
+if (!isOrig) JK.sort();
 if (idx && !isOrig) { // passage display
-  lsn = JKPSTeachingsDict[idx];
+  lsn = JK.getLesson(idx);
   w('<table width="900px">',
     '<tr><td align="center"><h2>', lsn.title, '</h2>');
   lsn.source && w('<p class="subttl">【', lsn.source, ' ', lsn.srcVol || '', '】&nbsp;&nbsp;');
@@ -53,14 +41,14 @@ if (idx && !isOrig) { // passage display
     '<tr><td align="center"><hr>【<a href="?i=">迴目錄</a>】', 
     '【<a href="?i=random">隨機選</a>】</td></tr></table>');
 } else { // TOC
-  const len = JKPSTeachings.length;
+  const len = JK.getCount();
   const aTag = isOrig ? '<a href="?" title="分類">' : '<a href="?i=orig" title="原序">';
-  w('<h2>', aTag, '淨空法師開示', isOrig ? len : '百', '篇</a></h2>',
+  w('<h2>', aTag, '淨空法師開示', len, (isOrig?'篇（詳細）':'篇'), '</a></h2>',
     '<p>空師法語，字字珠璣，句句精妙，實難擇分</p>',
     '<table cellpadding="0" cellspacing="0">');
   var lastType = '???';
-  for (var i in JKPSTeachings) {
-    lsn = JKPSTeachings[i];
+  for (var i in JK.teachings) {
+    lsn = JK.teachings[i];
     var cls = "toc";
     if (lsn.level) cls += ' ' + lsn.level;
     var type = TYPES[lsn.type] || (isOrig ? '' : '[未定]');
