@@ -1,4 +1,4 @@
-var list8 = new YTList('淨心與淨土 @善知識', 'PLbHDOn5U0Fa1b5ANv44HTuSoThVwGZ3cB')
+var list8 = new YTList('淨心與淨土|@善知識', 'PLbHDOn5U0Fa1b5ANv44HTuSoThVwGZ3cB')
   .add('11:41', 'h1ukw9R6r1U', '往生淨土是靠「佛力」還是「心力」？ | 心力跟佛力是不可分開的 | 永明延壽大師 | 蕅益大師 | 禪淨雙修 | 彌陀要解 01')
   .add('13:21', 'qtZTfKgm_-I', '心力不可思議：為何臨終一念能超越生死？ | 生命是由你的心靈創造出來的 02')
   .add('12:43', 'mm92FYEVUDU', '修行最大障礙 | 心念創造命運 03')

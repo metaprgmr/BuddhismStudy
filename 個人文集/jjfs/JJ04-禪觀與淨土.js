@@ -24,7 +24,7 @@ var list4 = new YTList('禪觀與淨土', 'PLpIuMuwaeLim1h8mJ2-XJCECfvib_3mqy')
   .add('48:56', 'nRCCIzsnpmw', '禪觀與淨土(四) 往生篇 第5集')
   .add('1:4:20','H-VXB2lUbBo', '禪觀與淨土(四) 往生篇 第6集')
 ;
-var list4a = new YTList('禪觀與淨土 @善知識', 'PLbHDOn5U0Fa1kBO--QJF54ePp_Ht1u08H')
+var list4a = new YTList('禪觀與淨土|@善知識', 'PLbHDOn5U0Fa1kBO--QJF54ePp_Ht1u08H')
   .add('12:14', 'rLZfEmtTRiQ', '念佛人為什麼要修習出離心？')
   .add('23:16', 'lZ7GIxfCp7s', '如何修出離心：贪爱福報而修善業 - 因地不真！什麽後果？')
   .add('10:05', '3C_qbOEA7Ro', '如何創造廣大功德？布施越多，福報越大？')

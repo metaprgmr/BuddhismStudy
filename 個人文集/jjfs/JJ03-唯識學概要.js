@@ -1,4 +1,4 @@
-var list3 = new YTList('唯識學概要 @善知識(共131講)', 'PLbHDOn5U0Fa1TYylZCxTFBIP9BZtRXe29')
+var list3 = new YTList('唯識學概要(共131講)|@善知識', 'PLbHDOn5U0Fa1TYylZCxTFBIP9BZtRXe29')
   .add('16:47', 'vAOV4SkYrjI', '心理學的最高峰！ 1~2')
   .add('22:21', 'kfBVrFX-G7o', '印度本宗的緣起 3~4')
   .add('19:45', 'ZTGdxJnj9x8', '中國本宗的緣起 5~6')

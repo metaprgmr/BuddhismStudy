@@ -19,7 +19,9 @@ class YTCollection {
         buf.w(`<td colspan=3><a href="javascript:${fxnName}(${i})">${lst[0]}</a></b></td></tr>`);
       } else {
         totalD += lst.totalDur;
-        buf.w(`<td><b><a href="javascript:${fxnName}(${i})">${lst.name}</a></b>`,
+        var a = lst.name.split('|'), more = '';
+        if (a.length > 1) more = ` <i style="opacity:0.4; font-size:14px">${a[1]}</i>`;
+        buf.w(`<td><b><a href="javascript:${fxnName}(${i})">${a[0]}</a>${more}</b>`,
               '&nbsp;&nbsp;&nbsp;</td>',
               `<td align="right"><code>${formatTime(lst.totalDur)}</code></td>`,
               `<td align="right">&nbsp;&nbsp;&nbsp;${lst.videos.length}</td><td>集</td></tr>`);
@@ -48,6 +50,22 @@ class YTCollection {
   }
 }
 
+class YTVideo {
+  constructor(id, title, time, extra) {
+    this.id    = id;
+    this.title = title;
+    this.time  = time;
+    extra && (this.extra = extra);
+
+    this.timeSecs = 0;
+    var a = time.split(':'), factor = 1, len = a.length;
+    for (var i=0; i<len; i++) {
+      this.timeSecs += a[len-i-1] * factor;
+      factor *= 60;
+    }
+  }
+}
+
 class YTList {
   constructor(name, id) { 
     this.id = id;
@@ -55,21 +73,34 @@ class YTList {
     this.videos = [];
     this.totalDur = 0;
   }
+  setReferences() { this.references = arguments; return this; }
   set(k,v) { k && v && (this[k] = v); return this; }
+  lastVideo() { return this.videos[this.videos.length-1]; }
+  getVideoIndex(id) {
+    for (var i=0; i<this.videos.length; ++i)
+      if (this.videos[i].id == id) return i+1;
+    return -1;
+  }
   add(time, id, title, extra) {
-    this.videos.push({id, title, time, extra});
-    { var a = time.split(':').reverse();
-      this.totalDur += parseInt(a[0]);
-      if (a[1]) this.totalDur += parseInt(a[1]) * 60;
-      if (a[2]) this.totalDur += parseInt(a[2]) * 3600;
+    if (!extra && this.references) {
+      for (var i in this.references) {
+        var r = this.references[i];
+        var idx = r.getVideoIndex(id);
+        if (idx > 0) { extra = `= ${r.name}&nbsp;[${idx}]`; break; }
+      }
     }
+    this.videos.push(new YTVideo(id, title, time, extra));
+    this.totalDur += this.lastVideo().timeSecs;
     return this;
   }
   render(buf) {
     buf.w('<h3 style="margin-bottom:5px">')
+    var a = this.name.split('|'), more = '';
+    var name = a[0];
+    if (a.length > 1) more = ` <i style="opacity:0.4">${a[1]}</i>`;
     buf.wIfElse(this.id, // if null, just a collection of videos
-                `<a href="${ytListURL(this.id)}" target="extnl">${this.name}</a>【${this.videos.length}個節目】`,
-                `${this.name||''}【${this.videos.length}個節目】`)
+                `<a href="${ytListURL(this.id)}" target="extnl">${name}</a>${more}【${this.videos.length}個節目】`,
+                `${name}${more}【${this.videos.length}個節目】`)
        .w('</h3><table bgcolor="white" style="margin-left:20px">');
     for (var i=0; i<this.videos.length; ++i) {
       var v = this.videos[i], viewed = YTViewing[v.id];
@@ -81,7 +112,8 @@ class YTList {
          .wIf(v.extra, `<br><span style="opacity:0.5">${v.extra}</span>`)
          .w('</td></tr>');
     }
-    buf.w(`<tr><td></td><td colspan=2 align=right style="border-top:1px solid gray">總時長：<code>${formatTime(this.totalDur)}</code></td></tr></table>`);
+    buf.w('<tr><td></td><td colspan=2 align=right style="border-top:1px solid gray">總時長：&nbsp;<code>',
+          formatTime(this.totalDur), '</code></td></tr></table>');
     return buf;
   }
 }
