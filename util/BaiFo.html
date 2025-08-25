@@ -17,7 +17,7 @@ var n = get('n') || 1, buf = new Buffer();
 if (n == 'sk') {
   buf.w('<h1 style="color:gold">Namo Bhagavate Śākyamunaye<br>',
         `Tathāgatāyārhate Samyaksaṃbuddhāya</h1><a href="javascript:ender('Clicked')">`,
-        '<img src="../images/釋迦牟尼佛.jpg" title="Click switch full screen." height="940px"></a>');
+        '<img src="../images/釋迦牟尼佛.jpg" title="Click to be full screen." height="940px"></a>');
   n = 0;
 } else {
   buf.w(`<a href="javascript:ender('Clicked')">`,
@@ -37,12 +37,14 @@ a.addEventListener('ended', ender);
 
 function ender(e) {
   if (e == 'Clicked') {
-    if (started)
+    if (started) {
       exitFullScreenMode();
-    else
-      document.documentElement.requestFullscreen();
-    if (started) return;
-    started = true;
+      started = false;
+    }
+    else {
+      enterFullScreenMode();
+      started = true;
+    }
   }
   if (cnt < n) {
     a.play();

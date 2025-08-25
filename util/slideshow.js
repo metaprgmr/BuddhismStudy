@@ -5,16 +5,16 @@ function isReal() { return TEST_SPEED == 1; }
 
 function toTimeDisp(secs, plain) {
   var ret = '';
-  var hrs = Math.floor(secs / 3600);
+  var hrs = Math.floor(secs / 3600),
+      mins = Math.floor((secs - hrs * 3600) / 60);
+  secs -= hrs * 3600 + mins * 60;
   if (hrs > 0) ret = hrs + ':';
   else secs = secs % 3600;
-  var mins = Math.floor(secs / 60).toFixed(0);
-  if (mins < 10) ret += plain ? '0' : '<inv>0</inv>';
-  if (mins == '60') mins = '00';
+  mins = mins.toFixed(0);
+  if (mins < 10) ret += (hrs || plain) ? '0' : '<inv>0</inv>';
   ret += mins + ':';
-  secs = (secs % 60).toFixed(0);
-  if (secs == 60) secs = '59';
-  else if (secs < 10) ret += '0';
+  secs = secs.toFixed(0);
+  if (secs < 10) ret += '0';
   return ret + secs;
 }
 
@@ -29,9 +29,27 @@ function toSecs(time) {
   return ret;
 }
 
+class Slide {
+  constructor(content, time, topPortion, stopClock) {
+    this.content = content;
+    if (typeof time == 'number') {
+      this.time = time;
+    } else {
+      var a = time.split('|');
+      this.time = toSecs(a[0]);
+      if (a.length > 1) this.time2 = toSecs(a[1]);
+    }
+    this.topPortion = topPortion;
+    stopClock && (this.stopClock = stopClock);
+  }
+  setToLong() { this.time2 && (this.time = this.time2); }
+  getTime() { return this.time; }
+}
+
 class SlideShow {
   constructor(cfg) {
     // environment
+    this.isLong      = cfg.isLong;
     this.stageHeight = cfg.stageHeight || 500;
     this.contentId   = cfg.contentElid;
     this.audioId     = cfg.audioElid;
@@ -65,13 +83,21 @@ class SlideShow {
 
   addSlide(content, time, topPortion) { return this.add(content, time, topPortion); } // alias
 
+  addIf(cond, content, time, topPortion, stopClock) {
+    return !cond ? this : this.add(content, time, topPortion, stopClock);
+  }
+
   add(content, time, topPortion, stopClock) {
     // content: can be string (as HTML) or function(this)
     //    time: from the start, in seconds
     if (!time || time < 0 || this.slides.length == 0) time = 0;
-    this.slides.push({ content, at:toSecs(time), topPortion, stopClock });
+    var s = new Slide(content, time, topPortion, stopClock);
+    if (this.isLong) s.setToLong();
+    this.slides.push(s);
     return this;
   }
+
+  setToLastIf(cond, vals) { return !cond ? this : this.setToLast(vals); }
 
   setToLast(vals) {
     if (typeof vals == 'object') {
@@ -83,7 +109,9 @@ class SlideShow {
 
   addSlideGroup(before, action, list, leading, topPortion) {
     for (var i=0; i<list.length; ++i) {
-      var l = list[i], id, idx = l.indexOf('#');
+      var l = list[i], id;
+      if (l == null) continue;
+      var idx = l.indexOf('#');
       if (idx >= 0) {
         id = l.substring(0,idx).trim();
         l = l.substring(idx+1).trim();
@@ -92,8 +120,10 @@ class SlideShow {
       var ts = l[0], fo = l[1], txt = (leading || '') + '<table>';
       for (var j=0; j<list.length; ++j) {
         l = list[j];
+        if (l == null) continue;
         l = l.split(',');
         var todo = l[2] || action;
+        if (l[2] == 'PAUSE') continue;
         if (j == i) {
           if (!before)
             txt += `<tr><td nowrap width="460px"><nian><red>${l[1]}</red></nian><dong>${todo}</dong></td></tr>`;
@@ -125,9 +155,9 @@ class SlideShow {
     if (next.stopClock) this.stopClock = true;
     this.showPtr += delta;
     {
-      var txt = toTimeDisp(this.slides[this.showPtr].at,true) + ',';
+      var txt = toTimeDisp(this.slides[this.showPtr].getTime(),true) + ',';
       if (this.showPtr < len-1)
-        txt += toTimeDisp(this.slides[this.showPtr+1].at,true);
+        txt += toTimeDisp(this.slides[this.showPtr+1].getTime(),true);
       else
         txt += '     ';
       console.log(`[${txt})【第${this.showPtr+1}/${len}步】${next.id||''}`);
@@ -155,10 +185,10 @@ class SlideShow {
     if (ptr < 0 || ptr>=len) ptr = Math.floor(len/2);
     var cur = this.slides[ptr], nxt;
     if (!cur) return -1;
-    if (curSecs >= cur.at) {
+    if (curSecs >= cur.getTime()) {
       for (; ptr<len; ++ptr) {
         nxt = this.slides[ptr+1];
-        if (!nxt || nxt.at > curSecs) return ptr;
+        if (!nxt || nxt.getTime() > curSecs) return ptr;
       }
       return -1;
     }
@@ -166,7 +196,7 @@ class SlideShow {
       for (; ptr>0; --ptr) {
         nxt = this.slides[ptr-1];
         if (!nxt) return 0;
-        if (nxt.at < curSecs) return ptr-1;
+        if (nxt.getTime() < curSecs) return ptr-1;
       }
       return -1;
     }
@@ -186,10 +216,10 @@ class SlideShow {
       var intvl = '[', txt;
       var n = curShow.slides[ptr];
       var txt = n && n.id || '';
-      if (n) intvl += toTimeDisp(n.at,1);
+      if (n) intvl += toTimeDisp(n.getTime(),1);
       intvl += ' - ';
       n = curShow.slides[ptr+1];
-      if (n) intvl += toTimeDisp(n.at,1);
+      if (n) intvl += toTimeDisp(n.getTime(),1);
       intvl += '] ' + txt;
       console.log(toTimeDisp(durSecs,1), 'ptr:', ptr, 'showPtr:', this.showPtr, intvl);
     }

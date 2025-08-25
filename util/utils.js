@@ -473,6 +473,10 @@ function formatTime(tm) {
   return '<b>' + hrs + ':</b>' + fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
 }
 
+function enterFullScreenMode() {
+  document.documentElement.requestFullscreen();
+}
+
 function exitFullScreenMode() {
   if (document.exitFullscreen) {
     document.exitFullscreen();
