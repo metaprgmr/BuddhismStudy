@@ -6,50 +6,69 @@
 <style>
 ol { font-size:20px; line-height:150% }
 </style>
+<script src="../util/utils.js"></script>
 </head>
 <body><center>
-
 <h1>《個人文集》目錄</h1>
-
-<div class="content">
-
-<center><table>
-<tr><th>佛法</th><th>修行</th><th>雜論</th></tr>
-<tr><td valign="top">
-<ol>
-<li><a href="JK-Learn-Buddhism-認識佛教筆記.html">《認識佛教》筆記</a>，<a href="JK-Learn-Buddhism-Review-Qs.html">復習</a></li>
-<li><a href="WLSJs_various.html">《無量壽經》諸版對照</a></li>
-<li><a href="《無量壽經》三聖之考究.html">《無量壽經》三聖之考究</a></li>
-<li><a href="與時俱進的提婆達多.html">與時俱進的提婆達多</a></li>
-<li><a href="經或會集本.html">夏蓮居會集的《無量壽經》<br>究竟是經還是會集本？</a></li>
-<li><a href="淨界法師.html">【善知識】淨界法師</a></li>
-<li><a href="北川致遠書社.html">【善知識】北川致遠書社</a></li>
-<li><a href="《八識規矩頌》內容.html">《八識規矩頌》內容</a></li>
-<li><a href="《宗鏡錄》摘要.html">《宗鏡錄》摘要</a></li>
-</ol></td>
-<td style="padding-left:30px" valign="top">
-<ol start="10">
-<li><a href="廿字加卅字.html">廿字加卅字</a></li>
-<li><a href="浪費時間.html">浪費時間</a></li>
-<li><a href="人之將死.html">人之將死</a></li>
-<li><a href="一即一切.html">一即一切</a></li>
-<li><a href="淨空法師是對的.html">淨空法師是對的</a></li>
-<li><a href="素質.html">素質</a></li>
-</ol></td>
-<td style="padding-left:30px" valign="top">
-<ol start="16">
-<li><a href="略言不言而喻之事.html">略言不言而喻之事</a></li>
-<li><a href="苦空無常之音.mp3">苦空無常之音</a></li>
-<li><a href="凡夫苦.html">凡夫苦</a></li>
-<li><a href="毛虫.html">毛虫</a></li>
-<li><a href="論飯桶，兼論素食.html">論飯桶，兼論素食</a></li>
-<li><a href="DuBist.html">Du Bist Was Du Isst</a></li>
-<li><a href="養生乎.html">養生，乎？</a></li>
-<li><a href="對自己好一點.html">對自己好一點</a></li>
-<li><a href="圍棋與人生.html">棋道•人道•佛道</a></li>
-</ol>
-</td></tr></table></center>
-<hr>
+<div id="content" class="content">
 </div>
 <span class="copyright"></span>
 </center></body></html>
+
+<script>
+var jklb = 'JK-Learn-Buddhism-',
+    lst = `
+<a href="${jklb}認識佛教筆記.html">《認識佛教》筆記</a>，<a href="${jklb}Review-Qs.html">復習</a>
+WLSJs_various.html|《無量壽經》諸版對照
+《無量壽經》三聖之考究
+與時俱進的提婆達多
+經或會集本.html|夏蓮居會集的《無量壽經》<br>究竟是經還是會集本？
+地藏菩薩大智開示
+《八識規矩頌》內容
+《宗鏡錄》摘要
+淨界法師.html|【善知識】淨界法師
+北川致遠書社.html|【善知識】北川致遠書社
+#######
+廿字加卅字
+浪費時間
+人之將死.html|人之將死
+一即一切
+淨空法師是對的
+素質
+#######
+略言不言而喻之事
+苦空無常之音.mp3|苦空無常之音
+凡夫苦
+毛虫
+論飯桶，兼論素食
+DuBist.html|Du Bist Was Du Isst
+養生乎.html|養生，乎？
+對自己好一點
+../writings/goetvie.html|棋道•人道•佛道
+`;
+
+var buf = new Buffer(), a = lst.trim().split('\n'), idx = 1;
+buf.w('<center><table><tr><th>佛法</th><th>修行</th><th>雜論</th></tr>');
+buf.w('<tr><td valign="top"><ol>');
+for (var i=0; i<a.length; ++i) {
+  var ln = a[i];
+  if (ln.startsWith('##')) {
+    buf.w('</ol></td><td style="padding-left:30px" valign="top">',
+          `<ol start="${idx}">`);
+    continue;
+  }
+  if (ln.startsWith('<a ')) {
+    buf.w('<li>', ln, '</li>');
+  } else {
+    ln = ln.split('|');
+    if (ln.length > 1)
+      buf.w(`<li><a href="${ln[0]}">${ln[1]}</a></li>`);
+    else
+      buf.w(`<li><a href="${ln[0]}.html">${ln[0]}</a></li>`);
+  }
+  ++idx;
+}
+buf.w('</ol></td></tr></table></center><hr>'); 
+buf.render('content');
+</script>
+

@@ -443,11 +443,11 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function writingRedir(name, ttl) {
+function writingRedir(name, ttl, back) {
   if (!ttl) ttl = name;
   document.title = ttl;
-  w(`<meta http-equiv="Refresh" content="1;url=../個人文集/${name}.html">`,
-    `</head><body><h2>${ttl}</h2></body></html>`);
+  w(`<meta http-equiv="Refresh" content="1;url=../${back?'writings':'個人文集'}/${name}.html">
+</head><body><h2>${ttl}</h2></body></html>`);
 }
 
 function getYourName(yourTag, anyTag) {

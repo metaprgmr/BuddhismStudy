@@ -796,7 +796,7 @@ class PageDims {
 
     if (pageId == 'terms') {
       buf.w('<div class="termsframe"><p style="padding:20px; margin-top:0px">',
-            '<b style="font-size:20px">【索引】</b>',
+            '<b style="font-size:20px">索引：</b>',
             '<darkred>【四十八願】</darkred>');
       for (var i=1; i<=48; ++i)
         showTerm(i);

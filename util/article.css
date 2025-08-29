@@ -13,8 +13,8 @@ red   { color:red }
 blue  { color:blue }
 brown { color:brown }
 teal  { color:teal }
-verse { color:teal }
-.verse { color:teal }
+verse { color:#066 }
+.verse { color:#066 }
 inv { opacity:0 }
 dim { opacity:0.3 }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }

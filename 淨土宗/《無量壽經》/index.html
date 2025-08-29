@@ -33,6 +33,7 @@ for (var i in lst) {
   cnts[txt] = cnt;
   lst[i] = txt;
 }
+
 </script>
 </head>
 <body><center>
@@ -93,8 +94,7 @@ function myClassifyRow() {
     var txt = lst[id];
     if (txt.startsWith('1')) txt = txt.substring(1);
     if (pad) while (txt.length < 9) txt += '　';
-    ++id;
-    w('<a href="../../util/reader.html?s=../淨土宗/《無量壽經》&b=01&c=', id, '">', txt, '</a>');
+    w(`<a href="../../util/reader.html?s=../淨土宗/《無量壽經》&b=01&c=${++id}">${txt}</a>`);
   }
 
   var ret = '', len = arguments.length, i=0;
@@ -110,12 +110,15 @@ function myClassifyRow() {
     else w('<tr bgcolor="#eee">');
   }
   w('<td>', x, '</td><td>');
-  for (; i<len; ++i) {
-    var a = arguments[i];
-    if (a === '|') {
-      w('<br>');
-    } else {
-      pinUrl(parseInt(a)-1, i<(len-1) && arguments[i+1] !== '|');
+  a = arguments[i];
+  if (typeof a == 'string') {
+    w(a); // just one text
+  } else {
+    for (; i<len; a = arguments[++i]) {
+      if (a === '|')
+        w('<br>');
+      else
+        pinUrl(parseInt(a)-1, i<(len-1) && arguments[i+1] !== '|');
     }
   }
   w('</td></tr>');
@@ -186,6 +189,131 @@ w('<tr><td colspan=6" align="center"><hr></td></tr>');
                   '一、大乘修行', 43, 44, 46, 47);
     myClassifyRow('二、獨留此經', 45);
     myClassifyRow('三、圓滿畢會', 48);
+</script>
+</table>
+
+<p>&nbsp;</p>
+
+<table border="1" cellpadding="3px" cellspacing="0px"><caption>全經各品之要旨</caption>
+<script>
+  var isDark=true, pinNum=1;
+  function getPartTR(rows, name) {
+    var c = isDark ? 'lightgray' : '#eee';
+    isDark = !isDark;
+    return `<tr bgcolor="#eee"><td rowspan="${rows}" bgcolor="${c}" align="center">${name}</td>`;
+  }
+  function pinName(i) { // 1-based
+    var x = lst[i-1];
+    if (x.startsWith('1')) x = x.substring(1);
+    return `<a href="../../util/reader.html?s=../淨土宗/《無量壽經》&b=01&c=${i}">${x}</a>`;
+  }
+  myClassifyRow(getPartTR(3, '序分'), pinName(pinNum++),
+    `列當機眾人，僅列阿南、彌勒菩薩，及極少數其他人以作烘托。`);
+  myClassifyRow(pinName(pinNum++),
+    `列十六正士及其功德。正士皆在家人，表本經之關鍵針對；皆他方世界來，表未來我等成就。`);
+  myClassifyRow(pinName(pinNum++),
+    `大教緣起於世尊自己所欲、阿南尊者領會佛意而提請。`);
+
+  myClassifyRow(getPartTR(7, '淨國願成'), pinName(pinNum++),
+    `時有世間自在王如來講經說法；法藏比丘發大心。`);
+  myClassifyRow(pinName(pinNum++),
+    `世間自在王如來為法藏比丘說法、顯現諸佛剎；法藏比丘得以成就莊嚴佛土清淨之行。`);
+  myClassifyRow(pinName(pinNum++),
+    `法藏比丘具陳四十八願詳情。`);
+  myClassifyRow(pinName(pinNum++),
+    `法藏比丘以偈再表誓願。`);
+  myClassifyRow(pinName(pinNum++),
+    `法藏比丘一向專志，所修佛國開廓廣大，超勝獨妙，建立常然。`);
+  myClassifyRow(pinName(pinNum++),
+    `法藏比丘積功累德無量無邊，圓滿成就清淨佛土，號為極樂，佛號阿彌陀佛。`);
+  myClassifyRow(pinName(pinNum++),
+    `阿闍王子與五百大長者聞法發願，表阿彌陀佛激發眾生無量善根。`);
+
+  myClassifyRow(getPartTR(12, '依報莊嚴'), pinName(pinNum++),
+    `淨土無三惡道以及不良地理，唯有黃金為地寬廣平正，自然七寶微妙奇麗清淨莊嚴。`);
+  myClassifyRow(pinName(pinNum++),
+    `阿彌陀佛威神光明最尊第一，衆生遇光皆得休息、命終解脫。`);
+  myClassifyRow(pinName(pinNum++),
+    `無量壽佛及其子民壽命無量，聲聞之數無量無邊。`);
+  myClassifyRow(pinName(pinNum++),
+    `寶樹徧國，七寶以成，榮色光曜不可勝視，清風時發諸妙音聲。`);
+  myClassifyRow(pinName(pinNum++),
+    `道場菩提樹高大寬廣莊嚴，演出無量妙法音聲、無量功德。`);
+  myClassifyRow(pinName(pinNum++),
+    `精舍樓觀欄楯皆七寶自然化成，明妙無比。眾聖賢隨意修習，莫不歡喜。`);
+  myClassifyRow(pinName(pinNum++),
+    `講堂左右泉池交流，華果恆芳光明照耀，奇香妙音助成佛道，水隨眾意，池蓮化生。`);
+  myClassifyRow(pinName(pinNum++),
+    `極樂國眾生容色微妙超世希有，威德階位神通變化非天人可比。`);
+  myClassifyRow(pinName(pinNum++),
+    `極樂國衆生形貌端嚴福德無量，智慧明了神通自在，受用種種一切豐足，隨意所須悉皆如念。`);
+  myClassifyRow(pinName(pinNum++),
+    `每於食時德風徐起，吹寶網樹出微妙音，及吹寶林飄華成聚。風觸眾身安和調適如得滅盡定。`);
+  myClassifyRow(pinName(pinNum++),
+    `衆寶蓮華周滿世界，光佛交織無量無邊，諸佛各各安立無量衆生於佛正道。`);
+  myClassifyRow(pinName(pinNum++),
+    `極樂國完全平等，眾生皆住正定之聚，決定證於阿耨多羅三藐三菩提。`);
+
+  myClassifyRow(getPartTR(1, '十方佛讚'), pinName(pinNum++),
+    `十方佛讚，欲令他方所有衆生發願求生淨土。`);
+
+  myClassifyRow(getPartTR(2, '往生正因'), pinName(pinNum++),
+    `上、中、下輩往生功德。其他大乘修行者一念淨心念於彼佛，即得往生。`);
+  myClassifyRow(pinName(pinNum++),
+    `持供本經晝夜相續求生者。修十善業、晝夜思惟志心歸依者。作善念佛一日一夜不斷絕者。`);
+
+  myClassifyRow(getPartTR(2, '菩薩來往'), pinName(pinNum++),
+    `他方菩薩供養阿彌陀佛及淨國眾生，聽經受化，稱讚佛土功德莊嚴。`);
+  myClassifyRow(pinName(pinNum++),
+    `淨國眾生供養十方諸佛及其人民。經須臾間還國集會七寶講堂聽無量壽佛廣宣大教演暢妙法。`);
+
+  myClassifyRow(getPartTR(5, '正報莊嚴'), pinName(pinNum++),
+    `淨國眾生天眼天耳具足，身有光明。觀音勢至光照三千大千世界，現居此界作大利樂。`);
+  myClassifyRow(pinName(pinNum++),
+    `淨國菩薩或一生補處、或大願度生，以宏誓功德而自莊嚴。國中常如一法，長久廣大明好快樂。`);
+  myClassifyRow(pinName(pinNum++),
+    `淨國菩薩種種修持操守。`);
+  myClassifyRow(pinName(pinNum++),
+    `淨國菩薩種種修行功德成就。`);
+  myClassifyRow(pinName(pinNum++),
+    `淨國菩薩種種功德莊嚴。勸喻大眾為善念道，捨離惡世，求生淨土。`);
+
+  myClassifyRow(getPartTR(5, '勸諭策進'), pinName(pinNum++),
+    `痛斥濁世惡苦，敦促離惡行善、求生淨土。`);
+  myClassifyRow(pinName(pinNum++),
+    `彌勒表今得值佛、聞無量壽聲，歡喜心開。世尊鼓勵精進求索，永拔生死之本，成無上聖道。`);
+  myClassifyRow(pinName(pinNum++),
+    `具陳五惡去五痛離五燒，詳述作惡之果報，令捨之，轉持五善以獲其福德。`);
+  myClassifyRow(pinName(pinNum++),
+    `再述惡行之因果報應，諄諄教誨端身正心，離苦求樂。`);
+  myClassifyRow(pinName(pinNum++),
+    `續敦精進，引導修行。當孝於佛，感恩佛德。`);
+
+  myClassifyRow(getPartTR(2, '親睹淨國'), pinName(pinNum++),
+    `頂禮西方極樂世界。阿彌陀佛顯現放光。具見彼此諸佛世界。`);
+  myClassifyRow(pinName(pinNum++),
+    `世尊驗證阿南、彌勒及眾生實見極樂國土。復問彌勒見否極樂世界胎生者。`);
+
+  myClassifyRow(getPartTR(2, '邊地疑城'), pinName(pinNum++),
+    `二因致生遍城，虛度五百歲，不得修習聖道。`);
+  myClassifyRow(pinName(pinNum++),
+    `以輪王七寶獄比喻。深悔乃出，得聞經法修習功德。解析不求往生者智慧微淺。`);
+
+  myClassifyRow(getPartTR(1, '菩薩往生'), pinName(pinNum++),
+    `敘述諸多佛剎眾多大小菩薩往生淨國，彰顯淨土法門凡聖兼收。`);
+
+  myClassifyRow(getPartTR(6, '流通分'), pinName(pinNum++),
+    `若聞阿彌陀佛名號能生一念喜愛之心，歸依瞻禮如說修行，此人非是小乘。當起精進求此法門。`);
+  myClassifyRow(pinName(pinNum++),
+    `若有衆生植諸善本，已曾供養無量諸佛，當獲廣大一切智智。應當專心信受，持誦說行。`);
+  myClassifyRow(pinName(pinNum++),
+    `當來之世經道滅盡，特留此經止住百歲，令值斯經者，隨意所願皆可得度。`);
+  myClassifyRow(pinName(pinNum++),
+    `諸法難聞，善知識難者難值。應勤修行隨順佛教。無得為妄增減經法。常念不絕則得道捷。`);
+  myClassifyRow(pinName(pinNum++),
+    `以偈總結得聞能修之德。`);
+  myClassifyRow(pinName(pinNum++),
+    `諸眾生聞世尊說法得道。諸天散花供養。終教。`);
 </script>
 </table>
 

@@ -364,10 +364,14 @@ for (var g=isSimple ? 1 : 0; g<groups.length; ++g) {
       w('<td nowrap bgcolor="lightgray" style="', styl, '">&nbsp;</td><td nowrap style="', styl2, '">');
     } else {
       p.num = ++paraNum;
-      var para = isSimple ? `第${p.num}段` : `第<br>${p.num}<br>段`;
+      var paraNumDisp = isSimple ? p.num : `<br>${p.num}<br>`;
+      var para = '', j;
+      for (j=0; j<p.wishes.length; ++j)
+        para += `<a name="_${num+j}"></a>`;
+      para += `第${paraNumDisp}段`;
       w('<td nowrap align="center" class="mynote" bgcolor="lightgray" style="', styl, '">',
         para, '</td><td nowrap style="', styl2, '"', (isSimple ? ' align="center"' : ''), '>');
-      for (var j=0; j<p.wishes.length; ++j) {
+      for (j=0; j<p.wishes.length; ++j) {
         if (j>0) w('<br>');
         if (isKang) {
           if (j == 0)

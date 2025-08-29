@@ -5,6 +5,7 @@ ytviewing.js
 *.class
 *.swp
 *.tmp
+*save
 *~
 alfa*
 beta*
