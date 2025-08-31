@@ -21,9 +21,9 @@ function toTimeDisp(secs, plain) {
 function toSecs(time) {
   if (typeof time == 'number') return time;
   // time is string
-  var a = time.split(':'), ret = parseFloat(a[a.length-1]), factor = 60;
-  for (var i=2; i<=a.length; ++i) {
-    ret += factor * a[a.length-i];
+  var a = time.split(':'), ret = 0, factor = 1;
+  for (var i=0; i<a.length; ++i) {
+    ret += factor * parseInt(a[a.length-i-1].trim());
     factor *= 60;
   }
   return ret;
@@ -161,12 +161,10 @@ class SlideShow {
       else
         txt += '     ';
       console.log(`[${txt})【第${this.showPtr+1}/${len}步】${next.id||''}`);
-    }
-    if (typeof next.content == 'function')
-      e(this.contentId).innerHTML = next.content();
-    else {
+
       const pillar = `<td height="${this.stageHeight}" rowspan="2" style="opacity:0">1</td>`;
       var c = next.content;
+      if (typeof c == 'function') c = c();
       if (c) {
         if (next.topPortion)
           c = `<table border=0 cellspacing=0 cellpadding=0><tr>${pillar}` +
@@ -267,7 +265,9 @@ class SlideShow {
   }
 
   audioEnded() {
-    this.audioStarted = false;
+    if (!this.isSingleAudioPlaying ) return;
+    this.isSingleAudioPlaying = false;
+
     // Update UI
     hideEl(this.audioId);
     showEl(this.msgbarId);
@@ -278,12 +278,16 @@ class SlideShow {
 
   _startSingleAudio() {
     if (!this.singleAudio || !this.audioId || TEST_SPEED != 1) return;
+    this.playAudio(this.singleAudio, true);
+  }
+
+  playAudio(url, isSingleAudio) {
     var a = e(this.audioId);
-    if (a) {
-      showEl(a);
-      a.src = this.singleAudio;
-      a.play();
-    }
+    if (!a) return;
+    this.isSingleAudioPlaying = isSingleAudio;
+    if (isSingleAudio) showEl(a);
+    a.src = url;
+    a.play();
   }
 
   _stopSingleAudio() {
@@ -359,6 +363,7 @@ class SlideShow {
 
 function audioStartedHandler(event) {
   console.log('Audio started playing');
+  if (!curShow.isSingleAudioPlaying) return;
   curShow._stopTimer();
   curShow.audioTime = 0;
   curShow.audioStarted = true;
@@ -366,12 +371,14 @@ function audioStartedHandler(event) {
 
 function audioEndHandler(event) {
   console.log('Audio playing finished');
+  if (!curShow.isSingleAudioPlaying) return;
   curShow.audioEnded();
   curShow.audioStarted = false;
 }
 
 function audioTimeHandler(event) {
   //console.log('Current time:', event.target.currentTime);
+  if (!curShow.isSingleAudioPlaying) return;
   curShow.audioTime = event.target.currentTime;
   curShow._checkAndShowNext();
 }

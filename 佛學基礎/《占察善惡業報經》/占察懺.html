@@ -20,6 +20,8 @@ const saky = '釋迦牟尼佛.jpg',
       dzng = '南無地藏王菩薩1.jpg';
 </script>
 <style>
+a { color:white }
+a:visited { color:white }
 namoAMTB { font-family:"KaiTi","Kaiti TC","楷体",STKaiti,"华文楷体"; color:red; font-size:96px; font-weight:bold }
   namoAMTB::before { content:"南無阿彌陀佛！" }
 #msgbar { color:white; font-size:30px; margin-top:-25px }
@@ -31,6 +33,8 @@ instr  { color:green }
 yourname { color:green; opacity:0.3; text-decoration:underline; text-decoration-color:red  }
 red    { color:red }
 blue   { color:blue }
+brown  { color:brown }
+teal   { color:teal }
 inv    { opacity:0 }
 .bggray { background-color:gray }
 #clock { color:white; font-size:28px }
@@ -61,7 +65,17 @@ dong::after  { content: '）' }
 <script> if (window['xgStyles']) w(window.xgStyles); </script>
 </style>
 </head>
-<body style="background-color:#553; margin:0px"><center>
+<body style="background-color:#553; margin:0px">
+<script>
+var _myname = get('myname');
+var isXG = _myname == '信裹';
+function toMyUri(uri) {
+  if (!_myname) return uri;
+  if (uri.length > 1) return uri + '&myname=' + _myname;
+  return '?myname=' + _myname;
+}
+w(isXG ? '<table style="padding-left:260px"><tr><td align=center>' : '<center>');
+</script>
 <table border="0" cellspacing="0" cellpadding="5px" bgcolor="#ffd">
 <tr><td width="1000px" align="center" style="border-bottom:1px solid black">
 <h1 class="mainttl"><red>占察善惡業報經</red>　<blue>正脩懺法<span id="ttlMore"></span></blue>&nbsp;</h1>
@@ -78,16 +92,18 @@ dong::after  { content: '）' }
 </table>
 <br>
 <div id="controller" align=center>
-　　　　　<button id="btnMan" onclick="letsgo()">手工模式</button>&nbsp;&nbsp;&nbsp;&nbsp;
-<span id="msgbar">《占察善惡業報經》正脩懺法　</span>
-<button id="btnAuto" onclick="letsgo(1)">自動模式</button>　　<script>
-  w(isLong ? '<a class=bggray href="?">日常版</a>' : '<a class=bggray href="?mode=long">解說版</a>');
+<span id="gettext"><a href="../index.html" target="ext">儀軌文本&nbsp;↧</a></span>　　　　<button
+id="btnMan"  onclick="letsgo()">手工模式</button>　　<span
+id="msgbar">《占察善惡業報經》正脩懺法　</span><button
+id="btnAuto" onclick="letsgo(1)">自動模式</button><script>
+  w(`<span id="mode">　　　　<a class=bggray href="${toMyUri(isLong?'?':'?mode=long')}">${isLong?'日常版':'解說版'}</a></span>`);
 </script>
 <audio id="audiop" controls style="margin-top:-25px; width:500px; display:none"
        title="若隨機跳轉，HTML5 Audio的聲音及時間可能有誤差，至少Firefox是。"></audio>
 </div>
 
-</center></body></html>
+<script> w(isXG ? '</td></tr></table>' : '</center>'); </script>
+</body></html>
 
 <script>
 
@@ -95,6 +111,7 @@ function letsgo(auto) {
   var el = e('cbShowTime');
   if (auto) curShow.startAutoPilot(el && el.checked ? 'clock' : null);
   else      curShow.startManual();
+  hideEl('gettext', 'mode');
 }
 
 function getName() { return getYourName('instr', 'yourname'); }
@@ -104,6 +121,7 @@ function getSlideShow(isLong) {
   const dz200 = imgTag(dzng,200),
         sk200 = imgTag(saky,200), sk450 = imgTag(saky,450),
         am200 = imgTag(amtb,200);
+        dz_am = `${dz200}　　　　${am200}`;
   var ss = new SlideShow({
     isLong:        isLong,
     stageHeight:   700,
@@ -114,13 +132,14 @@ function getSlideShow(isLong) {
     btnAutoElid:   'btnAuto',
     singleAudio:   `占察懺儀軌-定弘法師-${isLong?'詳版':'簡版改'}.mp3` })
 
-  .add('<p><instr>（專秉一心，念所脩法。' +
-       '<u>不得剎那念世雜事</u>，<br>當思生死事大，無常迅速，堅精努力，乃剋有濟。<br>' +
+  .add('<p><instr>（專秉一心，念所脩法。<u>不得剎那念世雜事</u>！<br>' +
+       '當思生死事大，無常迅速，堅精努力，乃剋有濟。<br>' +
        '倘稍違淨法，則唐喪劬勞，不可不慎。）</instr></p>', 0, sk450)
     .setToLast({id:'專秉一心，'})
   .add('<p><dong>正身、合掌</dong></p>' +
-       '<p><instr>（應先緣念，一切三寶，體常徧滿，無所不在。<br>' +
-       '　衆生迷惑，流轉可哀。我為衆生，翻迷歸悟，禮敬三寶。）</instr></p>', '29|2:04', sk450)
+       '<p><instr>（應先緣念：一切三寶，體常徧滿，無所不在。　<br>' +
+                 '　　　　　　衆生迷惑，流轉可哀。　　　　　　<br>' +
+                 '　　　　　　我為衆生，翻迷歸悟，禮敬三寶。）</instr></p>', '29|2:04', sk450)
     .setToLast({id:'應先緣念，'})
   .add('<p><nian>一切恭敬，一心敬禮，十方常住三寶。</nian><br>' +
        '<dong>一拜</dong>　</p>', '1:33|2:22', sk450)
@@ -336,17 +355,26 @@ function getSlideShow(isLong) {
 
   function lastPray(decorated) {
     var sp = decorated ? '</nian>　<nian>' : '　';
-    var x =
-      `我，弟子${getName()}，至心發願，願${sp}<br>` +
-      '十方三寶、<red>地藏</red>慈尊，哀愍護持，救拔拯濟。<br>' +
-      `令此國土，災亂消除；正法流通，咸生淨信；<br>` +
-      `無諸障礙，永斷魔邪。我及衆生，重罪速滅；<br>` +
-      `現離衰惱，充足資生；三聚戒根，畢竟清淨；<br>` +
-      `二種觀道，應念現前；三昧總持，神通方便；<br>` +
-      `四攝六度，無不圓成；了悟自心，一實境界。<br>` +
-      `捨身他世，生在佛前；面奉<red>彌陀</red>，歷侍諸佛，<br>` +
-      `親蒙受記。回入塵勞，普會群迷，同歸密藏。`;
-    return x;
+    var ret =
+`我，弟子${getName()}，至心發願，願${sp}<br>
+十方三寶、<red>地藏</red>慈尊，哀愍護持，救拔拯濟。<br>
+令此國土，災亂消除；正法流通，咸生淨信；<br>
+無諸障礙，永斷魔邪。我及衆生，重罪速滅；<br>
+現離衰惱，充足資生；三聚戒根，畢竟清淨；<br>
+二種觀道，應念現前；三昧總持，神通方便；<br>
+四攝六度，無不圓成；了悟自心，一實境界。<br>
+捨身他世，生在佛前；面奉<red>彌陀</red>，歷侍諸佛，<br>
+親蒙受記。回入塵勞，普會群迷，同歸密藏。`;
+    return ret;
+  }
+
+  function getEndFxn(color) {
+    var isAm = (color == 'AMTB');
+    return () => {
+      curShow.playAudio(`../../images/${isAm ? 'amtb4' : '鈴鼓'}.mp3`);
+      return isAm ? '<span class="fadein"><namoAMTB></namoAMTB></span>'
+                  : `<${color}>${lastPray()}</${color}>`;
+    };
   }
 
   ss
@@ -414,9 +442,10 @@ function getSlideShow(isLong) {
        '我今懺悔，不復更造。</nian>', '34:23|1:00:42', dz200)
     .setToLast({id:'，不復更造'})
   .add('<nian>願我及一切衆生，速得除滅無量劫來，<br>' +
-       '十惡、四重、五逆、顛倒、謗毀三寶、<br>' +
-       '一闡提罪。如是罪性，本惟空寂，<br>' +
-       '但從虛妄、顛倒心起，無有定實，而可得者。<br>' +
+       '十惡、四重、五逆、顛倒、謗毀三寶、一闡提罪。<br>' +
+       '如是罪性，本惟空寂，<br>' +
+       '但從虛妄、顛倒心起，<br>' +
+       '無有定實，而可得者。<br>' +
        '願一切衆生，速達心本，永滅罪根。</nian><br>&nbsp;<br>' +
        '<nian>懺悔已，歸命禮三寶。</nian><br>' +
        '<dong>跪拜</dong>　</p>', '34:44|1:01:04', dz200)
@@ -469,11 +498,15 @@ function getSlideShow(isLong) {
     .setToLast({id:'(佛像:in)'})
   .add(nianFoInstr, '40:47|1:07:19', imgTag(amtb, '550px', cls2))
     .setToLast({id:'(佛像:out)'})
-  .add(endInstr, '40:49|1:07:21', imgTag(dzng, '550px', cls1))
+  .addIf(isLong, endInstr, '40:49|1:07:21', imgTag(dzng, '550px', cls1))
+  .addIf(!isLong, endInstr, '40:49|1:07:21', imgTag(dzng, '550px', cls1))
     .setToLast({id:'(大衆自修)'})
-  .add(`<blue>${lastPray()}</blue>`,'45:00|1:22:21', `${dz200}　　　　${am200}`)
-    .setToLast({id:'(ultimo)'})
-  .addIf(!isLong, '<span class="fadein"><namoAMTB></namoAMTB></span>', '1:00:00')
+  .addIf(isLong, `<blue>${lastPray()}</blue>`,'45:00|1:22:21', dz_am)
+    .setToLastIf(isLong, {id:'(ultimo)'})
+  .addIf(!isLong, getEndFxn('blue'),  '45:00', dz_am)
+  .addIf(!isLong, getEndFxn('brown'), '50:00', dz_am)
+  .addIf(!isLong, getEndFxn('teal'),  '55:00', dz_am)
+  .addIf(!isLong, getEndFxn('AMTB'),  '1:00:00')
     .setToLastIf(!isLong, {id:'(fin)',stopClock:1})
 
   ss.setSlideCallback(showSections);

@@ -35,17 +35,17 @@ function get(name) {
 
 var urlMyName = get('myname');
 
-function addjs(uri)           { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
-function addStyleTag(s)       { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); }
-function toEl(x)              { return (typeof x=='string')?document.getElementById(x):x; }
-function e(id)                { return document.getElementById(id) }
-function showEl(id)           { var el=toEl(id); el && (el.style.display='block'); }
-function hideEl(id)           { var el=toEl(id); el && (el.style.display='none'); }
-function enableEl(id, set)    { var c = e(id); if (set) c.removeAttribute('disabled'); else c.setAttribute('disabled', ''); }
-function w()                  { for(var i in arguments)document.write(arguments[i]); }
-function showTop(id)          { var el=toEl(id); el && el.scrollIntoView(); }
-function renderText(id, txt)  { var el=toEl(id); el && (el.innerHTML=txt); }
-function addClass(id, cls)    { var el=toEl(id); el && el.classList.add(cls); } 
+function addjs(uri)         { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
+function addStyleTag(s)     { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); }
+function toEl(x)            { return (typeof x=='string')?document.getElementById(x):x; }
+function e(id)              { return document.getElementById(id) }
+function showEl()           { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
+function hideEl()           { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='none'); } }
+function enableEl(id, set)  { var c = e(id); c && (set ? c.removeAttribute('disabled') : c.setAttribute('disabled', '')); }
+function w()                { for(var i in arguments)document.write(arguments[i]); }
+function showTop(id)        { var el=toEl(id); el && el.scrollIntoView(); }
+function renderText(id, txt){ var el=toEl(id); el && (el.innerHTML=txt); }
+function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); } 
 function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); } 
 
 function digit2(i, increment) {

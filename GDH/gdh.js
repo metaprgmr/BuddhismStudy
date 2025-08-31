@@ -364,8 +364,8 @@ sing4 kei4 dou1 gwat6 cit3 sing3 kei4 se3 lei6 jau6 jau5 kap6 jin4 gip3 zaap6 zi
 zyun1 ze2 giu1 can4 wai4 san1 waa4 zik6 seon3 jyun6 wai6 hoeng1 zoeng6 bou2 jing1 zyu6 zai3
 咸共遵修具足無量遊宣赫奕如融金聚在
 haam4 gung6 zeon1 sau1 geoi6 zuk1 mou4 loeng6 jau4 syun1 haak1 jik6 jyu4 jung4 gam1 zeui6 zoi6
-理福田貯功德藥救療升灌頂階授菩提記為
-lei5 fuk1 tin4 cyu5 gung1 dak1 joek6 gau3 liu4 sing1 gun3 ding2 gaai1 sau6 pou4 tai4 gei3 wai6
+理福田貯功德藥救療升昇灌頂階授菩提記為
+lei5 fuk1 tin4 cyu5 gung1 dak1 joek6 gau3 liu4 sing1 sing1 gun3 ding2 gaai1 sau6 pou4 tai4 gei3 wai6
 教習相應熟邊善根護念剎譬幻異相實此
 gaau3 zaap6 soeng1/soeng3 jing3 suk6 bin1 sin6 gan1 wu6 nim6 caat3 pei3 waan6 ji6 soeng3 sat6 ci2
 遠超亦復是供養開導群身猶電裂見網纏縛

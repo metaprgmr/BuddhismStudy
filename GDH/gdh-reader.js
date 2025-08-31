@@ -1,6 +1,19 @@
 function hasDict() { return !!window['dict']; }
 
 // -------- audio player ---------
+class AudioList {
+  constructor() {
+    this.list = [];
+    this.curAudioIndex = -1;
+  }
+  add(n) { this.list.push(n); return this; }
+  nextIndex() {
+    var ret = ++this.curAudioIndex;
+    if (ret >= this.list.length) ret = this.curAudioIndex = -1;
+    return this.list[ret];
+  }
+}
+
 const HLCOLOR = '#ff9';
 var lastEl, curSeg = 0;
 
@@ -12,7 +25,7 @@ function writePlayerUI() {
       <button id="btnPrev" disabled onclick="playNext(-1)">&lt;上段</button>
       <button id="btnRept" disabled onclick="playNext(0)">重聽</button>
       <button id="btnNext" onclick="playNext(1)">下段&gt;</button></td></tr>
-    </table></div>`);
+    </table></center></div>`);
 }
 
 function playNext(dir) {
@@ -20,30 +33,47 @@ function playNext(dir) {
   case 1:  if (curSeg < 200) ++curSeg; break;
   case -1: if (curSeg > 0) --curSeg; break;
   }
-  e('_'+curSeg).scrollIntoView(true);
   playMyAudio(curSeg);
 }
 
+var audioCBSet = false, curList;
+
+function playList(lstNum) {
+  curList = readerHost.getList(lstNum);
+  audioEndCB();
+}
+
 function audiofxn(lnNum) {
-  var host = this;
+  var host = readerHost;
   var toAudio = (n) => { // TODO: generalize!
         var c = host.ln2chapter[n];
-        console.log(n, c, host.ln2chapter);
+        //console.log(n, c, host.ln2chapter, host.chapterAudioList);
         var ret = host.getTitle(c).substring(0,4) + '.mp3';
         if (c < 10) c = '0' + c;
         ret = 'wlsj-mp3/' + (2000 + n) + '-' + c + ret;
-        console.log(ret);
+        console.log(n, c, ret);
         return ret;
       };
 
   e('footer').style.display = 'block';
   var a = e('audiop');
+  if (!audioCBSet) { a.addEventListener('ended', audioEndCB); audioCBSet = true; }
   a.style.display = 'block';
   a.src = toAudio(curSeg = lnNum);
   a.play();
 
   if (lastEl) lastEl.style.backgroundColor = null;
-  (lastEl = e('_'+lnNum)).style.backgroundColor = HLCOLOR;
+  var el = e('_'+lnNum);
+  if (el) {
+    (lastEl = el).style.backgroundColor = HLCOLOR;
+    el.scrollIntoView(true);
+  }
+}
+
+function audioEndCB() {
+  var idx = curList ? curList.nextIndex() : -1;
+  if (idx >= 0) audiofxn(idx);
+  else curList = null;
 }
 
 // -------- /audio player ---------
@@ -92,11 +122,13 @@ class GDHReader {
                  };
     this.partStats  = [];
     this.ln2chapter = {};
+    this.chapterAudioList = []; // 1-based. Each is an [] of line numbers
     this.postRender = () => {};
 
     readerHost = this;
   }
 
+  getList(n) { return this.chapterAudioList[n]; }
   setTOCBreak(n) { this.tocBreak = n; return this; }
   setTitleAnno(ta) { this.titleAnno = ta; return this; }
   setContentWidth(n) { this.contentWidth = n; return this; }
@@ -111,17 +143,17 @@ class GDHReader {
 
   writeDoc() {
     if (this.hasAudio) {
-      w(`<div class="main" id="main"><center>`);
+      w('<div class="main" id="main"><center>');
       this._writeDoc();
-      w(`</center><p>&nbsp;<br>&nbsp;<br>&nbsp;</p></div>`);
+      w('</center><p>&nbsp;<br>&nbsp;<br>&nbsp;</p></div>');
       writePlayerUI();
-      w(`</center></div>`);
+      w('</center></div>');
     } else {
       this._writeDoc();
     }
   }
 
-  getTitle(n/* 1-based */) { return this.title ? this.titles[n-1] : null }
+  getTitle(n/* 1-based */) { return this.titles ? this.titles[n-1] : null; }
 
   _appendSeg(ln) {
     for (var i=0; i<ln.length; ++i) {
@@ -145,6 +177,9 @@ class GDHReader {
     if (!this._tmp_.lastSegs.length) return;
 
     this.ln2chapter[this._tmp_.curLnNum] = this._tmp_.lastChapter;
+    var lst = this.chapterAudioList[this._tmp_.lastChapter];
+    if (lst == null) lst = this.chapterAudioList[this._tmp_.lastChapter] = new AudioList();
+    lst.add(this._tmp_.curLnNum);
     var cls = '';
     if (this._tmp_.lastLen >= LONG) {
       if (this._tmp_.lastLen >= VERY_LONG)
@@ -164,7 +199,13 @@ class GDHReader {
       '<td valign="top" class="txt" style="width:1200px">');
     if (this._tmp_.lastTitle) {
       if (this.hrBeforeTitle) w('<hr>');
-      w('<h4><a name="__', this._tmp_.lastChapter, '">', this._decoDisp(this._tmp_.lastTitle), '</a></h4>');
+      var _n = this._tmp_.lastChapter;
+      w('<h4><a name="__', _n, '"></a>');
+      if (this.hasAudio)
+        w(`<a href="javascript:playList(${_n})" title="整品粵語誦讀">${this._decoDisp(this._tmp_.lastTitle)}</a>`);
+      else
+        w(this._decoDisp(this._tmp_.lastTitle));
+      w('</h4>');
       this._tmp_.lastTitle = null;
     }
 
@@ -246,7 +287,7 @@ class GDHReader {
     var titleAn = this.titleAnno || '';
     var buf = new Buffer();
     if (titleAn) titleAn = '<sup class="titleanno">&nbsp;' + titleAn + '</sup>';
-    buf.w('<h1 align="center">', this.title, titleAn, '</h1>');
+    buf.w('<h1 align="center" style="margin-bottom:-10px">', this.title, titleAn, '</h1>');
     if (this.hasAudio) w(buf.render());
     var a = this.text;
     w(`<center><table border="${DEBUG ? 1 : 0}" cellpadding="0" cellspacing="0">`);
@@ -321,7 +362,7 @@ class GDHReader {
 
 } // end of GDHReader.
 
-var okFauxAmis = ''; // 品及集強設蜜禪立因像兄牛漆畢泣戀速救差習休勤哽血誦詣許疾貧鋸舉彼仁輕愁寺據樂稽塵臨';
+var okFauxAmis = '品及集強設蜜禪立因像兄牛漆畢泣戀速救差習休勤哽血誦詣許疾貧鋸舉彼仁輕愁寺據樂稽塵臨';
 function showZis(zis, exclude) {
   if (!zis) return;
   if (exclude === 'not available') {
