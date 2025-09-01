@@ -12,11 +12,10 @@ function zNumber(n) {
 
 const TEXT1_LEN = 30;
 const TEXT2_LEN = 50;
-const ZPUNC = '　，、；：。？！…─—「」《》『』（）‥【】';
 function ziCount(txt) {
   var cnt = 0;
   for (var i=txt.length-1; i>=0; --i) {
-    if (ZPUNC.indexOf(txt[i]) < 0) ++cnt;
+    if (isHanZi(txt[i])) ++cnt;
   }
   return cnt;
 }
@@ -36,7 +35,7 @@ var _lastSrc;
 
 class Entry {
   constructor(text, 編者敬按) {
-    this.text = text;
+    this.text = text.replaceAll('○', '<br>○');
     this.id = __entryid++;
     if (編者敬按) this.編者敬按 = 編者敬按;
   }

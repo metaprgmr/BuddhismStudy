@@ -4,6 +4,7 @@ var TEST_SPEED = 1;
 function isReal() { return TEST_SPEED == 1; }
 
 function toTimeDisp(secs, plain) {
+  secs = Math.ceil(secs);
   var ret = '';
   var hrs = Math.floor(secs / 3600),
       mins = Math.floor((secs - hrs * 3600) / 60);

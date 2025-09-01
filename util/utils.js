@@ -47,6 +47,12 @@ function showTop(id)        { var el=toEl(id); el && el.scrollIntoView(); }
 function renderText(id, txt){ var el=toEl(id); el && (el.innerHTML=txt); }
 function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); } 
 function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); } 
+function showOne() { // id's; last is 0-based index; if not a number, defaulted to 0
+  var endIdx = arguments.length-1, selIdx = 0;
+  if (typeof arguments[endIdx] == 'number') selIdx = arguments[endIdx--];
+  for (var i=0; i<=endIdx; ++i)
+    if (i == selIdx) showEl(arguments[i]); else hideEl(arguments[i]);
+}
 
 function digit2(i, increment) {
   if (!i) i = 0;
