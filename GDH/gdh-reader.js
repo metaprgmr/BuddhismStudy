@@ -156,10 +156,8 @@ class GDHReader {
   getTitle(n/* 1-based */) { return this.titles ? this.titles[n-1] : null; }
 
   _appendSeg(ln) {
-    for (var i=0; i<ln.length; ++i) {
-      var c = ln[i];
-      if (c != ' ' && c != '　' && c != '\n') ++this._tmp_.lastLen;
-    }
+    for (var i=0; i<ln.length; ++i)
+      if (isHanZi(ln[i])) ++this._tmp_.lastLen;
     this._tmp_.lastSegs.push(ln);
   }
   _decoDisp(disp) {
