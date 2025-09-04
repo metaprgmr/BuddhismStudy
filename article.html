@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>個人文集</title>
+<script src="util/utils.js"></script>
+<script src="個人文集/registry.js"></script>
+</head>
+<body>
+
+<script>
+var id = get('id'), info = articleInfo[id];
+console.log(id, info);
+if (!info) window.open('個人文集/index.html', '_self');
+else window.open(`個人文集/${info.uri}`, '_self');
+</script>
+
+</body></html>
+

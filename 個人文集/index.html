@@ -7,6 +7,7 @@
 ol { font-size:20px; line-height:150% }
 </style>
 <script src="../util/utils.js"></script>
+<script src="registry.js"></script>
 </head>
 <body><center>
 <h1>《個人文集》目錄</h1>
@@ -16,56 +17,30 @@ ol { font-size:20px; line-height:150% }
 </center></body></html>
 
 <script>
-var jklb = 'JK-Learn-Buddhism-',
-    lst = `
-<a href="${jklb}認識佛教筆記.html">《認識佛教》筆記</a>，<a href="${jklb}Review-Qs.html">復習</a>
-WLSJs_various.html|《無量壽經》諸版對照
-《無量壽經》三聖之考究
-與時俱進的提婆達多
-經或會集本.html|夏蓮居會集的《無量壽經》<br>究竟是經還是會集本？
-地藏菩薩大智開示
-《八識規矩頌》內容
-《宗鏡錄》摘要
-淨界法師.html|【善知識】淨界法師
-北川致遠書社.html|【善知識】北川致遠書社
-#######
-廿字加卅字
-浪費時間
-人之將死.html|人之將死
-一即一切
-淨空法師是對的
-素質
-#######
-略言不言而喻之事
-苦空無常之音.mp3|苦空無常之音
-凡夫苦
-毛虫
-論飯桶，兼論素食
-DuBist.html|Du Bist Was Du Isst
-養生乎.html|養生，乎？
-對自己好一點
-../writings/goetvie.html|棋道•人道•佛道
-`;
-
-var buf = new Buffer(), a = lst.trim().split('\n'), idx = 1;
+var buf = new Buffer(), idx = 1, testing = get('test');
 buf.w('<center><table><tr><th>佛法</th><th>修行</th><th>雜論</th></tr>');
 buf.w('<tr><td valign="top"><ol>');
-for (var i=0; i<a.length; ++i) {
-  var ln = a[i];
+for (var i=0; i<lines.length; ++i) {
+  var ln = lines[i];
   if (ln.startsWith('##')) {
     buf.w('</ol></td><td style="padding-left:30px" valign="top">',
           `<ol start="${idx}">`);
     continue;
   }
-  if (ln.startsWith('<a ')) {
-    buf.w('<li>', ln, '</li>');
-  } else {
-    ln = ln.split('|');
-    if (ln.length > 1)
-      buf.w(`<li><a href="${ln[0]}">${ln[1]}</a></li>`);
-    else
-      buf.w(`<li><a href="${ln[0]}.html">${ln[0]}</a></li>`);
+  buf.w('<li>');
+  var row = ln.split('▄');
+  for (var j=0; j<row.length; ++j) {
+    if (j>0) buf.w('，');
+    ln = row[j].split('|');
+    var id = ln[0], info = articleInfo[id];
+    
+    if (!info || info.invalidID) alert(`Dup id: ${id}`);
+    else {
+      var uri = testing ? `../article.html?id=${id}` : info.uri;
+      buf.w(`<a href="${uri}" title="${id}">${info.title}</a>`);
+    }
   }
+  buf.w('</li>');
   ++idx;
 }
 buf.w('</ol></td></tr></table></center><hr>'); 

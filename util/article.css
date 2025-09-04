@@ -47,6 +47,9 @@ ol.cjk   { list-style-type: cjk-ideographic; }
 @media print {
   .noprint { display:none }
 }
+@media screen {
+  .forprint { display:none }
+}
 
 .fadein {
   opacity: 1;
