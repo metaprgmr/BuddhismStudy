@@ -15,6 +15,8 @@ cur { color:red; background-color:yellow; font-weight:bold }
 .todo  { background-color:pink }
 FOSSIL  { text-decoration:underline; text-decoration-style:double }
 WORKING { background-color:#ccc }
+FF { font-style:italic; color:red }
+FF::before { content:"Firefox" }
 </style>
 <script src="../env.js"></script>
 <script src="../util/utils.js"></script>
@@ -165,13 +167,27 @@ function showTextProcessing() {
 <h4 style="font-size:25px; margin-bottom:0px">文字處理操作</h4>
 <table border=1 bordercolor=red cellpadding="10px" bgcolor="white" style="margin-top:10px">
 <tr><td>
+<h4 style="color:blue; margin-bottom:-10px">最近的流程</h4>
+
+<p>　假如需要采纳一新的文章 https://book.bfnn.org/books/<i>5678</i>.htm，作如是操作：
+<ol>
+<li>在<FF></FF>中打开此文章，拷貝全部源代碼。</li>
+<li><code>$bfnn; cd books; vi <i>5678</i>.htm</code>&nbsp;將源代碼貼入其中。勿作任何改動。</li>
+<li><code>$java -cp ../javatools BfnnCommon <i>5678</i>.htm &gt; alfa.htm</code></li>
+<li>在<FF></FF>中打開<code>alfa.htm</code>；&nbsp;<code>$vi alfa.htm</code>&nbsp;目視檢察，尤其注意&lt;span&gt;等雜物，適當清理。</li>
+<li><code>$java -cp ../javatools -Dmode=writedoc Cat alfa.htm &gt; <i>5678</i>.htm</code></li>
+<li>在<FF></FF>中打開<code><i>5678</i>.htm</code>檢驗；&nbsp;<code>$vi <i>5678</i>.htm</code>&nbsp;目視檢察。</li>
+</ol>
+</p>
+<hr>
+
 <h4 style="color:blue; margin-bottom:-10px">轉Big5為UTF8</h4>
 <p>　使用中遇到個別問題，儘量修正。比如：OCR識別錯誤，等等。Big5編碼，不如UTF-8方便。</p>
 <!-- 標點、句讀錯誤；多餘空格、缺失字符；目錄欠美觀；圖表錯位-->
 <p>　<b>The following works&mdash;<i>reliably!</i></b>&mdash;albeit a manual process.</p>
 <ol>
 <li>Make a backup copy of <code><i>9999</i>.htm</code>, say, into <code><i>9999</i>big5.htm</code>.<br>
-    Then <i>(1)</i> open <code><i>9999</i>.htm</code> in <i style="color:red">Firefox</i>,  <i>(2)</i> view source, and  <i>(3)</i> copy all.</li>
+    Then <i>(1)</i> open <code><i>9999</i>.htm</code> in <FF></FF>,  <i>(2)</i> view source, and  <i>(3)</i> copy all.</li>
 <li>Open the original <code><i>9999</i>.htm</code> file in vim, replace the content from above, and modify as follows:
 <ol type="a">
 <li>Change <code>charset=utf-8</code> (from <code>Big5</code> or <code>big5</code>);</li>
@@ -182,14 +198,17 @@ if present, remove all up to <code>&lt;/body></code>, and add this:<br>
 <li>Within vim, save the file with utf-8 encoding: &nbsp;&nbsp;<code>:w ++enc=utf-8 <i>9999</i>.htm</code><br>
 Better exit vim right away.</li>
 </ol>
-The <code>BfnnCommon</code> tool does the first three steps.<br>
-Once text is pasted, just save with utf-8 in step (d), and run BfnnCommon, redirecting into a file.<br>
-As it evolves, more are packed into <code>mybfnn.js</code>, so text processing is simplified.<br>
-Alternatively, copy browser text and create a new page in the writeDoc mode.
+▸&nbsp;The <code>BfnnCommon</code> tool does the first three steps.<br>
+<ul>
+<li>Once text pasted, save with utf-8 in step (d), and run <code>BfnnCommon</code>, redirecting into a file.<br></li>
+<li>As it evolves, more are packed into <code>mybfnn.js</code>, so text processing is simplified.<br></li>
+<li>Alternatively, copy browser text and create a new page in the writeDoc mode;<br>
+if it is first cleansed via <code>BfnnCommon</code>, can use the <code>Cat</code> tool for this purpose.</li>
+</ul>
 </li></ol>
 
 <h4 style="color:blue; margin-bottom:-10px">增加新文</h4>
-<p>　　若欲加新文於此，當加入books9/。參考books9/9004.htm之方法。</p>
+<p>　若欲加新文於此，當加入books9/。參考books9/9004.htm之方法。</p>
 
 <h4 style="color:blue; margin-bottom:-5px">子目錄對應文章編號</h4>
 <pre>
@@ -198,6 +217,7 @@ Alternatively, copy browser text and create a new page in the writeDoc mode.
     book/books3/    2<i>xxx</i>.htm （但 2000-2016.htm 落在book2/，由於文章系列關係）
     book/books9/    <font class=extra>9xxx</font>.htm （不屬於「般若文海」的其他文章）
 </pre>
+
 </td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>`;
 
   new Buffer(textproc).render('stg');

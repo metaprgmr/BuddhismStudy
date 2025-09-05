@@ -73,7 +73,10 @@ function audiofxn(lnNum) {
 function audioEndCB() {
   var idx = curList ? curList.nextIndex() : -1;
   if (idx >= 0) audiofxn(idx);
-  else curList = null;
+  else {
+    if (curList) curList.curAudioIndex = -1;
+    curList = null;
+  }
 }
 
 // -------- /audio player ---------
@@ -94,6 +97,7 @@ function playMyAudio(x) {
           'An "AudioHost" is required to have a function playAudio(x), where x is for the AudioHost object to interpret.');
     return;
   }
+  curList = null;
   curSeg = x;
   readerHost.playAudio(x);
   enableEl('btnNext', x < 200);
