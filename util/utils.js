@@ -84,6 +84,25 @@ function startsWith() {
   return false;
 }
 
+function containsAny() {
+  var len = arguments.length;
+  var s = arguments[0];
+  if (s)
+    for (var i=1; i<len; ++i)
+      if (s.indexOf(arguments[i]) >= 0) return true;
+  return false;
+}
+
+function range(from, to) { // inclusive
+  var ret = [];
+  for (var i=from; i<=to; i++) ret.push(i);
+  return ret;
+}
+
+function toRange(a) {
+  return ((a.length == 3) && (a[1] == '-')) ? range(a[0], a[2]) : a;
+}
+
 function findFirst() {
   var foundIdx = -1, len = arguments.length;
   if (len > 0) {
@@ -257,14 +276,18 @@ class Buffer {
     return this;
   }
 
-  // renders to one or more elements.
-  // returns the text, and clears the internal content.
+  // renders to one or more elements,
+  // or an object with a write() function.
+  // returns the text, and clears internally.
   render() {
     var ret = this.text();
     for (var i in arguments) {
       var k = arguments[i];
+      if (!k) continue;
       if (typeof k == 'function')
         k(ret);
+      else if (k.write)
+        k.write(ret);
       else {
         var el = k.hasOwnProperty('innerHTML') ? k : e(k);
         el && (el.innerHTML = ret);
@@ -492,5 +515,36 @@ function exitFullScreenMode() {
     document.mozCancelFullScreen();
   } else if (document.msExitFullscreen) { // For IE/Edge
     document.msExitFullscreen();
+  }
+}
+
+class ResourceItem {
+  constructor(name, type) { this.name = name; this.type = type; }
+  run(opt) { throw 'ResourceItem.run() not implemented.'; }
+}
+class TextItem extends ResourceItem {
+  constructor(name, txt) { super(name, "TEXT"); this.text = txt; }
+  run(opt) { return this.text; }
+}
+class GridPerfectItem extends ResourceItem {
+  constructor(name, gp) { super(name, "GRIDP"); this.gp = gp; }
+  run(opt) { return this.gp.genSVG(opt); }
+}
+class ResourceRepo {
+  constructor() {
+    this.all = {};
+    this.config = null;
+  }
+  add(item) { this.all[item.name] = item; } 
+  get(name) { return this.all[name]; }
+  run(name, opt) { var i = this.all[name]; return i && i.run(opt); }
+  getAllItems(type) {
+    var keys = Object.keys(this.all), ret = [];
+    for (var i=0; i<keys.length; ++i) {
+      var item = this.all[keys[i]];
+      if (!type || (item.type == type))
+        ret.push(item);
+    }
+    return ret;
   }
 }

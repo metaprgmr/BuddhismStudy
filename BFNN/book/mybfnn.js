@@ -525,6 +525,41 @@ function write0900(n, body) {
          .writeEnd();
 }
 
+//  -- 佛學常見辭彙 陳義孝居士 --
+function write0592(n, body) {
+  var zn = zNumber(n);
+  function subttl(n) { return (n >= 6) ? '十六畫～' : `${zNumber((n-1)*3+1)}畫～${zNumber((n-1)*3+3)}畫`; }
+  function lnk(st) {
+    var uri;
+    switch(st) {
+    case 1: case 2: case 3:    uri = `0592.htm#a0${st}`; break;
+    case 4: case 5: case 6:    uri = `0593.htm#a0${st}`; break;
+    case 7: case 8: case 9:    uri = `0594.htm#a0${st}`; break;
+    case 10: case 11: case 12: uri = `0595.htm#a${st}`; break;
+    case 13: case 14: case 15: uri = `0596.htm#a${st}`; break;
+    default:                   uri = `0597.htm#a${st}`; break;
+    }
+    st = zNumber(st);
+    if (st.startsWith('二十') && st.length > 2) st = '廿' + st.substring(2);
+    else if (st.startsWith('三十三')) st = '卅三';
+    return `<a href="${uri}">${st}劃</a>`;
+  }
+  docInfo.reInit(592, 6, n)
+         .writeStart(`佛學常見辭彙 |（${subttl(n)}）`)
+         .w(SP, '<p class=TEXT030C>陳義孝居士編<br>竺摩法師鑑定</p>', SP,
+            '<p class=TEXTC>【<a href="0592S.htm">搜索工具</a>】&nbsp;&nbsp;');
+  for (var i=1; i<=26; ++i) {
+    switch(i) {
+    case 1:  break;
+    case 15: docInfo.w('<br>'); break;
+    default: docInfo.w('&nbsp;&nbsp;'); break;
+    }
+    docInfo.w(lnk(i));
+  }
+  docInfo.w('&nbsp;&nbsp;', lnk(33), '</p>')
+         .writeBody(body).writeEnd();
+}
+
 // -- 法華經講演錄 太虛大師 --
 function write1037(n, body) {
   docInfo.setHints(FA_HUA_PINS)

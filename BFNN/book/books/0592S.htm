@@ -1,0 +1,297 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>佛學常見辭彙</title>
+<link rel="stylesheet" href="../books/book.css">
+<style>
+b { color:brown }
+hilite { color:brown }
+pre { line-height:18px }
+.matching { background-color:#9f9 }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../../../util/gridperfect.js"></script>
+<script src="../mybfnn.js"></script>
+<script src="0592/base.js"></script>
+<script src="0592/diagrams.js"></script>
+<script src="0592/tables.js"></script>
+<script src="0592/01-3.js"></script>
+<script src="0592/04-9.js"></script>
+<script src="0592/10-33.js"></script>
+</head>
+<body lang=ZH-TW link=blue vlink=purple background="textbackground.jpg" class="Normal" bgcolor="#ffffff">
+<div class=bookClean style='layout-grid:18.0pt'>
+  <p class=TITLE>佛學常用辭彙</p>
+  <p class=TEXT030C>陳義孝居士　 <a href="0592.htm">原編</a><br>信裹居士 製作拓展</p>
+  <LNSP></LNSP>
+
+  <div id="index"><center>
+    <table border=0>
+    <tr><td>按首字拼音：</td><td id="indexByPhon"></td>
+        <td align=right>搜索首字：<input id="search" size=1></td>
+        <td>　<a href="javascript:allResources()">所有圖表</a></td>
+        <td>　<a href="javascript:allTerms(1)">主要條目</a></td>
+    </tr>
+    <tr><td>按首字筆畫：</td><td id="indexByStrokes" colspan=2></td>
+        <td>　<a href="javascript:allLeadZis()">所有首字</a></td>
+        <td>　<a href="javascript:allTerms()">所有條目</a></td>
+    </tr>
+    </table>
+    <hr>
+  </div>
+  <div id="termList"></div>
+  <div id="stg"></div>
+</div>
+
+<div class=endImageXG title="本頁由信裹居士從陳義孝居士的《佛學常用詞彙》開始製作、發展"></div>
+</body></html>
+
+<script>
+e('search').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    showTerms(event.target.value);
+    event.preventDefault();
+  }
+});
+
+var byPhon = foTerms.getIndexByPhonetics(),
+    byStrokes = foTerms.getIndexByStrokes(),
+    curZis, curTerms, viewHistory = [];
+
+function showIndexByPhon(cur, bpmf) {
+  var buf = new Buffer();
+  for (i=0; i<byPhon.length; ++i) {
+    if (i>0) buf.w('&nbsp;&nbsp;');
+    var gn = byPhon[i].group;
+    if (cur == gn)
+      buf.w(`<b>${gn}</b>`);
+    else {
+      var cls = '';
+      if (bpmf == gn) cls = " class=matching";
+      buf.w(`<a${cls} href="javascript:showList('${gn}','${byPhon[i].zis}')">${gn}</a>`);
+    }
+  }
+  buf.render('indexByPhon');
+}
+
+function showIndexByStrokes(cur, strokes) {
+  var buf = new Buffer();
+  for (i=0; i<byStrokes.length; ++i) {
+    if (i>0) buf.w('&nbsp;&nbsp;');
+    var st = byStrokes[i].strokes;
+    if (cur == st)
+      buf.w(`<b>${st}</b>`);
+    else {
+      var cls = '';
+      if (strokes == st) cls = " class=matching";
+      buf.w(`<a${cls} href="javascript:showList(${st}, '${byStrokes[i].zis}')">${st}</a>`);
+    }
+  }
+  buf.render('indexByStrokes');
+}
+
+function clear(termgrp) {
+  curZis = curTerms = null;
+  showIndexByPhon(null, getBPMF(termgrp && termgrp.pinyin));
+  showIndexByStrokes(null, termgrp && termgrp.strokes);
+  var buf = new Buffer();
+  buf.render('stg');
+}
+
+function showTermLink(buf, t, openAll) {
+  if (t.term) t = t.term;
+  else if (t.name) t = t.name;
+  buf.w(`<a href="javascript:showTerms('${t}',null,${!!openAll})">${t}</a>`);
+}
+
+function showZiLink(buf, zi) {
+  buf.w(`<a href="javascript:showTerms(null,'${zi}')">${zi}</a>`);
+}
+
+function showList(cur, zis) {
+  var prefix = '';
+  switch(typeof cur) {
+  case 'number': showIndexByStrokes(cur); showIndexByPhon(); prefix = `【${cur}劃】`; break;
+  case 'string': showIndexByPhon(cur); showIndexByStrokes(); prefix = `【${cur}】`; break;
+  default:       clear(); break;
+  }
+
+  var buf = new Buffer(), i;
+  if (!zis && !cur) return buf.render('termList');
+
+  if (zis.length == 1) {
+    buf.render('termList'); // clear it
+    showTerms(null, zis[0]);
+    return;
+  }
+
+  curZis = zis;
+  buf.w('<center>', prefix);
+  for (i=0; i<zis.length; ++i) {
+    if (i > 0) buf.w(i%30==0 ? '<br>' : '&nbsp;&nbsp;');
+    var zi = zis[i];
+    if (cur == zi)
+      buf.w(`<b>${zi}</b>`);
+    else
+      showZiLink(buf, zi);
+  }
+  buf.w('<hr></center>').render('termList');
+
+  buf.render('stg'); // clear it
+}
+
+function showPrev() {
+  viewHistory.pop();
+  var prev = viewHistory.pop();
+  if (prev) showTerms(prev[0], prev[1]);
+}
+
+function showCur() {
+  showTerms((viewHistory.length > 0) ? viewHistory[viewHistory.length-1]
+                                     : localStorage.getItem('lastview'));
+}
+
+function showTermDetails(buf, term, openAll) {
+  // Handle [[...|...]]
+  var s = term.info, idx1, t;
+  for (var idx = 0; ; idx += 2) {
+    idx = s.indexOf('[[', idx);
+    if (idx < 0) break;
+    idx1 = s.indexOf(']]', idx);
+    if (idx1 < 0) break;
+    t = s.substring(idx+2, idx1), ref = t, idx2 = t.indexOf('|');
+    if (idx2 > 0) { ref = t.substring(idx2+1); t = t.substring(0, idx2); }
+    if (ref.length <= 20) {
+      if (foTerms.containsTerm(ref))
+        ref = `<a href="javascript:showTerms('${ref}')">${t}</a>`;
+      else
+        ref = `<hilite>${t}</hilite>`;
+      s = `${s.substring(0, idx)}${ref}${s.substring(idx1+2)}`;
+      idx1 += ref.length-2;
+    }
+  }
+  // Handle {{...}} and {{!...}}
+  idx = s.indexOf('{{');
+  if (idx >= 0) {
+    idx1 = s.indexOf('}}', idx);
+    if (idx1 < 0) throw `Unbalanced {{: ${s}`;
+    t = s.substring(idx+2, idx1);
+    var a = t.split('|'), anno = a[1], id = `diag${term}`, always = false;
+    t = a[0].trim();
+    if (t.startsWith('!')) {
+      always = true;
+      t = t.substring(1).trim();
+    }
+    if (openAll || always) // forced
+      t = openChart(t);
+    else
+      t = `<a href="javascript:openChart('${t}','${id}')">░&nbsp;${t}&nbsp;░　👀</a>`;
+    s = s.substring(0, idx) +
+        `<center><div id="${id}" title="${anno||''}">${t}</div></center>` +
+        s.substring(idx1+2);
+  }
+  buf.w(`<tr><td nowrap valign=top>【${term.term}】</td><td valign=top>${s}</td></tr>`);
+}
+
+function showTerms(curTerm, zi, openAll) {
+  var buf = new Buffer(), NUM_TO_SHOW = 10;
+
+  var tg = foTerms.getTermsPerZi(zi || (curTerm && curTerm[0]));
+  if (!openAll) clear(tg); 
+  if (!tg) { showCur(); return; }
+  viewHistory.push([curTerm, zi]);
+  curTerms = tg.terms;
+
+  var len = curTerms.length, firstIdx = 0, endIdx = NUM_TO_SHOW;
+  if (len > NUM_TO_SHOW) { // show the terms
+    if (curTerm) firstIdx = -1;
+    buf.w('<center>');
+    for (var i=0; i<len; ++i) {
+      var t = curTerms[i];
+      if (i > 0) buf.w('&nbsp;&nbsp;');
+      if (firstIdx < 0) {
+        if (t.term == curTerm) {
+          firstIdx = i;
+          endIdx = firstIdx + NUM_TO_SHOW;
+          buf.w(`<b>${t.term}</b>`);
+        } else
+          showTermLink(buf, t, openAll);
+      } else if (i < endIdx)
+        buf.w(`<b>${t.term}</b>`);
+      else
+        showTermLink(buf, t, openAll);
+    }
+    buf.w('</center>');
+  }
+
+  if (firstIdx < 0) firstIdx = 0; // should not happen
+  var endIdx = firstIdx + NUM_TO_SHOW;
+  buf.w('<table border=0 style="padding-top:20px; padding-bottom:20px">');
+  for (i=firstIdx; i<len; ++i)
+    if (i >= firstIdx && i < endIdx)
+      showTermDetails(buf, curTerms[i], openAll);
+  buf.w('</td></table>');
+  buf.wIf(viewHistory.length > 1, '<center>【<a href="javascript:showPrev()">回溯</a>】</center><hr>');
+  buf.render('stg');
+  localStorage.setItem('lastview', curTerm || curTerms[0].term);
+}
+
+function openChart(name, elid) {
+  var buf = tableCharts.run(name);
+  if (!buf) return;
+  if (!elid)
+    return (typeof buf == 'string') ? buf : buf.render();
+  if (typeof buf == 'string')
+    renderText(elid, buf);
+  else
+    buf.render(elid);
+}
+
+function allLeadZis() {
+  clear();
+  var allZis = foTerms.getAllLeadZis(), buf = new Buffer();
+  buf.render('termList');
+  for (var i=0; i<allZis.length; ++i) {
+    if (i>0) buf.w(' ');
+    showZiLink(buf, allZis[i]);
+  }
+  buf.render('stg');
+}
+
+function allTerms(mainOnly) {
+  clear();
+  var allTerms = foTerms.getAllTerms(mainOnly),
+      buf = new Buffer();
+  buf.render('termList');
+  buf.w(`【共${allTerms.length}條】`);
+  for (var i=0; i<allTerms.length; ++i) {
+    if (i>0) buf.w('&nbsp; ');
+    showTermLink(buf, allTerms[i]);
+  }
+  buf.render('stg');
+}
+
+function allResources(type) {
+  clear();
+  var all = tableCharts.getAllItems(type), lst,
+      buf = new Buffer('<center><table border=0>');
+  buf.w('<tr><td valign=top nowrap>【有圖示條目】</td><td>');
+  lst = all.filter((a) => a.type == 'GRIDP');
+  for (var i=0; i<lst.length; ++i) {
+    if (i>0) buf.w((i%10==0) ? '<br>' : '&nbsp; ');
+    showTermLink(buf, lst[i], true);
+  }
+  buf.w('</td></tr>');
+
+  buf.w('<tr><td valign=top nowrap>【有表格條目】</td><td>');
+  lst = all.filter((a) => a.type == 'TEXT');
+  for (var i=0; i<lst.length; ++i) {
+    if (i>0) buf.w((i%10==0) ? '<br>' : '&nbsp; ');
+    showTermLink(buf, lst[i], true);
+  }
+  buf.w('</td></tr></table></center><hr>').render('termList');
+  buf.render('stg');
+}
+
+showTerms(localStorage.getItem('lastview'));
+</script>
