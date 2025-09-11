@@ -95,8 +95,7 @@ class DocInfo {
     // ttl can have | indicating subtitle; or || for subtitle with line break
 
     if (!this.buf)
-      this.w(`<body lang=ZH-TW link=blue vlink=purple background="../books/textbackground.jpg"
-             class="Normal" bgcolor="#ffffff">`);
+      this.w(`<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">`);
     this.w(`<div class=bookClean style='layout-grid:18.0pt'>`); // content starts...
     if (this.isXG && this.endCenter)
       this.w('<table><tr><td>');
