@@ -6,11 +6,52 @@
 <script src="../../../util/utils.js"></script>
 <script src="../mybfnn.js"></script>
 </head>
-<body lang=ZH-TW link=blue vlink=purple background="../books/textbackground.jpg" class="Normal" bgcolor="#ffffff">
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
 <div id="stg"></div>
 </body></html>
 
 <script>
+var pinsUri = [ // 0-based
+  "?vol=1",          // 卷第一　　　世主妙嚴品　　　　 第一
+  "?vol=6",          // 卷第六　　　如來現相品　　　　 第二
+  "?vol=7",          // 卷第七　　　普賢三昧品　　　　 第三
+  "?vol=7&pin=p04",  // 　　　　　　世界成就品　　　　 第四
+  "?vol=8",          // 卷第八　　　華藏世界品　　　　 第五
+  "?vol=11",         // 卷第十一　　毘盧遮那品　　　　 第六
+  "?vol=12",         // 卷第十二　　如來名號品　　　　 第七
+  "?vol=12&pin=p08", // 　　　　　　四聖諦品　　　　　 第八
+  "?vol=13",         // 卷第十三　　光明覺品　　　　　 第九
+  "?vol=13&pin=p10", // 　　　　　　菩薩問明品　　　　 第十
+  "?vol=14",         // 卷第十四　　淨行品　　　　　　 第十一
+  "?vol=14&pin=p12", // 　　　　　　賢首品　　　　　　 第十二
+  "?vol=16",         // 卷第十六　　昇須彌山頂品　　　 第十三
+  "?vol=16&pin=p14", // 　　　　　　須彌頂上偈讚品　　 第十四
+  "?vol=16&pin=p15", // 　　　　　　十住品　　　　　　 第十五
+  "?vol=17",         // 卷第十七　　梵行品　　　　　　 第十六
+  "?vol=17&pin=p17", // 　　　　　　初發心功德品　　　 第十七
+  "?vol=18",         // 卷第十八　　明法品　　　　　　 第十八
+  "?vol=19",         // 卷第十九　　昇夜摩天宮品　　　 第十九
+  "?vol=19&pin=p20", // 　　　　　　夜摩宮中偈讚品　　 第二十
+  "?vol=19&pin=p21", // 　　　　　　十行品　　　　　　 第二十一
+  "?vol=21",         // 卷第二十一　十無盡藏品　　　　 第二十二
+  "?vol=22",         // 卷第二十二　昇兜率天宮品　　　 第二十三
+  "?vol=23",         // 卷第二十三　兜率宮中偈讚品　　 第二十四
+  "?vol=23&pin=p25", // 　　　　　　十迴向品　　　　　 第二十五
+  "?vol=34",         // 卷第三十四　十地品　　　　　　 第二十六
+  "?vol=40",         // 卷第四十　　十定品　　　　　　 第二十七
+  "?vol=44",         // 卷第四十四　十通品　　　　　　 第二十八
+  "?vol=44?pin=p29", // 　　　　　　十忍品　　　　　　 第二十九
+  "?vol=45",         // 卷第四十五　阿僧祇品　　　　　 第三十
+  "?vol=45?pin=p31", // 　　　　　　壽量品　　　　　　 第三十一
+  "?vol=45?pin=p32", // 　　　　　　諸菩薩住處品　　　 第三十二
+  "?vol=46",         // 卷第四十六　佛不思議法品　　　 第三十三
+  "?vol=48",         // 卷第四十八　如來十身相海品　　 第三十四
+  "?vol=48?pin=p35", // 　　　　　　如來隨好光明功德品 第三十五
+  "?vol=49",         // 卷第四十九　普賢行品　　　　　 第三十六
+  "?vol=50",         // 卷第五十　　如來出現品　　　　 第三十七
+  "?vol=53",         // 卷第五十三　離世間品　　　　　 第三十八
+  "?vol=60",         // 卷第六十　　入法界品 　　　　　第三十九
+];
 var HYJ = new (class extends SeriesContainer {
   constructor() { super(); }
 
@@ -31,37 +72,67 @@ var HYJ = new (class extends SeriesContainer {
                          HYJ.text +
                          `\n/TEXTR/大方廣佛華嚴經卷${zn}\n\n/VOLSEP/\n`);
         else // write the grand TOC
-          this.writeStart(`大方廣佛華嚴經`, `華嚴經`)
-              .writeBody(HYJ.text);
+          this.writeStart(`大方廣佛華嚴經`, `華嚴經`).writeBody(HYJ.text);
         this.writeEnd();
       }
 
       writeSeriesNav(links) {
-        function isAvailable(n) { // TODO: update for new additions
-          return (n <= 15) || (n >= 60);
+        var cur=HYJ.volNum, me=this, pinNo=1, meeting7pins=
+`十定品 十通品 十忍品 阿僧祇品 壽量品
+諸菩薩住處品 佛不思議法品 如來十身相海品
+如來隨好光明功德品 普賢行品 如來出現品`;
+        function isAvailable(n) { // TODO: update for new additions, until all done
+          return (n <= 15) || (n >= 49) || (n >= 34) && (n <= 39);
         }
-        this.w('<center><table><tr><td>');
-        var len = 80;
-        for (var i=0; i<len; ++i) {
-          var n = i+1;
-          switch (n) {
-          case  1: this.w('　初會菩提場：　　'); break;
-          case 12: this.w('　(六品)<br>　二會普光明殿：　'); break;
-          case 16: this.w('　(六品)<br>　三會忉利天宮：　'); break;
-          case 19: this.w('　(六品)<br>　四會夜摩天宮：　'); break;
-          case 22: this.w('　(四品)<br>　五會兜率天宮：　'); break;
-          case 34: this.w('　(三品)<br>　六會他化自在天：'); break;
-          case 40: this.w('　《十地品》<br>　七再會重普光殿：'); break;
-          case 53: this.w('　(十一品)<br>　八三會普光明殿：'); break;
-          case 60: this.w('　《離世間品》<br>　九會逝多林：　　'); break;
+        function isPinAvail(n) { // TODO: update for new additions, until all done
+          return (n <= 12) || (n >= 36) || (n == 26);
+        }
+        function writePin(name) {
+          me.w('　')
+            .wIf(isPinAvail(pinNo), `<a href="${pinsUri[pinNo-1]}">${name}</a>`)
+            .wIf(!isPinAvail(pinNo), name)
+            .w(`<sup>${pinNo++}</sup>`);
+        }
+        function row(meeting, start, end, pins, m7pins) {
+          pins = pins && pins.replaceAll('品', '').split(' ');
+          var n, cols = pins ? ` colspan=${m7pins?2:3}` : '';
+          me.w(`<tr><td valign=top>【${meeting}】</td><td valign=top${cols}>`) ;
+          me.w(`<span style="display:inline-block; width:260px">`);
+          for (n = start; n <= end; ++n) {
+            me.w(n == 70 ? '<br>' : ' ');
+            var isCur = (n == cur), zn = (n<=10) ? zNumber(n) : n;
+            if (!isAvailable(n)) me.w(`<i style="opacity:0.3">${zn}</i>`);
+            else me.w(isCur ? `<cur>${zn}</cur>` : `<a href="?vol=${n}">${zn}</a>`);
           }
-          var isCur = (n == HYJ.volNum), zn = (n<=10) ? zNumber(n) : n;
-          if (!isAvailable(n)) this.w(` <i style="opacity:0.3">${zn}</i>`);
-          else this.w(isCur ? ` <cur>${zn}</cur>` : ` <a href="9010.htm?vol=${n}">${zn}</a>`);
+          me.w('</span>');
+          if (!pins)
+            me.w('</td><td align=right nowrap>⋯⋯⋯⋯⋯⋯</td>'); // （共11品）
+          else
+            for (n=0; n<pins.length; ++n) writePin(pins[n]);
+          if (m7pins) {
+            me.w('</td><td valign=top rowspan=3 style="border-left:1px solid #999">');
+            var a = m7pins.split('\n');
+            for (var i=0; i<a.length; ++i) {
+              pins = a[i].replaceAll('品', '').split(' ');
+              me.wIf(i>0, '　　　　<br>');
+              for (n=0; n<pins.length; ++n) writePin(pins[n]);
+            }
+          }
+          me.w('</td></tr>');
         }
-        this.w('　《入法界品》')
-            .wIf(this.volNum, '<h4 align=center><a href="?">完整目錄</a></h4>')
-            .w('</td></tr></table></center>');
+
+        this.w('<center><table border=0 style="margin-top:-30"><tr>');
+        row('初會菩提場', 1, 11, '世主妙嚴品 如來現相品 普賢三昧品 世界成就品 華藏世界品 毘盧遮那品');
+        row('二會普光明殿', 12, 15, '如來名號品 四聖諦品 光明覺品 菩薩問明品 淨行品 賢首品');
+        row('三會忉利天宮', 16, 18, '昇須彌山頂品 須彌頂上偈讚品 十住品 梵行品 初發心功德品 明法品');
+        row('四會夜摩天宮', 19, 21, '昇夜摩天宮品 夜摩宮中偈讚品 十行品 十無盡藏品');
+        row('五會兜率天宮', 22, 33, '昇兜率天宮品 兜率宮中偈讚品 十迴向品');
+        row('六會他化自在天', 34, 39, '十地品', meeting7pins)
+        row('七再會重普光殿', 40, 52); // see above
+        row('八三會普光明殿', 53, 59, '離世間品');
+        row('九會逝多林', 60, 80, '入法界品');
+        this.w('</tr></table></center>')
+            .wIf(this.volNum, '<h4 align=center><a href="?">完整目錄</a></h4>');
       }
     } // class extends DocInfo
     )();
@@ -70,4 +141,6 @@ var HYJ = new (class extends SeriesContainer {
 })(); // HYJ
 
 HYJ.show(get('vol'), get('pin')); // 卷 品
+
+// 經文來源，例如：https://budaedu.org/budaedu/buda2_04.php
 </script>
