@@ -69,7 +69,7 @@ function processText(seg, segNum, verseNum) {
   verseNum = null; // TODO: re-enable?
   var ret = '';
 
-    var len = seg.length, len1 = len-1;
+    var len = seg.length, len1 = len-1, annoType = '', prevAnno;
     for (i=0; i<len1; ++i) {
       var idelta = -1, cur = seg[i], nxt = seg[i+1], p1;
 
@@ -81,8 +81,8 @@ function processText(seg, segNum, verseNum) {
         var term = nxt;
         for (p1=i+2; p1<len; ++p1) {
           nxt = seg[p1];
-          if (nxt == ']') { idelta = p1 - i; nxt = seg[p1+1]; break }
-          else term += nxt;
+          if (nxt == ']') { idelta = p1-i; nxt = seg[p1+1]; break; }
+          term += nxt;
         }
 
         var idx1 = term.indexOf('@');
@@ -104,7 +104,11 @@ function processText(seg, segNum, verseNum) {
           } else {
             anno = lookupTerm(term) || ('（“' + term + '”的註解未找到）');
           }
-          cur = '<anno title="' + anno + '">' + term + '</anno>';
+          if (anno != prevAnno) {
+            annoType = (annoType == '') ? '1' : '';
+            prevAnno = anno;
+          }
+          cur = `<anno${annoType} title="${anno}">${term}</anno${annoType}>`;
         }
       }
 
@@ -374,6 +378,7 @@ class MyBookInfo {
             for (var j=0; j<term.length; ++j)
               result += '[' + term[j] + divr + anno + ']';
           }
+          divr = null;
           break;
         } else if ((idxDiv < 0) && isASCII(c)) {
           idxDiv = i++;
