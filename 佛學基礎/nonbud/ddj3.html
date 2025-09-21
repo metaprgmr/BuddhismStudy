@@ -6,6 +6,7 @@
 <style>
 body { background-color:#efe }
 anno { color:#e00 }
+b { color:red }
 a { text-decoration:none }
 .chapter { border-top:2px solid brown; border-bottom:1px solid gray }
 .caption { font-weight:bold; color:brown; font-family:細明體 }
@@ -205,7 +206,7 @@ class DDJ {
     for (var i=0; i<8; ++i) {
       buf.w('<tr>');
       for (var j=0; j<10; ++j) {
-        var n = i*10+j+1;
+        var n = i*10+j+1, isCur = (n == this.curChapter);
         buf.w('<td nowrap>');
         if (n<10) buf.w('<inv>0</inv>');
         var styl = '';
@@ -213,7 +214,10 @@ class DDJ {
           styl = ' style="background-color:#fcc"';
         else if (n >= 38) // 《德經》
           styl = ' style="background-color:#d0eed0"';
-        buf.w(`<span${styl}>${n}.&nbsp;<a href="javascript:writeChapter(${n})">`, this.chapters[n-1].title, '</a></span>&nbsp;</td>');
+        if (isCur)
+          buf.w(`<span${styl}>${n}.&nbsp;<b>`, this.chapters[n-1].title, '</b></span>&nbsp;</td>');
+        else
+          buf.w(`<span${styl}>${n}.&nbsp;<a href="javascript:writeChapter(${n})">`, this.chapters[n-1].title, '</a></span>&nbsp;</td>');
       }
       buf.w('</tr>');
     }
@@ -270,7 +274,9 @@ clear(true);
 writeChapter();
 
 function writeChapter(n) {
-  if (introType) { ddj.renderTOC(n); introType = null; }
+  ddj.curChapter = n;
+  ddj.renderTOC(); 
+  if (introType) introType = null;
   ddj.renderChapters(n);
 }
 function clear(keepStore) {

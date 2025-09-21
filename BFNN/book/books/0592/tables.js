@@ -1,9 +1,9 @@
 addText('九地', `
 <table border=1 cellspacing=0 cellpadding="2px" style="margin-top:10px; margin-bottom:10px">
-<tr> <td width=96 rowspan=3 align="center"> 三界九品 </td>
+<tr> <td width=96 rowspan=3 align="center"> 三界九地 </td>
      <td width=72 align="center"> 無色界 </td>
      <td width=144>
-想菲非想處地<br>
+非想非非想處地<br>
 所有處地<br>
 無邊處地<br>
 無邊處地</td></tr>
@@ -189,7 +189,7 @@ addText('菩薩戒', `
       <td align=center> 盜戒 </td>
     </tr>
     <tr> 
-      <td align=center> >3 </td>
+      <td align=center> 3 </td>
       <td align=center> 淫戒 </td>
       <td align=center> 3 </td>
       <td align=center> 大妄語戒 </td>

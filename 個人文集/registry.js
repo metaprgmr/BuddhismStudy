@@ -29,6 +29,8 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250530|淨界法師.html|【善知識】淨界法師
 250629|北川致遠書社.html|【善知識】北川致遠書社
 #######
+250916|十句
+250917|發露懺悔
 250515|廿字加卅字
 241113|浪費時間
 241114|人之將死.html|人之將死

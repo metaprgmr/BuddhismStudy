@@ -28,7 +28,7 @@ pre { line-height:18px }
   <div id="index"><center>
     <table border=0>
     <tr><td>按首字拼音：</td><td id="indexByPhon"></td>
-        <td align=right>搜索首字：<input id="search" size=1></td>
+        <td align=right><a href="0592/inspect.html">&nbsp;</a>搜索首字：<input id="search" size=1></td>
         <td>　<a href="javascript:allResources()">所有圖表</a></td>
         <td>　<a href="javascript:allTerms(1)">主要條目</a></td>
     </tr>
@@ -54,9 +54,45 @@ e('search').addEventListener('keydown', (event) => {
   }
 });
 
-var byPhon = foTerms.getIndexByPhonetics(),
-    byStrokes = foTerms.getIndexByStrokes(),
-    curZis, curTerms, viewHistory = [];
+class ViewHistory {
+  constructor(max) {
+    this.MAX = max || 20;
+    var hist = localStorage.getItem('viewhistory');
+    this.history = hist ? JSON.parse(hist) : [];
+    this.listByPhon = localStorage.getItem('listByPhon');
+    this.listByStrokes = parseInt(localStorage.getItem('listByStrokes'));
+    this.listOfZis = localStorage.getItem('listOfZis');
+  }
+  add(term) {
+    this.history.push(term);
+    for (; this.history.length > this.MAX; this.history.shift());
+    localStorage.setItem('viewhistory', JSON.stringify(this.history));
+  }
+  clear() {
+    this.history = [];
+    localStorage.removeItem('viewhistory');
+    localStorage.removeItem('zi');
+  }
+  saveZi(zi) { localStorage.setItem('zi', zi); }
+  getZi() { return localStorage.getItem('zi'); }
+  getCur() { return this.history[this.history.length-1]; }
+  getPrev() { this.history.pop(); return this.history.pop(); }
+  saveListOfZis(cur, zis) {
+    var ls = localStorage;
+    switch (typeof cur) {
+    case 'number':  ls.removeItem('listByPhon'); ls.setItem('listByStrokes', cur); break;
+    case 'string':  ls.removeItem('listByPhon'); ls.setItem('listByStrokes', cur); break;
+    default:        ls.removeItem('listByPhon'); ls.removeItem('listByStrokes'); break;
+    }
+    if (zis) ls.setItem('listOfZis', zis); else ls.removeItem('listOfZis');
+  }
+  hasHistory() { return this.history.length > 1; }
+}
+
+var viewHistory = new ViewHistory(),
+    byPhon      = foTerms.getIndexByPhonetics(),
+    byStrokes   = foTerms.getIndexByStrokes(),
+    curZis, curTerms;
 
 function showIndexByPhon(cur, bpmf) {
   var buf = new Buffer();
@@ -94,8 +130,8 @@ function clear(termgrp) {
   curZis = curTerms = null;
   showIndexByPhon(null, getBPMF(termgrp && termgrp.pinyin));
   showIndexByStrokes(null, termgrp && termgrp.strokes);
-  var buf = new Buffer();
-  buf.render('stg');
+  if (termgrp) viewHistory.saveZi(termgrp.firstZi);
+  renderText('stg', '');
 }
 
 function showTermLink(buf, t, openAll) {
@@ -108,7 +144,19 @@ function showZiLink(buf, zi) {
   buf.w(`<a href="javascript:showTerms(null,'${zi}')">${zi}</a>`);
 }
 
-function showList(cur, zis) {
+function showList(cur, zis, selectedZi, dontShowTerms) { // cur: strokes or bpmf
+  if (selectedZi) {
+    cur = foTerms.getTermsPerZi(selectedZi).strokes;
+    var len = byStrokes.length;
+    zis = byStrokes[((cur >= len) ? len : cur)-1].zis;
+  }
+  if (cur && zis)
+    viewHistory.saveListOfZis(cur, zis);
+  else {
+    if (!zis) zis = viewHistory.listOfZis;
+    if (!cur) cur = viewHistory.listByPhon || viewHistory.listByStrokes;
+  }
+
   var prefix = '';
   switch(typeof cur) {
   case 'number': showIndexByStrokes(cur); showIndexByPhon(); prefix = `【${cur}劃】`; break;
@@ -116,21 +164,20 @@ function showList(cur, zis) {
   default:       clear(); break;
   }
 
-  var buf = new Buffer(), i;
-  if (!zis && !cur) return buf.render('termList');
-
+  if (!zis && !cur) return renderText('termList', '');
   if (zis.length == 1) {
-    buf.render('termList'); // clear it
-    showTerms(null, zis[0]);
+    renderText('termList', '');
+    if (!dontShowTerms) showTerms(null, zis[0]);
     return;
   }
 
+  var buf = new Buffer(), i;
   curZis = zis;
   buf.w('<center>', prefix);
   for (i=0; i<zis.length; ++i) {
     if (i > 0) buf.w(i%30==0 ? '<br>' : '&nbsp;&nbsp;');
     var zi = zis[i];
-    if (cur == zi)
+    if (selectedZi == zi)
       buf.w(`<b>${zi}</b>`);
     else
       showZiLink(buf, zi);
@@ -140,21 +187,12 @@ function showList(cur, zis) {
   buf.render('stg'); // clear it
 }
 
-function showPrev() {
-  viewHistory.pop();
-  var prev = viewHistory.pop();
-  if (prev) showTerms(prev[0], prev[1]);
-}
-
-function showCur() {
-  showTerms((viewHistory.length > 0) ? viewHistory[viewHistory.length-1]
-                                     : localStorage.getItem('lastview'));
-}
+function showPrev() { var prev = viewHistory.getPrev(); prev && showTerms(prev); }
 
 function showTermDetails(buf, term, openAll) {
   // Handle [[...|...]]
   var s = term.info, idx1, t;
-  for (var idx = 0; ; idx += 2) {
+  for (var idx=0; ; idx+=2) {
     idx = s.indexOf('[[', idx);
     if (idx < 0) break;
     idx1 = s.indexOf(']]', idx);
@@ -193,14 +231,17 @@ function showTermDetails(buf, term, openAll) {
   buf.w(`<tr><td nowrap valign=top>【${term.term}】</td><td valign=top>${s}</td></tr>`);
 }
 
-function showTerms(curTerm, zi, openAll) {
+function showTerms(curTerm, zi, openAll) { // curTerm or zi; not simultaneously
+  zi = zi || (curTerm && curTerm[0]);
+  if (zi) showList(null, null, zi, true);
   var buf = new Buffer(), NUM_TO_SHOW = 10;
 
-  var tg = foTerms.getTermsPerZi(zi || (curTerm && curTerm[0]));
+  var tg = foTerms.getTermsPerZi(zi);
   if (!openAll) clear(tg); 
-  if (!tg) { showCur(); return; }
-  viewHistory.push([curTerm, zi]);
+  if (!tg) return;
   curTerms = tg.terms;
+  if (!curTerm) curTerm = curTerms[0].term;
+  viewHistory.add(curTerm);
 
   var len = curTerms.length, firstIdx = 0, endIdx = NUM_TO_SHOW;
   if (len > NUM_TO_SHOW) { // show the terms
@@ -230,10 +271,11 @@ function showTerms(curTerm, zi, openAll) {
   for (i=firstIdx; i<len; ++i)
     if (i >= firstIdx && i < endIdx)
       showTermDetails(buf, curTerms[i], openAll);
-  buf.w('</td></table>');
-  buf.wIf(viewHistory.length > 1, '<center>【<a href="javascript:showPrev()">回溯</a>】</center><hr>');
-  buf.render('stg');
-  localStorage.setItem('lastview', curTerm || curTerms[0].term);
+  buf.w('</td></table><center>')
+     .wIf(viewHistory.hasHistory(), '【<a href="javascript:showPrev()">回溯</a>】')
+     .w('【<a href="javascript:viewHistory.clear();clear()">清除歷史</a>】')
+     .w('</center><hr>')
+     .render('stg');
 }
 
 function openChart(name, elid) {
@@ -260,8 +302,7 @@ function allLeadZis() {
 
 function allTerms(mainOnly) {
   clear();
-  var allTerms = foTerms.getAllTerms(mainOnly),
-      buf = new Buffer();
+  var allTerms = foTerms.getAllTerms(mainOnly), buf = new Buffer();
   buf.render('termList');
   buf.w(`【共${allTerms.length}條】`);
   for (var i=0; i<allTerms.length; ++i) {
@@ -293,5 +334,11 @@ function allResources(type) {
   buf.render('stg');
 }
 
-showTerms(localStorage.getItem('lastview'));
+function showCur() {
+  var cur = viewHistory.getCur();
+  showList();
+  showTerms(cur);
+}
+
+showCur();
 </script>

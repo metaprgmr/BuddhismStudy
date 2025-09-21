@@ -9,7 +9,6 @@ b { color:brown }
 </style>
 <script src="../../../../util/utils.js"></script>
 <script src="../../../../util/gridperfect.js"></script>
-<script src="base.js"></script>
 <script src="diagrams.js"></script>
 </head>
 <body bgcolor="#eee" style="margin:0 0 0 0">
@@ -18,55 +17,6 @@ b { color:brown }
 </body></html>
 
 <script>
-tableCharts.config = {
-  bgColor:"#ffe"
-};
-
-function showContent(name, design) {
-  if (!name) {
-    name = localStorage.getItem('cur');
-    if (name && name.endsWith('*')) {
-      design = true;
-      name = name.substring(0,name.length-1);
-    }
-  }
-  var rsc = name && tableCharts.run(name, design);
-  if (rsc) {
-    if (typeof rsc == 'string') renderText('stg', rsc);
-    else rsc.render('stg'); // assumed a Buffer
-    showTOC(name, design);
-  }
-}
-
-function showTOC(cur, design) {
-  if (cur)
-    localStorage.setItem('cur', cur + (design ? '*' : ''));
-  else {
-    cur = localStorage.getItem('cur');
-    if (cur && cur.endsWith('*')) {
-      design = true;
-      cur = cur.substring(0,cur.length-1);
-    }
-  }
-  var names = Object.keys(tableCharts.all), buf = new Buffer();
-  for (var i=0; i<names.length; ++i) {
-    if (i>0)
-      buf.w((i % 10 == 0) ? '<br>' : ' ');
-    var n = names[i], rsc = tableCharts.get(n), isGP = rsc.type == 'GRIDP',
-        diagLnk   = `<a href="javascript:showContent('${n}')">${n}</a>`,
-        designLnk = `<sub><a href="javascript:showContent('${n}',1)">🔍</a></sub>`;
-    if (isGP) {
-      if (n == cur)
-        buf.w(design ? `<u>${diagLnk}</u>` : `<b>${n}</b>${designLnk}`);
-      else
-        buf.w(diagLnk, designLnk);
-    } else { // text
-      buf.w((n==cur) ? `<b>${n}</b>` : diagLnk);
-    }
-  }
-  buf.w('<hr>').render('toc');
-}
-
-showTOC();
-showContent();
+gpCharts.config = { bgColor:"#ffe" };
+gpCharts.setElidTOC('toc').setElidStage('stg').show();
 </script>

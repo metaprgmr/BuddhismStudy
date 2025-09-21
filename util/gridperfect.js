@@ -20,6 +20,13 @@ class GridPerfect {
     this.bgColor = undefined;
     this.macros = {};
     this.marks = '';
+    this.styleBlock = null;
+
+//  Set in _initLayout():
+//  this.program   = [];
+//  this.namedPts  = {}; // name => [x,y]; for runtime
+//  this.xyToMarks = {}; // x_y => name; for layout design view
+//  this.shiftings = {}; // x_y => [dx,dy]; only apply to starting points
 
     var o = arguments[0], isCfg = (typeof o == 'object');
     if (isCfg) Object.assign(this, o);
@@ -28,16 +35,44 @@ class GridPerfect {
     layout && this.setLayout(layout);
   }
 
+  setup(f) { f(this); return this; } // Good practice for namespace cleanness.
+
+  clone() {
+    return new GridPerfect({
+      gridW: this.gridW,
+      gridH: this.gridH,
+      fontSize: this.fontSize,
+      bgColor: this.bgColor,
+      marks: this.marks,
+      styleBlock: this.styleBlock,
+      program: Array.from(this.program || []),
+      namedPts: Object.assign({}, this.namedPts),
+      xyToMarks: Object.assign({}, this.xyToMarks),
+      shiftings: Object.assign({}, this.shiftings)
+    });
+  }
+
   setLayout(layout) {
     this.layout = layout.split('\n');
-    var ln = this.layout[0];
+    var ln = this.getLayoutLine(0);
     if (ln.trim() == '') this.layout.shift(); // skip 1st empty line
     this.height = this.layout.length;
     this.width  = 10; // random min width
     for (var i in this.layout)
-      this.width = Math.max(this.width, this.layout[i].length+1);
+      this.width = Math.max(this.width, this.getLayoutLine(i).replace(/<[^>]*>/g,'').length+1);
     this._initLayout();
     return this;
+  }
+
+  getLayoutLine(i) {
+    function removeComment(ln) {
+      if (!ln) return ln;
+      var idx = ln.indexOf('//');
+      if (idx<0) return ln;
+      for (--idx; (idx>0) && (ln[idx]==' '); --idx);
+      return ln.substring(0, idx+1);
+    }
+    return removeComment(this.layout[i]);
   }
 
   setMacro(name, fxn) { this.macros[name] = fxn; return this; }
@@ -100,11 +135,27 @@ class GridPerfect {
   }
   getShifting(x, y) { return this.shiftings[`${x}_${y}`]; }
 
+  setStyle(styleBlk) { this.styleBlock = styleBlk; return this; }
   // [from] can be a string for a defined point, or an [x,y].
   // [to] can be like from, but can also take derivitives:
   // '%r9', '%l9', '%u9', '%d' for going right, left, up and down.
-  line(from, to) { this.program.push({ act:LINE, from, to }); return this; }
-
+  line(from, to, extra) { this.program.push({ act:LINE, from, to, extra }); return this; }
+  text(x, y, txt, extra) { this.program.push({ act:TEXT, x, y, text:txt, extra }); return this; }
+  removeText(x, y) {
+    this.program = this.program.filter((a) => (a.act=='TEXT') && (a.x==x) && (a.y==y));
+    return this;
+  }
+  setText(x, y, txt, extra) {
+    for (var i in this.program) {
+      var inst = this.program[i];
+      if ((inst.act==TEXT) && (inst.x==x && (inst.y==y))) {
+        inst.text = txt;
+        inst.extra = extra;
+        return this;
+      }
+    }
+    return this.text(x, y, txt, extra); // not found, set it
+  }
   _initLayout() {
     this.program   = [];
     this.namedPts  = {}; // name => [x,y]; for runtime
@@ -113,7 +164,7 @@ class GridPerfect {
 
     var i, j, curInst;
     for (var i=1; i<=this.height; ++i) {
-      var row = this.layout[i-1];
+      var row = this.getLayoutLine(i-1);
       for (var j=1; j<=row.length; ++j) {
         var c = row[j-1];
         if (isGPSP(c)) {
@@ -195,7 +246,7 @@ class GridPerfect {
     for (i=1; i<=this.height; ++i) {
       buf.w('<tr><td align=right style="border-right:1px solid black; background-color:lightgray">&nbsp;',
             i, '&nbsp;</td>');
-      s = this.layout[i-1];
+      s = this.getLayoutLine(i-1);
       for (j=1; j<=s.length; ++j) {
         var cell = this.xyToMarks[`${j}_${i}`];
         if (cell) cell = `<red>${cell}</red>`; else cell = s[j-1];
@@ -218,6 +269,7 @@ class GridPerfect {
     if (this.bgColor) svg += ` style="background-color:${this.bgColor}"`;
     var pgm = this._compile(), gw = this.gridW, gh = this.gridH, hw = gw/2;
     buf.w(`${svg} height="${this.height * gh + gh}" width="${this.width * gw + gw}">`);
+    if (this.styleBlock) buf.w('<style>', this.styleBlock, '</style>');
     for (var i in pgm) {
       var inst = pgm[i], x, y, x2, y2, dx, dy, shft;
       switch(inst.act) {
@@ -234,7 +286,7 @@ class GridPerfect {
         } // otherwise, it is relative, just shift with from
         x2 = (dx+inst.to[0])  * gw + gh/2;
         y2 = (dy+inst.to[1])  * gh;
-        buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" style="stroke:black;stroke-width:1"/>`);
+        buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" ${inst.extra||' style="stroke:black;stroke-width:1px"'}/>`);
         break;
       case TEXT:
         shft = this.getShifting(inst.x, inst.y);
@@ -242,7 +294,7 @@ class GridPerfect {
         dy = shft && shft[1] || 0;
         x = (dx+inst.x) * gw;
         y = (dy+inst.y) * gh + gh/4;
-        buf.w(`<text x="${x}" y="${y}" font-size="${this.fontSize}">${inst.text}</text>`);
+        buf.w(`<text x="${x}" y="${y}" font-size="${this.fontSize}" ${inst.extra||''}>${inst.text}</text>`);
         break;
       }
     }
@@ -250,3 +302,63 @@ class GridPerfect {
   }
 
 } // end of GridPerfect.
+
+// Singleton, with UI support
+var gpRepo = new (class extends ResourceRepo {
+  setElidTOC(id) { this.elidTOC = id; return this; }
+  setElidStage(id) { this.elidStage = id; return this; }
+  showDiagram(name, elid, design) {
+    if (!name) {
+      name = localStorage.getItem('cur');
+      if (name && name.endsWith('*')) {
+        design = true;
+        name = name.substring(0,name.length-1);
+      }
+    }
+    var rsc = name && gpRepo.run(name, design);
+    if (rsc) {
+      if (typeof rsc == 'string') renderText(elid || this.elidStage || document, rsc);
+      else rsc.render(elid || this.elidStage || document);
+      this.showTOC(name, design);
+    }
+  }
+
+  showTOC(cur, design) {
+    if (cur)
+      localStorage.setItem('cur', cur + (design ? '*' : ''));
+    else {
+      cur = localStorage.getItem('cur');
+      if (cur && cur.endsWith('*')) {
+        design = true;
+        cur = cur.substring(0,cur.length-1);
+      }
+    }
+    var names = Object.keys(gpRepo.all), buf = new Buffer();
+    for (var i=0; i<names.length; ++i) {
+      if (i>0)
+        buf.w((i % 10 == 0) ? '<br>' : ' ');
+      var n = names[i], rsc = gpRepo.get(n), isGP = rsc.type == 'GRIDP',
+          diagLnk   = `<a href="javascript:gpRepo.showDiagram('${n}')">${n}</a>`,
+          designLnk = `<sub><a href="javascript:gpRepo.showDiagram('${n}',null,1)">🔍</a></sub>`;
+      if (isGP) {
+        if (n == cur)
+          buf.w(design ? `<u>${diagLnk}</u>` : `<b>${n}</b>${designLnk}`);
+        else
+          buf.w(diagLnk, designLnk);
+      } else { // text
+        buf.w((n==cur) ? `<b>${n}</b>` : diagLnk);
+      }
+    }
+    buf.w('<hr>').render(this.elidTOC);
+  }
+
+  show() { this.showTOC(); this.showDiagram(); }
+})();
+
+function addGP(gp) { gpRepo.add(gp); }
+
+function createGP(name, cfg) {
+  var gp = new GridPerfect(cfg || gpRepo.config);
+  addGP(new GridPerfectItem(name, gp));
+  return gp;
+}

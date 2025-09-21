@@ -87,7 +87,7 @@ class Entry {
     ret += '<span class="synopsis">' + this.text1;
     if (this.text2)
       ret += '&nbsp;<a href="javascript:displayEntry(\'' + this.id + '\')" title="' +
-             this.text2 + ((e.text2.length >= TEXT2_LEN) ? '……' : '') + '">……</a>';
+             this.text2 + ((this.text2.length >= TEXT2_LEN) ? '……' : '') + '">……</a>';
     return ret + '</span>';
   }
 
@@ -157,7 +157,7 @@ class 印光大師文鈔菁華錄 {
     const e = this._curSection.addEntry(text, 編者敬按);
     this.entryMap[''+e.id] = e;
   }
-  entryById(id) { return this.entryMap[''+id] }
+  getEntry(id) { return this.entryMap[''+id] }
 }
 
 const TheBook = new 印光大師文鈔菁華錄();

@@ -44,9 +44,9 @@ function hideEl()           { for (var i in arguments) { var el=toEl(arguments[i
 function enableEl(id, set)  { var c = e(id); c && (set ? c.removeAttribute('disabled') : c.setAttribute('disabled', '')); }
 function w()                { for(var i in arguments)document.write(arguments[i]); }
 function showTop(id)        { var el=toEl(id); el && el.scrollIntoView(); }
-function renderText(id, txt){ var el=toEl(id); el && (el.innerHTML=txt); }
-function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); } 
-function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); } 
+function renderText(id, txt){ new Buffer(txt).render(id); }
+function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); }
+function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); }
 function showOne() { // id's; last is 0-based index; if not a number, defaulted to 0
   var endIdx = arguments.length-1, selIdx = 0;
   if (typeof arguments[endIdx] == 'number') selIdx = arguments[endIdx--];
@@ -146,6 +146,16 @@ function toSet(lst) {
   return ret;
 }
 
+function dateShift(adate, num, unit) { // unit: 'y', 'm', 'd', 'w'. Default 'd'.
+  var y = adate.getFullYear(), m = adate.getMonth(), d = adate.getDate();
+  switch(unit) {
+  case 'y': return new Date(y+num, m, d);
+  case 'm': return new Date(y, m+num, d);
+  case 'w': return new Date(y, m, d+num*7);
+  default:  return new Date(y, m, d+num);
+  }
+}
+
 function getUniqueHanZisAsSet(str) {
   var ret = {}, ast = str.isAstral ? str : new Astral(str), len = ast.getLength();
   for (var i=0; i<len; ++i) {
@@ -233,7 +243,7 @@ var AlignedListItemBullet = 1;
 function bulletAlignedListStart(, bullet) {
   AlignedListBulletType = bulletType;
 }
-function numnberAlignedListStart(start) { AlignedListBulletType = bulletType; }
+function numberAlignedListStart(start) { AlignedListBulletType = bulletType; }
   AlignedListBulletType = ALBulletNumber;
   AlignedListItemNumber = (arguments.length > 0) ? arguments[0] : 1;
 }
@@ -241,7 +251,6 @@ function alignedList(subject, content, bullet) {
 }
 */
 
-// Buffer
 class Buffer {
   constructor() { this.bufList = Array.from(arguments); }
 
@@ -297,7 +306,7 @@ class Buffer {
     return ret;
   }
 
-  text() { 
+  text() {
     var s = this.bufList.join('')
     this.bufList = [ s ];
     return s;
@@ -310,6 +319,89 @@ class Buffer {
   }
 
 } // end of Buffer.
+
+const NULL = { j:'suinil' };
+function isNil(x) { return (x == null) || (x === NULL); }
+function ensureNULL(x) { return (x == null) ? NULL : x; }
+
+class ActiveObject {
+  constructor(storageItem, obj) {
+    if (arguments.length == 1) obj = storageItem;
+    else storageItem && (this.storageItem = storageItem);
+    if ((obj == null) && this.storageItem)
+      obj = JSON.parse(localStorage.getItem(this.storageItem));
+
+    this.data = {};
+    this.changed = {};
+    this.globalHandler = null;
+         // if globalHandler is set,
+         // individual handlers will be ignored, but won't be removed.
+    this.handlers = {};
+    if (obj) {
+      for (var i in obj) {
+        var v = obj[i];
+        if (v != null) this.data[i] = v;
+      }
+    }
+  }
+  setHandler(k, fxn) { // if only one param, set as the global handler
+    fxn ? (this.handlers[k] = fxn) : (this.globalHandler = k);
+    return this;
+  }
+  removeHandler(k) { // if no k, remove the global handler
+    k ? (delete this.handlers[k]) : (this.golbalHandler = null);
+    return this;
+  }
+  set(k,v) {
+    var old = ensureNULL(this.data[k]);
+    v = ensureNULL(v);
+    if (v !== old) {
+      this.changed[k] = old;
+      if (v == null) delete this.data[k]; else this.data[k] = v;
+    }
+    return this;
+  }
+  getValues() { return this.data; }
+  get(k) { return this.data[k]; }
+  done() {
+    if (this.globalHandler) { // handle globally ONLY
+      var changes = [];
+      for (var k in this.changed)
+        changes.push([ k, this.data[k], this.changed[k]]);
+      this.globalHandler(changes);
+    } else { // call individual handlers
+      for (var k in this.changed) {
+        var f = this.handlers[k];
+        f && f(this.data[k], this.changed[k]); // new & old values
+      }
+    }
+    this.changed = {};
+    this.storageItem && localStorage.setItem(this.storageItem, JSON.stringify(this.data));
+    return this;
+  }
+}
+
+class PersistentHistory {
+  constructor(storageItem) {
+    this.storageItem = storageItem;
+    this.data = JSON.parse(localStorage.getItem(this.storageItem)) || [];
+  }
+  persist() {
+    if (this.storageItem) {
+      if (this.data)
+        localStorage.setItem(this.storageItem, JSON.stringify(this.data));
+      else
+        localStorage.removeItem(this.storageItem);
+    }
+  }
+  // for push()/unshift(), the obj is copied
+  push(obj) { obj && this.data.push(Object.assign({}, obj)); this.persist(); }
+  unshift(obj) { obj && this.data.unshift(Object.assign({}, obj)); this.persist(); }
+  pop() { var obj = this.data.pop(); this.persist(); return obj; }
+  shift() { var obj = this.data.shift(); this.persist(); return obj; }
+  cur() { return this.data[this.data.length-1]; }
+  length() { return this.data.length; }
+}
 
 class Astral {
   constructor(str) {
@@ -535,7 +627,12 @@ class ResourceRepo {
     this.all = {};
     this.config = null;
   }
-  add(item) { this.all[item.name] = item; } 
+  add(item) {
+    var name = item.name;
+    if (this.all[name]) throw `Resource "${name}" already exists in ResourceRepo.`;
+    this.all[name] = item;
+    return this;
+  }
   get(name) { return this.all[name]; }
   run(name, opt) { var i = this.all[name]; return i && i.run(opt); }
   getAllItems(type) {

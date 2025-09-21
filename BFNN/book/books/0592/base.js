@@ -77,8 +77,8 @@ class Glossary {
       this.map[zi0] = tg = new TermGroupByZi(zi0, strokes);
       this.all.push(tg);
     }
-    tg.add(term, info);
-    this.allTerms[term] = true;
+    var t = tg.add(term, info);
+    this.allTerms[t.term] = true;
     return this;
   }
 
@@ -153,19 +153,7 @@ class Glossary {
 // Singletons:
 var pinyins = getPinyins(),
     foTerms = new Glossary(),
-    tableCharts = new ResourceRepo();
-
-function addGP(gp) { tableCharts.add(gp); }
-
-function createGP(name, cfg) {
-  var gp = new GridPerfect(cfg || tableCharts.config);
-  addGP(new GridPerfectItem(name, gp));
-  return gp;
-}
-
-function addTextItem(item) { tableCharts.add(item); }
-
-function addText(name, txt) { addTextItem(new TextItem(name,txt)); }
+    tableCharts = gpCharts; // in gridperfect.js
 
 function addTerms() {
   var strokes = arguments[0];
@@ -235,3 +223,4 @@ function getPinyins() {
   }
   return ret;
 }
+

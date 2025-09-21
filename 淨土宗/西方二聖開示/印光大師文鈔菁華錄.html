@@ -24,16 +24,15 @@ var isRand = m == 'r';
 function displayEntry(id, toTop) {
   var el, e, last = TheBook.curFullTextId;
   if (last) {
-    e = TheBook.entryById(last);
+    e = TheBook.getEntry(last);
     el = document.getElementById('_' + last);
     if (el) el.innerHTML = e.getSynopsis();
   }
 
-  e = TheBook.entryById(id);
+  e = TheBook.getEntry(id);
   if (!e) return;
   el = document.getElementById('_' + e.id);
   if (el) {
-    el.innerHTML = e.getFullText();
     el.innerHTML = '<div style="border:1px solid blue; padding:5px" onclick="displayEntry()">' +
                    e.getFullText() + '</div>';
     TheBook.curFullTextId = e.id;

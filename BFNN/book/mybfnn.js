@@ -585,11 +585,95 @@ function write1644(n, body) {
 
 // -- 簡明成唯識論白話講記 于凌波居士 --
 function write2088(n, subttl, body) {
-  var zn = zNumber(n);
-  docInfo.reInit(2088, 6, n)
-         .writeStart(`簡明成唯識論白話講記||（第${zn}篇 ${subttl}）`, `成唯識論白話講記 篇${zn}`)
-         .w(SP, '<p class=TEXT030C>于凌波居士講授<br>佛光山叢林學院．臺中慈明佛學研究所佛學講義</p>', SP);
-  body && docInfo.writeBody(body).writeEnd();
+  new (class extends DocInfo {
+    constructor() {
+      super();
+      var zn = zNumber(n);
+      this.reInit(2088, 6, n)
+          .writeStart(`簡明成唯識論白話講記||（第${zn}篇 ${subttl}）`, `成唯識論白話講記 篇${zn}`)
+          .w(SP, '<p class=TEXT030C>于凌波居士講授<br>佛光山叢林學院．臺中慈明佛學研究所佛學講義</p>', SP)
+          .writeBody(body)
+          .writeEnd();
+    }
+    writeSeriesNav(links) {
+      var toc = [
+`釋歸敬頌 釋難破執<br>標宗歸識 彰能變體
+序
+歸敬頌與造釋願由
+釋難破執．破實我
+釋難破執．破實法
+釋難破執．破餘乘
+釋難破執．釋外妨難
+彰能變體`,
+
+`異熟能變識詮釋
+三相門
+所緣行相門
+心所相應門
+五受相應門
+三性分別門
+心所例同門
+因果譬喻門
+伏斷位次門
+如何證明有第八阿賴耶識——五教證
+如何證明有第八阿賴耶識——十理證`,
+
+`思量能變識詮釋
+舉體出名門
+所依門
+所緣門
+體性行相門
+合解染俱相應二門
+三性分別門
+界繫分別門
+起滅分位門
+如何證明有第七識`,
+
+`了境能變識詮解
+能變差別門
+自性行相門
+三性分別門
+心所相應門．泛說六位心所
+三受門
+心所相應門．詳釋六位心所
+所依門．俱不俱轉門
+起滅分位門
+綜合分別八識`,
+
+`廣釋所變 釋違理難<br>釋違教難 唯識實性
+正辯唯識
+問答辯難
+釋違理難．心法生起的原由
+四緣、十因、五果
+釋違理難．有情生死相續的由來
+惑、業、苦與十二有支
+釋違教難．三種自性
+釋違教難．三種無性與唯識實性`,
+
+`明唯識位<br>唯識五位修行
+總明五位
+釋資糧位
+釋加行位
+釋通達位
+釋修習位
+釋究竟位` ];
+      var i, len = toc.length;
+      for (i=0; i<len; ++i) toc[i] = toc[i].split('\n');
+      this.w('<center><hr><table border=0 cellspacing=0 cellpadding="5px">');
+      this.w('<tr>');
+      for (i=0; i<len; ++i) {
+        this.w('<td align=center valign=top>');
+        if (this.volNum == i+1)
+          this.w(`<cur>第${zNumber(i+1)}篇</cur>`);
+        else
+          this.w(`<a href="${2088+i}.htm">第${zNumber(i+1)}篇</a>`);
+        this.w(`<br>${toc[i][0]}</td>`);
+      }
+      this.w('</tr><tr>');
+      this.w('</tr>');
+      this.w('</table></center>');
+    }
+  })();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,123 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>雙師賜教</title>
+<style>
+body { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:120%; }
+td   { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:120%; font-size:20px }
+.subttl { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋";
+          font-size:14px; margin-top:-10px; margin-bottom:10px }
+a { text-decoration:none }
+em { font-style:normal; color:red; background-color:lightyellow }
+em.edu { background-color:eef }
+.toc { font-size:15px }
+.info { font-family:Courier New; font-size:12px }
+ytid { font-family:Courier New; font-size:10px; opacity:0.5 }
+
+td.toc { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:90%; font-size:22px }
+td.anno { font-size:16px; padding-top:5px }
+.synopsis { font-size:16px; padding-top:5px }
+comment { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:16px }
+anno { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:14px }
+</style>
+<script src="../../util/utils.js"></script>
+<script src="../../env.js"></script>
+<script src="JK-teachings.js"></script>
+<script src="印光大師文鈔菁華錄.js"></script>
+</head>
+<body style="margin:20px; background:#dfd">
+<center>
+<div id="stg"></div>
+</center></body></html>
+
+<script>
+var teachings =
+`  1|260|QqJ0NbA5TkE
+   2|265|9Kt22Pm8Vx8
+   5|155|jISPO8RPZ5E
+   6|289|ffCX7dm5bus
+   7|113|hKd7GTRjWxg
+   8| 75|fXoxW4LVeEs|但自無心於萬物，何妨萬物常圍繞。歷事鍊心。當相離相，不隨物轉。真修行
+   9|171|OojSRPCDnf8
+  10| 63|kzcjkI5WSeg
+  11|219
+  12|235|v1u7CIno0PI
+  13|124|jptAlJncEE4
+  14| 33|A_L5UyTRPFo
+  16|205|hDCteRr05s0
+  17|310|wjXHxWOUNsY
+  18|293|O6QC047nE-M
+  19|235|j-BHmMdMw8I
+  26| 61|0lIH0YpK8Vk|無論出聲默念，皆須念從心起，聲從口出，音從耳入。心口念得清清楚楚，耳根聽得清清楚楚，如是攝心，妄念自息矣。
+  27|218|72-drUl0jq0
+  28| 71|w16aKPkS1bY
+  29|112|S9AbvEL4vsA
+  33|   |N4nq-sfxQ54
+`;
+
+(() => {
+  var W = 1200, tdw = (W-30)/2,
+      buf = new Buffer(), a = teachings.trim().split('\n');
+  buf.w(`<table bgcolor="#f0fff0" border=1 cellspacing=0 cellpadding="5px" width="${W}px">`,
+        '<tr><th></th><th>印光大師教導</th><th>淨空法師教導</th></tr>');
+  for (var i=a.length-1; i>=0; --i) {
+    var row = a[i].split('|'), r0 = row[0], r1 = row[1], r2 = row[2],
+        ygid = r1 && r1.trim(), jkid = r2 && r2.trim();
+    if (window['displayTeachingID']) r0 = displayTeachingID(r0); else r0 = i+1;
+    if (ygid == '-') ygid = '';
+    var yg = TheBook.getEntry(ygid), jk = JK.getLesson(jkid) || '';
+    if (jk) {
+      var ttl = jk.title;
+      if (ttl.length > 25) ttl = `<font style="font-size:17px">${ttl}</font>`;
+      jk = `<a href="javascript:displayLesson('${jkid}')">${ttl}</a>`;
+    }
+    buf.w('<tr><td valign=top align=center>', r0, '</td>',
+          `<td valign=top width="${tdw}px" id="_${ygid}">`, yg && yg.getSynopsis() || '', '</td>',
+          `<td valign=top width="${tdw}px" id="_${jkid}">`, jk, '</td></tr>');
+  }
+  buf.w('</table>')
+     .render('stg');
+})();
+
+// JK
+function displayLesson(id, synop) {
+  var jk = JK.getLesson(id), buf = new Buffer();
+  var ttl = jk.title;
+  if (synop) {
+    if (ttl.length > 25) ttl = `<font style="font-size:17px">${ttl}</font>`;
+    buf.w(`<a href="javascript:displayLesson('${id}')">${ttl}</a>`);
+  } else {
+    var tag = (ttl.length > 18) ? 'h3' : 'h2';
+    ttl = `<${tag} align=center style="margin-bottom:-15px">${ttl}</${tag}>`;
+    buf.w(`<a href="javascript:displayLesson('${id}',true)">${ttl}</a>`,
+          `<br><center><a href="JK-teachings.html?i=${id}"><ytid>${id}</ytid></a></center>`);
+    for (var i in jk.text) {
+      var txt = jk.text[i];
+      if (!txt.startsWith('　　')) txt = '　　' + txt;
+      buf.w('<p>', txt, '</p>');
+    }
+  }
+  buf.render('_'+id);
+}
+
+// YG
+function displayEntry(id, toTop) {
+  var el, last = TheBook.curFullTextId;
+  if (last) {
+    entry = TheBook.getEntry(last);
+    el = e('_' + last);
+    if (el) el.innerHTML = entry.getSynopsis();
+  }
+
+  entry = TheBook.getEntry(id);
+  if (!entry) return;
+  el = e('_' + entry.id);
+  if (el) {
+    el.innerHTML = '<div style="border:1px solid blue; padding:5px" onclick="displayEntry()">' +
+                   entry.getFullText() + '</div>';
+    TheBook.curFullTextId = entry.id;
+    if (toTop) el.scrollIntoView(true);
+  }
+}
+</script>
+
