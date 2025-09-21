@@ -153,7 +153,11 @@ class Glossary {
 // Singletons:
 var pinyins = getPinyins(),
     foTerms = new Glossary(),
-    tableCharts = gpRepo; // in gridperfect.js
+    charts = gpRepo, // in gridperfect.js
+    tables = new ResourceRepo();
+
+function addTextItem(item) { tables.add(item); }
+function addText(name, txt) { addTextItem(new TextItem(name,txt)); }
 
 function addTerms() {
   var strokes = arguments[0];

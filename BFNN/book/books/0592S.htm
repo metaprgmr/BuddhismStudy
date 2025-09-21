@@ -280,7 +280,7 @@ function showTerms(curTerm, zi, openAll) { // curTerm or zi; not simultaneously
 }
 
 function openChart(name, elid) {
-  var buf = tableCharts.run(name);
+  var buf = charts.run(name) || tables.run(name);
   if (!buf) return;
   if (!elid)
     return (typeof buf == 'string') ? buf : buf.render();
@@ -315,7 +315,7 @@ function allTerms(mainOnly) {
 
 function allResources(type) {
   clear();
-  var all = tableCharts.getAllItems(type), lst,
+  var all = charts.getAllItems(type), lst,
       buf = new Buffer('<center><table border=0>');
   buf.w('<tr><td valign=top nowrap>【有圖示條目】</td><td>');
   lst = all.filter((a) => a.type == 'GRIDP');
