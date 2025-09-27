@@ -31,14 +31,13 @@ function writeArticalLink(uri, title, ending, ignoreCircle) {
   w(`<a href="${bfnn(uri)}">${title}</a>`);
   if (ending) w(ending);
 }
-function extLink(file, title, ending, ignoreCircle, addExt) {
+function extLink(file, title, ending, ignoreCircle) {
   if (title[0] === '#') title = '<inv>0</inv>' + title.substring(1);
   var subdir = '';
   switch(file[0]) {
   case '1': subdir = '2'; break;
   case '2': subdir = '3'; break;
   }
-  if (addExt && isBfnnLocal()) file += 'ext';
   writeArticalLink('/books' + subdir + '/' + file + '.htm', title, ending, ignoreCircle);
 }
 function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${leftPad(base-1+i)}.htm`, i, ' ', true); }
@@ -49,7 +48,7 @@ function YuanYinLinks() {
     var extra = ' ';
     if (i == 12) extra = '<br>　　　　　　　　　　　<a href="YuanYingKePan/YuanYing科判Verses.html">經文</a>　<a href="YuanYingKePan/YuanYing科判.html">科判</a>' + '　';
     else if (i == 24) extra = '<br>';
-    extLink(`${1471+i}`, (i<10) ? ('#'+i) : i, extra, true, true);
+    extLink(`${1471+i}`, (i<10) ? ('#'+i) : i, extra, true);
   }
 }
 function WangLinks() {
@@ -73,7 +72,7 @@ function HaiRenLinks() {
   for (var i=1; i<=10; ++i)
     extLink(`${1874+i}`, i,
             (i != 10) ? ' ' : '　<a href="HaiRengKePan/HaiReng科判.html">科判</a>　',
-            true, true);
+            true);
   w('<a href="HaiRengKePan/HaiReng科判Verses.html">經文</a>　<br>');
 }
 function HaiRenKePan() {

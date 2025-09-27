@@ -1,4 +1,12 @@
 var DEBUG = ''; // 'border:1px solid red;';
+var isDebugging = false;
+const ON={}, OFF={};
+function dbg() {
+  if (arguments[0] == ON) { isDebugging = true; return; }
+  else if (arguments[0] === OFF) { isDebugging = false; return; }
+  if (isDebugging) console.log.apply(null, Array.from(arguments));
+}
+
 const HILITE_COLOR = '#ff8';
 const KAI_TI = 'KaiTi, Kaiti TC, 楷体, STKaiti, 华文楷体';
 const FANGSONG_TI = 'FangSong, 仿宋体, STFangSong, 华文仿宋体';
@@ -53,6 +61,7 @@ function showOne() { // id's; last is 0-based index; if not a number, defaulted 
   for (var i=0; i<=endIdx; ++i)
     if (i == selIdx) showEl(arguments[i]); else hideEl(arguments[i]);
 }
+function jslnk(jscall, txt) { return `<a href="javascript:${jscall}">${txt}</a>`; }
 
 function digit2(i, increment) {
   if (!i) i = 0;
@@ -611,7 +620,13 @@ function exitFullScreenMode() {
 }
 
 class ResourceItem {
-  constructor(name, type) { this.name = name; this.type = type; }
+  constructor(name, type) {
+    var a = name.split('|');
+    this.name = a[0];
+    if (a.length > 1) { a.shift(); this.alias = a; }
+    this.type = type;
+  }
+  setCategory(cat) { cat && (this.category = cat); return this; }
   run(opt) { throw 'ResourceItem.run() not implemented.'; }
 }
 class TextItem extends ResourceItem {
@@ -627,10 +642,17 @@ class ResourceRepo {
     this.all = {};
     this.config = null;
   }
-  add(item) {
-    var name = item.name;
-    if (this.all[name]) throw `Resource "${name}" already exists in ResourceRepo.`;
-    this.all[name] = item;
+  add(item, category) {
+    var me = this, name = item.name;
+    function _add(name, item) {
+      if (me.all[name]) throw `Resource "${name}" already exists in ResourceRepo.`;
+      me.all[name] = item;
+    }
+    item.setCategory(category);
+    _add(name, item);
+    var len = item.alias ? item.alias.length : 0;
+    for (var i=0; i<len; ++i)
+      _add(item.alias[i], item);
     return this;
   }
   get(name) { return this.all[name]; }

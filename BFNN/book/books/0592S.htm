@@ -13,7 +13,6 @@ pre { line-height:18px }
 <script src="../../../util/gridperfect.js"></script>
 <script src="../mybfnn.js"></script>
 <script src="0592/base.js"></script>
-<script src="0592/diagrams.js"></script>
 <script src="../../../util/repo-diagrams.js"></script>
 <script src="0592/tables.js"></script>
 <script src="0592/01-3.js"></script>
@@ -280,7 +279,7 @@ function showTerms(curTerm, zi, openAll) { // curTerm or zi; not simultaneously
 }
 
 function openChart(name, elid) {
-  var buf = charts.run(name) || tables.run(name);
+  var buf = tables.run(name) || charts.run(name);
   if (!buf) return;
   if (!elid)
     return (typeof buf == 'string') ? buf : buf.render();
@@ -318,7 +317,7 @@ function allResources(type) {
   var all = charts.getAllItems(type), lst,
       buf = new Buffer('<center><table border=0>');
   buf.w('<tr><td valign=top nowrap>【有圖示條目】</td><td>');
-  lst = all.filter((a) => a.type == 'GRIDP');
+  lst = all.filter((a) => (a.type == 'GRIDP') && (foTerms.containsTerm(a.name)));
   for (var i=0; i<lst.length; ++i) {
     if (i>0) buf.w((i%10==0) ? '<br>' : '&nbsp; ');
     showTermLink(buf, lst[i], true);
@@ -326,7 +325,7 @@ function allResources(type) {
   buf.w('</td></tr>');
 
   buf.w('<tr><td valign=top nowrap>【有表格條目】</td><td>');
-  lst = all.filter((a) => a.type == 'TEXT');
+  lst = tables.getAllItems();
   for (var i=0; i<lst.length; ++i) {
     if (i>0) buf.w((i%10==0) ? '<br>' : '&nbsp; ');
     showTermLink(buf, lst[i], true);

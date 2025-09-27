@@ -282,6 +282,15 @@ class DocInfo {
       return;
     }
 
+    if (ln1.startsWith('<html:diagram>')) { // e.g. 0115
+      ln = ln1.substring(14).trim();
+      if (!ln.endsWith('</html:diagram>'))
+        throw '<html:diagram> must be closed on the same line.';
+      ln = ln.substring(0, ln.length-15).trim();
+      this.w('<script> gpRepo.showDiagram("', ln, '"); </script>');
+      return;
+    }
+
     if (ln1.startsWith('/gatha/')) { // e.g. 0875
       this.inGatha = true;
       return;
