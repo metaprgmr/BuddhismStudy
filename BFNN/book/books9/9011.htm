@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>大般涅槃經</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var pinsUri = [ // 0-based
+  "?vol=1",          // 卷第一　　　序品　      　　　 第一
+  "?vol=2",          // 卷第二　　　如來現相品　　　　 第二
+  "?vol=2&pin=p03",  // 　　　　　　哀歎品　　　　　　 第三
+  "?vol=3&pin=p04",  // 卷第三　　　長壽品　　　　　　 第四
+  "?vol=3&pin=p05",  // 　　　　　　金剛身品　　　　　 第五
+  "?vol=3&pin=p06",  // 　　　　　　功德品　　　　　　 第六
+  "?vol=4",          // 卷第四　　　四相品　　　　　　 第七之一
+];
+var NJ = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9011/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setBuffer(buf).setXG().reInit(9011, 36);
+        this.volNum = NJ.volNum;
+        var zn = zNumber(NJ.volNum);
+        if (NJ.volNum) // write the volume content
+          this.writeStart(`大般涅槃經||卷${zn}`, `大般涅槃經 卷${NJ.volNum}`)
+              .writeBody('\n\n/TEXT030C/宋代沙門慧嚴等依泥洹經加之\n\n' +
+                         `/TEXT339/大般涅槃經${zn}` +
+                         NJ.text +
+                         `\n/TEXTR/大般涅槃經卷${zn}\n\n/VOLSEP/\n`);
+        else // write the grand TOC
+          this.writeStart(`大般涅槃經`).writeBody(NJ.text);
+        this.writeEnd();
+      }
+
+/*
+      writeSeriesNav(links) {
+        var cur=NJ.volNum, me=this, pinNo=1;
+      }
+*/
+    } // class extends DocInfo
+    )();
+    buf.render('stg');
+  }
+})(); // NJ
+
+NJ.show(get('vol'), get('pin')); // 卷 品
+
+// 經文來源：T12n0375_大般涅槃經.pdf
+</script>
