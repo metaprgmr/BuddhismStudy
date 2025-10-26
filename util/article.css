@@ -22,6 +22,7 @@ anno { color:#008; font-size:10.0pt; font-weight:normal } /* annotation */
 ail { color:#008; font-size:10.0pt; font-weight:normal } /* annotation in-line */
 ail:before { content:" ❲" }
 ail:after  { content:"❳ " }
+cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
 inv { opacity:0 }
 dim { opacity:0.3 }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.regex.Pattern;
+import java.nio.charset.StandardCharsets;
 import static java.lang.System.out;
 import static java.lang.System.err;
 
@@ -7,6 +8,7 @@ public class BfnnCommon {
 
   public static interface StateMachine {
     String proc(String line);
+    default void println(String ln) { out.println(ln); }
   }
 
   public static void main(String[] args) throws Exception {
@@ -15,6 +17,11 @@ public class BfnnCommon {
 
   public static BufferedReader openFile(String name) throws IOException {
     return new BufferedReader(new InputStreamReader(new FileInputStream(name), "utf-8"));
+  }
+
+  public static PrintWriter openFileToWrite(String name) throws IOException {
+    return new PrintWriter(new BufferedWriter(
+      new OutputStreamWriter(new FileOutputStream(name), StandardCharsets.UTF_8)));
   }
 
   public static String digitN(int i, int n) {
@@ -85,11 +92,11 @@ public class BfnnCommon {
 
         line = sm.proc(line);
         if (END_REACHED.equals(line)) {
-          out.println("\n<script> writeBfnnEnd(); </script>");
+          sm.println("\n<script> writeBfnnEnd(); </script>");
           break;
         }
         if ((line != null) && !line.equals("<script language=\"JavaScript\" src=\"\"></script>"))
-          out.println(line);
+          sm.println(line);
       }
     }
   }
@@ -101,6 +108,22 @@ public class BfnnCommon {
     boolean doneBig5 = false;
     boolean inBody = false;
     boolean hasEndImage = false;
+    PrintWriter pw;
+
+    public BasicStateMachine() {
+      this.pw = null;
+    }
+
+    public BasicStateMachine(PrintWriter w) {
+      this.pw = w;
+    }
+
+    public void println(String ln) {
+     if (pw == null)
+       out.println(ln);
+     else
+       pw.println(ln);
+    }
 
     public static String getFirstTag(String ln) {
       int idx = ln.indexOf('>');

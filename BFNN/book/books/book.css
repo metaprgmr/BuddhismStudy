@@ -9,41 +9,52 @@
         font-size:12.0pt;
         font-family:細明體;}
 
+.KAITI {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; text-indent:24.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.KaiTi      { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.FangSongTi { font-family: FangSong, "仿宋", STFangsong, "华文仿宋" }
+.SongTi     { font-family: SimSong, "Songti TC", "宋体", STSong, "华文宋体" }
+.HeiTi      { font-family: SimHei, "黑体", STHeiti, "华文黑体" }
+
+.BQKaiTi     { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.BQFangSongTi{ margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: FangSong, "仿宋", STFangsong, "华文仿宋" }
+.BQSongTi    { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: SimSong, "Songti TC", "宋体", STSong, "华文宋体" }
+.BQHeiTi     { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: SimHei, "黑体", STHeiti, "华文黑体" }
+
 .book      { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; background-color: #BBFFBB }
+.samskrt   { color:red }
 ol.cjk { margin-left:0px; list-style-type: cjk-ideographic; }
 li.cjk { margin-bottom:3.0pt; }
 blockquote.quote { color:teal; }
 ul { margin-left:-16.0pt; }
 a { text-decoration:none; }
 .bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px }
-BODY {SCROLLBAR-FACE-COLOR: #0099FF; SCROLLBAR-HIGHLIGHT-COLOR: #0099FF; SCROLLBAR-SHADOW-COLOR: #006699; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: 
-#00354F; } 
+BODY {SCROLLBAR-FACE-COLOR: #09f; SCROLLBAR-HIGHLIGHT-COLOR: #09f; SCROLLBAR-SHADOW-COLOR: #069; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: #00354F; } 
 .endBar { text-align:center }
-hr.volsep { border: none; height: 1px; background: rgba(255, 0, 0, 0.3); }
+hr.volsep { border: none; height: 1px; background: rgba(255,0,0,0.3); }
 
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
 my   { }
 my_1 { }
 .topbar { border-top:1px solid gray }
 .bottombar { border-bottom:1px solid gray }
-.caption { font-size:36.0pt;font-family:標楷體;color:#FF6600;font-weight:bold; text-align:center }
-.kepan { color:#333399 }
-kpDone { color:#333399 }
-.volend { color:brown }
+.caption { font-size:36.0pt;font-family:標楷體;color:#f60;font-weight:bold; text-align:center }
+.kepan { color:#339 }
+kpDone { color:#339 }
+.volend { color:brown; text-indent:0.0pt; margin:0cm; margin-bottom:.0001pt;  }
 .seriesnav { background:#cec }
 .endImage { width:300px; height:30px; background-size:300px 30px; background-image:url('../books/sign.gif'); }
 .endImageXG { width:300px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); }
 .gathanum { float:left; color:black; opacity:0.4; font-size:10px; width:25pt; padding-top:3pt }
-.gatha { color:#003388 }
+.gatha { color:#038 }
 .gatha2 { color:teal }
-verseNum { color:#333399; font-weight:normal }
+verseNum { color:#339; font-weight:normal }
  verseNum::before { content:'【' }
  verseNum::after  { content:'】 ' }
 dcirc  { color:purple }
  dcirc::before { content:'◎' }
 small { color:brown }
-cil { color:#777; font-weight:normal } /* comment in-line */
-ail { color:#003300 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
+ail { color:#030 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
 red { color:red }
 black { color:black }
 purple { color:purple }
@@ -60,22 +71,24 @@ pt12 { font-size:12px } pt12:before { content:' ' }
 /* for paragraphs */
 LNSP {margin:0cm; font-size:9.0pt; font-family:細明體;}
 LNSP::before {content: '　';}
-.BQ2  { margin-left:24.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
-.BQ3  { margin-left:36.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
-.BQ4  { margin-left:48.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
+/* BlockQuote */
+.BQ2  { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
+.BQ3  { margin-left:36.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
+.BQ4  { margin-left:48.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal }
 .TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}
 .TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}
 .TEXTC    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center}
-.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#333399}
-.TEXT339L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#333399}
-.TEXT339C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#333399}
-.TEXT030  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#003300}
-.TEXT030L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#003300}
-.TEXT030C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#003300}
+.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
+c339 { color:#339 }
+.TEXT339L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
+.TEXT339C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#339}
+.TEXT030  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#030}
+.TEXT030L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#030}
+.TEXT030C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#030}
 .TEXT1    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt;}
-.TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#FF6600;}
-subtitle  { font-size:24.0pt }
+.TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
+subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:24.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 .VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
 .VERSEL   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; font-weight:bold; color:teal;}
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
@@ -83,5 +96,6 @@ verse     { font-family:細明體; color:teal;}
 quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:#000077;}
 .bglightyellow { background-color:lightyellow }
 .COMPONENT{margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
-.KEPAN    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#333399;}
+KEPAN     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
+.KEPAN    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 hrAdd { font-weight:normal; color:black; opacity:0.5; }

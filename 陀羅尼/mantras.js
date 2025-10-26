@@ -10,7 +10,7 @@ function showAll(ttl, mantras, onlyOne, isSimple, intro) { // 0-based, 0-9
 
   if (!isOnlyOne && !isSimple) {
     w(`<h2 style="margin-left:95px" title="${intro||''}">`, ttl,
-      '<a href="?simple=1" style="margin-left:43px; font-size:14px">【緊縮版】</a></h2>',
+      '<a href="?simple=1" style="margin-left:43px; font-size:14px">【緊縮打印版】</a></h2>',
       '<table class="toc" border="0">');
     for (i=0; i<mantras.length; i++) {
       m = mantras[i];
@@ -18,7 +18,7 @@ function showAll(ttl, mantras, onlyOne, isSimple, intro) { // 0-based, 0-9
       w(`<tr><td align="right">${id}.&nbsp;</td>`,
         `<td title="${m.titleS || ''}"><a href="#${id}" title="${m.功德||''}">${m.title}</a>`);
       for (k=m.title.length; k<15; ++k) w('　');
-      w('　【<a href="?i=', i, '">單此咒</a>】</td></tr>');
+      w('　【<a href="?i=', i, '">詳情</a>】</td></tr>');
     }
     w('<tr><td>&nbsp;</td></tr></table>');
   }

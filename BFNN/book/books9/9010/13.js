@@ -1,7 +1,7 @@
 HYJ.volNum = 13;
 HYJ.text = `
 /TEXTC/光明覺品第九　|
-/TEXTC/<a href="javascript:showTop('p10')">菩薩問明品第十</a>
+/TEXTC/<a#p10>菩薩問明品第十</a>
 
 /TEXT339/光明覺品第九
 

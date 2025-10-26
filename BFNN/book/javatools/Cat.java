@@ -23,16 +23,19 @@ public class Cat {
   public static void main(String args[]) throws Exception {
     if (args.length <= 0) return;
     String ln, mode = System.getProperty("mode");
-    try (BufferedReader br = open(args[0])) {
-      if ("writedoc".equalsIgnoreCase(mode))
-        toWriteDoc(br);
-      else if ("sutra".equalsIgnoreCase(mode))
-        markSutraSastra(br, false);
-      else if ("checksutra".equalsIgnoreCase(mode))
-        markSutraSastra(br, true);
-      else
-        for (; (ln=br.readLine()) != null; out.println(ln));
-    }
+    if ("towritedoc".equalsIgnoreCase(mode))
+      toWriteDocFromBig5(args);
+    else
+      try (BufferedReader br = open(args[0])) {
+        if ("writedoc".equalsIgnoreCase(mode))
+          toWriteDoc(br);
+        else if ("sutra".equalsIgnoreCase(mode))
+          markSutraSastra(br, false);
+        else if ("checksutra".equalsIgnoreCase(mode))
+          markSutraSastra(br, true);
+        else
+          for (; (ln=br.readLine()) != null; out.println(ln));
+      }
   }
 
   static void markSutraSastra(BufferedReader br, boolean checkOnly) throws Exception {
@@ -74,6 +77,16 @@ public class Cat {
 
     if (checkOnly && !all.isEmpty())
       out.println(String.join(" ", all));
+  }
+
+  static void toWriteDocFromBig5(String[] args) throws Exception {
+    final String tmpfile = "/tmp/alfa.html";
+    try (PrintWriter pw = BfnnCommon.openFileToWrite(tmpfile)) {
+      BfnnCommon.concatParaTag(args, new BfnnCommon.BasicStateMachine(pw));
+    }
+    try (BufferedReader br = open(tmpfile)) {
+      toWriteDoc(br);
+    }
   }
 
   static void toWriteDoc(BufferedReader br) throws Exception {

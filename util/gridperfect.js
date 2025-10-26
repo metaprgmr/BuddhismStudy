@@ -1,9 +1,22 @@
-function isGPSP(x) { // SP = space
-  const SPs = '　〇─│┌┐└┘┼┬┴├┤';
-  return x && (SPs.indexOf(x) >= 0);
-}
+const AIL    = '.ail { font-size:12px; opacity:0.8 }\n';
+const HILITE = '.hl { fill:red }\n';
+const BOLD   = '.b { stroke:brown }\n' +
+               '.b1 { stroke:green }\n' +
+               '.b2 { stroke:red }\n' +
+               '.b3 { stroke:blue }\n' +
+               '.mantra { stroke:teal }\n' +
+               '.c339 { stroke:#333399 }\n';
+const CAT_基本 = '基本';
+const CAT_唯識 = '唯識';
+const CAT_大乘 = '大乘';
+const CAT_小乘 = '小乘';
+const CAT_戒律 = '戒律';
+const CAT_經論 = '經論';
+const CAT_ELSE = 'ELSE';
 
-const LINE='LINE', TEXT='TEXT', INCL='INCL';
+const LINE='LINE', TEXT='TEXT', RECT='RECT', CIRCLE='CIRCLE',
+      RIGHTEDGE='R_EDGE', INCL='INCL';
+const SPLIT = '〰';
 
 // Named points (marks) are useful to abstract out diagrams.
 // They can be defined programmatically, which always works.
@@ -22,10 +35,13 @@ class GridPerfect {
     this.program = [];
     this.shiftings = {}; // x_y => [dx,dy]; only apply to starting points
     this.layout = []; // dummy
-    this.width  = 1;
-    this.height = 1;
+    this.width  = 0;
+    this.height = 0;
     this.shiftX = 0;
     this.shiftY = 0;
+    this.namedTexts = null;
+    this.dialogId = null;
+    this.SPs = '　〇─│┌┐└┘┼┬┴├┤';
 
 //  Set in _initLayout():
 //  this.marks     = {}; // name => [x,y]; for runtime
@@ -36,6 +52,23 @@ class GridPerfect {
 
     var layout = isCfg ? arguments[1] : o;
     layout && this.setLayout(layout);
+  }
+
+  setNotGPSP(s) {
+    for (var i=s.length-1; i>=0; --i)
+      this.SPs = this.SPs.replaceAll(s[i], '');
+    return this;
+  }
+  isGPSP(x) { // SP = space
+    return x && (this.SPs.indexOf(x) >= 0);
+  }
+  getNamedText(id) { return this.namedTexts && this.namedTexts[id]; }
+  setNamedText(id,txt) {
+    if (id) {
+      if (!this.namedTexts) this.namedTexts = {};
+      this.namedTexts[id] = txt;
+    }
+    return this;
   }
 
   run(f) { f(this); return this; } // Good practice for namespace cleanness.
@@ -67,14 +100,35 @@ class GridPerfect {
   }
 
   setLayout(layout) {
-    this.layout = layout.split('\n');
-    var ln = this.getLayoutLine(0);
-    if (ln.trim() == '') this.layout.shift(); // skip 1st empty line
+    this.layout = trimFirstBlankLine(layout).split('\n');
     this.height = this.layout.length;
-    this.width  = 10; // random min width
-    for (var i in this.layout)
-      this.width = Math.max(this.width, this.getLayoutLine(i).replace(/<[^>]*>/g,'').length+1);
+    if (!this.width) {
+      this.width = 0;
+      for (var i in this.layout)
+        this.width = Math.max(this.width, this.getLayoutLine(i).replace(/<[^>]*>/g,'').length+1);
+    }
     this._initLayout();
+    return this;
+  }
+
+  setTree(layout, indent) {
+    if (!indent) indent = '〇';
+    this.setLayout(layout.replaceAll('\n!!', '\n　')); // for design view
+    this.tree = new Tree(layout, indent);
+    var me = this;
+    this.tree.dfs((n) => {
+      // handle node's anno
+      var ln = n.name, idx = ln.indexOf(indent);
+      if (idx > 0) {
+        while (ln[idx] == indent) ++idx;
+        me.TC(n.x+idx, n.y, 'ail');
+      }
+      var num = n.numChildren();
+      if (!num) return;
+      me.L([n.x-0.25, n.y+0.55], [n.x-0.25, n.lastChild().y]);
+      for (var i=0; i<num; ++i)
+        me.L([n.x-0.25, n.children[i].y], '%r0.5');
+    });
     return this;
   }
 
@@ -88,6 +142,7 @@ class GridPerfect {
   }
 
   set(k,n) { this[k] = n; return this; }
+  setPopupModal(yes) { this.popupModal = yes; return this; }
   setGridWidth(sz) { this.gridW = this.fontSize = sz; return this; }
   setGridHeight(sz) { this.gridH = sz; return this; }
   setShift(dx, dy) { this.shiftX = dx; this.shiftY = dy; return this; }
@@ -144,6 +199,7 @@ class GridPerfect {
     this.program.push({ act:INCL, diagram, x, y, ignoreStyle });
     return this;
   }
+  hasRightEdge(color) { this.rightEdge = { act:RIGHTEDGE, color }; return this; }
   line(f,t,e) { return this.L(f,t,e); }
   // [from] can be a string for a defined point, or an [x,y].
   // [to] can be like from, but can also take derivitives:
@@ -157,6 +213,14 @@ class GridPerfect {
       if ((inst.act==TEXT) && (inst.x==x && (inst.y==y)))
         inst.text = tspan + inst.text + '</tspan>';
     }
+    return this;
+  }
+  circle(x,y,r,extra) { // TODO: impl
+    this.program.push({ act:CIRCLE, x, y, r, extra});
+    return this;
+  }
+  rect(x,y,width,height,extra) { // TODO: impl
+    this.program.push({ act:RECT, x, y, width, height, extra});
     return this;
   }
   text(x,y,t,e) { return this.T(x,y,t,e); }
@@ -175,8 +239,51 @@ class GridPerfect {
       this.program.push({ act:TEXT, x, y, text:txt, extra });
     return this;
   }
+  vtext(x,y,t,e) { return this.VT(x,y,t,e); }
+  VT(x, y, txt, extra) {
+    var len = txt.length;
+    for (var i=0; i<len; ++i)
+      this.T(x, y+i, txt[i], extra);
+    return this;
+  }
   removeText(x, y) {
     this.program = this.program.filter((a) => (a.act=='TEXT') && (a.x==x) && (a.y==y));
+    return this;
+  }
+  findText(t) {
+    for (var i in this.program) {
+      var inst = this.program;
+      if ((inst.act == TEXT) && (inst.text == t))
+        return inst;
+    }
+    return null;
+  }
+  fanOut(xLeft, yTop, yBottom, numItems) { return this.FO(xLeft, yTop, yBottom, numItems); }
+  FO(xLeft, yTop, yBottom, numItems) { // returns yMiddle
+    if (!numItems) numItems = 2;
+    this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom])
+        .L([xLeft+0.5, (yTop+yBottom)/2], "%l0.75")
+        .L([xLeft+0.5, yTop], "%r0.5")
+        .L([xLeft+0.5, yBottom], "%r0.5");
+    if (numItems > 2) {
+      var dist = (yBottom-yTop) / (numItems-1);
+      for (var i=1; i<numItems-1; ++i)
+        this.L([xLeft+0.5, yTop + dist * i], "%r0.5");
+    }
+    return this;
+  }
+  fanIn(xLeft, yTop, yBottom, numItems) { return this.FI(xLeft, yTop, yBottom, numItems); }
+  FI(xLeft, yTop, yBottom, numItems) {
+    if (!numItems) numItems = 2;
+    this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom])
+        .L([xLeft+0.5, (yTop+yBottom)/2], "%r0.75")
+        .L([xLeft+0.5, yTop], "%l0.5")
+        .L([xLeft+0.5, yBottom], "%l0.5");
+    if (numItems > 2) {
+      var dist = (yBottom-yTop) / (numItems-1);
+      for (var i=1; i<numItems-1; ++i)
+        this.L([xLeft+0.5, yTop + dist * i], "%l0.5");
+    }
     return this;
   }
   _procText(s) { // turn 「/ail|你好/」 into 「<tspan class="ail">你好</tspan>」
@@ -188,9 +295,28 @@ class GridPerfect {
       idx1 = s.indexOf('/', idx+1);
       if (idx1 < 0) { ret += s; break; }
       ret += s.substring(0, idx);
-      var a = s.substring(idx+1,idx1).split('|');
+      var a = s.substring(idx+1,idx1).split('|'),
+          first = a[0], txt = a[1], idx2 = first.indexOf(':');
+      if (idx2 > 0) {
+        var type = first.substring(0,idx2).trim();
+        first = first.substring(idx2+1).trim();
+        if (type == 'see') { // popup
+          if (!gpRepo.canPopup()) {
+            ret += txt;
+            console.log('Cannot popup. ' + first);
+          } else {
+            var clicker = `onclick="gpRepo.showDialog('${this.name}', '${first || txt}')"`;
+            ret += `<tspan cursor="pointer" text-decoration="underline" ${clicker}>${txt}</tspan>`;
+          }
+        } else {
+          var msg = `Don't know what to do for [${type}:${first}|${txt}]`;
+          ret += `<tspan text-decoration="underline" title="${msg}">${txt}</tspan>`;
+          console.log(msg);
+        }
+      } else {
+        ret += `<tspan class="${first}">${txt}</tspan>`;
+      }
       s = s.substring(idx1+1);
-      ret += `<tspan class="${a[0]}">${a[1]}</tspan>`;
       idx = s.indexOf('/');
       if (idx < 0) { ret += s; break; }
     }
@@ -207,7 +333,7 @@ class GridPerfect {
       var row = this.getLayoutLine(i-1);
       for (var j=1; j<=row.length; ++j) {
         var c = row[j-1];
-        if (isGPSP(c)) {
+        if (this.isGPSP(c)) {
           if (curInst) {
             curInst.text = this._procText(curInst.text);
             curInst = null;
@@ -215,6 +341,7 @@ class GridPerfect {
         } else if (this.isMark(c)) {
           this.defMark(c, j, i);
         } else { // not GPSP nor mark
+          if (c == SPLIT) c = '　';
           if (curInst) {
             curInst.text += c;
           } else {
@@ -294,7 +421,7 @@ class GridPerfect {
       for (j=1; j<=s.length; ++j) {
         var cell = this.xyToMarks[`${j}_${i}`];
         if (cell) cell = `<mark>${cell}</mark>`; else cell = s[j-1];
-        buf.w(`<td align=center${isGPSP(cell) ? ' class=sp' : ''}>${cell}</td>`);
+        buf.w(`<td align=center${this.isGPSP(cell) ? ' class=sp' : ''}>${cell}</td>`);
       }
       buf.w('</tr>');
     }
@@ -347,9 +474,16 @@ class GridPerfect {
     var pgm = this._compile(), gw = this.gridW, gh = this.gridH, hw = gw/2;
     if (!ignoreStyle && this.styleBlock)
       buf.w('<style>', this.styleBlock, '</style>');
+    if (this.rightEdge && (pgm[pgm.length-1] != this.rightEdge))
+      pgm.push(this.rightEdge);
     for (var i in pgm) {
       var inst = pgm[i], x, y, x2, y2, dx, dy, shft, extra;
       switch(inst.act) {
+      case RIGHTEDGE:
+        inst.from  = [this.width+0.25, 0];
+        inst.to    = [this.width+0.25, this.height+1];
+        inst.extra = ` style="stroke:${inst.color||'lightgray'};stroke-width:1px"`;
+        // fall through
       case LINE:
         shft = this.getShifting(inst.from[0], inst.from[1]);
         dx = shft && shft[0] || 0;
@@ -381,8 +515,53 @@ class GridPerfect {
 
 } // end of GridPerfect.
 
+class MyContent {
+  constructor(gridperf) {
+    if (!gridperf) throw `MyContent needs to set gridperfect.`;
+    this.gp = gridperf;
+    this.setCommonTexts();
+    this.setTexts();
+  }
+  setNamedText(id, txt) { this.gp.setNamedText(id, txt); }
+  setDialogOL(name, title, csv, sep) {
+    var txt = toOL(csv.trim().split(sep || '|'));
+    if (title) txt = `<h3>${title}</h3>${txt}`;
+    this.setNamedText(name, txt);
+  }
+  parseOLLists(prefix, csvLines, sep) {
+    csvLines = csvLines.split('\n');
+    for (var i in csvLines) {
+      var ln = csvLines[i].trim();
+      if (!ln) continue;
+      var pair = ln.split('='), p = pair[0].split('|'), subj = (p.length > 1);
+      this.setDialogOL(prefix+p[subj ? 1 : 0].trim(), subj ? p[0] : null, pair[1], sep);
+    }
+  }
+
+  setCommonTexts() {
+    this.setDialogOL('十八相動', '六種十八相動',
+      '動、遍動、等遍動|' +
+      '起、遍起、等遍起|' + // or 爆、極爆、徧極爆
+      '湧、遍湧、等遍湧|' +
+      '震、遍震、等遍震|' +
+      '吼、遍吼、等遍吼|' +
+      '擊、遍擊、等遍擊');
+  }
+
+  setTexts() { // individual work's texts
+  }
+
+} // end of MyContent
+
 // Singleton, with UI support
 var gpRepo = new (class extends ResourceRepo {
+  setDialogId(id) { this.dialogId = id; return this; }
+  canPopup() { return this.dialogId; }
+  showDialog(name, txtId, modeless) {
+    var rsc = gpRepo.get(name);
+    rsc && showDialog(this.dialogId, `${name}:${txtId}`, rsc.gp.getNamedText(txtId), modeless);
+  }
+
   setElidTOC(id) { this.elidTOC = id; return this; }
   setElidStage(id) { this.elidStage = id; return this; }
   showDiagram(name, elid, design) {
@@ -396,11 +575,10 @@ var gpRepo = new (class extends ResourceRepo {
     var rsc = name && gpRepo.run(name, design);
     if (rsc) {
       if (typeof rsc == 'string') renderText(elid || this.elidStage || document, rsc);
-      else rsc.render(elid || this.elidStage || document);
+      else rsc.wrap('<center>', '</center>').render(elid || this.elidStage || document);
       this.showTOC(name, design);
     }
   }
-
   showTOC(cur, design) {
     if (cur)
       localStorage.setItem('cur', cur + (design ? '*' : ''));
@@ -421,7 +599,7 @@ var gpRepo = new (class extends ResourceRepo {
       if (!a) categories[c] = a = [];
       a.push(item.name);
     }
-    var catNames = ['基本','唯識','大乘','小乘','戒律','其他'],
+    var catNames = ['基本','唯識','大乘','小乘','戒律','經論','ELSE'],
         buf = new Buffer('<center><table border=0 style="min-width:750px">');
     for (var i in catNames) {
       var c = catNames[i], names = categories[c];
@@ -452,10 +630,15 @@ function getGP(name) {
   return item.gp;
 }
 
-function cloneGP(name) { return getGP(name).clone(); }
+function cloneGP(name,newName) {
+  var c = getGP(name).clone(); 
+  c.name = newName || `${name}-clone`;
+  return c;
+}
 
 function addGP(name, gp, category) {
-  gpRepo.add(new GridPerfectItem(name, gp).setCategory(category));
+  gp.name = name;
+  gpRepo.add(new GridPerfectItem(name, gp).setCategory(category || CAT_ELSE));
   return gp;
 }
 
@@ -463,4 +646,27 @@ function createGP(name, category, cfg) {
   var gp = new GridPerfect(cfg || gpRepo.config);
   addGP(name, gp, category);
   return gp;
+}
+
+function writeDialogCode(width, dlgId) {
+  if (!dlgId) dlgId = 'dlg';
+  if (!width) width = 700;
+  console.log(`If not already, write the following into <style>:
+
+#${dlgId}        { background-color:#ffe; padding-left:0px; padding-right:0px }
+#${dlgId}Title   { color:brown; border-bottom:1px solid brown; padding-left:10px }
+#${dlgId}Body    { padding-left:10px; padding-right:10px }
+#${dlgId} header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }`);
+  document.write(`<dialog id="${dlgId}">
+<header>
+  <table width="${width}px" cellspacing="0">
+    <tr><td id="${dlgId}Title"></td>
+        <td align=right style="border-bottom:1px solid brown; padding-right:10px">
+          <button aria-label="Close dialog" onclick="closeEl('${dlgId}')">&times;</button>
+        </td>
+    </tr>
+  </table>
+</header>
+<div id="${dlgId}Body"></div>
+</dialog>`);
 }

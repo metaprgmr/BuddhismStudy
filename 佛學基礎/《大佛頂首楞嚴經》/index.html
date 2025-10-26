@@ -26,54 +26,93 @@ function leftPad(x, len, digit) {
   while (x.length < len) x = digit + x;
   return x;
 }
-function writeArticalLink(uri, title, ending, ignoreCircle) {
-  if (!ignoreCircle && isBfnnLocal()) w('&cir;&nbsp;&nbsp;');
+function writeArticalLink(uri, title, ending) {
   w(`<a href="${bfnn(uri)}">${title}</a>`);
   if (ending) w(ending);
 }
-function extLink(file, title, ending, ignoreCircle) {
-  if (title[0] === '#') title = '<inv>0</inv>' + title.substring(1);
-  var subdir = '';
+function extLink(file, title, ending) {
+  var subdir = '/books';
+  if (typeof file == 'number') {
+    if (file < 1000) ;
+    else if (file < 2000) subdir += '2';
+    else if (file >= 9000) subdir += '9';
+    else subdir += '3';
+  }
   switch(file[0]) {
-  case '1': subdir = '2'; break;
-  case '2': subdir = '3'; break;
+  case '1': subdir += '2'; break;
+  case '2': subdir += '3'; break;
+  case '9': subdir += '9'; break;
   }
-  writeArticalLink('/books' + subdir + '/' + file + '.htm', title, ending, ignoreCircle);
+  writeArticalLink(subdir + '/' + file + '.htm', title, ending);
 }
-function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${leftPad(base-1+i)}.htm`, i, ' ', true); }
+function bookInSetLink(rootDir, base, i) { writeArticalLink(`/${rootDir}/${leftPad(base-1+i)}.htm`, i); }
 
-function YuanYinLinks() {
-  w("　圓瑛大師《大佛頂首楞嚴經講義》");
-  for (var i=1; i<=24; ++i) {
-    var extra = ' ';
-    if (i == 12) extra = '<br>　　　　　　　　　　　<a href="YuanYingKePan/YuanYing科判Verses.html">經文</a>　<a href="YuanYingKePan/YuanYing科判.html">科判</a>' + '　';
-    else if (i == 24) extra = '<br>';
-    extLink(`${1471+i}`, (i<10) ? ('#'+i) : i, extra, true);
+function JiaoGuangLinks() {
+  w('<tr><td valign=top>交　光大師《大佛頂首楞嚴經正脈疏》</td><td colspan=3>&nbsp;');
+  extLink(1762, '序');
+  var i;
+  for (i=4; i<=40; ++i) {
+    w('<td align=right>&nbsp;');
+    extLink(1762+i, i);
+    w('</td>');
+    if (i == 20) w('</tr><tr><td>&nbsp;</td>');
   }
+  w('</tr>');
+}
+function YuanYinLinks() {
+  w('<tr><td valign=top>圓　瑛大師《大佛頂首楞嚴經講義》</td>');
+  for (var i=1; i<=24; ++i) {
+    w('<td align=right>&nbsp;');
+    extLink(`${1471+i}`, i);
+    w('</td>');
+    switch (i) {
+    case 12:
+      w('<td></td><td colspan=18><a href="YuanYingKePan/YuanYing科判Verses.html">經文</a></td></tr><tr><td>&nbsp;</td>');
+      break;
+    case 24:
+      w('<td></td><td colspan=18><a href="YuanYingKePan/YuanYing科判.html">科判</a></td></tr>');
+      break;
+    }
+  }
+  w('</tr>');
 }
 function WangLinks() {
-  w("&nbsp;王治平居士《大佛頂首楞嚴經譯解》&nbsp;&nbsp;");
-  for (var i=1; i<=10; ++i) w('<a href="WangZhiPing/Wang.html?vid=', i, '">', i, '</a>', i<10 ? ' ' : '');
-  w('　<a href="WangZhiPing/synopsis.html">全經梗概</a>　　<br>');
+  w('<tr><td valign=top>王治平居士《大佛頂首楞嚴經譯解》</td>');
+  for (var i=1; i<=10; ++i)
+    w('<td align=right>&nbsp;<a href="WangZhiPing/Wang.html?vid=', i, '">', i, '</a></td>');
+  w('<td></td><td colspan=18>&nbsp;<a href="WangZhiPing/synopsis.html">全經梗概</a></td></tr>');
 }
 function HanShanLinks() {
-  w("&nbsp;明憨山大師《楞嚴經通議》　　　　&nbsp;&nbsp;");
-  for (var i=1; i<=10; ++i) bookInSetLink('books2', 1644, i);
-  writeArticalLink("/books2/1643.htm", "《楞嚴經懸鏡》", null, true);
+  w('<tr><td valign=top>憨　山大師《楞嚴經通議》</td>');
+  for (var i=1; i<=10; ++i) {
+    w('<td align=right>&nbsp;');
+    bookInSetLink('books2', 1644, i);
+    w('</td>');
+  }
+  w('<td></td><td colspan=18>');
+  writeArticalLink("/books2/1643.htm", "《楞嚴經懸鏡》");
+  w('</td></tr>');
 }
 function OuYiLinks() {
-  w("&nbsp;明蕅益大師《大佛頂首楞嚴經文句》&nbsp;&nbsp;");
-  for (var i=1; i<=10; ++i) bookInSetLink('books', 881, i);
-  writeArticalLink("/books/0880.htm", "《玄義》　　　", null, true);
-  w('<br>');
+  w('<tr><td valign=top>蕅　益大師《大佛頂首楞嚴經文句》</td>');
+  for (var i=1; i<=10; ++i) {
+    w('<td align=right>&nbsp;');
+    bookInSetLink('books', 881, i);
+    w('</td>');
+  }
+  w('<td></td><td colspan=18>');
+  writeArticalLink("/books/0880.htm", "《玄義》");
+  w('</td></tr>');
 }
 function HaiRenLinks() {
-  w("&nbsp;　海仁法師《大佛頂首楞嚴經講記》&nbsp;&nbsp;");
-  for (var i=1; i<=10; ++i)
-    extLink(`${1874+i}`, i,
-            (i != 10) ? ' ' : '　<a href="HaiRengKePan/HaiReng科判.html">科判</a>　',
-            true);
-  w('<a href="HaiRengKePan/HaiReng科判Verses.html">經文</a>　<br>');
+  w('<tr><td valign=top>海　仁法師《大佛頂首楞嚴經講記》</td>');
+  for (var i=1; i<=10; ++i) {
+    w('<td align=right>&nbsp;');
+    extLink(`${1874+i}`, i);
+    w('</td>');
+  }
+  w('<td></td><td colspan=18>&nbsp;<a href="HaiRengKePan/HaiReng科判.html">科判</a>　',
+    '<a href="HaiRengKePan/HaiReng科判Verses.html">經文</a></td></tr>');
 }
 function HaiRenKePan() {
   function hairenKPMain(num, subject, from, to, wfrom, wto) {
@@ -117,14 +156,20 @@ function HaiRenKePan() {
 　　　　　　<a href="../../util/reader.html?s=../佛學基礎/《大佛頂首楞嚴經》/&b=10">卷十</a>　禪定中辨別魔事　　　　　　5280字<br>
 　　　　　　　　　　　　　　　　　　　　共<inv>0</inv>62306字<br>
 
+<hr>
+<table cellpadding="0" cellspacing="0">
 <script>
-w('<hr>');
   YuanYinLinks();
+  JiaoGuangLinks();
   HaiRenLinks();
   WangLinks();
   OuYiLinks();
   HanShanLinks();
-w('<hr>');
+</script>
+</table>
+
+<hr>
+<script>
   HaiRenKePan();
 </script>
 

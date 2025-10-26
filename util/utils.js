@@ -26,6 +26,75 @@ function zNumber(n) { // 0 to 999
   return ret;
 }
 
+var SAMSKRT_SCRIPT = 'Siddham'; // or 'Devaganari'
+function IAST(iast) {
+  var i = iast;
+  if ((i.length > 1) && i.endsWith('a'))
+    i = i.substring(0,i.length-1);
+  switch(i) {
+  case 'a':   return '𑖀';
+  case 'ā':   return '𑖁';
+  case 'aṃ':
+  case 'āṃ':  return '𑖀𑖽';
+  case 'aḥ':  return '𑖀𑖾';
+  case 'i':   return '𑖂';
+  case 'ī':   return '𑖃';
+  case 'u':   return '𑖄';
+  case 'ū':   return '𑖅';
+  case 'ṛ':   return '𑖆';
+  case 'ṝ':   return '𑖇';
+  case 'ḷ':   return '𑖈';
+  case 'ḹ':   return '𑖉';
+  case 'e':   return '𑖊';
+  case 'ai':  return '𑖋';
+  case 'o':   return '𑖌';
+  case 'au':  return '𑖍';
+  case 'k':   return '𑖎';
+  case 'kh':  return '𑖏';
+  case 'g':   return '𑖐';
+  case 'gh':  return '𑖑';
+  case 'ṅ':   return '𑖒';
+  case 'c':   return '𑖓';
+  case 'ch':  return '𑖔';
+  case 'j':   return '𑖕';
+  case 'jh':  return '𑖖';
+  case 'ñ':   return '𑖗';
+  case 'ṭ':   return '𑖘';
+  case 'ṭh':  return '𑖙';
+  case 'ḍ':   return '𑖚';
+  case 'ḍh':  return '𑖛';
+  case 'ṇ':   return '𑖜';
+  case 't':   return '𑖝';
+  case 'th':  return '𑖞';
+  case 'd':   return '𑖟';
+  case 'dh':  return '𑖠';
+  case 'n':   return '𑖡';
+  case 'p':   return '𑖢';
+  case 'ph':  return '𑖣';
+  case 'b':   return '𑖤';
+  case 'bh':  return '𑖥';
+  case 'm':   return '𑖦';
+  case 'ś':   return '𑖫';
+  case 'ṣ':   return '𑖬';
+  case 's':   return '𑖭';
+  case 'h':   return '𑖮';
+  case 'y':   return '𑖧';
+  case 'v':   return '𑖪';
+  case 'r':   return '𑖨';
+  case 'l':   return '𑖩';
+  }
+  return iast;
+}
+function samskrt(iast, zi, sans) {
+  //case 'ṃ': // anusvāra
+  //case 'ḥ': // visarga
+  var i = iast;
+  if ((i.length > 1) && i.endsWith('a'))
+    i = i.substring(0,i.length-1);
+  if (!sans && i) iast = IAST(iast);
+  return `<span class="samskrt" title="${iast}">${sans}</span>${zi||''}`;
+}
+
 var queryParams;
 function get(name) {
   if (!queryParams) { // singleton, instantiated on-demand
@@ -49,10 +118,12 @@ function toEl(x)            { return (typeof x=='string')?document.getElementByI
 function e(id)              { return document.getElementById(id) }
 function showEl()           { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
 function hideEl()           { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='none'); } }
-function enableEl(id, set)  { var c = e(id); c && (set ? c.removeAttribute('disabled') : c.setAttribute('disabled', '')); }
-function w()                { for(var i in arguments)document.write(arguments[i]); }
+function enableEl(id, set)  { var el=toEl(id); el && (set ? el.removeAttribute('disabled') : el.setAttribute('disabled', '')); }
 function showTop(id)        { var el=toEl(id); el && el.scrollIntoView(); }
-function renderText(id, txt){ new Buffer(txt).render(id); }
+function showModal(id,s,t)   { showDialog(id,s,t); }
+function showModeless(id,s,t){ showDialog(id,s,t,true); }
+function w()                { for(var i in arguments){var x=arguments[i]; if(typeof x!='number')x=x||''; document.write(x);} }
+function renderText(id,t)   { id ? new Buffer(t).render(id) : document.write(t); }
 function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); }
 function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); }
 function showOne() { // id's; last is 0-based index; if not a number, defaulted to 0
@@ -62,6 +133,16 @@ function showOne() { // id's; last is 0-based index; if not a number, defaulted 
     if (i == selIdx) showEl(arguments[i]); else hideEl(arguments[i]);
 }
 function jslnk(jscall, txt) { return `<a href="javascript:${jscall}">${txt}</a>`; }
+function toOL(lst, extra) { return `<ol ${extra||''}><li>${lst.join('</li><li>')}</li></ol>`; }
+function toOLZH(lst) { return toOL(lst, 'class=cjk'); }
+function toUL(lst) { return `<ul><li>${lst.join('</li><li>')}</li></ul>`; }
+function trimFirstBlankLine(txt) {
+  if (!txt) return txt;
+  var idx = txt.indexOf('\n');
+  if (idx < 0) return txt;
+  var first = txt.substring(0, idx).trim();
+  return (first == '') ? txt.substring(idx+1) : txt;
+}
 
 function digit2(i, increment) {
   if (!i) i = 0;
@@ -123,6 +204,12 @@ function findFirst() {
     }
   }
   return (foundIdx > host.length) ? -1 : foundIdx;
+}
+
+function repeat(x, n) {
+  var ret = '';
+  for (var i=0; i<n; ++i) ret += x;
+  return ret;
 }
 
 function toW(n, w, c) {
@@ -265,8 +352,12 @@ class Buffer {
 
   w() {
     var ret = '';
-    for (var i in arguments) ret += arguments[i];
-    if (ret) this.bufList.push(ret);
+    for (var i in arguments) {
+      var x = arguments[i];
+      if (x || (typeof x == 'number'))
+        ret += x;
+    }
+    if (ret.length) this.bufList.push(ret);
     return (this.bufList.length < 1024) ? this : this.condense();
   }
 
@@ -293,6 +384,8 @@ class Buffer {
     if (ret) this.bufList.unshift(ret);
     return this;
   }
+
+  wrap(before, after) { return this.prepend(before).w(after); }
 
   // renders to one or more elements,
   // or an object with a write() function.
@@ -332,6 +425,129 @@ class Buffer {
 const NULL = { j:'suinil' };
 function isNil(x) { return (x == null) || (x === NULL); }
 function ensureNULL(x) { return (x == null) ? NULL : x; }
+
+class Counter {
+  constructor() { this.counts = {}; this.second = {}; }
+  add(n) { n=n||''; this.counts[n] = 1 + (this.counts[n] || 0); }
+  add2nd(n) { n=n||''; this.second[n] = 1 + (this.second[n] || 0); }
+  getCount(n) { return this.counts[n] || 0; }
+  get2ndCount(n) { return this.second[n] || 0; }
+  getNames() { return getKeysOrdered(this.counts); }
+  getNamesByCount(type) {
+    var me = this;
+    if (typeof type == 'function')
+      return getKeysOrdered(this.counts, type);
+    var asc = (type || 'desc').toLowerCase().startsWith('asc');
+    return getKeysOrdered(this.counts,
+             (a,b) => {
+               var c1 = me.getCount(a), c2 = me.getCount(b);
+               if (c1 == c2) return 0;
+               c1 = (c1 > c2) ? 1 : -1;
+               return asc ? c1 : -c1;
+             });
+  }
+  getNamesBy2ndCount() {
+    return this.getNamesByCount(
+             (a,b) => {
+               var c1 = me.get2ndCount(a), c2 = me.get2ndCount(b);
+               if (c1 == c2) return 0;
+               return (c1 > c2) ? 1 : -1;
+             });
+  }
+}
+
+class TreeNode {
+  constructor(name) { this.name = name; }
+  isRoot() { return !this.parent; }
+  hasChildren() { return this.children && this.children.length; }
+  numChildren() { return this.children ? this.children.length : 0; }
+  lastChild() { return this.children && this.children[this.children.length-1]; }
+  addChild(c) { // returns c
+    c.parent = this;
+    if (!this.children) this.children = [];
+    this.children.push(c);
+    return c;
+  }
+  dfs(fxn) {
+    if (!this.isRoot()) fxn(this);
+    var len = this.numChildren();
+    for (var i=0; i<len; ++i)
+      this.children[i].dfs(fxn);
+  }
+  dump(indent) {
+    if (!this.isRoot())
+      console.log(repeat(indent, this.depth()) + this.name);
+    var len = this.numChildren();
+    for (var i=0; i<len; ++i)
+      this.children[i].dump(indent);
+  }
+  depth() { // not-slim'med!
+    var ret = -1;
+    for (var n=this; !n.isRoot(); n = n.parent, ++ret);
+    return ret;
+  }
+/*
+  slim() {
+    delete this.parent;
+    var len = this.numChildren();
+    for (var i=0; i<len; ++i) {
+      var n = this.children[i];
+      if (typeof n == 'object') {
+        n.slim();
+        if (!n.hasChildren())
+          this.children[i] = n.name; // use text
+      }
+    }
+  }
+*/
+} // end of TreeNode.
+
+class Tree {
+  constructor(txt, indent) {
+    this.indent = indent;
+    this._parse(txt);
+  }
+  dfs(fxn) { this.root.dfs(fxn); return this; }
+//  slim() { this.root.slim(); return this; }
+  dump() { this.root.dump(this.indent); }
+  _parse(txt) {
+    var indent = this.indent;
+    function getDepth(ln) {
+      var x=0, len = ln ? ln.length : 0;
+      for (; (x<len) && (ln[x]==indent); ++x);
+      return x;
+    }
+    this.root = new TreeNode('ROOT');
+    var curN = this.root,
+        lnNum = 1,
+        a = trimFirstBlankLine(txt).split('\n'),
+        len = a.length;
+    for (var i=0; i<len; ++i) {
+      var orig = a[i],
+          curD = curN.depth(),
+          d    = getDepth(orig),
+          ln   = orig.substring(d);
+      if (!ln.trim()) continue;
+      if (ln.startsWith('!!')) { // treated as a continuation, not a new node
+        ++lnNum;
+        continue;
+      }
+      var n = new TreeNode(ln);
+      n.x = d+1;
+      n.y = lnNum++;
+      if (d == curD)
+        curN = curN.parent.addChild(n);
+      else if (d < curD) {
+        for (; d < curD; --curD, curN = curN.parent);
+        curN = curN.parent.addChild(n);
+      }
+      else if (d == curD+1)
+        curN = curN.addChild(n);
+      else
+        throw `Illegal descending: ${d}, ${curD}, ${orig}`;
+    }
+  }
+}
 
 class ActiveObject {
   constructor(storageItem, obj) {
@@ -485,10 +701,10 @@ function trimLead0s(n) {
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
 }
-function getKeysOrdered(obj) {
+function getKeysOrdered(obj, cptr) {
   if (!obj) return null;
   var a = Object.keys(obj);
-  a.sort();
+  if (cptr) a.sort(cptr); else a.sort();
   return a;
 }
 function dumpKeys(obj) { console.log(getKeysOrdered(obj)) }
@@ -581,11 +797,13 @@ function writingRedir(name, ttl, back) {
 }
 
 function getYourName(yourTag, anyTag) {
-  var ret = urlMyName || window['MYNAME'];
+  var ret = urlMyName || getGlobal('MYNAME');
   if (ret) return !yourTag ? ret : `<${yourTag}>${ret}</${yourTag}>`;
   const help = "若要設定名字，有二法：\n1. 在env.js裡加: var MYNAME='張三';\n2. 在url上加?myname=張三";
   return !anyTag ? '某甲' : `<${anyTag} title="${help}">某甲</${anyTag}>`;
 }
+
+function getGlobal(name) { return window[name]; }
 
 function formatTime(tm) {
   if (tm == 0) return '';
@@ -616,6 +834,43 @@ function exitFullScreenMode() {
     document.mozCancelFullScreen();
   } else if (document.msExitFullscreen) { // For IE/Edge
     document.msExitFullscreen();
+  }
+}
+
+function closeEl(id)        { var el=toEl(id); el && el.close(); }
+function showDialog(id, subj, txt, modeless) {
+  var el = txt && toEl(id);
+  if (!el) return;
+  renderText(id+'Title', subj);
+  renderText(id+'Body', txt);
+  modeless ? el.show() : el.showModal();
+}
+
+class MyDialog {
+  constructor(width, dlgId) {
+    this.width = width || 700;
+    this.dlgId = dlgId || 'dlg';
+  }
+  render(id) {
+    var dlgId = this.dlgId;
+    console.log(`May write and/or modify the following in <style>:
+
+#${dlgId}        { background-color:#ffe; padding-left:0px; padding-right:0px }
+#${dlgId}Title   { color:brown; border-bottom:1px solid brown; padding-left:10px }
+#${dlgId}Body    { padding-left:10px; padding-right:10px }
+#${dlgId} header { margin-top:-15px; margin-left:0px; margin-right:0px; margin-bottom:10px }`);
+    renderText(id, `<dialog id="${dlgId}">
+<header>
+  <table width="${this.width}px" cellspacing="0">
+    <tr><td id="${dlgId}Title"></td>
+        <td align=right style="border-bottom:1px solid brown; padding-right:10px">
+          <button aria-label="Close dialog" onclick="closeEl('${dlgId}')">&times;</button>
+        </td>
+    </tr>
+  </table>
+</header>
+<div id="${dlgId}Body"></div>
+</dialog>`);
   }
 }
 

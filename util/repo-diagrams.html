@@ -5,19 +5,28 @@
 <style>
 mark { color:red }
 .sp  { opacity:0.4 }
+#dlg        { background-color:#ffe; padding-left:0px; padding-right:0px }
+#dlg header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }
+#dlgTitle   { color:brown; border-bottom:1px solid brown; padding-left:10px }
+#dlgBody    { padding-left:10px; padding-right:10px }
 </style>
 <script src="utils.js"></script>
 <script src="gridperfect.js"></script>
 <script>
 gpRepo.config = { bgColor:"#dfd" };
+gpRepo.setElidTOC('toc').setElidStage('stg').setDialogId('dlg');
 </script>
 <script src="repo-diagrams.js"></script>
+<script src="repo-else.js"></script>
+<script src="lit-HYJ-華嚴經.js"></script>
+<script src="lit-BNPJ-般涅槃經.js"></script>
+<script src="lit-XDGJ-心地觀經.js"></script>
+<script src="lit-digests.js"></script>
 </head>
 <body bgcolor="#eff" style="margin:0 0 0 0">
 <div id="toc" align=center style="padding-top:10px; padding-left:10px; padding-right:10px; background-color:#ddf""></div>
 <div id="stg" align=center style="padding-top:20px"></div>
+<script> new MyDialog(800, 'dlg').render(); </script>
 </body></html>
 
-<script>
-gpRepo.setElidTOC('toc').setElidStage('stg').show();
-</script>
+<script> gpRepo.show(); </script>

@@ -1,3 +1,5 @@
+function toEl(x)     { return (typeof x=='string')?document.getElementById(x):x; }
+function showTop(id) { var el=toEl(id); el && el.scrollIntoView(); }
 function zNumber(n) { // 0 to 999
   const zdigits = '〇一二三四五六七八九十';
   if (typeof n == 'string') n = parseInt(n);
@@ -19,8 +21,6 @@ function trimLead0s(n) {
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
 }
-
-var queryParams;
 function get(name) {
   if (!queryParams) { // singleton, instantiated on-demand
     queryParams = {};
@@ -43,7 +43,9 @@ function getFileName() {
 }
 
 const LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
-var terse = get('terse');
+var terse = get('terse'),
+    queryParams, url=document.URL, a=url.indexOf('s/j'),
+    isDebug = (a>url.indexOf(':/')) && (a<url.indexOf('g/'));
 
 const FA_HUA_PINS = [
   '序品', '方便品', '譬喻品', '信解品', '藥草喻品', '授記品', '化城喻品',
@@ -65,12 +67,12 @@ class DocInfo {
     this.firstVolNum = firstVol;
     this.totalVols = totalVols;
     this.labels = labels;
-    this.volNum = vol || 1;
+    this.volNum = vol ? vol : 0;
     return this;
   }
   getIdAt(i/*1-based*/) {
     var idx = (i || 1) - 1;
-    return this.idMap ? this.idMap[idx] : this.firstVolNum + idx;
+    return this.idMap ? this.idMap[idx] : (this.firstVolNum + idx);
   }
   setBuffer(buf) { this.buf = buf; return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
@@ -100,20 +102,22 @@ class DocInfo {
     if (this.isXG && this.endCenter)
       this.w('<table><tr><td>');
 
-    var idx = ttl.indexOf('|');
-    if (idx > 0) {
-      var sub = ttl.substring(idx+1);
-      ttl = ttl.substring(0,idx);
-      if (sub.startsWith('|')) {
-        sub = sub.substring(1);
-        if (!docTtl) docTtl = ttl + ' ' + sub;
-        ttl += `<br><subtitle>${sub}</subtitle>`;
-      } else {
-        if (!docTtl) docTtl = ttl + ' ' + sub;
-        ttl += `<subtitle>${sub}</subtitle>`;
+    if (ttl) {
+      var idx = ttl.indexOf('|');
+      if (idx > 0) {
+        var sub = ttl.substring(idx+1);
+        ttl = ttl.substring(0,idx);
+        if (sub.startsWith('|')) {
+          sub = sub.substring(1);
+          if (!docTtl) docTtl = ttl + ' ' + sub;
+          ttl += `<br><subtitle>${sub}</subtitle>`;
+        } else {
+          if (!docTtl) docTtl = ttl + ' ' + sub;
+          ttl += ` <subtitle>${sub}</subtitle>`;
+        }
       }
+      this.w(`<p class=TITLE>${ttl}</p>`);
     }
-    this.w(`<p class=TITLE>${ttl}</p>`);
     document.title = docTtl || ttl;
     return this;
   }
@@ -135,7 +139,10 @@ class DocInfo {
     this.w('</body></html>');
     return this;
   }
+  setVolumesInJS(hasTOC) { this.volumesInJS = true; this.hasTOCJS = hasTOC; return this; }
   writeSeriesNav(links) {
+    if (this.volumesInJS) return this.writeSeriesNavForJS(links);
+
     function fname(pnum) {
       pnum = to4d(pnum);
       return terse ? `${pnum}.htm?terse` : `${pnum}.htm`;
@@ -154,7 +161,24 @@ class DocInfo {
     else this.w(`&nbsp;<a href="${fname(this.getIdAt(this.volNum+1))}">&raquo;</a>`);
     if (links) this.w('　', links);
   }
-  writeBody(txt) {
+  writeSeriesNavForJS(links) {
+    function lnk(vnum, disp) {
+      return `<a class="seriesnav" href="?vol=${vnum}">${disp}</a>`;
+    }
+    if (this.hasTOCJS)
+      this.w('【', lnk(0,'總目錄'), '】&nbsp;');
+    if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
+    else this.w(lnk(this.volNum, '&laquo;'));
+    for (var i=1; i<=this.totalVols; ++i) {
+      var lbl = (i<=10) ? this.zdigits[i] : i;
+      if (i == this.volNum) this.w(`&nbsp;<cur>${lbl}</cur>`);
+      else this.w('&nbsp;', lnk(i, lbl));
+    }
+    if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
+    else this.w('&nbsp;', lnk(this.volNum+1, '&raquo;'));
+    if (links) this.w('　', links);
+  }
+  writeBody(txt, withEnd) {
     // The features are:
     // <Line Format>
     //   1. Each line is a unit, except for a few special cases.
@@ -189,33 +213,81 @@ class DocInfo {
       if (ln.endsWith('|')) ln = ln.substring(0, ln.length-1); // trailing | is just visual
       this.writeln(ln, i+1);
     }
-    return this;
+    return withEnd ? this.writeEnd() : this;
+  }
+  writeLines(txt, buf) {
+    if (!txt) return;
+    var mybuf = this.buf;
+    this.buf = buf;
+    var a = txt.split('\n');
+    for (var i in a) {
+      var ln = a[i];
+      if (!ln) this.w(LNSP);
+      else this.writeln(ln);
+    }
+    this.buf = mybuf;
+    return buf;
   }
   writeln(ln, lnnum) {
-    var ln1 = ln && ln.trim();
+    var ln1 = ln && ln.trim(), lnId, idx1, idx2;
     if (ln1[0] == '/') {
-      if ((ln1[1] == '<') && ln1.endsWith('>/')) { // vanilla HTML code. e.g. 0875
-        this.w(ln1.substring(1, ln1.length-1));
-        return;
+      idx1 = ln1.indexOf('/', 1);
+      idx2 = ln1.indexOf('|', 1);
+      if ((idx2>1) && (idx2<idx1)) { // static line ID. e.g. 9023.htm
+        lnId = ln1.substring(1, idx2);
+        if (lnId) this.writeKPLine(lnId);
+        isDebug && console.log(`[id=${lnId}]`, ln1.length < 30 ? ln1 : (ln1.substring(0, 30)+'...'));
+        if (idx2 == idx1+1) { // e.g. "/123|/....."
+          ln1 = ln1.substring(idx1+1); // all the following if's should pass.
+          ln = ln.substring(idx1+1);
+        } else {              // e.g. "/123|TEXTL/......"
+          ln1 = '/' + ln1.substring(idx2+1); // remove the id part
+          ln = '/' + ln.substring(idx2+1);
+        }
       }
-      if (ln1.startsWith('/bq')) { // shortcut. e.g. 9020/028.js
-        this.w(`<blockquote${ln1.substring(3, ln1.length-1)}>`);
-        return;
-      }
-      if (ln1.startsWith('/_bq')) { // shortcut. e.g. 9020/028.js
-        this.w('</blockquote>');
-        return;
-      }
-      if (ln1.startsWith('/quote')) { // shortcut. e.g. 9020/003.js
-        this.w(`<blockquote class="quote"${ln1.substring(6, ln1.length-1)}>`);
-        this.savedDefaultClass = this.defaultClass;
-        this.defaultClass = 'TEXTL';
-        return;
-      }
-      if (ln1.startsWith('/_quote')) { // shortcut. e.g. 9020/003.js
-        this.w('</blockquote>');
-        this.defaultClass = this.savedDefaultClass;
-        return;
+      switch(ln1[1]) { // (performance)
+      case '<':
+        if ((ln1[1] == '<') && ln1.endsWith('>/')) { // vanilla HTML code. e.g. 0875
+          this.w(ln1.substring(1, ln1.length-1));
+          return lnId;
+        }
+        break;
+      case 'c':
+        if (ln1.startsWith('/class')) { // shortcut. e.g. 0056.htm, 0117.htm
+          this.savedDefaultClass = this.defaultClass;
+          this.defaultClass = ln1.substring(6, ln1.length-1).trim();
+          return lnId;
+        }
+        break;
+      case 'b':
+        if (ln1[2] == 'q') { // shortcut. e.g. 9020/028.js
+          this.w(`<blockquote${ln1.substring(3, ln1.length-1)}>`);
+          return lnId;
+        }
+        break;
+      case 'q':
+        if (ln1.startsWith('/quote')) { // shortcut. e.g. 9020/003.js
+          this.w(`<blockquote class="quote"${ln1.substring(6, ln1.length-1)}>`);
+          this.savedDefaultClass = this.defaultClass;
+          this.defaultClass = 'TEXTL';
+          return lnId;
+        }
+        break;
+      case '_':
+        if (ln1.startsWith('/_bq')) { // shortcut. e.g. 9020/028.js
+          this.w('</blockquote>');
+          return lnId;
+        }
+        if (ln1.startsWith('/_quote')) { // shortcut. e.g. 9020/003.js
+          this.w('</blockquote>');
+          this.defaultClass = this.savedDefaultClass;
+          return lnId;
+        }
+        if (ln1.startsWith('/_class')) { // 0056.js
+          this.defaultClass = this.savedDefaultClass;
+          return lnId;
+        }
+        break;
       }
     }
 
@@ -225,7 +297,7 @@ class DocInfo {
         ln = ln1.substring(0, ln.length-7);
       }
       this.w(ln, '\n');
-      return;
+      return lnId;
     }
 
     if (this.inJS) {
@@ -234,7 +306,7 @@ class DocInfo {
         ln = ln1.substring(0, ln.length-10) + '</script>';
       }
       this.w(ln.replaceAll('\\`', '`'), '\n');
-      return;
+      return lnId;
     }
 
     if (this.inGatha) {
@@ -246,18 +318,18 @@ class DocInfo {
         this.gathaText += '\n' + ln;
       else
         this.gathaText = ln;
-      return;
+      return lnId;
     }
 
     if (this.inLst) {
       if (ln1.startsWith('//')) {
         this.inLst = false;
         this.w(`</${this.lstTag}>`);
-        return;
+        return lnId;
       }
       if (ln1.length > 0)
         this.w(`<li class=cjk>${ln}</li>`);
-      return;
+      return lnId;
     }
 
     if (ln.startsWith('<html>')) { // e.g. 0117, 0875
@@ -267,7 +339,7 @@ class DocInfo {
       else
         this.inHtml = true;
       this.w(ln, '\n');
-      return;
+      return lnId;
     }
 
     if (ln1.startsWith('<html:js>')) { // e.g. 1731
@@ -279,53 +351,52 @@ class DocInfo {
         ln = '<script>' + ln;
       }
       this.w(ln.replaceAll('\\`', '`'), '\n');
-      return;
+      return lnId;
     }
 
-    if (ln1.startsWith('<html:diagram>')) { // e.g. 0115
-      ln = ln1.substring(14).trim();
+    if (ln1.startsWith('<html:diagram')) { // e.g. 0970, 0115
+      idx1 = ln.indexOf('>');
+      ln = ln1.substring(idx1+1).trim();
       if (!ln.endsWith('</html:diagram>'))
         throw '<html:diagram> must be closed on the same line.';
       ln = ln.substring(0, ln.length-15).trim();
       this.w('<script> gpRepo.showDiagram("', ln, '"); </script>');
-      return;
+      return lnId;
     }
 
     if (ln1.startsWith('/gatha/')) { // e.g. 0875
       this.inGatha = true;
-      return;
+      return lnId;
     }
 
     if (ln1.startsWith('/olzh')) { // e.g. 9020/*.js
       this.inLst = true;
       this.lstTag = 'ol';
       this.w(ln.replaceAll('/olzh', '<ol class=cjk').replace('/', '>'));
-      return;
+      return lnId;
     }
 
     if (ln1.startsWith('/ul')) {
       this.inLst = true;
       this.lstTag = 'ul';
       this.w(ln.replaceAll('/ul', '<ul').replace('/', '>'));
-      return;
+      return lnId;
     }
 
     if (ln1.startsWith('/VOLSEP/')) { // e.g. 9011
       this.w('<hr class=volsep>');
-      return;
+      return lnId;
     }
 
-    // process <a!999>; e.g. 0010
-    ln = ln.replace(/<a!\d+>/g,
-            (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
+    ln = this.localProc(ln);
 
     if (ln1[0] != this.metaLeft) {
       this.w(`<p class=${this.defaultClass}>${ln}</p>`);
-      return;
+      return lnId;
     }
 
     var idx = ln.indexOf(this.metaRight, 1);
-    if (idx < 0) throw `Missing meta closing delimiter ${this.metaRight} at line ${lnnum}.`;
+    if (idx < 0) throw `Missing meta closing delimiter ${this.metaRight}: ${ln}`;
     var cls = ln.substring(1,idx).split(':');
     ln = ln.substring(idx+1);
     if (cls.length > 1) {
@@ -333,7 +404,7 @@ class DocInfo {
       for (var k in anchors)
         ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
     }
-    cls = cls[0] || this.defaultClass;
+    cls = cls[0] || '';
     if (cls == 'L' || cls == 'R' || cls == 'C')
       cls = 'TEXT' + cls;
     if (cls.startsWith('TEXT') && cls.endsWith('R'))
@@ -341,6 +412,21 @@ class DocInfo {
     if (cls.endsWith('align=right') && !ln.endsWith('　'))
       ln += '　';
     this.w(`<p class=${cls}>${ln}</p>`);
+    return lnId;
+  }
+
+  localProc(ln) {
+    // process <a!999>; e.g. 0010
+    ln = ln.replace(/<a!\d+>/g,
+         (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
+
+    // process <a#a01>; e.g. 9021
+    return ln.replace(/<a#[^>]+>/g,
+      (m) => {
+        m = m.substring(3,m.length-1);
+        return (m=='xxx') ? '<a style="font-style:italic">'
+                          : `<a class="localref" href="javascript:showTop('${m.trim()}')")>`
+      });
   }
 
   gatha() {
@@ -359,13 +445,22 @@ class DocInfo {
         this.w(LNSP);
       } else {
         this.w(`<p class="TEXTL ${this.gathaClass}"><span class="gathanum">`,
-          (len > 5) ? (num++) : '',
-          `&nbsp;</span>${ln.replaceAll(' ', sp)}`);
+          (len > 5) ? (num++) : '', '&nbsp;</span>', this.localProc(ln.replaceAll(' ', sp)));
         if (anno) this.w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
         this.w(`</p>`);
       }
     }
     delete this.gathaText;
+  }
+
+  writeKPLine(lnId) {
+    this.w(`<a name="k${lnId}", id="k${lnId}"></a>`);
+    this.wIf(isDebug, this.getKPLine(lnId));
+    return this;
+  }
+
+  getKPLine(lnId) {
+    return `<KEPAN><font style="font-size:10pt">【${lnId}】&nbsp;</font></KEPAN>`;
   }
 
   writeDoc(ttl) { // convenience method for writing the whole doc
@@ -375,7 +470,7 @@ class DocInfo {
     case 2:  bodyTxt = arguments[1]; break;
     default: bodyTxt = arguments[2]; docTtl = arguments[1]; break;
     }
-    this.writeStart(ttl, docTtl).writeBody(bodyTxt).writeEnd();
+    this.writeStart(ttl, docTtl).writeBody(bodyTxt, true);
   }
 
 } // end of DocInfo.
@@ -455,7 +550,7 @@ function write0119(filenum, body) {
           .writeStart(`妙法蓮華經${FA_HUA_PINS[curIdx]}淺釋`)
           .w(SP, '<p class=TEXT030C>姚秦三藏法師鳩摩羅什譯</p>',
                  '<p class=TEXT030C>美國萬佛聖城宣化上人講述</p>')
-          .writeBody(body).writeEnd();
+          .writeBody(body, true);
     }
   })();
 }
@@ -468,10 +563,8 @@ function write0145(n, body) {
          .w(SP, '<p class=TEXT030C>唐天竺沙門般剌密帝　譯<br>',
                 '烏萇國沙門彌伽釋迦　譯語<br>',
                 '菩薩戒弟子前正議大夫同中書門下平章事清河房融　筆受</p>', SP)
-         .wIf(n>1,
-              `<p class=TEXT339>卷${zn}</p>`, SP)
-         .writeBody(body)
-         .writeEnd();
+         .wIf(n>1, `<p class=TEXT339>卷${zn}</p>`, SP)
+         .writeBody(body, true);
 }
 
 // -- 地藏菩薩本願經講記 淨空法師 --
@@ -479,8 +572,7 @@ function write0166(n, body) {
   docInfo.reInit(166, 51, n)
          .writeStart(`地藏菩薩本願經講記||（第${zNumber(n)}卷）`, `地藏經講記 卷${n}`)
          .w(SP, '<p class=TEXT030C>淨空法師主講<br>新加坡淨宗學會錄影室</p>', SP)
-         .writeBody(body)
-         .writeEnd();
+         .writeBody(body, true);
 }
 
 // -- 恆河大手印 元音老人 --
@@ -491,8 +583,7 @@ function write0383(n, body) {
          .w(SP, '<p class=TEXT030C>元音老人 著</p>', SP)
          .wIf(n>1,
               `<p class=KEPAN>第${zn}講</p>`, SP)
-         .writeBody(body)
-         .writeEnd();
+         .writeBody(body, true);
 }
 
 // -- 太上感應篇例證語譯 釋海山‧釋大恩‧釋昌臻主編 --
@@ -501,8 +592,7 @@ function write0608(n, body) {
   docInfo.reInit(608, 4, n)
          .writeStart(`太上感應篇例證語譯|| 卷${zn}`, `太上感應篇例證 卷${n}`)
          .w(SP, '<p class=TEXT030C>釋海山‧釋大恩‧釋昌臻主編</p>', SP)
-         .writeBody(body)
-         .writeEnd();
+         .writeBody(body, true);
 }
 
 // -- 佛頂文句 智旭大師 --
@@ -512,12 +602,20 @@ function write0881(n, body) {
   docInfo.reInit(880, 11, n+1, ['玄義','一','二','三','四','五','六','七','八','九','十'])
          .writeStart(`大佛頂如來密因修證了義<br>諸菩薩萬行首楞嚴經文句||（${subttl}）`, `佛頂文句${subttl}`)
          .w(SP, '<p class=TEXT030C>智旭大師著<p>', SP)
-         .w(n>0,
+         .wIf(n>0,
             `<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經 【文句卷第${zn}】</p>`, SP)
          .w('<p class=TEXT align=right>唐天竺沙門般剌密諦譯經　<br>明菩薩沙彌古吳智旭文句　',
-            n<7 ? '</p>' : '<br>菩薩比丘溫陵道昉參訂　</p>', SP)
+            n<7 ? '</p>' : '<br>菩薩比丘溫陵道昉參訂　</p>')
+         .writeBody(body, true);
+}
+
+// -- 大乘本生心地觀經講記 太虛大師 --
+function write0970(n, subttl, body) {
+  docInfo.reInit(970, 13, n)
+         .writeStart(`大乘本生心地觀經講記||${subttl}`, `心地觀經講記${subttl}`)
+         .w(SP, '<p class=TEXT030C>太虛大師講述<br>二十一年十二月在閩南佛學院<p>')
          .writeBody(body)
-         .writeEnd();
+         .writeEnd(n==0 ? null : '<a href="0969.htm">懸論</a>');
 }
 
 //  -- 彌陀疏鈔演義 淨空會本 --
@@ -529,8 +627,7 @@ function write0900(n, body) {
                 '明古杭雲棲寺 　古德演義<br>',
                 '民國華藏蓮社 　淨空會本</p>', SP,
                 `<p class=KEPAN>佛說阿彌陀經疏鈔演義本卷第${zn}</p>`, SP)
-         .writeBody(body)
-         .writeEnd();
+         .writeBody(body, true);
 }
 
 //  -- 佛學常見辭彙 陳義孝居士 --
@@ -565,7 +662,7 @@ function write0592(n, body) {
     docInfo.w(lnk(i));
   }
   docInfo.w('&nbsp;&nbsp;', lnk(33), '</p>')
-         .writeBody(body).writeEnd();
+         .writeBody(body, true);
 }
 
 // -- 法華經講演錄 太虛大師 --
@@ -574,8 +671,17 @@ function write1037(n, body) {
          .reInit(1037, 28, n)
          .writeStart(`法華經通議||（${FA_HUA_PINS[n-1]}第${zNumber(n)}）`)
          .w(SP, '<p class=TEXT030C>太虛大師講述<br>民國十年秋在北京</p>', SP)
-         .writeBody(body)
-         .writeEnd();
+         .writeBody(body, true);
+}
+
+// -- 法華經講演錄 太虛大師 --
+function write0944(n, body) {
+  var zn = zNumber(n);
+  docInfo.reInit(944, 4, n)
+         .writeStart(`楞伽經義記|（卷第${zn}）`, `楞伽經義記卷${zn}`)
+         .w(SP, '<p class=TEXT030C>太虛大師講述<br>十四年夏在寧波天童寺講',
+            '<br>信裹居士拆分細解</p>', SP)
+         .writeBody(body, true);
 }
 
 // -- 楞嚴經通議 憨山大師 --
@@ -600,9 +706,8 @@ function write2088(n, subttl, body) {
       var zn = zNumber(n);
       this.reInit(2088, 6, n)
           .writeStart(`簡明成唯識論白話講記||（第${zn}篇 ${subttl}）`, `成唯識論白話講記 篇${zn}`)
-          .w(SP, '<p class=TEXT030C>于凌波居士講授<br>佛光山叢林學院．臺中慈明佛學研究所佛學講義</p>', SP)
-          .writeBody(body)
-          .writeEnd();
+          .w(SP, '<p class=TEXT030C>于凌波居士講授<br>佛光山叢林學院．臺中慈明佛學研究所佛學講義</p>')
+          .writeBody(body, true);
     }
     writeSeriesNav(links) {
       var toc = [
@@ -697,8 +802,7 @@ function write1875(n, body) {
       this.reInit(1875, 10, n)
           .writeStart(`大佛頂首楞嚴經講記||（卷第${zNumber(n)}）`, `楞嚴經 海仁講記 卷${n}`)
           .w(SP, '<p class=TEXT030C>海仁老法師主講<br>受業弟子釋文珠筆記</p>', n>1 ? SP : '')
-          .writeBody(body)
-          .writeEnd();
+          .writeBody(body, true);
     }
     writeln(ln, lnnum) {
       if (ln.startsWith('#HR:')) {
@@ -724,8 +828,7 @@ function write1472(n, body) {
           .wIf(n>1,
                '<p class=KEPAN>大佛頂如來密因修證了義諸菩薩萬行首楞嚴經講義</p>', SP,
                '<p class=TEXT align=right>福州鼓山湧泉禪寺圓瑛弘悟述受法弟子明暘日新敬校　</p>', SP)
-          .writeBody(body)
-          .writeEnd();
+          .writeBody(body, true);
     }
     writeln(ln, lnnum) {
       if (ln.startsWith('#YY:')) {
@@ -793,7 +896,7 @@ function write1762(n, body) {
                '<p class=TEXT align=right>明京都西湖沙門交光真鑑述</p>',
                '<p class=TEXT align=right>蒲州萬固沙門妙峰福登校</p>', SP);
       }
-      this.writeBody(body).writeEnd();
+      this.writeBody(body, true);
     }
     getSubTitle() {
                    // 懸示 一 二 三 四 五 六 七 八 九 十

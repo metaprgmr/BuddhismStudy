@@ -66,11 +66,11 @@ var HYJ = new (class extends SeriesContainer {
         this.volNum = HYJ.volNum;
         var zn = zNumber(HYJ.volNum);
         if (HYJ.volNum) // write the volume content
-          this.writeStart(`大方廣佛華嚴經||卷${zn}`, `華嚴經 卷${HYJ.volNum}`)
-              .writeBody('\n\n/TEXT030C/唐于闐實叉難陀譯\n\n' +
-                         `/TEXT339/大方廣佛華嚴經卷${zn}\n\n` +
+          this.writeStart(`大方廣佛華嚴經|卷${zn}`, `華嚴經 卷${HYJ.volNum}`)
+              .writeBody('\n/TEXT030C/唐于闐實叉難陀譯\n\n' +
+                         `/TEXT339/大方廣佛華嚴經卷${zn}` +
                          HYJ.text +
-                         `\n/TEXTR/大方廣佛華嚴經卷${zn}\n\n/VOLSEP/\n`);
+                         `\n/TEXT339R/大方廣佛華嚴經卷${zn}\n\n/VOLSEP/\n`);
         else // write the grand TOC
           this.writeStart(`大方廣佛華嚴經`, `華嚴經`).writeBody(HYJ.text);
         this.writeEnd();
@@ -81,17 +81,9 @@ var HYJ = new (class extends SeriesContainer {
 `十定品 十通品 十忍品 阿僧祇品 壽量品
 諸菩薩住處品 佛不思議法品 如來十身相海品
 如來隨好光明功德品 普賢行品 如來出現品`;
-        function isAvailable(n) { // TODO: update for new additions, until all done
-          return (n <= 15) || (n >= 49) || (n >= 34) && (n <= 39);
-        }
-        function isPinAvail(n) { // TODO: update for new additions, until all done
-          return (n <= 12) || (n >= 36) || (n == 26);
-        }
         function writePin(name) {
-          me.w('　')
-            .wIf(isPinAvail(pinNo), `<a href="${pinsUri[pinNo-1]}">${name}</a>`)
-            .wIf(!isPinAvail(pinNo), name)
-            .w(`<sup>${pinNo++}</sup>`);
+          me.w(`　<a href="${pinsUri[pinNo-1]}">${name}</a>`,
+               `<sup>${pinNo++}</sup>`);
         }
         function row(meeting, start, end, pins, m7pins) {
           pins = pins && pins.replaceAll('品', '').split(' ');
@@ -101,12 +93,11 @@ var HYJ = new (class extends SeriesContainer {
           for (n = start; n <= end; ++n) {
             me.w(n == 70 ? '<br>' : ' ');
             var isCur = (n == cur), zn = (n<=10) ? zNumber(n) : n;
-            if (!isAvailable(n)) me.w(`<i style="opacity:0.3">${zn}</i>`);
-            else me.w(isCur ? `<cur>${zn}</cur>` : `<a href="?vol=${n}">${zn}</a>`);
+            me.w(isCur ? `<cur>${zn}</cur>` : `<a href="?vol=${n}">${zn}</a>`);
           }
           me.w('</span>');
           if (!pins)
-            me.w('</td><td align=right nowrap>⋯⋯⋯⋯⋯⋯</td>'); // （共11品）
+            me.w('</td><td align=right nowrap>⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</td>'); // （共11品）
           else
             for (n=0; n<pins.length; ++n) writePin(pins[n]);
           if (m7pins) {
