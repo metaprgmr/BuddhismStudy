@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>大乘大集地藏十輪經</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var DZJ = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9030/${900+parseInt(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setBuffer(buf)
+            .setVolumesInJS(true).setXG().reInit(9030, 10);
+        this.volNum = DZJ.volNum;
+        var zn = zNumber(DZJ.volNum);
+        if (DZJ.volNum) // write the volume content
+          this.writeStart(`大乘大集地藏十輪經||卷${zn}`, `地藏十輪經 卷${DZJ.volNum}`)
+              .writeBody('\n/TEXT030C/三藏法師玄奘奉詔譯\n\n' +
+                         `/TEXT339/大乘大集地藏十輪經${zn}\n` +
+                         DZJ.text +
+                         `\n/TEXT339R/大乘大集地藏十輪經${zn}\n/VOLSEP/`);
+        else // write the grand TOC
+          this.writeStart(`大乘大集地藏十輪經`).writeBody(DZJ.text);
+        this.writeEnd();
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // DZJ
+
+DZJ.show(get('vol'), get('pin')); // 卷 品
+</script>

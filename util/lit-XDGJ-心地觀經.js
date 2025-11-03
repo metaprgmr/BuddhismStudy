@@ -145,6 +145,7 @@ createGP('本生心地觀經要旨', CAT_經論) // 9029
 .setStyle(AIL + BOLD)
 .set('width', 50)
 .hasRightEdge()
+.run((gp) => { new My心地觀經Content(gp); })
 .setTree(`
 /b|《大乘本生心地觀經》/
 〇/b|序品第一/〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰/c339|▸卷第一/
@@ -381,7 +382,4 @@ createGP('本生心地觀經要旨', CAT_經論) // 9029
 〇〇〇獲/see:十種身語意業清淨|十種身、語、意業清淨/
 
 `)
-.run((gp) => {
-  new My心地觀經Content(gp);
-})
 ;

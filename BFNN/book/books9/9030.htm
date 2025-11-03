@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>大集經</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var DJJ = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9030/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        function translator(vn) {
+          if (vn <= 26) return '北涼天竺三藏曇無讖於姑臧譯';
+          if (vn <= 30) return '宋涼州沙門智嚴共寶雲譯';
+          if (vn >= 59) return '高齊天竺三藏那連提耶舍譯';
+          return '';
+        }
+        function pin(vn) {
+          switch (vn) {
+          case 1:                                      return '瓔珞品';
+          case 2: case 3: case 4:                      return '陀羅尼品';
+          case 5: case 6:                              return '寶女品';
+          case 7:                                      return '不眴品';
+          case 8: case 9: case 10: case 11:            return '海慧品';
+          case 12:                                     return '無言品';
+          case 13:                                     return '不可說品';
+          case 14: case 15: case 16: case 17: case 18: return '虛空藏品';
+          case 25: case 26:                            return '寶髻品';
+          case 27: case 28: case 29: case 30:          return '無盡意品';
+          case 59: case 60:                            return '十方品';
+          default: return '';
+          }
+        }
+        this.setVolumesInJS(true);
+        this.setBuffer(buf).setXG().reInit(9030, 60);
+        var vn = this.volNum = DJJ.volNum;
+        var zn = zNumber(DJJ.volNum);
+        if (vn) // write the volume content
+          this.writeStart(`大方等大集經||卷${zn}`, `大集經${pin(vn)}卷${vn}`);
+        else // write the grand TOC
+          this.writeStart(`大方等大集經||Mahā-saṃnipāta Sūtra`);
+
+        var buf1 = new Buffer();
+        buf1.w('/TEXT030C/', translator(vn), '\n')
+            .w(DJJ.text)
+            .wIf(vn>1 && vn!=30 && vn!=59, `\n/TEXT339R/大方等大集經卷第${zn}\n`)
+            .wIf(vn>0, '/VOLSEP/');
+        this.writeBody(buf1.render(), true);
+      }
+      writeSeriesNav(links) {
+        if (!this.volNum) return;
+        function toShow(n) { return (n<=18) || (n>=25 && n<=30) || (n>=59); }
+        function fname(pnum) { return `${to4d(pnum)}.htm`; }
+        this.w('【<a href="?">總目錄</a>】&nbsp;&nbsp;');
+        for (var i=1; i<=this.totalVols; ++i) {
+          if (!toShow(i)) continue;
+          if (i==25 || i==59) this.w('　');
+          var lbl = i, hint = '';
+          if (this.labels) lbl = this.labels[i-1];
+          if (this.hints) hint = ` title="${this.hints[i-1]}"`;
+          else if (i <= 10) lbl = this.zdigits[i]; // 漢字數字
+          if (i == this.volNum) this.w(`&nbsp;<cur${hint}>${lbl}</cur>`);
+          else this.w(`&nbsp;<a class="seriesnav" href="?vol=${i}">${lbl}</a>`);
+        }
+        if (links) this.w('　', links);
+        this.w('<br>',
+               '　<a href="9031.htm">寶幢分</a>',
+               '　<a href="9032.htm">虛空目分</a>',
+               '　<a href="9033.htm">日密分</a>',
+               '　<a href="9034.htm">日藏分</a>',
+               '　<a href="9035.htm">月藏分</a>',
+               '　<a href="9036.htm">須彌藏分</a>');
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // DJJ
+
+DJJ.show(get('vol'), get('pin')); // 卷 品
+
+// 經文來源：T13n0397_大方等大集經.pdf
+</script>

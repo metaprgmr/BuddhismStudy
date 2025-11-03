@@ -54,7 +54,9 @@ dcirc  { color:purple }
  dcirc::before { content:'◎' }
 small { color:brown }
 cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
+.cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
 ail { color:#030 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+.ail { color:#030 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
 red { color:red }
 black { color:black }
 purple { color:purple }
@@ -76,16 +78,23 @@ LNSP::before {content: '　';}
 .BQ3  { margin-left:36.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
 .BQ4  { margin-left:48.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal }
+.MANTRAL  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:teal }
 .TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}
 .TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}
 .TEXTC    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center}
 .TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
 c339 { color:#339 }
+.c339 { color:#339 }
+c030 { color:#030 }
+.c030 { color:#030 }
 .TEXT339L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
 .TEXT339C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#339}
 .TEXT030  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#030}
 .TEXT030L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#030}
 .TEXT030C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#030}
+.TEXT666  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#666}
+.TEXT666L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#666}
+.TEXT666C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#666}
 .TEXT1    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt;}
 .TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:24.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
@@ -99,3 +108,5 @@ quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細�
 KEPAN     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 .KEPAN    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 hrAdd { font-weight:normal; color:black; opacity:0.5; }
+.myruby { ruby-position:under; text-decoration:underline; text-decoration-color:red }
+.myphon { text-decoration:underline; text-decoration-color:red }

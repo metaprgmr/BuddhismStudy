@@ -9,6 +9,7 @@ sup { font-size:14px }
 code { color:blue }
 a { text-decoration:none }
 cur { color:red; background-color:yellow; font-weight:bold }
+dim { opacity:0.4 }
 .sutra { background-color:#FF9 }
 .orig  { background-color:#DFD }
 .extra { font-style:italic; color:brown }
@@ -98,8 +99,8 @@ function showThem() {
         styl = wk.isAvail() ? ` style="color:red"` : '',
         note, ttl = wk.getTitleDisp();
     for (var j=lastId+1; j<wk.id; ++j) 
-      buf.w(`<tr><td></td><td>&nbsp;<i>${toW(j,4,'0')}</i></td><td colspan=2></td></tr>`);
-    note = !wk.note ? '' : `<font style="opacity:0.4">${wk.note}</font>`;
+      buf.w(`<tr><td></td><td>&nbsp;<dim>${toW(j,4,'0')}</dim></td><td colspan=2></td></tr>`);
+    note = !wk.note ? '' : `<dim>${wk.note}</dim>`;
     if (!wk.isAvail() && window['MY_BFNN']) {
       if (wk.isMulti()) {
         ttl += note;
@@ -133,17 +134,14 @@ function showList(topic) {
   if (topic == '全部內容') { showAllArticles(); return; }
   if (topic == '文字處理') { showTextProcessing(); return; }
   var isAdded = (topic == '外加內容');
+  function toShow(wk) {
+    return ((isAdded && (wk.id >= 9000)) || (topic == '所集佛經' && wk.isSutra)) ||
+           (wk.isAvail() || wk.isToGet()) && wk.isTopic(topic);
+  }
   var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    if (isAdded) {
-      if (wk.id >= 9000)
-        wk.render(buf);
-    }
-    else if (wk.isAvail() || wk.isToGet()) {
-      if (wk.isTopic(topic) || (topic == '所集佛經' && wk.isSutra))
-        wk.render(buf);
-    }
+    toShow(wk) && wk.render(buf);
   }
   buf.w('</table></td></tr></table>');
   if (topic == '所集佛經') showSutraList(buf);

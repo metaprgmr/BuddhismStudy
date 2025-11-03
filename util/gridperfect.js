@@ -1,18 +1,19 @@
 const AIL    = '.ail { font-size:12px; opacity:0.8 }\n';
-const HILITE = '.hl { fill:red }\n';
 const BOLD   = '.b { stroke:brown }\n' +
                '.b1 { stroke:green }\n' +
                '.b2 { stroke:red }\n' +
                '.b3 { stroke:blue }\n' +
+               '.hl { fill:red }\n' +
                '.mantra { stroke:teal }\n' +
                '.c339 { stroke:#333399 }\n';
 const CAT_基本 = '基本';
 const CAT_唯識 = '唯識';
 const CAT_大乘 = '大乘';
 const CAT_小乘 = '小乘';
-const CAT_戒律 = '戒律';
 const CAT_經論 = '經論';
+const CAT_外道 = '外道';
 const CAT_ELSE = 'ELSE';
+const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_經論,CAT_外道,CAT_ELSE];
 
 const LINE='LINE', TEXT='TEXT', RECT='RECT', CIRCLE='CIRCLE',
       RIGHTEDGE='R_EDGE', INCL='INCL';
@@ -599,8 +600,7 @@ var gpRepo = new (class extends ResourceRepo {
       if (!a) categories[c] = a = [];
       a.push(item.name);
     }
-    var catNames = ['基本','唯識','大乘','小乘','戒律','經論','ELSE'],
-        buf = new Buffer('<center><table border=0 style="min-width:750px">');
+    var buf = new Buffer('<center><table border=0 style="min-width:750px">');
     for (var i in catNames) {
       var c = catNames[i], names = categories[c];
       if (!names) continue;

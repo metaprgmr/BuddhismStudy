@@ -11,6 +11,8 @@ const HILITE_COLOR = '#ff8';
 const KAI_TI = 'KaiTi, Kaiti TC, 楷体, STKaiti, 华文楷体';
 const FANGSONG_TI = 'FangSong, 仿宋体, STFangSong, 华文仿宋体';
 // 特殊符号大全 https://www.jiuwa.net/fuhao/agg/
+const A2Z = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const a2z = 'abcdefghijklmnopqrstuvwxyz';
 
 const zdigits = '〇一二三四五六七八九';
 function zNumber(n) { // 0 to 999

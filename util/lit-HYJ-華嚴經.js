@@ -641,8 +641,7 @@ createGP('華嚴經要解', CAT_經論) // 9010
   new My華嚴經Content(gp);
 
   // 五十三參
-  var xy = gp.getMark('A'),
-      start = xy && xy[1];
+  var xy = gp.getMark('A'), start = xy && xy[1];
   for (var i=1; i<=53; ++i) gp.T(3,start+i-0.03,`/ail|${i}/`);
 
   // 佛不思議法品第三十三

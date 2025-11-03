@@ -635,7 +635,7 @@ createGP('六根本煩惱|十使', CAT_唯識)
 
 createGP('阿賴耶識相應心所', CAT_唯識)
 .run((gp) => {
-  gp.setStyle(AIL + HILITE)
+  gp.setStyle(AIL + BOLD)
     .T(1, 1, '阿賴耶識只相應五遍行心所。')
     .include(cloneGP('心所法')
       .T(8, 1, '/hl|觸/、/hl|作意/、/hl|受/、/hl|想/、/hl|思/'),
@@ -644,7 +644,7 @@ createGP('阿賴耶識相應心所', CAT_唯識)
 
 createGP('末那識相應心所', CAT_唯識)
 .run((gp) => {
-  gp.setStyle(AIL + HILITE)
+  gp.setStyle(AIL + BOLD)
     .T(1, 1, '末那識相應十八個心所。')
     .include(cloneGP('心所法')
       .T(8, 1, '/hl|觸/、/hl|作意/、/hl|受/、/hl|想/、/hl|思/')
@@ -656,7 +656,7 @@ createGP('末那識相應心所', CAT_唯識)
 
 createGP('五識相應心所', CAT_唯識)
 .run((gp) => {
-  gp.setStyle(AIL + HILITE)
+  gp.setStyle(AIL + BOLD)
     .T(1, 1, '眼識、耳識、鼻識、舌識、身識相應三十四個心所。')
     .include(cloneGP('心所法')
       .T(8, 1, '/hl|觸/、/hl|作意/、/hl|受/、/hl|想/、/hl|思/')
@@ -671,7 +671,7 @@ createGP('五識相應心所', CAT_唯識)
 
 createGP('第六識相應心所', CAT_唯識)
 .run((gp) => {
-  gp.setStyle(AIL + HILITE)
+  gp.setStyle(AIL + BOLD)
     .T(1, 1, '第六識相應全部五十一個心所。')
     .include(cloneGP('心所法')
       .T(8, 1, '/hl|觸/、/hl|作意/、/hl|受/、/hl|想/、/hl|思/')
@@ -845,6 +845,14 @@ createGP('二諦四重', CAT_大乘).setLayout(`
   .FO(9,2,6)  // 事理意義之對
   .FO(8,3,7)  // 道理深淺之對
   .FO(7,4,8)  // 詮旨各別之對
+  .L([6.75,3], "%r0.5")
+  .L([7.75,3], "%r0.5")
+  .L([6.75,4], "%r0.5")
+  .L([6.75,5], "%r0.5")
+  .L([13.5,1], "%r6.75")  // 世間世俗諦
+  .L([13.5,2], "%r0.75").L([15.5,2], "%r4.75")  // 道理世俗諦
+  .L([13.5,1], "%r6.75")  // 世間世俗諦
+  .L([13.5,2], "%r0.75").L([15.5,2], "%r4.75")  // 道理世俗諦
   .L([13.5,1], "%r6.75")  // 世間世俗諦
   .L([13.5,2], "%r0.75").L([15.5,2], "%r4.75")  // 道理世俗諦
   .L([15.5,3], "%r0.75").L([17.5,3], "%r2.75")  // 證得世俗諦
@@ -1444,7 +1452,7 @@ createGP('七十五法與百法對照', CAT_小乘)
   .include(cloneGP('五位百法'), 1, 16)
 ;
 
-createGP('八段五篇', CAT_戒律).setLayout(`
+createGP('八段五篇', CAT_小乘).setLayout(`
 〇〇〇〇（名目）〇（比丘戒）〇（比丘尼戒）〇〇〇（名目）
 〇〇第一〇波羅夷〇〇〇〇四〇〇〇〇〇〇八〇〇〇〇〇波羅夷
 〇〇第二〇僧〇殘〇〇〇十三〇〇〇〇〇十七〇〇〇〇〇僧〇殘
@@ -1471,7 +1479,7 @@ createGP('八段五篇', CAT_戒律).setLayout(`
   .L([30,7],[30,9]).L([30,9],"%l1")
 ;
 
-createGP('四分律', CAT_戒律).setLayout(`
+createGP('四分律', CAT_小乘).setLayout(`
 　　┌初分前部─────────僧戒本───┬───止持
 四　│　　　　　　　　　　　　　　　　　　　　│
 分─┤初分後部至第二分前部───尼戒本───┘

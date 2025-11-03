@@ -41,6 +41,12 @@ function getFileName() {
   var i = window.location.href.lastIndexOf('/');
   return (i>0) ? x.substring(i+1) : x;
 }
+function R(txt,rub) { // for "ruby"
+  return `<ruby class="myruby">${txt}<rt>${rub}</rt></ruby>`;
+}
+function P(txt,phon) { // for "phon" or "phonetic"
+  return `<span class="myphon" title="${phon}">${txt}</span>`;
+}
 
 const LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
 var terse = get('terse'),
@@ -124,7 +130,7 @@ class DocInfo {
   writeEnd(links) {
     if (this.firstVolNum) {
       this.w(SP, '<div class=endBar>');
-      this.writeSeriesNav(links);
+      if (this.volNum || !this.hasTOCJS) this.writeSeriesNav(links);
       this.w('</div>');
     } else if (links) {
       this.w(SP, '<div class=endBar>', links, '</div>');
@@ -376,10 +382,14 @@ class DocInfo {
       return lnId;
     }
 
-    if (ln1.startsWith('/ul')) {
+    if (ln1.startsWith('/ul') || ln1.startsWith('/ol')) {
+      var isUL = ln1.startsWith('/ul');
       this.inLst = true;
-      this.lstTag = 'ul';
-      this.w(ln.replaceAll('/ul', '<ul').replace('/', '>'));
+      this.lstTag = isUL ? 'ul' : 'ol';
+      if (isUL)
+        this.w(ln.replaceAll('/ul', '<ul').replace('/', '>'));
+      else
+        this.w(ln.replaceAll('/ol', '<ol').replace('/', '>'));
       return lnId;
     }
 
@@ -405,17 +415,55 @@ class DocInfo {
         ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
     }
     cls = cls[0] || '';
+    var append = (cls[0] == '+');
+    if (append) cls = cls.substring(1);
     if (cls == 'L' || cls == 'R' || cls == 'C')
       cls = 'TEXT' + cls;
     if (cls.startsWith('TEXT') && cls.endsWith('R'))
       cls = cls.substring(0, cls.length-1) + ' align=right';
     if (cls.endsWith('align=right') && !ln.endsWith('　'))
       ln += '　';
+    if (append)
+      cls = `"${this.defaultClass} ${cls}"`;
     this.w(`<p class=${cls}>${ln}</p>`);
     return lnId;
   }
 
   localProc(ln) {
+    // process inline function call; e.g. 9028
+    var idx = ln.indexOf('{');
+    if (idx >= 0) {
+      var ret = '';
+      while (idx >= 0) {
+        var idx1 = ln.indexOf('}', idx);
+        if (idx1 <= idx) {
+          ret += ln;
+          break;
+        }
+        var call = ln.substring(idx+1,idx1).split(':');
+        if (call.length <= 1) { // error; skip the line
+          ret += ln;
+          break;
+        }
+        // now handle the call
+        var fn = call.shift(), f = window[fn];
+        if (typeof f == 'function')
+          call = f.apply(null, call);
+        else if (call.length > 1)
+          call = `<span style="background-color:lightgray" title="${fn}:${call[1]}">${call[0]}</span>`;
+        else
+          call = call[0];
+        ret += ln.substring(0, idx) + call;
+        ln = ln.substring(idx1+1);
+        idx = ln.indexOf('{');
+        if (idx < 0) {
+          ret += ln;
+          break;
+        }
+      }
+      ln = ret;
+    }
+
     // process <a!999>; e.g. 0010
     ln = ln.replace(/<a!\d+>/g,
          (m) => `<a href="javascript:xref(${m.substring(3,m.length-1)})")>`);
