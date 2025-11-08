@@ -15,6 +15,7 @@ const A2Z = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const a2z = 'abcdefghijklmnopqrstuvwxyz';
 
 const zdigits = '〇一二三四五六七八九';
+const znumeric = zdigits + '零十百千萬億兆';
 function zNumber(n) { // 0 to 999
   if (typeof n == 'string') n = parseInt(n);
   if (n == 0) return zdigits[0];
@@ -25,6 +26,43 @@ function zNumber(n) { // 0 to 999
   var d1   = n - d100 * 100 - d10 * 10;
   var ret = (d100 > 0 ? zdigits[d100] : '') + zdigits[d10] + zdigits[d1];
   while (ret.length > 1 && ret.startsWith('〇')) ret = ret.substring(1);
+  return ret;
+}
+function isZDigit(c) { return znumeric.indexOf(c) >= 0; }
+function parseZNumber(n) {
+  var len = n.length, ret = 0;
+  for (var i=0; i<len; ++i) {
+    var cur = zdigits.indexOf(n[i]), check億萬 = false;
+    if (cur > 0) {
+      if (i == len-1) ret += cur;
+      else {
+        switch(n[i+1]) {
+        case '億': ret += cur * 100000000; ++i; break;
+        case '萬': ret += cur * 10000; ++i; break;
+        case '千': cur = cur * 1000; ++i; check億萬 = true; break;
+        case '百': cur = cur * 100;  ++i; check億萬 = true; break;
+        case '十': cur = cur * 10;   ++i; check億萬 = true; break;
+        }
+      }
+    }
+    else {
+      switch (n[i]) {
+      case '十': cur = 10; check億萬 = true; break;
+      case '零': ++i; break;
+      default: throw `Invalid Chinese number: ${n}`;
+      }
+    }
+    if (check億萬) {
+      if (i == len-1)  ret += cur;
+      else {
+        switch(n[i+1]) {
+        case '億': ret += cur * 100000000; ++i; break;
+        case '萬': ret += cur * 10000; ++i; break;
+        default:   ret += cur; break;
+        }
+      }
+    }
+  }
   return ret;
 }
 
@@ -871,7 +909,7 @@ class MyDialog {
     </tr>
   </table>
 </header>
-<div id="${dlgId}Body"></div>
+<div id="${dlgId}Body" style="width:${this.width}px"></div>
 </dialog>`);
   }
 }

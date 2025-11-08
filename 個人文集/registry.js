@@ -27,6 +27,7 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250801|《宗鏡錄》摘要
 250530|淨界法師.html|【善知識】淨界法師
 250629|北川致遠書社.html|【善知識】北川致遠書社
+251107|念佛节奏計算器
 #######
 250917|發露懺悔
 250515|廿字加卅字

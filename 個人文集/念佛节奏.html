@@ -1,0 +1,93 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>念佛节奏計算器</title>
+<link rel="stylesheet" href="../util/article.css">
+<style>
+th { background-color:lightgray }
+</style>
+<script src="registry.js"></script>
+<script src="../util/utils.js"></script>
+</head>
+<body><center>
+
+<div class="contentW">
+
+<h2 align="center" style="text-align:center">念佛节奏計算器</h2>
+
+<script>
+  var buf = new Buffer();
+  buf.w('<h3 style="text-align:center">根據念佛節奏（每分鐘次數）計算每天念佛次數</h3>');
+  var bpms = [ 60, 75, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200 ];
+  buf.w('<center><table bgcolor=white cellspacing="3px"><caption><u>念佛次數 = bpm * 60 * 小時數</u></caption>',
+        '<tr><th align=right>BPM：</th>');
+  for (var i in bpms) {
+    var bpm = bpms[i];
+    if (bpm < 140) buf.w(`<th>${bpm}</th>`);
+    else buf.w(`<th style="color:red">${bpm}</th>`);
+  }
+  buf.w('</tr>');
+  for (var hrs=4; hrs<=24; hrs+=2) {
+    buf.w(`<tr><td bgcolor=lightgray align=right>${hrs}小時：</td>`);
+    for (var i in bpms) {
+      var bpm = bpms[i];
+      var cnt = (bpm * 60 * hrs / 10000).toFixed(1);
+      buf.w(`<td align=right>${cnt}萬</td>`);
+    }
+    buf.w('</tr>');
+  }
+  buf.w('</table></center>');
+  buf.render(document);
+
+  buf.w('<h3 style="text-align:center">根據目標次數計算最低念佛節奏（每分鐘次數）</h3>');
+  var targets = [ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 ]; // 萬
+  var hours   = [  6,  8, 12, 16, 18, 20, 22, 24 ];
+  function getBPM(target, hours) { return (target * 10000) / (hours * 60); }
+
+  buf.w('<center><table bgcolor=white cellspacing="3px">',
+        '<tr><th aligth=right>目標次數：</th>');
+  for (var i in targets) 
+    buf.w(`<th>${targets[i]}萬</th>`);
+  buf.w('</tr>');
+  for (var j in hours) {
+    var hrs = hours[j];
+    buf.w(`<tr><td bgcolor=lightgray align=right>${hrs}小時：</td>`);
+    for (var i in targets) {
+      var bpm = getBPM(targets[i], hrs);
+      buf.w('<td align=right');
+      if (bpm >= 200 || bpm <= 30)
+        buf.w(` style="color:lightgray"><i>${bpm.toFixed(0)}</i>`);
+      else if (bpm >= 140)
+        buf.w(` style="color:red">${bpm.toFixed(0)}`);
+      else
+        buf.w(`>${bpm.toFixed(0)}`);
+      buf.w('</td>');
+    }
+    buf.w('</tr>');
+  }
+  buf.w('</table></center>');
+  buf.render(document);
+</script>
+
+<h3 style="text-align:center">生成節拍器音聲文件</h3>
+
+<p>在本 repository 的 tools 目錄下，有一個工具 gen-metronome.sh（需要 Java）可以生成節拍器音聲文件，但只能是WAV；若要轉換格式，這裡的轉換工具調用ffmpeg；否則自己想辦法。節拍生成器的使用方法如下：</p>
+<pre style="background-color:white; font-size:14px">
+tools $ gen-metronome.sh 
+Usage: gen-metronome.sh outFile bpm dur beat
+  where: outFile is the output WAV file name
+         bpm     is an integer for beats-per-minute
+         dur     is duration; can end with 's' (seconds) or 'm' (minutes)
+         beat    can be a file name, or a note frequency such as 440
+A few examples:
+    gen-metronome.sh metron-120-5mins.wav 120 5m ../images/metrobeat.wav
+or: gen-metronome.sh metronA4-125-30secs.wav 125 30 440
+or: gen-metronome.sh metronA3-140-30secs.wav 140 30s 220
+
+For your quick reference, the frequencies of musical notes are:
+  C4=261.6 D4=293.7 E4=329.6 F4=349.2 G4=392 A4=440 B4=493.9
+</pre>
+<script>
+  endOfArticle('251107');
+</script>
+</center></body></html>

@@ -1,4 +1,4 @@
-const AIL    = '.ail { font-size:12px; opacity:0.8 }\n';
+const AIL    = '.ail { font-size:12px; opacity:0.8 }\n.cil { font-size:14px; opacity:0.8 }\n';
 const BOLD   = '.b { stroke:brown }\n' +
                '.b1 { stroke:green }\n' +
                '.b2 { stroke:red }\n' +
@@ -525,9 +525,30 @@ class MyContent {
   }
   setNamedText(id, txt) { this.gp.setNamedText(id, txt); }
   setDialogOL(name, title, csv, sep) {
-    var txt = toOL(csv.trim().split(sep || '|'));
+    if (!Array.isArray(csv)) csv = csv.trim().split(sep || '|');
+    var txt = toOL(csv);
     if (title) txt = `<h3>${title}</h3>${txt}`;
     this.setNamedText(name, txt);
+  }
+  setDialogOLSplit(name, title, csv, sep, cols) {
+    if (!Array.isArray(csv)) csv = csv.trim().split(sep || '|');
+    var len = csv.length;
+    if (!cols) cols = 2;
+    var sublen = Math.floor(len / cols);
+    if (len % cols) ++sublen;
+    var buf = new Buffer();
+    buf.wIf(title, '<h3>', title, '</h3>')
+       .w('<table><tr><td valign=top><ol>');
+    var nextBrk = sublen;
+    for (var i=0; i<len; ++i) {
+      if (i == nextBrk) {
+        buf.w(`</ol></td><td valign=top><ol start="${i+1}">`);
+        nextBrk += sublen;
+      }
+      buf.w('<li>', csv[i], '</li>');
+    }
+    buf.w('</ol></td></tr>');
+    this.setNamedText(name, buf.render());
   }
   parseOLLists(prefix, csvLines, sep) {
     csvLines = csvLines.split('\n');
