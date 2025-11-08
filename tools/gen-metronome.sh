@@ -1,1 +1,1 @@
-java -cp $(dirname "$0")/java/metrogen.jar MetronomeGen $*
+java -Dcemoi=1 -cp $(dirname "$0")/java/metrogen.jar MetronomeGen $*

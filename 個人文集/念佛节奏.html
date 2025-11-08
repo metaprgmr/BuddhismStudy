@@ -17,9 +17,10 @@ th { background-color:lightgray }
 
 <script>
   var buf = new Buffer();
-  buf.w('<h3 style="text-align:center">根據念佛節奏（每分鐘次數）計算每天念佛次數</h3>');
+  var ttl = '【根據念佛節奏（每分鐘次數）計算每天念佛次數】',
+      calc = '<u>念佛次數 = bpm * 60 * 小時數</u></caption>';
   var bpms = [ 60, 75, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200 ];
-  buf.w('<center><table bgcolor=white cellspacing="3px"><caption><u>念佛次數 = bpm * 60 * 小時數</u></caption>',
+  buf.w(`<center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
         '<tr><th align=right>BPM：</th>');
   for (var i in bpms) {
     var bpm = bpms[i];
@@ -46,12 +47,13 @@ th { background-color:lightgray }
   buf.w('</table></center>');
   buf.render(document);
 
-  buf.w('<h3 style="text-align:center">根據目標次數計算最低念佛節奏（每分鐘次數）</h3>');
   var targets = [ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 ]; // 萬
-  var hours   = [  8, 12, 16, 18, 20, 22, 24 ];
+  var hours   = [  8, 10, 12, 16, 18, 20, 22, 24 ];
   function getBPM(target, hours) { return (target * 10000) / (hours * 60); }
 
-  buf.w('<center><table bgcolor=white cellspacing="3px">',
+  ttl = '【根據目標次數計算最低念佛節奏（每分鐘次數）】';
+  buf.w('<br>',
+        `<center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
         '<tr><th aligth=right>目標次數：</th>');
   for (var i in targets) 
     buf.w(`<th>${targets[i]}萬</th>`);
@@ -61,7 +63,7 @@ th { background-color:lightgray }
     buf.w(`<tr><td bgcolor=lightgray align=right>${hrs}小時：</td>`);
     for (var i in targets) {
       var bpm = getBPM(targets[i], hrs);
-      if (bpm >= 200 || bpm <= 30)
+      if (bpm > 195 || bpm <= 30)
         buf.w(`<td align=right style="opacity:0.3"><i>${bpm.toFixed(0)}</i></td>`);
       else if (bpm >= 140)
         buf.w(`<td align=right style="color:red">${bpm.toFixed(0)}</td>`);
@@ -75,21 +77,48 @@ th { background-color:lightgray }
   buf.w('</table></center>');
   buf.render(document);
 </script>
+<br>
+<center><table bgcolor=white cellspacing="3px"><caption>【生成的節拍器試聽】（五分鐘，可循迴）</caption>
+<tr><th></th>
+<script>
+  var tunes = [ '板','C3','D3','E3','F3','G3','A3','B3','C4','D4','E4','F4','G4','A4','B4' ];
+  var bpms = [ 120, 140, 160, 180, 190, 200 ];
+  for (var i in tunes)
+    buf.w('<th>', tunes[i], '</th>');
+  buf.w('</tr>');
+  for (var i in bpms) {
+    var bpm = bpms[i];
+    buf.w('<tr><td>', bpm, '拍：</td>');
+    for (var j in tunes) {
+      var t = tunes[j];
+      if (t == '板') t = '';
+      if ((bpm == 120) || (bpm == 180) || (t == '') || (t[0] == 'A'))
+        buf.w(`<td><a href="metronomes/metron${t}-${bpm}-5m_.mp3" target="extra">聽</a></td>`);
+      else
+        buf.w('<td></td>');
+    }
+    buf.w('</tr>');
+  }
+  buf.w('</table></center>');
+  buf.render(document);
+</script>
 
 <h3 style="text-align:center">生成節拍器音聲文件</h3>
 
-<p>在本 repository 的 tools 目錄下，有一個工具 gen-metronome.sh（需要 Java）可以生成節拍器音聲文件，但只能是WAV；若要轉換格式，這裡的轉換工具調用ffmpeg；否則自己想辦法。節拍生成器的使用方法如下：</p>
-<pre style="background-color:white; font-size:14px">
-tools $ gen-metronome.sh 
+<p>這些音聲是由 tools 目錄下的 gen-metronome.sh（需要 Java）生成的。它只生成WAV；這裡用ffmpeg轉成mp3。不然，自己想辦法。節拍生成器的使用方法如下：</p>
+<pre style="background-color:white; font-size:14px; padding-left:10px">
+tools$ gen-metronome.sh 
 Usage: gen-metronome.sh outFile bpm dur beat
-  where: outFile is the output WAV file name
-         bpm     is an integer for beats-per-minute
-         dur     is duration; can end with 's' (seconds) or 'm' (minutes)
-         beat    can be a file name, or a note frequency such as 440
+  where: outFile is the output WAV file name.
+         bpm     is an integer for beats-per-minute.
+         dur     is duration; can end with 's' (seconds) or 'm' (minutes).
+                 Further, if ends with '_', the last 10 beats will be softer.
+         beat    can be a file name, or a note frequency such as 440.
 A few examples:
-    gen-metronome.sh metron-120-5mins.wav 120 5m ../images/metrobeat.wav
-or: gen-metronome.sh metronA4-125-30secs.wav 125 30 440
-or: gen-metronome.sh metronA3-140-30secs.wav 140 30s 220
+    gen-metronome.sh metron-120-5m.wav    120 5m  ../images/metrobeat.wav
+or: gen-metronome.sh metronA4-125-5m_.wav 125 5m_ 440
+or: gen-metronome.sh metronA4-125-30.wav  125 30  440
+or: gen-metronome.sh metronA3-140-30.wav  140 30s 220
 
 For your quick reference, the frequencies of musical notes are:
   C4=261.6 D4=293.7 E4=329.6 F4=349.2 G4=392 A4=440 B4=493.9

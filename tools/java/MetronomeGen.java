@@ -25,7 +25,8 @@ public class MetronomeGen {
     int getFrameCount() { return (int)(this.data.length / this.format.getFrameSize()); }
     int getDataSize() { return this.data.length; }
     double getSampleRate() { return this.format.getSampleRate(); }
-    double getBytesPerSec() { return this.format.getSampleRate() * this.format.getSampleSizeInBits() / 8; }
+    int getSampleSizeInBits() { return this.format.getSampleSizeInBits(); } // pratically always 2
+    double getBytesPerSec() { return this.format.getSampleRate() * this.getSampleSizeInBits() / 8; }
     AudioInputStream toAudioInputStream() {
       ByteArrayInputStream bais = new ByteArrayInputStream(this.data);
       return new AudioInputStream(bais, this.format, this.getFrameCount());
@@ -33,20 +34,24 @@ public class MetronomeGen {
   }
 
   static void help() {
-    System.err.println(
+    String txt =
       "Usage: java MetronomeGen outFile bpm dur beat\n" +
-      "  where: outFile is the output WAV file name\n" +
-      "         bpm     is an integer for beats-per-minute\n" +
-      "         dur     is duration; can end with 's' (seconds) or 'm' (minutes)\n" +
-      "         beat    can be a file name, or a note frequency such as 440\n" +
+      "  where: outFile is the output WAV file name.\n" +
+      "         bpm     is an integer for beats-per-minute.\n" +
+      "         dur     is duration; can end with 's' (seconds) or 'm' (minutes).\n" +
+      "                 Further, if ends with '_', the last 20 beats will be softer.\n" +
+      "         beat    can be a file name, or a note frequency such as 440.\n" +
       "A few examples:\n" +
-      "    java MetronomeGen metron-120-5mins.wav 120 5m ../images/metrobeat.wav\n" +
-      "or: java MetronomeGen metronA4-125-30secs.wav 125 30 440\n" +
-      "or: java MetronomeGen metronA3-140-30secs.wav 140 30s 220\n" +
+      "    java MetronomeGen metron-120-5m.wav    120 5m  ../images/metrobeat.wav\n" +
+      "or: java MetronomeGen metronA4-125-5m_.wav 125 5m_ 440\n" +
+      "or: java MetronomeGen metronA4-125-30.wav  125 30  440\n" +
+      "or: java MetronomeGen metronA3-140-30.wav  140 30s 220\n" +
       "\n" +
       "For your quick reference, the frequencies of musical notes are:\n" +
-      "  C4=261.6 D4=293.7 E4=329.6 F4=349.2 G4=392 A4=440 B4=493.9\n" +
-      "");
+      "  C4=261.6 D4=293.7 E4=329.6 F4=349.2 G4=392 A4=440 B4=493.9\n";
+    if (System.getProperty("cemoi") != null)
+      txt = txt.replaceAll("java MetronomeGen", "gen-metronome.sh");
+    System.err.println(txt);
   }
 
   public static void main(String[] args) throws Exception {
@@ -54,10 +59,15 @@ public class MetronomeGen {
 
     String outFile = args[0];
     int    bpm  = Integer.parseInt(args[1]);
-    String dur  = args[2]; // e.g. "30", "30s", or "15m"
+    String dur  = args[2]; // e.g. "30", "30s", "15m" or "15m_"
     String beat = args[3]; // e.g. "metrobeat.wav" or 440
+    boolean endTaper = false;
 
     int durSecs = 1, last = dur.length()-1;
+    if (dur.charAt(last) == '_') {
+      endTaper = true;
+      dur = dur.substring(0, last--);
+    }
     if (dur.charAt(last) == 's')
       dur = dur.substring(0, last);
     else if (dur.charAt(last) == 'm') {
@@ -66,41 +76,60 @@ public class MetronomeGen {
     }
     durSecs *= Integer.parseInt(dur);
 
-    double noteFreq = 0;
+    Object beatOpt;
     try {
-      noteFreq = Double.parseDouble(beat);
+      beatOpt = Double.valueOf(beat);
     } catch(Exception e) {
-      noteFreq = -1;
+      beatOpt = beat;
     }
-    if (noteFreq > 0)
-      createMetronome(outFile, bpm, durSecs, noteFreq);
-    else
-      createMetronome(outFile, bpm, durSecs, beat);
+    createMetronome(outFile, bpm, durSecs, endTaper, beatOpt);
   }
 
-  public static void createMetronome(String outFile, int bpm, double durSecs, String beatFile)
+  public static void createMetronome(String outFile, int bpm, double durSecs, boolean endTaper, Object beat)
                                     throws IOException, UnsupportedAudioFileException {
-    genMetronome(outFile, readMonoWAV(beatFile), bpm, durSecs);
+    SoundInfo si = null;
+    if (beat instanceof String)
+      si = readMonoWAV((String)beat);
+    else if (beat instanceof Number) {
+      double noteFreqHz = ((Number)beat).doubleValue();
+      double[] envSegs = { 0.2, 0.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0, 0.8, 0.5, 0.2 };
+      si = createPureSoundData(noteFreqHz, beatDur, 44100, envSegs);
+    }
+    genMetronome(outFile, si, bpm, durSecs, endTaper);
   }
 
-  public static void createMetronome(String outFile, int bpm, double durSecs, double noteFreqHz) throws IOException {
-    double[] envSegs = { 0.2, 0.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0, 0.8, 0.5, 0.2 };
-    genMetronome(outFile, createPureSoundData(noteFreqHz, beatDur, 44100, envSegs), bpm, durSecs);
+  static int ensureEven(int i) {
+    return ((i & 0x1) == 1) ? (i+1) : i;
   }
 
-  static void genMetronome(String outFile, SoundInfo si, int bpm, double durSecs) throws IOException {
+  static void genMetronome(String outFile, SoundInfo si, int bpm, double durSecs, boolean endTaper)
+                          throws IOException
+  {
     int beatlen = si.getDataSize();
     double bytesPerSec = si.getBytesPerSec();
     double beatDist = bytesPerSec * 60 / bpm;
-    byte[] buf = new byte[(int)(bytesPerSec * durSecs)+2];
-    int len = buf.length, ptr = (int)Math.max((beatDist-beatlen)/2, 0.0);
-    for (int p1=ptr; p1<len; ptr=(int)(ptr+beatDist)) {
-      if ((ptr & 0x1) == 1)
-        ++ptr;
+    int len = (int)(bytesPerSec * durSecs);
+    // make multiples of beats, and even
+    len = ensureEven((int)( (1+(int)(len / beatDist)) * beatDist ) + 1);
+    byte[] buf = new byte[len];
+    int p1, ptr = (int)Math.max((beatDist-beatlen)/2, 0.0);
+    for (p1=ptr; p1<len; ptr=(int)(ptr+beatDist)) {
+      ptr = ensureEven(ptr);
       for (int j=0; j<beatlen; j++) { // copy the beat data at intervals
         p1 = ptr + j;
         if (p1 >= len) break;
         buf[p1] = si.data[j];
+      }
+    }
+    if (endTaper) {
+      int t1 = (int)(len-beatDist*20), t2 = (int)(len-beatDist*10);
+      for (p1=t1; p1<t2; ++p1)
+        buf[p1] = (byte)(buf[p1] * 6 / 10);
+      double morphz = 0.06, morphR = 0.3-morphz, dist = len-t2;
+      for (p1=t2; p1<len-2; p1+=2) {
+        double morph = (1-(p1-t2)/dist) * morphR + morphz;
+        buf[p1  ] = (byte)((int)(buf[p1  ] * morph) & 0xFF);
+        buf[p1+1] = (byte)((int)(buf[p1+1] * morph) & 0xFF);
       }
     }
 
