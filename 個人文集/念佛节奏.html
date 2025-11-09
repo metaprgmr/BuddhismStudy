@@ -60,7 +60,7 @@ th { background-color:lightgray }
   }
   buf.w('</tr>');
   for (var hrs=4; hrs<=24; hrs+=2) {
-    buf.w(`<tr><td bgcolor=lightgray align=right>${hrs}小時：</td>`);
+    buf.w(`<tr><td bgcolor=lightgray align=right>&nbsp;${hrs}小時：</td>`);
     for (var i in bpms) {
       var bpm = bpms[i];
       var cnt = bpm * 60 * hrs / 10000, disp = `${cnt.toFixed(1)}萬`;
@@ -80,7 +80,7 @@ th { background-color:lightgray }
 </script>
 <br>
 <center><table bgcolor=white cellspacing="3px"><caption>【生成的節拍器試聽】</caption>
-<tr><th></th>
+<tr><th align=right>音調：</th>
 <script>
 var prevID, playNum, curBPM, uri;
 function audioEndCB(event) {
@@ -90,9 +90,10 @@ function audioEndCB(event) {
   renderText('msg', uri + `（${perMin}拍；${perHr}拍/時）第${++playNum}輪`);
 }
 function playMetron(tune, bpm) {
-  if (prevID)
-    e(prevID).style.backgroundColor = null;
-  prevID = `_${bpm}_${tune}`;
+  var newID = `_${bpm}_${tune}`;
+  if (newID == prevID) return;
+  if (prevID) e(prevID).style.backgroundColor = null;
+  prevID = newID;
   playNum = 1;
   curBPM = bpm;
   e(prevID).style.backgroundColor = 'pink';
@@ -111,7 +112,7 @@ function playMetron(tune, bpm) {
   buf.w('</tr>');
   for (var i in bpms) {
     var bpm = bpms[i];
-    buf.w('<tr><td bgcolor=lightgray>', bpm, '拍：</td>');
+    buf.w('<tr><td bgcolor=lightgray>&nbsp;', bpm, '拍/分：</td>');
     for (var j in tunes) {
       var t = tunes[j];
       if (t == '板') t = '';
@@ -123,7 +124,7 @@ function playMetron(tune, bpm) {
     buf.w('</tr>');
   }
   buf.w('</table><div id="msg">五分鐘，可循迴</div>',
-        '<audio controls id="audiop" style="width:410px; margin-top:2px; display:none"></center>');
+        '<audio controls id="audiop" style="width:436px; margin-top:2px; display:none"></center>');
   buf.render(document);
   e('audiop').addEventListener('ended', audioEndCB);
 </script>
