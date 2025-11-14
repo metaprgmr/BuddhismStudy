@@ -17,6 +17,7 @@ th { background-color:lightgray }
 <h2 align="center" style="text-align:center; margin-bottom:10px">念佛节奏計算器</h2>
 
 <script>
+  var hoursToPlay = get('hours') || get('hrs') || 4;
   var buf = new Buffer();
 
   var targets = [ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 ]; // 萬
@@ -24,7 +25,7 @@ th { background-color:lightgray }
   function getBPM(target, hours) { return (target * 10000) / (hours * 60); }
 
   var ttl = '【根據目標次數計算最低念佛節奏（每分鐘次數）】',
-      calc = '<u>念佛次數 = bpm * 60 * 小時數</u></caption>';
+      calc = '<u>念佛次數 = bpm*60*小時數</u></caption>';
   buf.w(`<center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
         '<tr><th aligth=right>目標次數：</th>');
   for (var i in targets) 
@@ -50,12 +51,13 @@ th { background-color:lightgray }
   buf.render(document);
 
   ttl = '【根據念佛節奏（每分鐘次數）計算每天念佛次數】';
-  var bpms = [ 60, 90, 100, , 120, 130, 140, 150, 160, 170, 180, 190, 200 ];
-  buf.w(`<br><center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
+  var bpms = [ 60, 90, 100, 120, 130, 140, 150, 160, 170, 180, 190, 200 ];
+  buf.w('<br><a name="metronome"></a>',
+        `<center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
         '<tr><th align=right>BPM：</th>');
   for (var i in bpms) {
     var bpm = bpms[i];
-    if (bpm < 140) buf.w(`<th>${bpm}</th>`);
+    if (bpm < 170) buf.w(`<th>${bpm}</th>`);
     else buf.w(`<th style="color:red">${bpm}</th>`);
   }
   buf.w('</tr>');
@@ -82,12 +84,22 @@ th { background-color:lightgray }
 <center><table bgcolor=white cellspacing="3px"><caption>【生成的節拍器試聽】</caption>
 <tr><th align=right>音調：</th>
 <script>
+var clipDur = 5; // minutes
 var prevID, playNum, curBPM, uri;
 function audioEndCB(event) {
+  var perClip = curBPM * clipDur, perHr = curBPM * 60,
+      totalPlays = hoursToPlay * 60 / clipDur;
+  if (playNum > totalPlays) return;
+  if (++playNum > totalPlays) {
+    renderText('msg', `${hoursToPlay}小時播放終了。總計${hoursToPlay*perHr}次。`);
+    event.target.currentTime = 0;
+    event.target.src = '../images/鈴鼓.mp3';
+    event.target.play();
+    return;
+  }
   event.target.currentTime = 0;
   event.target.play();
-  var perMin = curBPM * 5, perHr = curBPM * 60;
-  renderText('msg', uri + `（${perMin}拍；${perHr}拍/時）第${++playNum}輪`);
+  renderText('msg', uri + `（${perClip}拍；${perHr}拍/時）第${playNum}輪`);
 }
 function playMetron(tune, bpm) {
   var newID = `_${bpm}_${tune}`;
@@ -102,17 +114,23 @@ function playMetron(tune, bpm) {
   showEl(a);
   a.src = uri;
   a.play();
-  renderText('msg', uri + `（${bpm*5}拍；${bpm*60}拍/時）`);
+  console.log('bpm:', bpm, ' clipDur:', clipDur, ' hours:', hoursToPlay,
+              ' rounds:', hoursToPlay * 60 / clipDur,
+              '\ntotalBeats:', bpm * 60 * hoursToPlay);
+  renderText('msg', uri + `（${bpm*5}拍；${bpm*60}拍/時）將播放${hoursToPlay}小時`);
 }
 
   var tunes = [ '板','C3','D3','E3','F3','G3','A3','B3','C4','D4','E4','F4','G4','A4','B4' ];
-  var bpms = [ 120, 140, 160, 180, 190, 200 ];
+  var bpms = [ 120, 140, 150, 160, 170, 175, 180, 185, 190, 195, 200 ];
   for (var i in tunes)
     buf.w('<th>', tunes[i], '</th>');
   buf.w('</tr>');
   for (var i in bpms) {
     var bpm = bpms[i];
-    buf.w('<tr><td bgcolor=lightgray>&nbsp;', bpm, '拍/分：</td>');
+    if (bpm > 160)
+      buf.w('<tr><td bgcolor=lightgray>&nbsp;<red>', bpm, '</red>拍/分：</td>');
+    else
+      buf.w('<tr><td bgcolor=lightgray>&nbsp;', bpm, '拍/分：</td>');
     for (var j in tunes) {
       var t = tunes[j];
       if (t == '板') t = '';
@@ -131,7 +149,7 @@ function playMetron(tune, bpm) {
 
 <h3 style="text-align:center; margin-bottom:-10px">生成節拍器音聲文件</h3>
 
-<p>這些音聲是由 tools 目錄下的 gen-metronome.sh（需要 Java）生成的。它只生成WAV；這裡用ffmpeg轉成mp3。不然，自己想辦法。節拍生成器的使用方法如下：</p>
+<p>這些音聲是由tools/gen-metronome.sh（需要 Java）生成的。它只生成WAV；這裡用ffmpeg轉成mp3。不然，自己想辦法。節拍生成器的使用方法如下：</p>
 <pre style="background-color:white; font-size:14px; padding-left:10px">
 tools$ gen-metronome.sh 
 Usage: gen-metronome.sh outFile bpm dur beat

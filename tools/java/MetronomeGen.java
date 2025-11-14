@@ -169,18 +169,14 @@ public class MetronomeGen {
     int i, len = (int)(sampleRate * durSecs);
     double angle = 2 * Math.PI * freqHz / sampleRate;
     double[] env = getEnvelope(envSegs, len);
-    if (env == null) { // no envelope
-      for (i=0; i < len; i++) {
-        short sample = (short) (Short.MAX_VALUE * Math.sin(i * angle));
-        baos.write(sample & 0xFF);        // sample bytes
-        baos.write((sample >> 8) & 0xFF); // little-endian
-      }
-    } else {
-      for (i=0; i<len; i++) {
-        short sample = (short) (Short.MAX_VALUE * Math.sin(i * angle) * env[i]);
-        baos.write(sample & 0xFF);        // sample bytes
-        baos.write((sample >> 8) & 0xFF); // little-endian
-      }
+    for (i=0; i<len; i++) {
+      short sample;
+      if (env != null)
+        sample = (short)(Short.MAX_VALUE * Math.sin(i * angle) * env[i]);
+      else
+        sample = (short)(Short.MAX_VALUE * Math.sin(i * angle));
+      baos.write(sample & 0xFF);        // sample bytes
+      baos.write((sample >> 8) & 0xFF); // little-endian
     }
     return baos.toByteArray();
   }

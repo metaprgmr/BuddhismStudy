@@ -183,6 +183,15 @@ function trimFirstBlankLine(txt) {
   var first = txt.substring(0, idx).trim();
   return (first == '') ? txt.substring(idx+1) : txt;
 }
+function selectOptions(options, cur) { // options: [ value, display... ]
+  var ret = '';
+  for (var i=0; i<options.length; i+=2) {
+    ret += '<option value="' + options[i] + '"';
+    if (options[i] == cur) ret += ' selected';
+    ret += '>' + options[i+1] + '</option>';
+  }
+  return ret;
+}
 
 function digit2(i, increment) {
   if (!i) i = 0;
@@ -203,6 +212,8 @@ function digit3RightAligned(i) {
   if (typeof i == 'string') i = parseInt(i);
   return (i<10) ? ('<font style="opacity:0">00</font>' + i) : (i<100 ? ('<font style="opacity:0">0</font>' + i) : i);
 }
+
+function numberDisp(n) { return n.toLocaleString('en-US'); }
 
 function startsWith() {
   var len = arguments.length;
@@ -845,20 +856,20 @@ function getYourName(yourTag, anyTag) {
 
 function getGlobal(name) { return window[name]; }
 
-function formatTime(tm) {
+function formatTime(tm, simple) {
   if (tm == 0) return '';
   function fmt2Digits(x, min) {
-    if (min && (x < min)) return '<inv>0</inv>0';
-    return (x<10) ? ('<inv>0</inv>'+x) : x;
+    if (min && (x < min)) return simple ? '00': '<inv>0</inv>0';
+    if (x >= 10) return x;
+    return (simple ? '0' : '<inv>0</inv>') + x;
   }
   var hrs = Math.floor(tm / 3600);
   var secs = tm - hrs*3600;
   var mins = Math.floor(secs / 60);
   secs -= mins*60;
-  var res = '';
   if (hrs <= 0)
     return fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
-  return '<b>' + hrs + ':</b>' + fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
+  return (simple ? hrs : `<b>${hrs}</b>`) + ':' + fmt2Digits(mins) + ':' + fmt2Digits(secs, 5);
 }
 
 function enterFullScreenMode() {

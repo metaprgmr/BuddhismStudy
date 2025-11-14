@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>念佛維那</title>
+<style>
+a { text-decoration:none; color:white }
+th { border-bottom: 1px solid black }
+#stg { height:800px; width:436px; background-color:#ffffe8; overflow:auto }
+</style>
+<script src="utils.js"></script>
+</head>
+<body bgcolor="#454"><center>
+<table border=0><tr><td align="center">
+<div id="stg"></div>
+</td><td width="40px"></td><td valign=top style="color:white">
+<h2 style="margin-top:0px">念佛維那</h2>
+ (參看：<a href="../個人文集/念佛节奏.html#metronome">計算器</a>）
+<div id="cfg">config</div>
+</td></tr>
+<tr><td>
+<audio controls id="audiop" style="width:436px; margin-top:5px" onended="agenda.audioEnd(event)">
+</td><td></td><td width="240px" style="color:white" nowrap>
+下輪音調：<br>
+<input name="tune" type="radio" id="t_Ban" checked>板
+<input name="tune" type="radio" id="t_A3">A3
+<input name="tune" type="radio" id="t_A4">A4
+<input name="tune" type="radio" id="t_rotate">輪轉
+</td></tr></table>
+</center></body></html>
+
+<script>
+class MyUI {
+  constructor() {}
+  writeStage(buf) { buf.render('stg'); }
+  writeConfig(buf) { buf.render('cfg'); }
+  getAudioEl() { return e('audiop'); }
+  getTune() {
+    if (e('t_rotate').checked) {
+      if (this.curTone == 'A3') return this.curTone = 'A4';
+      if (this.curTone == 'A4') return this.curTone = '';
+      return this.curTone = 'A3';
+    }
+    if (e('t_A3').checked) return this.curTone = 'A3';
+    if (e('t_A4').checked) return this.curTone = 'A4';
+    return this.curTone = '';
+  }
+}
+var ui = new MyUI();
+
+class Scheme {
+  constructor(name) {
+    this.clipDur = 5; // all MP3 are so
+    this.name = name;
+    this.list = [];
+  }
+  setTotalDur(defaultBPM, hrs, mins) {
+    var len = (hrs*60+(mins||0)) / this.clipDur;
+    if (!defaultBPM) defaultBPM = 120;
+    for (var i=0; i<len; ++i)
+      if (!this.list[i])
+        this.list[i] = defaultBPM;
+    return this;
+  }
+  setAt(idx) {
+    var a = Array.isArray(idx) ? idx : [idx],
+        len = arguments.length-1;
+    for (var j in a) {
+      idx = this.toListIndex(a[j]);
+      for (var i=0; i<len; ++i)
+        this.list[idx+i] = arguments[i+1];
+    }
+    return this;
+  }
+  setToEnd(idx, bpm) {
+    idx = this.toListIndex(idx);
+    var len = this.list.length;
+    for (var i=idx; i<len; ++i)
+      this.list[i] = bpm;
+    return this;
+  }
+  add() {
+    var len = arguments.length;
+    for (var i=0; i<len; ++i)
+      this.list.push(arguments[i]);
+    return this;
+  }
+  addRepeat(bpm, cnt) {
+    for (var i=0; i<cnt; ++i)
+      this.list.push(bpm);
+    return this;
+  }
+  setPlayerSrcAt(idx, start) {
+    idx = this.toListIndex(idx);
+    var a = ui.getAudioEl();
+    if (idx < 0)
+      a.src = this.bellMP3();
+    else {
+      var bpm = this.list[idx];
+      a.src = bpm && this.getMP3(ui.getTune(), bpm) || '';
+    }
+    a.currentTime = 0;
+    if (start && a.src) a.play();
+  }
+  getMP3(tune, bpm) { return `../個人文集/metronomes/metron${tune}-${bpm}-5m_.mp3`; }
+  bellMP3() { return '../images/鈴鼓.mp3'; }
+  timeDisp(mins) {
+    var x = formatTime(mins*60, true);
+    x = x ? x.substring(0, x.length-3) : '00';
+    if (x.length == 2) x = '0:' + x;
+    return x;
+  }
+  toListIndex(i) {
+    if (typeof i == 'string') {
+      var a = i.split(':');
+      if (a.length <= 1) return parseInt(i)/5;
+      return (parseInt(a[0])*60 + parseInt(a[1])) / 5;
+    }
+    return i;
+  }
+  start() {
+    this.curPlaying = 0;
+    this.setPlayerSrcAt(0);
+
+    var buf = new Buffer();
+    buf.w('<table border=0 cellpadding=0 cellspacing="3px">',
+          '<tr><th></th><th>BPM</th><th>&nbsp;&nbsp;本輪拍數</th>',
+          '<th>&nbsp;&nbsp;累計拍數</th><th>&nbsp;&nbsp;時間</th></tr>');
+    var len = this.list.length;
+    var cumuCnt = 0, cumuTime = 0;
+    for (var i=0; i<len; ++i) {
+      var bpm = this.list[i], cnt = bpm * 5;
+      cumuCnt += cnt;
+      var styl = ' style="color:green"';
+      if (bpm >= 170) styl = ' style="color:red"';
+      else if (bpm >= 160) styl = ' style="color:blue"';
+      buf.w(`<tr><td style="font-size:12px" align=right>${i+1}.&nbsp;</td>`,
+            `<td id="_bpm${i}" align=center${styl}>${bpm}</td>`,
+            `<td align=right style="opacity:0.4">${cnt}拍&nbsp;</td>`,
+            `<td id="_cumu${i}" style="opacity:0.4" align=right>${numberDisp(cumuCnt)}拍&nbsp;</td>`,
+            `<td align=right>${this.timeDisp(cumuTime)}</td>`,
+            '</tr>');
+      cumuTime += 5;
+    }
+    buf.w('</table>');
+    ui.writeStage(buf);
+    e('_bpm0').style.backgroundColor = 'yellow';
+  }
+  _audioEnd(event) {
+    if (this.curPlaying < 0) return;
+    var el;
+    if (this.curPlaying < this.list.length-1) {
+      el = e(`_cumu${this.curPlaying}`);
+        if (this.curPlaying > 28) showTop(el);
+        el.style.opacity = 1;
+        el.style.color = 'green';
+      e(`_bpm${this.curPlaying}`).style.backgroundColor = '';
+      e(`_bpm${++this.curPlaying}`).style.backgroundColor = 'yellow';
+    }
+    else {
+      el = e(`_cumu${this.curPlaying}`);
+        el.style.opacity = 1;
+        el.style.color = 'green';
+      e(`_bpm${this.curPlaying}`).style.backgroundColor = '';
+      this.curPlaying = -1;
+    }
+    this.setPlayerSrcAt(this.curPlaying, true);
+  }
+}
+
+class Agenda {
+  constructor() {
+    this.schemes = {};
+  }
+  addScheme(s) { this.schemes[s.name] = s; return this; }
+  startScheme(schName) {
+    this.cur = this.schemes[schName];
+    this.cur && this.cur.start();
+    return this;
+  }
+  audioEnd(event) { this.cur && this.cur._audioEnd(event); }
+  updateUI() {
+    var buf = new Buffer(),
+        schnames = Object.keys(this.schemes),
+        opts = [];
+    if (schnames.length == 0)
+      buf.w('(沒有課表)');
+    else {
+      for (var i=0; i<schnames.length; ++i) {
+        var n = schnames[i]
+        opts.push(n);
+        opts.push(n);
+      }
+      buf.w('<br><br>課表：<br>',
+            `<select id="schemelst">${selectOptions(opts, opts[0])}</select>`);
+    }
+    ui.writeConfig(buf);
+    e('schemelst').addEventListener('change', schemeChange);
+    this.startScheme(opts[0]);
+    return this;
+  }
+}
+function schemeChange(event) { agenda.startScheme(event.target.value); }
+
+var agenda = new Agenda('stg', 'audiop')
+    .addScheme(new Scheme('四小時四萬唸（175bpm）')
+       .setTotalDur(175, 4)
+       .setAt(0, 120, 140, 160)
+       .setAt(['0:45','1:15','1:45','2:15','2:45','3:15'], 160)
+       .setAt('3:50', 140)
+       .setAt('3:55', 120))
+    .addScheme(new Scheme('二小時二萬唸（175bpm）')
+       .setTotalDur(175, 2)
+       .setAt(0, 120, 150, 170)
+       .setAt(['1:00'], 160)
+       .setAt('1:50', 140)
+       .setAt('1:55', 120))
+    .addScheme(new Scheme('十小時十萬唸（175bpm）')
+       .setTotalDur(175, 10)
+       .setAt(0, 120, 140, 160)
+       .setAt(['0:45','1:15','1:45','2:15','2:45','3:15','3:45','4:15','4:45'], 160)
+       .setAt(['5:15','5:45','6:15','6:45','7:15','7:45','8:15','8:45','9:15'], 160)
+       .setAt('9:50', 140)
+       .setAt('9:55', 120))
+    .addScheme(new Scheme('四小時四萬唸（180bpm）')
+       .setTotalDur(180, 3, 50)
+       .setAt(0, 120, 140, 160)
+       .setAt(['0:20','1:05','1:30','2:00','3:00'], 185)
+       .setAt(['0:45','1:15','1:45','2:15','2:45','3:15'], 160)
+       .setAt('3:45', 160)
+       .setAt('3:50', 140)
+       .setAt('3:55', 120))
+    .updateUI();
+</script>
