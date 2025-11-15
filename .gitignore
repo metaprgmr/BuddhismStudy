@@ -5,6 +5,7 @@ repo-else.js
 .DS_Store
 *.class
 *.swp
+*.bak
 *.tmp
 *save
 *~

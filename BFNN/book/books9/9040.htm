@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>大方廣佛華嚴經</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var HY40 = new (class extends SeriesContainer {
+  constructor() { super(); }
+  loadJS(vol) { addjs(`9040/${to2d(vol||1)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setBuffer(buf).setXG().setVolumesInJS(true).reInit(9040,40);
+        this.volNum = HY40.volNum;
+        var zn = zNumber(this.volNum);
+        this.writeStart(`大方廣佛華嚴經入不思議解脫境界普賢行願品|卷${zn}`, `四十華嚴 卷${HY40.volNum}`)
+            .writeBody('\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n' +
+                       `/TEXT339/大方廣佛華嚴經入不思議解脫境界普賢行願品卷${zn}\n` +
+                       HY40.text +
+                       `\n\n/TEXT339R/大方廣佛華嚴經入不思議解脫境界普賢行願品卷${zn}\n\n/VOLSEP/\n`, true);
+      }
+    })(); // class extends DocInfo
+
+    buf.render('stg');
+  }
+})(); // HY40
+
+HY40.show(get('vol')); // 卷
+
+// 經文來源：https://zh.wikisource.org/zh-hant/大方廣佛華嚴經四十卷
+</script>

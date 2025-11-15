@@ -82,8 +82,8 @@ HYJ.text =
 <a href="?vol=60">卷第六十　　入法界品 　　　　　第三十九 之一</a>　　　【九會逝多林】<br>
 <a href="?vol=61">卷第六十一　　　　　　　　　　 　　　　 之二</a>　　　（一品廿一卷）<br>
 <a href="?vol=62">卷第六十二　　　　　　　　　　 　　　　 之三</a><br>
-<a href="?vol=63">卷第六十三　　　　　　　　　　 　　　　 之四</a><br>
-<a href="?vol=64">卷第六十四　　　　　　　　　　 　　　　 之五</a><br>
+<a href="?vol=63">卷第六十三　　　　　　　　　　 　　　　 之四</a>　　　（或見《<a href="9040.htm">普賢行願品</a>》<br>
+<a href="?vol=64">卷第六十四　　　　　　　　　　 　　　　 之五</a>　　　　又名《四十華嚴》）<br>
 <a href="?vol=65">卷第六十五　　　　　　　　　　 　　　　 之六</a><br>
 <a href="?vol=66">卷第六十六　　　　　　　　　　 　　　　 之七</a><br>
 <a href="?vol=67">卷第六十七　　　　　　　　　　 　　　　 之八</a><br>
@@ -99,8 +99,7 @@ HYJ.text =
 <a href="?vol=77">卷第七十七　　　　　　　　　　 　　　　 之十八</a><br>
 <a href="?vol=78">卷第七十八　　　　　　　　　　 　　　　 之十九</a><br>
 <a href="?vol=79">卷第七十九　　　　　　　　　　 　　　　 之二十</a><br>
-<a href="?vol=80">卷第八十　　　　　　　　　　　 　　　　 之二十一<br>
-<a href="../books/0008.htm">　　　　　　普賢行願品</a>
+<a href="?vol=80">卷第八十　　　　　　　　　　　 　　　　 之二十一
 </td></tr></table></html>
 /VOLSEP/
 `;
