@@ -22,12 +22,13 @@ var HY40 = new (class extends SeriesContainer {
         super();
         this.setBuffer(buf).setXG().setVolumesInJS(true).reInit(9040,40);
         this.volNum = HY40.volNum;
-        var zn = zNumber(this.volNum);
-        this.writeStart(`大方廣佛華嚴經入不思議解脫境界普賢行願品|卷${zn}`, `四十華嚴 卷${HY40.volNum}`)
+        var ttl = '大方廣佛華嚴經入不思議解脫境界普賢行願品',
+            zn = zNumber(this.volNum);
+        this.writeStart(`${ttl}|卷${zn}`, `四十華嚴 卷${HY40.volNum}`)
             .writeBody('\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n' +
-                       `/TEXT339/大方廣佛華嚴經入不思議解脫境界普賢行願品卷${zn}\n` +
+                       `/TEXT339/${ttl}卷${zn}\n` +
                        HY40.text +
-                       `\n\n/TEXT339R/大方廣佛華嚴經入不思議解脫境界普賢行願品卷${zn}\n\n/VOLSEP/\n`, true);
+                       `\n\n/TEXT339R/${ttl}卷${zn}\n\n/VOLSEP/\n`, true);
       }
     })(); // class extends DocInfo
 
