@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>大寶積經</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var DBJJ = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9050/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        function translator(vn) {
+          return '唐．菩提流志等譯';
+        }
+        this.setVolumesInJS(true).setBuffer(buf).setXG().reInit(9050, 120);
+        var vn = this.volNum = DBJJ.volNum, ttl = '大寶積經',
+            zn = zNumber(DBJJ.volNum);
+        if (vn) // write the volume content
+          this.writeStart(`${ttl}||卷${zn}`, `寶積經卷${vn}`);
+        else // write the grand TOC
+          this.writeStart(`${ttl}||Mahā-ratnakūṭa Sūtra`);
+
+        var buf1 = new Buffer();
+        buf1.w('/TEXT030C/', translator(vn), '\n')
+            .w(DBJJ.text);
+        this.writeBody(buf1.render(), true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // DBJJ
+
+DBJJ.show(get('vol'), get('pin')); // 卷 品
+
+// 經文來源：
+</script>

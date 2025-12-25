@@ -13,15 +13,15 @@ G3=196
 A3=220
 B3=246.9
 
-BPM=150
+BPM=90
 DUR=5m_
 
-#gen-metronome.sh metron-$BPM-$DUR.wav $BPM $DUR ../images/metrobeat.wav
-#to-mp3.sh metron-$BPM-$DUR.wav metron-$BPM-$DUR.mp3
-#gen-metronome.sh metronA3-$BPM-$DUR.wav $BPM $DUR $A3
-#to-mp3.sh metronA3-$BPM-$DUR.wav metronA3-$BPM-$DUR.mp3
-#gen-metronome.sh metronA4-$BPM-$DUR.wav $BPM $DUR $A4
-#to-mp3.sh metronA4-$BPM-$DUR.wav metronA4-$BPM-$DUR.mp3
+gen-metronome.sh metron-$BPM-$DUR.wav $BPM $DUR ../images/metrobeat.wav
+to-mp3.sh metron-$BPM-$DUR.wav metron-$BPM-$DUR.mp3
+gen-metronome.sh metronA3-$BPM-$DUR.wav $BPM $DUR $A3
+to-mp3.sh metronA3-$BPM-$DUR.wav metronA3-$BPM-$DUR.mp3
+gen-metronome.sh metronA4-$BPM-$DUR.wav $BPM $DUR $A4
+to-mp3.sh metronA4-$BPM-$DUR.wav metronA4-$BPM-$DUR.mp3
 
 #gen-metronome.sh metronC3-$BPM-$DUR.wav $BPM $DUR $C3
 #gen-metronome.sh metronD3-$BPM-$DUR.wav $BPM $DUR $D3

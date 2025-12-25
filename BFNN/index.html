@@ -43,8 +43,8 @@ FF::before { content:"Firefox" }
 </center></body></html>
 
 <script>
-const topics = '所集佛經　金剛經　楞嚴經　法華經　唯識論　淨土　理修　善書　外加內容|' +
-               '佛學基礎　圓覺經　地藏經　占察經　摩訶衍　天台　戒律　人物　文字處理';
+const topics = '所集佛經　金剛經　楞嚴經　法華經　唯識論　禪修　淨土　理修　人生　外加內容|' +
+               '佛學基礎　圓覺經　地藏經　占察經　摩訶衍　天台　善書　戒律　人物　文字處理';
 function showNav(topic) {
   var a = topics.split('|'), buf = new Buffer();
   for (var i=0; i<a.length; ++i) {
@@ -150,12 +150,14 @@ function showList(topic) {
 }
 
 function showSutraList(buf) {
-  var lsts = new ChoiceLists();
+  var lsts = new ChoiceLists(), len = lsts.collectionCount();
   buf.w('<p>&nbsp;</p>',
         ' <center><table border=0 bgcolor="white"><tr><td valign=top>');
-  lsts.renderList(buf, false);
-  buf.w('</td><td valign=top>');
-  lsts.renderList(buf, true);
+  for (var i=0; i<len; ++i) {
+    lsts.renderList(buf, i);
+    if (i<len-1)
+      buf.w('</td><td valign=top style="border-left:1px solid gray; padding-left:5px">');
+  }
   buf.w('</td></tr></table></center>');
 }
 

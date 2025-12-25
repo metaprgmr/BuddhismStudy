@@ -48,6 +48,7 @@ function parseZNumber(n) {
     else {
       switch (n[i]) {
       case '十': cur = 10; check億萬 = true; break;
+      case '〇':
       case '零': ++i; break;
       default: throw `Invalid Chinese number: ${n}`;
       }
@@ -150,19 +151,48 @@ function get(name) {
   return queryParams[name];
 }
 
+class MultiLingual {
+  constructor() {
+    this.langSet = {};
+    var mycur = getLang();
+    for (var i in arguments) {
+      var a = arguments[i].split(':'); // lang:divId
+      this.langSet[a[0]] = a[1];
+      if (!mycur) mycur = a[0];
+    }
+    this.useLang(mycur);
+  }
+  useLang(l) {
+    if (l == this.cur) return;
+    setLang(l);
+    this.cur = l;
+    var keys = Object.keys(this.langSet);
+    for (var i in keys) {
+      var lang = keys[i], elid = this.langSet[lang];
+      if (lang == l) showEl(elid); else hideEl(elid);
+    }
+  }
+}
+var multiLang;
+function supportMultiLang() { multiLang = Reflect.construct(MultiLingual, arguments); }
+function useLang(l) { multiLang && multiLang.useLang(l); }
+
 var urlMyName = get('myname');
 
+function setLang(l)         { var cur = localStorage.getItem('lang'); localStorage.setItem('lang',l); return cur!=l; }
+function getLang()          { return localStorage.getItem('lang'); }
 function addjs(uri)         { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
 function addStyleTag(s)     { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); }
-function toEl(x)            { return (typeof x=='string')?document.getElementById(x):x; }
-function e(id)              { return document.getElementById(id) }
-function showEl()           { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
-function hideEl()           { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='none'); } }
+function toEl(x)  { return (typeof x=='string')?document.getElementById(x):x; }
+function e(id)    { return document.getElementById(id) }
+function showEl() { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
+function hideEl() { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='none'); } }
 function enableEl(id, set)  { var el=toEl(id); el && (set ? el.removeAttribute('disabled') : el.setAttribute('disabled', '')); }
 function showTop(id)        { var el=toEl(id); el && el.scrollIntoView(); }
 function showModal(id,s,t)   { showDialog(id,s,t); }
 function showModeless(id,s,t){ showDialog(id,s,t,true); }
-function w()                { for(var i in arguments){var x=arguments[i]; if(typeof x!='number')x=x||''; document.write(x);} }
+function removeEl(el) { var el = toEl(el); el && el.parentNode && el.parentNode.removeChild(el); }
+function w() { for(var i in arguments){var x=arguments[i]; if(typeof x!='number')x=x||''; document.write(x);} }
 function renderText(id,t)   { id ? new Buffer(t).render(id) : document.write(t); }
 function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); }
 function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); }
@@ -176,6 +206,74 @@ function jslnk(jscall, txt) { return `<a href="javascript:${jscall}">${txt}</a>`
 function toOL(lst, extra) { return `<ol ${extra||''}><li>${lst.join('</li><li>')}</li></ol>`; }
 function toOLZH(lst) { return toOL(lst, 'class=cjk'); }
 function toUL(lst) { return `<ul><li>${lst.join('</li><li>')}</li></ul>`; }
+function showTableData(data, tableExtra, sep, colfxn) {
+  sep = sep || '\|';
+  var buf = new Buffer();
+  var a = data.split('\n'),
+      titleTrExtra = '', thExtras = [], tdExtras = [], caption,
+      started = false, tag = 'th', firstRow = '';
+  for (var i in a) {
+    var ln = a[i].trim(); if (!ln) continue;
+
+    var trExtra = '', extras = tdExtras, row;
+    if (!started) {
+      if (ln.startsWith('#groups#')) {
+        row = ln.substring(8).split(sep);
+        for (var i=0; i<row.length; ++i) {
+          var x = row[i], idx = x.indexOf(':');
+          if (idx <= 0)
+            firstRow += `<th>${x}</th>`;
+          else
+            firstRow += `<th colspan="${x.substring(0,idx)}">${x.substring(idx+1)}</th>`;
+        }
+        continue;
+      }
+      else if (ln.startsWith('#caption#')) {
+        caption = ln.substring(9).trim();
+        continue;
+      }
+      else if (ln.startsWith('#tr0#')) {
+        titleTrExtra = ln.substring(5).trim();
+        continue;
+      }
+      else if (ln.startsWith('#ths#')) {
+        thExtras = ln.substring(5).split(sep);
+        continue;
+      }
+      else if (ln.startsWith('#tds#')) {
+        tdExtras = ln.substring(5).split(sep);
+        for (var k=0; k<tdExtras.length; ++k) {
+          var x = tdExtras[k];
+          if (x && (x.indexOf('=') < 0)) tdExtras[k] = 'align=' + x;
+        }
+        continue;
+      }
+      else {
+        trExtra = titleTrExtra;
+        extras = thExtras;
+        buf.w(`<table ${tableExtra||''}>`)
+           .wIf(caption, `<caption>${caption}</caption>`)
+           .wIf(firstRow, `<tr ${trExtra||''}>${firstRow}</tr>`);
+        started = true;
+      }
+    }
+
+    var row = ln.split(sep);
+    buf.w(`<tr ${trExtra||''}>`);
+    colfxn && buf.w(colfxn('', 'tr'));
+    for (var i=0; i<row.length; ++i) {
+      var c = row[i] || '';
+      colfxn && c && (c = colfxn(c, tag));
+      buf.w(`<${tag} ${extras[i]||''}>${c}</${tag}>`);
+    }
+    colfxn && buf.w(colfxn('', '/tr'));
+    buf.w('</tr>');
+    tag = 'td';
+  }
+  colfxn && buf.w(colfxn('', '/table'));
+  buf.w('</table>');
+  return buf.render();
+}
 function trimFirstBlankLine(txt) {
   if (!txt) return txt;
   var idx = txt.indexOf('\n');
@@ -509,28 +607,43 @@ class Counter {
 
 class TreeNode {
   constructor(name) { this.name = name; }
+  setShowRoot(yes) { this.showRoot = yes; }
   isRoot() { return !this.parent; }
   hasChildren() { return this.children && this.children.length; }
   numChildren() { return this.children ? this.children.length : 0; }
   lastChild() { return this.children && this.children[this.children.length-1]; }
-  addChild(c) { // returns c
+  addChild(c, info) { // returns c
     c.parent = this;
     if (!this.children) this.children = [];
     this.children.push(c);
+    if (info) {
+      if (!this.childrenInfo)
+        this.childrenInfo = [];
+      this.childrenInfo[this.children.length-1] = info;
+    }
     return c;
   }
-  dfs(fxn) {
-    if (!this.isRoot()) fxn(this);
-    var len = this.numChildren();
-    for (var i=0; i<len; ++i)
-      this.children[i].dfs(fxn);
+  getChildInfo(idx) {
+    if (typeof idx != 'number') return null;
+    return this.childrenInfo && this.childrenInfo[idx];
   }
-  dump(indent) {
-    if (!this.isRoot())
-      console.log(repeat(indent, this.depth()) + this.name);
+  dfs(fxn,i) {
+    if (!this.isRoot()) fxn(this,i);
     var len = this.numChildren();
     for (var i=0; i<len; ++i)
-      this.children[i].dump(indent);
+      this.children[i].dfs(fxn,i);
+  }
+  dump(indent, buf, fxn, i) {
+    if (this.showRoot || !this.isRoot()) {
+      var n = fxn ? fxn(this,i) : this.name, d = this.depth();
+      if (!this.isRoot()) d++;
+      n = repeat(indent, d) + n;
+      buf ? buf.w(n,'\n') : console.log(n);
+    }
+
+    var len = this.numChildren();
+    for (var i=0; i<len; ++i)
+      this.children[i].dump(indent, buf, fxn, i);
   }
   depth() { // not-slim'med!
     var ret = -1;

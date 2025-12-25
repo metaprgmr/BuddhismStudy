@@ -33,6 +33,7 @@ BODY {SCROLLBAR-FACE-COLOR: #09f; SCROLLBAR-HIGHLIGHT-COLOR: #09f; SCROLLBAR-SHA
 hr.volsep { border: none; height: 1px; background: rgba(255,0,0,0.3); }
 
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
+xg { text-decoration:underline; text-decoration-color:red; text-decoration-style:dashed }
 my   { }
 my_1 { }
 .topbar { border-top:1px solid gray }
@@ -47,19 +48,23 @@ kpDone { color:#339 }
 .gathanum { float:left; color:black; opacity:0.4; font-size:10px; width:25pt; padding-top:3pt }
 .gatha { color:#038 }
 .gatha2 { color:teal }
+.plain { color:black }
+plain { color:black }
 verseNum { color:#339; font-weight:normal }
  verseNum::before { content:'【' }
  verseNum::after  { content:'】 ' }
 dcirc  { color:purple }
  dcirc::before { content:'◎' }
 small { color:brown }
-cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
-.cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
-ail { color:#030 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
-.ail { color:#030 ; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
-red { color:red }
+cil   { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
+.cil  { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
+ail   { color:#030; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+.ail  { color:#030; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+ail1  { color:#666; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+.ail1 { color:#666; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+red   { color:red }
 black { color:black }
-purple { color:purple }
+purple{ color:purple }
 label { font-weight:normal; color:purple }
 inv { opacity:0 }
 dim { opacity:0.4 }
@@ -77,6 +82,8 @@ LNSP::before {content: '　';}
 .BQ2  { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
 .BQ3  { margin-left:36.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
 .BQ4  { margin-left:48.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; }
+mantra    { color:teal }
+.mantra   { color:teal }
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal }
 .MANTRAL  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:teal }
 .TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}

@@ -39,7 +39,7 @@ public class MetronomeGen {
       "  where: outFile is the output WAV file name.\n" +
       "         bpm     is an integer for beats-per-minute.\n" +
       "         dur     is duration; can end with 's' (seconds) or 'm' (minutes).\n" +
-      "                 Further, if ends with '_', the last 20 beats will be softer.\n" +
+      "                 Further, if ends with '_', the last 10 beats will be softer.\n" +
       "         beat    can be a file name, or a note frequency such as 440.\n" +
       "A few examples:\n" +
       "    java MetronomeGen metron-120-5m.wav    120 5m  ../images/metrobeat.wav\n" +
@@ -122,15 +122,20 @@ public class MetronomeGen {
       }
     }
     if (endTaper) {
-      int t1 = (int)(len-beatDist*20), t2 = (int)(len-beatDist*10);
-      for (p1=t1; p1<t2; ++p1)
-        buf[p1] = (byte)(buf[p1] * 6 / 10);
-      double morphz = 0.06, morphR = 0.3-morphz, dist = len-t2;
+      int t2 = (int)(len-beatDist*10);
+      double morphz = 0.3, morphR = 1.0-morphz, dist = len-t2;
       for (p1=t2; p1<len-2; p1+=2) {
         double morph = (1-(p1-t2)/dist) * morphR + morphz;
         buf[p1  ] = (byte)((int)(buf[p1  ] * morph) & 0xFF);
         buf[p1+1] = (byte)((int)(buf[p1+1] * morph) & 0xFF);
       }
+      // also change the first 3 beats
+      buf[0] = (byte)((int)(buf[0] * 0.4) & 0xFF);
+      buf[1] = (byte)((int)(buf[1] * 0.4) & 0xFF);
+      buf[2] = (byte)((int)(buf[0] * 0.6) & 0xFF);
+      buf[3] = (byte)((int)(buf[1] * 0.6) & 0xFF);
+      buf[4] = (byte)((int)(buf[0] * 0.8) & 0xFF);
+      buf[5] = (byte)((int)(buf[1] * 0.8) & 0xFF);
     }
 
     writeWAV(outFile, new SoundInfo(si.format, buf));

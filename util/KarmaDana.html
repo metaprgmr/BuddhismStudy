@@ -8,6 +8,7 @@ a { text-decoration:none; color:white }
 th { border-bottom: 1px solid black }
 #stg { height:800px; width:436px; background-color:#ffffe8; overflow:auto }
 </style>
+<script src="../env.js"></script>
 <script src="utils.js"></script>
 </head>
 <body bgcolor="#454"><center>
@@ -20,6 +21,7 @@ th { border-bottom: 1px solid black }
 </td></tr>
 <tr><td>
 <audio controls id="audiop" style="width:436px; margin-top:5px" onended="agenda.audioEnd(event)">
+<audio id="audiop2">
 </td><td></td><td width="240px" style="color:white" nowrap>
 下輪音調：<br>
 <input name="tune" type="radio" id="t_Ban" checked>板
@@ -35,6 +37,7 @@ class MyUI {
   writeStage(buf) { buf.render('stg'); }
   writeConfig(buf) { buf.render('cfg'); }
   getAudioEl() { return e('audiop'); }
+  getAudio2El() { return e('audiop2'); }
   getTune() {
     if (e('t_rotate').checked) {
       if (this.curTone == 'A3') return this.curTone = 'A4';
@@ -55,6 +58,8 @@ class Scheme {
     this.list = [];
   }
   setTotalDur(defaultBPM, hrs, mins) {
+    this.isNianFo = (defaultBPM < 20);
+    if (this.isNianFo) defaultBPM *= 4;
     var len = (hrs*60+(mins||0)) / this.clipDur;
     if (!defaultBPM) defaultBPM = 120;
     for (var i=0; i<len; ++i)
@@ -90,20 +95,35 @@ class Scheme {
       this.list.push(bpm);
     return this;
   }
+  playBell(type, volume) {
+    var a = ui.getAudio2El(),
+        uri = this.bellMP3(type);
+    if (a.src != uri) a.src = uri;
+    a.volume = volume || 1.0;
+    a.play();
+  }
   setPlayerSrcAt(idx, start) {
     idx = this.toListIndex(idx);
     var a = ui.getAudioEl();
-    if (idx < 0)
-      a.src = this.bellMP3();
-    else {
-      var bpm = this.list[idx];
-      a.src = bpm && this.getMP3(ui.getTune(), bpm) || '';
+    if (idx < 0) {
+      this.playBell();
+      return;
     }
+    var bpm = this.list[idx],
+        uri = bpm && this.getMP3(ui.getTune(), bpm) || '';
+    if (a.src != uri) a.src = uri;
     a.currentTime = 0;
     if (start && a.src) a.play();
   }
-  getMP3(tune, bpm) { return `../個人文集/metronomes/metron${tune}-${bpm}-5m_.mp3`; }
-  bellMP3() { return '../images/鈴鼓.mp3'; }
+  getMP3(tune, bpm) {
+    var base = '../個人文集/metronomes';
+    switch (bpm) {
+    case 40: return `${base}/metron-10-apm.mp3`;
+    case 48: return `${base}/metron-12-apm.mp3`;
+    default: return `${base}/metron${tune}-${bpm}-5m_.mp3`;
+    }
+  }
+  bellMP3(type) { return `../images/鈴鼓${type=='short' ? '1' : ''}.mp3`; }
   timeDisp(mins) {
     var x = formatTime(mins*60, true);
     x = x ? x.substring(0, x.length-3) : '00';
@@ -122,46 +142,51 @@ class Scheme {
     this.curPlaying = 0;
     this.setPlayerSrcAt(0);
 
-    var buf = new Buffer();
+    var buf = new Buffer(), isnf = this.isNianFo,
+        unit = isnf?'唸':'拍', XPM = isnf?'APM':'BPM';
     buf.w('<table border=0 cellpadding=0 cellspacing="3px">',
-          '<tr><th></th><th>BPM</th><th>&nbsp;&nbsp;本輪拍數</th>',
-          '<th>&nbsp;&nbsp;累計拍數</th><th>&nbsp;&nbsp;時間</th></tr>');
-    var len = this.list.length;
-    var cumuCnt = 0, cumuTime = 0;
+          `<tr><th></th><th>${XPM}</th><th>&nbsp;&nbsp;本輪${unit}數</th>`,
+          `<th>&nbsp;&nbsp;累計${unit}數</th><th>&nbsp;&nbsp;時間</th></tr>`);
+    var len = this.list.length,
+        cumuCnt = 0, cumuTime = 0;
     for (var i=0; i<len; ++i) {
-      var bpm = this.list[i], cnt = bpm * 5;
+      var xpm = this.list[i];
+      if (isnf) xpm /= 4;
+      var cnt = xpm * 5;
       cumuCnt += cnt;
       var styl = ' style="color:green"';
-      if (bpm >= 170) styl = ' style="color:red"';
-      else if (bpm >= 160) styl = ' style="color:blue"';
+      if (xpm >= 170) styl = ' style="color:red"';
+      else if (xpm >= 160) styl = ' style="color:blue"';
       buf.w(`<tr><td style="font-size:12px" align=right>${i+1}.&nbsp;</td>`,
-            `<td id="_bpm${i}" align=center${styl}>${bpm}</td>`,
-            `<td align=right style="opacity:0.4">${cnt}拍&nbsp;</td>`,
-            `<td id="_cumu${i}" style="opacity:0.4" align=right>${numberDisp(cumuCnt)}拍&nbsp;</td>`,
-            `<td align=right>${this.timeDisp(cumuTime)}</td>`,
-            '</tr>');
+            `<td id="_xpm${i}" align=center${styl}>${xpm}</td>`,
+            `<td align=right style="opacity:0.4">${cnt}${unit}&nbsp;</td>`,
+            `<td id="_cumu${i}" style="opacity:0.4" align=right>${numberDisp(cumuCnt)}${unit}&nbsp;</td>`,
+            `<td align=right>${this.timeDisp(cumuTime)}</td></tr>`);
       cumuTime += 5;
     }
     buf.w('</table>');
     ui.writeStage(buf);
-    e('_bpm0').style.backgroundColor = 'yellow';
+    e('_xpm0').style.backgroundColor = 'yellow';
   }
   _audioEnd(event) {
     if (this.curPlaying < 0) return;
-    var el;
+    var el = this.curPlaying+1;
+    if (this.curPlaying > 0 && (el % 6)==0)
+      if (el % 12 == 0) this.playBell();
+      else this.playBell('short', 0.5);
     if (this.curPlaying < this.list.length-1) {
       el = e(`_cumu${this.curPlaying}`);
         if (this.curPlaying > 28) showTop(el);
         el.style.opacity = 1;
         el.style.color = 'green';
-      e(`_bpm${this.curPlaying}`).style.backgroundColor = '';
-      e(`_bpm${++this.curPlaying}`).style.backgroundColor = 'yellow';
+      e(`_xpm${this.curPlaying}`).style.backgroundColor = '';
+      e(`_xpm${++this.curPlaying}`).style.backgroundColor = 'yellow';
     }
     else {
       el = e(`_cumu${this.curPlaying}`);
         el.style.opacity = 1;
         el.style.color = 'green';
-      e(`_bpm${this.curPlaying}`).style.backgroundColor = '';
+      e(`_xpm${this.curPlaying}`).style.backgroundColor = '';
       this.curPlaying = -1;
     }
     this.setPlayerSrcAt(this.curPlaying, true);
@@ -171,6 +196,9 @@ class Scheme {
 class Agenda {
   constructor() {
     this.schemes = {};
+    var nf = getGlobal('NIAN_FO');
+    if (nf)
+      this.addScheme(new Scheme(nf[0]).setTotalDur(nf[1], nf[2], nf[3]));
   }
   addScheme(s) { this.schemes[s.name] = s; return this; }
   startScheme(schName) {
@@ -203,6 +231,10 @@ class Agenda {
 function schemeChange(event) { agenda.startScheme(event.target.value); }
 
 var agenda = new Agenda('stg', 'audiop')
+    .addScheme(new Scheme('四小時二萬唸（90bpm）')
+       .setTotalDur(90, 4))
+    .addScheme(new Scheme('四小時秒唸')
+       .setTotalDur(60, 4))
     .addScheme(new Scheme('四小時四萬唸（175bpm）')
        .setTotalDur(175, 4)
        .setAt(0, 120, 140, 160)

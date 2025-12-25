@@ -166,6 +166,7 @@ class DocInfo {
     if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
     else this.w(`&nbsp;<a href="${fname(this.getIdAt(this.volNum+1))}">&raquo;</a>`);
     if (links) this.w('　', links);
+    return this;
   }
   writeSeriesNavForJS(links) {
     function lnk(vnum, disp) {
@@ -183,6 +184,7 @@ class DocInfo {
     if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
     else this.w('&nbsp;', lnk(this.volNum+1, '&raquo;'));
     if (links) this.w('　', links);
+    return this;
   }
   writeBody(txt, withEnd) {
     // The features are:
@@ -430,7 +432,7 @@ class DocInfo {
   }
 
   localProc(ln) {
-    // process inline function call; e.g. 9028
+    // process inline function call; e.g. 9028 for "{R...}", "{P...}"
     var idx = ln.indexOf('{');
     if (idx >= 0) {
       var ret = '';
@@ -519,6 +521,7 @@ class DocInfo {
     default: bodyTxt = arguments[2]; docTtl = arguments[1]; break;
     }
     this.writeStart(ttl, docTtl).writeBody(bodyTxt, true);
+    return this;
   }
 
 } // end of DocInfo.
@@ -582,7 +585,7 @@ function write0119(filenum, body) {
     { id:137, vol:6 }, { id:138, vol:6 }, { id:139, vol:6 }, { id:140, vol:7 },
     { id: 73, vol:7 }, { id:141, vol:7 }, { id:142, vol:7 }, { id:143, vol:7 },
   ];
-  new (class extends DocInfo {
+  return new (class extends DocInfo {
     constructor() {
       super();
       this.idMap = [];
@@ -748,7 +751,7 @@ function write1644(n, body) {
 
 // -- 簡明成唯識論白話講記 于凌波居士 --
 function write2088(n, subttl, body) {
-  new (class extends DocInfo {
+  return new (class extends DocInfo {
     constructor() {
       super();
       var zn = zNumber(n);
@@ -843,7 +846,7 @@ function write2088(n, subttl, body) {
 
 // -- 海仁法師 大佛頂首楞嚴經講記 --
 function write1875(n, body) {
-  new (class extends DocInfo {
+  return new (class extends DocInfo {
     constructor() {
       super();
       this.VERSES = getHaiRenVerses();
@@ -867,7 +870,7 @@ function write1875(n, body) {
 
 // -- 圓瑛大師 大佛頂首楞嚴經講義 --
 function write1472(n, body) {
-  new (class extends DocInfo {
+  return new (class extends DocInfo {
     constructor() {
       super();
       this.reInit(1472, 24, n)
@@ -926,7 +929,7 @@ function write1472(n, body) {
 
 // -- 大佛頂首楞嚴經正脈疏 交光大師 --
 function write1762(n, body) {
-  new (class extends DocInfo {
+  return new (class extends DocInfo {
     constructor() {
       super();
       this.reInit(1762, 38, n);

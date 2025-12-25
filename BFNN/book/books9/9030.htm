@@ -43,19 +43,18 @@ var DJJ = new (class extends SeriesContainer {
           default: return '';
           }
         }
-        this.setVolumesInJS(true);
-        this.setBuffer(buf).setXG().reInit(9030, 60);
-        var vn = this.volNum = DJJ.volNum;
-        var zn = zNumber(DJJ.volNum);
+        this.setVolumesInJS(true).setBuffer(buf).setXG().reInit(9030, 60);
+        var vn = this.volNum = DJJ.volNum, ttl = '大方等大集經',
+            zn = zNumber(DJJ.volNum);
         if (vn) // write the volume content
-          this.writeStart(`大方等大集經||卷${zn}`, `大集經${pin(vn)}卷${vn}`);
+          this.writeStart(`${ttl}||卷${zn}`, `大集經${pin(vn)}卷${vn}`);
         else // write the grand TOC
-          this.writeStart(`大方等大集經||Mahā-saṃnipāta Sūtra`);
+          this.writeStart(`${ttl}||Mahā-saṃnipāta Sūtra`);
 
         var buf1 = new Buffer();
         buf1.w('/TEXT030C/', translator(vn), '\n')
             .w(DJJ.text)
-            .wIf(vn>1 && vn!=30 && vn!=59, `\n/TEXT339R/大方等大集經卷第${zn}\n`)
+            .wIf(vn>1 && vn!=30 && vn!=59, `\n/TEXT339R/${ttl}卷第${zn}\n`)
             .wIf(vn>0, '/VOLSEP/');
         this.writeBody(buf1.render(), true);
       }

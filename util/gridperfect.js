@@ -1,11 +1,29 @@
-const AIL    = '.ail { font-size:12px; opacity:0.8 }\n.cil { font-size:14px; opacity:0.8 }\n';
+const AIL    = '.ail  { font-size:12px; opacity:0.8 }\n' +
+               '.ailb { font-size:14px; opacity:0.8; stroke:brown }\n' +
+               '.ailb1{ font-size:14px; opacity:0.8; stroke:green }\n' +
+               '.ailb2{ font-size:14px; opacity:0.8; stroke:red }\n' +
+               '.ailb3{ font-size:14px; opacity:0.8; stroke:blue }\n' +
+               '.ailteal{ font-size:14px; opacity:0.8; stroke:teal }\n' +
+               '.ail339 { font-size:14px; opacity:0.8; stroke:#333399 }\n' +
+               '.ailinv { font-size:14px; opacity:0.0 }\n' +
+               '.cil { font-size:14px; opacity:0.8 }\n';
 const BOLD   = '.b { stroke:brown }\n' +
-               '.b1 { stroke:green }\n' +
-               '.b2 { stroke:red }\n' +
-               '.b3 { stroke:blue }\n' +
-               '.hl { fill:red }\n' +
-               '.mantra { stroke:teal }\n' +
-               '.c339 { stroke:#333399 }\n';
+               '.b1{ stroke:green }\n' +
+               '.b2{ stroke:red }\n' +
+               '.b3{ stroke:blue }\n' +
+               '.hl{ fill:red }\n' +
+               '.inv { opacity:0 }\n' +
+               '.mantra{ stroke:teal }\n' +
+               '.c339  { stroke:#333399 }\n' +
+               '.see   { cursor:pointer; text-decoration:underline }\n' +
+               '.see-b { cursor:pointer; text-decoration:underline; stroke:brown }\n' +
+               '.see-b1{ cursor:pointer; text-decoration:underline; stroke:green }\n' +
+               '.see-b2{ cursor:pointer; text-decoration:underline; stroke:red }\n' +
+               '.see-b3{ cursor:pointer; text-decoration:underline; stroke:blue }\n' +
+               '.see-hl{ cursor:pointer; text-decoration:underline; stroke:red }\n' +
+               '.see-mantra{ cursor:pointer; text-decoration:underline; stroke:teal }\n' +
+               '.see-c339  { cursor:pointer; text-decoration:underline; stroke:#333399 }\n' +
+               '';
 const CAT_基本 = '基本';
 const CAT_唯識 = '唯識';
 const CAT_大乘 = '大乘';
@@ -13,7 +31,8 @@ const CAT_小乘 = '小乘';
 const CAT_經論 = '經論';
 const CAT_外道 = '外道';
 const CAT_ELSE = 'ELSE';
-const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_經論,CAT_外道,CAT_ELSE];
+const CAT_NONE = '　';
+const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_經論,CAT_外道,CAT_ELSE,CAT_NONE];
 
 const LINE='LINE', TEXT='TEXT', RECT='RECT', CIRCLE='CIRCLE',
       RIGHTEDGE='R_EDGE', INCL='INCL';
@@ -297,26 +316,26 @@ class GridPerfect {
       if (idx1 < 0) { ret += s; break; }
       ret += s.substring(0, idx);
       var a = s.substring(idx+1,idx1).split('|'),
-          first = a[0], txt = a[1], idx2 = first.indexOf(':');
+          first = a[0], txt = a[1], idx2 = first.indexOf(':'),
+          tscls = first, tsextra = '';
       if (idx2 > 0) {
         var type = first.substring(0,idx2).trim();
         first = first.substring(idx2+1).trim();
-        if (type == 'see') { // popup
+        if (type.startsWith('see')) { // popup
           if (!gpRepo.canPopup()) {
-            ret += txt;
+            tscls = '';
             console.log('Cannot popup. ' + first);
           } else {
-            var clicker = `onclick="gpRepo.showDialog('${this.name}', '${first || txt}')"`;
-            ret += `<tspan cursor="pointer" text-decoration="underline" ${clicker}>${txt}</tspan>`;
+            tsextra = ` onclick="gpRepo.showDialog('${this.name}', '${first || txt}')"`;
+            tscls = type;
           }
         } else {
-          var msg = `Don't know what to do for [${type}:${first}|${txt}]`;
-          ret += `<tspan text-decoration="underline" title="${msg}">${txt}</tspan>`;
+          tsextra = ` title="Don't know what to do for [${type}:${first}|${txt}]"`;
+          tscls = type;
           console.log(msg);
         }
-      } else {
-        ret += `<tspan class="${first}">${txt}</tspan>`;
       }
+      ret += `<tspan class="${tscls}"${tsextra}>${txt}</tspan>`;
       s = s.substring(idx1+1);
       idx = s.indexOf('/');
       if (idx < 0) { ret += s; break; }
@@ -517,13 +536,17 @@ class GridPerfect {
 } // end of GridPerfect.
 
 class MyContent {
-  constructor(gridperf) {
+  constructor(gridperf, init) {
     if (!gridperf) throw `MyContent needs to set gridperfect.`;
-    this.gp = gridperf;
+    this.gp = gridperf || new GridPerfect();
+    if (init) Object.assign(this, init);
     this.setCommonTexts();
     this.setTexts();
   }
   setNamedText(id, txt) { this.gp.setNamedText(id, txt); }
+  getNamedText(id, txt) { return this.gp.getNamedText(id, txt); }
+  setTableData(id, data, tblExtra, sep) { this.setNamedText(id, showTableData(data, tblExtra, sep)); }
+
   setDialogOL(name, title, csv, sep) {
     if (!Array.isArray(csv)) csv = csv.trim().split(sep || '|');
     var txt = toOL(csv);
@@ -625,7 +648,8 @@ var gpRepo = new (class extends ResourceRepo {
     for (var i in catNames) {
       var c = catNames[i], names = categories[c];
       if (!names) continue;
-      buf.w(`<tr><td valign=top nowrap>${c}：&nbsp;</td><td>`);
+      if (c.trim().length > 0) c += '：&nbsp;';
+      buf.w(`<tr><td valign=top nowrap>${c}</td><td>`);
       for (var j=0; j<names.length; ++j) {
         var n = names[j], rsc = gpRepo.get(n),
             alias = rsc.alias && ('/' + rsc.alias.join('/')) || '',
@@ -659,7 +683,7 @@ function cloneGP(name,newName) {
 
 function addGP(name, gp, category) {
   gp.name = name;
-  gpRepo.add(new GridPerfectItem(name, gp).setCategory(category || CAT_ELSE));
+  gpRepo.add(new GridPerfectItem(name, gp).setCategory(category || CAT_NONE));
   return gp;
 }
 

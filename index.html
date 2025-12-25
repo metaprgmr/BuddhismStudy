@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>信裹居士學佛</title>
 <link rel="stylesheet" href="util/article.css">
+<script src="util/utils.js"></script>
 <script src="env-sample.js"></script>
 <script src="env.js"></script>
 </head>
@@ -15,21 +16,22 @@ var ttl = '信裹<sup style="font-size:20px">、鼓瞍、一〇</sup>居士學�
     isLoc = document.URL.startsWith('file:');
 if (isLoc) {
   document.title = '信裹居士學佛（本地）';
-  document.write('<font style="color:blue">' + ttl + '</font>');
+  w('<font style="color:blue">' + ttl + '</font>');
 } else {
-  document.write(ttl);
+  w(ttl);
 }
 </script>
 </h1>
 
-<h3 class="epithet">
+<h3 id="epithet" class="epithet"></h3>
 <script>
-document.write(
-  (Math.random() > 0.5)
-  ? '無上甚深微妙法　百千萬劫難遭遇<br>我今見聞得受持　願解如來真實義'
-  : '多讀大乘以廣其心　勤修觀行以銷其障<br>常求加被以開其慧　教宗般若行在彌陀');
+var epithets = [
+      '無上甚深微妙法　百千萬劫難遭遇<inv>*</inv><br>' +
+      `我今見聞得受持　願解如來真實義<dim><a href="javascript:renderText('epithet', epithets[1])">*</a></dim>`,
+      '多讀大乘以廣其心　勤修觀行以銷其障<inv>*</inv><br>' +
+      `常求加被以開其慧　教宗般若行在彌陀<dim><a href="javascript:renderText('epithet', epithets[0])">*</a></dim>` ];
+renderText('epithet', epithets[(Math.random() > 0.5) ? 0 : 1]);
 </script>
-</h3>
 
 <table border="0" width="750">
 <tr><td colspan="2" class="zFangSongTi" align="center">
@@ -63,9 +65,9 @@ if (window['OTHERS']) {
       pref = '';
     }
     if (isLoc)
-      document.write(pref + '<a href="' + l + '" style="background-color:#afa" title="個人內容，未發表">' + n + '</a>　');
+      w(pref + '<a href="' + l + '" style="background-color:#afa" title="個人內容，未發表">' + n + '</a>　');
     else
-      document.write(pref + '<a href="' + l + '" title="otro">' + n + '</a> ');
+      w(pref + '<a href="' + l + '" title="otro">' + n + '</a> ');
   }
 }
 </script>
