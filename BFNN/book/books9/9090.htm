@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>淨宗同學修行守則</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+<script src="../../../env.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var XXSZ = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9090/${to2d(vol||1)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true).setBuffer(buf).setXG().reInit(9090, 7);
+        this.volNum = XXSZ.volNum;
+        var subttl = XXSZ.sectionTitle, ttl = '淨宗同學修行守則',
+            author = (subttl == '常禮舉要') ? '李炳南老居士' : '淨空老法師 教導';
+        this.writeStart(subttl == '修行守則' ? ttl : `${ttl}|${subttl}`, subttl)
+            .writeBody(`\n/TEXT030C/${author}\n${XXSZ.text}\n\n/VOLSEP/`, true);
+      }
+      writeSeriesNav(links) {
+        var labels = [ "修行守則", "無量壽經節錄", "發起菩薩殊勝志樂經節錄",
+                       "五大科目", "律要節錄", "百過格", "常禮舉要" ];
+        if (!this.volNum) return;
+        for (var i=1; i<=this.totalVols; ++i) {
+          var lbl = labels[i-1];
+          if (i == this.volNum) this.w(`　<cur>${lbl}</cur>　`);
+          else this.w(`　<a class="seriesnav" href="?vol=${i}">${lbl}</a>　`);
+        }
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // XXSZ
+
+XXSZ.show(get('vol')); // 卷
+
+</script>

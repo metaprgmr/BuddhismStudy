@@ -11,14 +11,22 @@
 
 .KAITI {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; text-indent:24.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .KaiTi      { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+KaiTi       { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .FangSongTi { font-family: FangSong, "仿宋", STFangsong, "华文仿宋" }
+FangSongTi  { font-family: FangSong, "仿宋", STFangsong, "华文仿宋" }
 .SongTi     { font-family: SimSong, "Songti TC", "宋体", STSong, "华文宋体" }
+SongTi      { font-family: SimSong, "Songti TC", "宋体", STSong, "华文宋体" }
 .HeiTi      { font-family: SimHei, "黑体", STHeiti, "华文黑体" }
+HeiTi       { font-family: SimHei, "黑体", STHeiti, "华文黑体" }
 
-.BQKaiTi     { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.BQKaiTi    { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.BQKaiTi14  { margin-left:24.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:14.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.BQKaiTi14L { margin-left:0.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:14.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.BQKaiTi18  { margin-left:24.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:18.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.BQKaiTi18L { margin-left:0.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:18.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .BQFangSongTi{ margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: FangSong, "仿宋", STFangsong, "华文仿宋" }
-.BQSongTi    { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: SimSong, "Songti TC", "宋体", STSong, "华文宋体" }
-.BQHeiTi     { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: SimHei, "黑体", STHeiti, "华文黑体" }
+.BQSongTi   { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: SimSong, "Songti TC", "宋体", STSong, "华文宋体" }
+.BQHeiTi    { margin-left:24.0pt; margin-right:12.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:12.0pt; font-family: SimHei, "黑体", STHeiti, "华文黑体" }
 
 .book      { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; background-color: #BBFFBB }
 .samskrt   { color:red }
@@ -56,13 +64,16 @@ verseNum { color:#339; font-weight:normal }
 dcirc  { color:purple }
  dcirc::before { content:'◎' }
 small { color:brown }
+fs10  { font-size:10.0pt }
+fs8  { font-size:8.0pt }
 cil   { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
 .cil  { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
-ail   { color:#030; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
-.ail  { color:#030; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
-ail1  { color:#666; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
-.ail1 { color:#666; font-size:10.0pt;  font-weight:normal } /* annotation in-line */
+ail   { color:#030; font-size:10.0pt; font-weight:normal } /* annotation in-line */
+.ail  { color:#030; font-size:10.0pt; font-weight:normal } /* annotation in-line */
+ail1  { color:#666; font-size:10.0pt; font-weight:normal } /* annotation in-line */
+.ail1 { color:#666; font-size:10.0pt; font-weight:normal } /* annotation in-line */
 red   { color:red }
+lightgreen { color:lightgreen }
 black { color:black }
 purple{ color:purple }
 label { font-weight:normal; color:purple }
@@ -90,6 +101,10 @@ mantra    { color:teal }
 .TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}
 .TEXTC    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center}
 .TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
+.TEXTs10  {margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-indent:24.0pt}
+.TEXTs10L {margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-indent:0.0pt}
+.TEXTs10C {margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-align:center}
+.TEXT339s10{margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
 c339 { color:#339 }
 .c339 { color:#339 }
 c030 { color:#030 }

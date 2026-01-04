@@ -319,9 +319,9 @@ class YPLine {
   var fauxamis = toSet(
     '集習坑立泣疾急蜜畢吉訖迄乞漆禽禁坎堪尋品斤近貧熏勤仁新欽溪偽詣齎繫誦' +
     '及稽繼攜救愁據舉驅淳卻斫腳像羌祥響強棄器欺歧履俗熾寺棘竊設諂禪親許引' +
-    '顯遣荊矜輕勸丸戀泉雪血速曲膝因休鄰逆誣繳劇井陷徙懈糺煢忪鋸兄犬牛伎乳' +
-    '邑懇雀攫臨什忽薰突屈欣幸' +
-    '差拖哽玷樂咄'); // 《地藏經》讀者發音迥異！
+    '顯遣荊矜輕勸丸戀泉雪血速曲膝因休鄰逆誣繳劇井陷徙懈糺煢忪鋸剝兄犬牛伎' +
+    '乳邑懇雀攫赤輒臨什忽薰突屈欣幸' +
+    '攢差拖哽玷樂咄龕'); // 《地藏經》讀者發音迥異！
   function _isFA(zi) { return fauxamis[zi] }
 
   var ignoreLevels = [
@@ -531,7 +531,7 @@ wai5 maan6 laam4 sou1 fu2 jyun4 se4 fuk1 hit3 hyut3 seot6 wai6 gaa1 zong1 saa1 s
 訖詠誘誣貝賣賤赤趁踐踴躬較輔辛許
 gat1 wing6 jau5 mou4 bui3 maai6 zin6 cek3 can3 cin5 jung2 gung1 gaau3 fu6 san1 heoi2
 辦辭迄迅返逢遞遣遮邃鄭鄰醫醯釘鈇鈍
-baan6 ci4 ngat6 seon3 faan2 fung4 dai6 hin2 ze1 seoi6 zeng6 leon4 ji1 hei1 deng1 fu2 deon6
+baan6 ci4 gat6 seon3 faan2 fung4 dai6 hin2 ze1 seoi6 zeng6 leon4 ji1 hei1 deng1 fu2 deon6
 鈒銅銷鋸錢鎖鏤鑗鑿闕附險雀雛革領飢
 zaap6 tung4 siu1 geoi3 cin2 so2 lau6 lei4 zok6 gwat6 fu6 him2 zoek3 co1 gaak3 ling5 gei1
 馬馳駕騾驅驢骨魅魍魎魘魚鮮鱉鴛鴦並
@@ -578,14 +578,14 @@ wai2 paa3 zaak6 luk1 fok3 syun1 seon4 jiu1 haap6 jyu4 sin1 taat3 maan4 kau1 saan
 wai2 cyun1 nik6 hang4 han6 gon1 paau1 hei1 seon3 soek3 ling4 gai3 jung2 king4 jau6 gwai1 aai1
 錫振裡宛紺澄洪爐乍遙摘壇惹搖只打愆
 sek3 zan3 lei5 jyun2 gam3 cing4 hung4 lou4 zaa3 jiu4 zaak6 taan4 je5 jiu4 zi2 daa2 hin1
-翹披瀝憫詳遶瞬炬芽遷移按
-kiu4 pei1 lik6 man5 coeng4 jiu2 seon3 geoi6 ngaa4 cin1 ji4 on3
+翹披瀝憫詳遶瞬炬芽遷移按昶毳泆緉翫憒
+kiu4 pei1 lik6 man5 coeng4 jiu2 seon3 geoi6 ngaa4 cin1 ji4 on3 cong2 ceoi3 jat6 loeng5 wun6 kui2
 絺㝹馱桓玻曼祴鶴鸚鵡頻鞞跋沮統勉攀
 ci1 nau4 to4 wun4 bo1 maan6 goi1 hok2 jing1 mou5 pan4 bing2 bat6 zeoi1/zeoi2 tung2 min5 paan1
 區展怯錯謬曀旨占促裹擬虔航淩祝徬徨憑閦
 keoi1 zin2 hip3 co3 mau6 ai3 zi2 zim3 cuk1 gwo2 ji5 kin4 hong4 ling4 zuk1 pong4 wong4 pang4 cuk1
-伴侶工姻畔剖呼傍朗誕隔垣覓巖縈蓊
-bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaam4 jing4 jung2
+伴侶工姻畔剖呼傍朗誕隔垣覓巖縈蓊瓶
+bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaam4 jing4 jung2 ping4
 `.split('\n');
 
   function _getIgnoreLevel(zi) {

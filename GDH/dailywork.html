@@ -7,17 +7,22 @@ a { text-decoration:none }
 li { font-family: "KaiTi", "楷体", STKaiti, "华文楷体"; font-size:24px; color:red; padding-bottom:10px }
 .big { background-color:#ffd0d0 }
 .major { background-color:#ff0; color:red }
+.齋日 { color:white; font-size:18px }
 </style>
 <title>佛修道場</title>
 <script src="../env.js"></script>
 <script src="../util/utils.js"></script>
+<script src="../util/nongli.js"></script>
 <script src="../淨土宗/西方二聖開示/JK-teachings.js"></script>
 <script>
+loadNongLiYear(null, null, true);
 const TARGET = 'view';
 const LEVEL = 1;
 const EXT = 'xview';
 const 十小咒 = '../陀羅尼/十小咒.html';
-var curEID = 0, lastEId = null, lastLink = null;
+var curEID = 0, lastEId = null, lastLink = null,
+    dayInfo = getDayInfo(yyyymmdd(new Date())),
+    is齋日 = dayInfo && dayInfo.is齋日;
 class ImageMap {
   constructor() {
     this.imgMap = {
@@ -189,11 +194,11 @@ function DiZangSession() {
     '<li>', lnk('《地藏菩薩讚》', 'various.js', '_27', '南無地藏王菩薩1.jpg'), '</li>',
     '<li>', mainlnk('《地藏菩薩本願經》', `dzj.js&level=${LEVEL}`, null, '南無地藏王菩薩1.jpg'), '</li>',
     '<li>', mainlnk('《占察善惡業報經》', `ZhanCha-2nd-part.js&level=${LEVEL}`, null, '南無地藏王菩薩1.jpg'), '</li>',
+    '<li>', lnk('《地藏王讚》', 'various.js', '_28', '南無地藏王菩薩1.jpg'), '</li>',
     '<li>', lnk('《普賢十願》', 'various.js', '_11', '普賢菩薩十大願.jpg'), '</li>',
     '<li>', lnk('《懺悔滅罪偈》', 'various.js', '_11', '普賢懺悔滅罪偈.png'), '</li>',
     '<li>', lnk('《發四宏願》', 'various.js', '_11', '四宏誓願.jpg'), '</li>',
     '<li>', lnk('《迴向偈》', 'various.js', '_14', '回向偈.png'), '</li>',
-    '<li>', lnk('《地藏王讚》', 'various.js', '_28', '南無地藏王菩薩1.jpg'), '</li>',
     '</ol>'
   ).render('prgm');
 }
@@ -245,8 +250,13 @@ setTimeout(() => openLnk(null, '../陀羅尼/諸真言.html'), 500); // iframe i
 <table cellpadding="0" cellspacing="0">
 <tr>
 <td nowrap style="padding-right:15px; min-width:280px; background-color:#ffd" align="center" valign="top">
-<h2 style="background-color:red; color:yellow; margin-top:0px; margin-right:-15px"><a
- href="javascript:StartSession(true)" style="color:yellow">直心道場</a></h2>
+<script>
+w('<h2 style="background-color:red; color:yellow; margin-top:0px; margin-right:-15px">');
+wIf(is齋日, '<sup class="齋日" style="opacity:0">齋日　</sup>');
+w('<a href="javascript:StartSession(true)" style="color:yellow">直心道場</a>');
+wIf(is齋日, '<sup class="齋日">　齋日</sup>');
+w('</h2>');
+</script>
 <div id="prgm">
 <script>
 var sess = get('type')||'';

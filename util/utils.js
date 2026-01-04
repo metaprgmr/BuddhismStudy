@@ -193,6 +193,7 @@ function showModal(id,s,t)   { showDialog(id,s,t); }
 function showModeless(id,s,t){ showDialog(id,s,t,true); }
 function removeEl(el) { var el = toEl(el); el && el.parentNode && el.parentNode.removeChild(el); }
 function w() { for(var i in arguments){var x=arguments[i]; if(typeof x!='number')x=x||''; document.write(x);} }
+function wIf() { if (arguments[0]) { arguments[0] = ''; this.w.apply(this, arguments); } }
 function renderText(id,t)   { id ? new Buffer(t).render(id) : document.write(t); }
 function addClass(id, cls)  { var el=toEl(id); el && el.classList.add(cls); }
 function removeClass(id, cls) { var el=toEl(id); el && el.classList.remove(cls); }
@@ -370,6 +371,8 @@ function toW(n, w, c) {
 function to4d(n) { return toW(n, 4, '0'); }
 function to3d(n) { return toW(n, 3, '0'); }
 function to2d(n) { return toW(n, 2, '0'); }
+
+function yyyymmdd(d,sep) { sep = sep||''; return `${d.getFullYear()}${sep}${to2d(d.getMonth()+1)}${sep}${to2d(d.getDate())}`; }
 
 function toInt(n) { return (typeof n === 'string') ? parseInt(n) : n; }
 

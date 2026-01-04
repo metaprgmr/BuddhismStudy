@@ -1,0 +1,46 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>沙彌律儀</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+<script src="9091/lectures.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var SMLY = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9091/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var base = 'https://www.hwadzan.com/education/play?menuidparent=WD11&menuidchild=2&mp4=1&numbers=',
+        buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9091, 47);
+        this.volNum = SMLY.volNum;
+        var lnk = `（檔名：<a target="extra" href="${base}${332210+this.volNum}">WD11-002-${to4d(this.volNum)}</a>）\n`;
+        if (!this.volNum)
+          this.writeStart(`沙彌律儀`)
+              .writeBody(`\n/TEXT030C/2008年 悟道法師 講於 廬江金剛寺\n${SMLY.text}\n\n/VOLSEP/`, true);
+        else
+          this.writeStart(`沙彌律儀|（第${zNumber(this.volNum)}講）`)
+              .writeBody(`\n/TEXT030C/2008年 悟道法師 講於 廬江金剛寺<br>${lnk}
+/TEXT339/【第${zNumber(this.volNum)}講】 ${lectures[this.volNum-1]}
+${SMLY.text}
+/VOLSEP/`, true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // SMLY
+
+SMLY.show(get('vol')); // 卷
+
+</script>

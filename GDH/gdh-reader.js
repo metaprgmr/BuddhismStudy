@@ -238,6 +238,9 @@ class GDHReader {
       } else if (cols > 0) {
         var a = ln.split(colsep);
         w('<tr>');
+        if (a[0] == '-')
+          w(`<td colspan="${cols}" style="font-size:10px">&nbsp;</td>`);
+        else
         for (var j=0; j<cols; ++j) {
 //          if (j > 0) w('<td width="5px">&nbsp;</td>');
           var s = a[j] || '', tdx ='', isend = false;

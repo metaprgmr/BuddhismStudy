@@ -21,8 +21,7 @@ var NJ = new (class extends SeriesContainer {
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setVolumesInJS(true);
-        this.setBuffer(buf).setXG().reInit(9011, 36);
+        this.setVolumesInJS(true).setBuffer(buf).setXG().reInit(9011, 36);
         this.volNum = NJ.volNum;
         var zn = zNumber(NJ.volNum);
         if (NJ.volNum) // write the volume content

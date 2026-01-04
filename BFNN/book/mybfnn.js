@@ -48,7 +48,19 @@ function P(txt,phon) { // for "phon" or "phonetic"
   return `<span class="myphon" title="${phon}">${txt}</span>`;
 }
 
-const LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
+function colDiv(w) {
+  return `</td><td width="${w||10}px"></td><td valign=top>`;
+}
+
+const COL_START = '<center><table border=0><tr><td valign=top>',
+      COL_DIV   = colDiv(),
+      COL_DIV15 = colDiv(15),
+      COL_DIV20 = colDiv(20),
+      COL_DIV30 = colDiv(30),
+      COL_END   = '</td></tr></table></center>',
+      EXTERNAL  = '↗';
+      LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
+
 var terse = get('terse'),
     queryParams, url=document.URL, a=url.indexOf('s/j'),
     isDebug = (a>url.indexOf(':/')) && (a<url.indexOf('g/'));
@@ -145,7 +157,12 @@ class DocInfo {
     this.w('</body></html>');
     return this;
   }
-  setVolumesInJS(hasTOC) { this.volumesInJS = true; this.hasTOCJS = hasTOC; return this; }
+  setVolumesInJS(hasTOC, tocSepLine) {
+    this.volumesInJS = true;
+    this.hasTOCJS = hasTOC;
+    this.tocSepLine = tocSepLine;
+    return this;
+  }
   writeSeriesNav(links) {
     if (this.volumesInJS) return this.writeSeriesNavForJS(links);
 
@@ -173,7 +190,7 @@ class DocInfo {
       return `<a class="seriesnav" href="?vol=${vnum}">${disp}</a>`;
     }
     if (this.hasTOCJS)
-      this.w('【', lnk(0,'總目錄'), '】&nbsp;');
+      this.w('【', lnk(0,'總目錄'), '】', this.tocSepLine ? '\n' : '&nbsp;');
     if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
     else this.w(lnk(this.volNum, '&laquo;'));
     for (var i=1; i<=this.totalVols; ++i) {
@@ -194,6 +211,7 @@ class DocInfo {
     //   2. For each line, the CSS class name is in the leading /.../.
     //      The default CSS class is "TEXT".
     //   3. Pseudo class "TEXT*R" is rendered as <p class=TEXT align=right>.
+    //      Pseudo class "{AnyCls}-R" is rendered as <p class={AnyCls} align=right>.
     //   4. If a page uses / as a regular leading character, [...] can be
     //      used instead. This is global, so either /.../ or [...].
     // <Anchor>
@@ -336,7 +354,7 @@ class DocInfo {
         return lnId;
       }
       if (ln1.length > 0)
-        this.w(`<li class=cjk>${ln}</li>`);
+        this.w(`<li class="cjk">${ln}</li>`);
       return lnId;
     }
 
@@ -377,21 +395,34 @@ class DocInfo {
       return lnId;
     }
 
+    var lstcls = '';
     if (ln1.startsWith('/olzh')) { // e.g. 9020/*.js
-      this.inLst = true;
-      this.lstTag = 'ol';
-      this.w(ln.replaceAll('/olzh', '<ol class=cjk').replace('/', '>'));
-      return lnId;
+      lstcls = 'cjk';
+      ln1 = ln1.replace('/olzh', '/ol');
+      ln = ln.replace('/olzh', '/ol');
+      // fall thru
     }
 
     if (ln1.startsWith('/ul') || ln1.startsWith('/ol')) {
       var isUL = ln1.startsWith('/ul');
       this.inLst = true;
       this.lstTag = isUL ? 'ul' : 'ol';
+      if (ln1[5] == '@')
+        ln = ln.replace('@', ' start=');
       if (isUL)
-        this.w(ln.replaceAll('/ul', '<ul').replace('/', '>'));
-      else
-        this.w(ln.replaceAll('/ol', '<ol').replace('/', '>'));
+        this.w(ln.replaceAll('/ul', '<ul class="' + lstcls).replace('/', '">'));
+      else {
+        var start = '<ol class="';
+        if (ln1[3] == '@') {
+          var idx = ln1.indexOf(' ', 3);
+          if (idx > 3) {
+            start = `<ol start="${ln1.substring(4, idx)}" class="`;
+            ln1 = '/ol' + ln1.substring(idx);
+            ln = ln1;
+          }
+        }
+        this.w(ln.replaceAll('/ol', start + lstcls).replace('/', '">'));
+      }
       return lnId;
     }
 
@@ -423,6 +454,8 @@ class DocInfo {
       cls = 'TEXT' + cls;
     if (cls.startsWith('TEXT') && cls.endsWith('R'))
       cls = cls.substring(0, cls.length-1) + ' align=right';
+    else if (cls.endsWith('-R'))
+      cls = cls.substring(0, cls.length-2) + ' align=right';
     if (cls.endsWith('align=right') && !ln.endsWith('　'))
       ln += '　';
     if (append)
@@ -632,8 +665,7 @@ function write0383(n, body) {
   docInfo.reInit(383, 17, n)
          .writeStart(`恆河大手印||（第${zn}講）`, `恆河大手印 第${n}講`)
          .w(SP, '<p class=TEXT030C>元音老人 著</p>', SP)
-         .wIf(n>1,
-              `<p class=KEPAN>第${zn}講</p>`, SP)
+         .wIf(n>1, `<p class=KEPAN>第${zn}講</p>`, SP)
          .writeBody(body, true);
 }
 
@@ -714,6 +746,27 @@ function write0592(n, body) {
   }
   docInfo.w('&nbsp;&nbsp;', lnk(33), '</p>')
          .writeBody(body, true);
+}
+
+// -- 印光大師文鈔 （增廣正編）--
+function write1288(n, body) {
+  docInfo.reInit(1288, 4, n)
+         .writeStart(`印光大師文鈔|（增廣正編）卷第${zNumber(n)}`)
+         .writeBody(body, true);
+}
+
+// -- 普賢行願品講記 淨空法師 --
+function write0627(n, body) {
+  docInfo.reInit(627, 35, n)
+         .writeStart(`普賢行願品講記|（第${zNumber(n)}卷）`)
+         .writeBody('\n/TEXT030C/淨空法師講述\n/TEXT030C/華藏圖書館\n' + body + '\n/VOLSEP/', true);
+}
+
+// -- 佛說阿彌陀經講記 淨空法師 --
+function write0662(n, body) {
+  docInfo.reInit(662, 21, n)
+         .writeStart(`佛說阿彌陀經講記|（第${zNumber(n)}講）`)
+         .writeBody('\n/TEXT030C/淨空法師講述\n' + body + '\n/VOLSEP/', true);
 }
 
 // -- 法華經講演錄 太虛大師 --

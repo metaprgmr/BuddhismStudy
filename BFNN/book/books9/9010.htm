@@ -5,12 +5,24 @@
 <link rel="stylesheet" href="../books/book.css">
 <script src="../../../util/utils.js"></script>
 <script src="../mybfnn.js"></script>
+<script src="9010/visits-53.js"></script>
 </head>
 <body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
 <div id="stg"></div>
 </body></html>
 
 <script>
+function visit(n) {
+  var needN = n > 0;
+  if (!needN) n = -n;
+  var zn = zNumber(n);
+  var t = VISITS53[n-1].teacher;
+  if (Array.isArray(t))
+    t = t.shift() + '，又稱' + t.join('、');
+  return needN ? `/TEXT339s10:can${n}/【第${zn}參：${t}】`
+               : `/TEXT339s10/【第${zn}參：${t}】`
+}
+
 var pinsUri = [ // 0-based
   "?vol=1",          // 卷第一　　　世主妙嚴品　　　　 第一
   "?vol=6",          // 卷第六　　　如來現相品　　　　 第二
@@ -133,7 +145,7 @@ var HYJ = new (class extends SeriesContainer {
   }
 })(); // HYJ
 
-HYJ.show(get('vol'), get('pin')); // 卷 品
+HYJ.show(get('vol'), get('pin')||get('loc')); // 卷 品/部分
 
 // 經文來源，例如：https://budaedu.org/budaedu/buda2_04.php
 </script>
