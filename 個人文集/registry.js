@@ -1,5 +1,6 @@
 var articleInfo = {},
-    lines; // for index.html to list
+    lines, // for index.html to list
+    MULTI_SEP = '▄';
 
 function w() { for (var i in arguments) document.write(arguments[i]) }
 
@@ -16,9 +17,9 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 }
 
 (() => {
-  var knownIDs = {}, jklb = 'JK-Learn-Buddhism-';
+  var jklb = 'JK-Learn-Buddhism-';
   lines = `
-240530|${jklb}認識佛教筆記.html|《認識佛教》筆記▄240608|${jklb}Review-Qs.html|復習
+240530|${jklb}認識佛教筆記.html|《認識佛教》筆記${MULTI_SEP}240608|${jklb}Review-Qs.html|復習
 250328|WLSJs_various.html|《無量壽經》諸版對照
 250828|地藏菩薩大智開示
 251007|圓音講義
@@ -26,8 +27,8 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250523|《八識規矩頌》內容
 250801|《宗鏡錄》摘要
 250530|淨界法師.html|【善知識】淨界法師
-250629|北川致遠書社.html|【善知識】北川致遠書社
-250916|十句
+260107|百過歌
+260111|佛子根
 #######
 251107|念佛节奏.html|念佛节奏計算器
 250917|發露懺悔
@@ -47,23 +48,26 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 230518|苦空無常之音.mp3|苦空無常之音
 230517|論飯桶，兼論素食
 231111|DuBist.html|Du Bist Was Du Isst
-240307|養生乎.html|養生，乎？
-240308|對自己好一點
+231222|養生乎.html|養生，乎？
+240210|對自己好一點
 250802|圍棋與人生.html|棋道•人道•佛道
 `.trim().split('\n');
+
+//250629|北川致遠書社.html|【善知識】北川致遠書社
+//250916|十句
 
   for (var i=0; i<lines.length; ++i) {
     var ln = lines[i];
     if (ln.startsWith('##')) continue;
-    var row = ln.split('▄');
+    var row = ln.split(MULTI_SEP);
     for (var j=0; j<row.length; ++j) {
       ln = row[j].split('|');
       var id = ln[0];
+      if (articleInfo[id]) throw `Duplicate article ID: ${id}`;
       if (ln.length > 2)
         articleInfo[id] = { uri:ln[1], title:ln[2] };
       else
         articleInfo[id] = { uri:ln[1]+'.html', title:ln[1] };
-      if (knownIDs[id]) articleInfo[id].invalidID = true;
     }
   }
 })();

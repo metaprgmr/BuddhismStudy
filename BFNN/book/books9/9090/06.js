@@ -1,6 +1,3 @@
-XXSZ.sectionTitle = '百過格';
-XXSZ.volNum = 6;
-XXSZ.text = (() => {
 var check100 =
 `生活起居異常。
 服裝儀容不整潔。
@@ -23,7 +20,7 @@ var check100 =
 殺、傷害有情眾生。
 貪圖食、衣、住、行享受。
 偷盜或未經同意取走別人任何一物。
-六齋及十齋日佛菩薩聖誕日，未能全素、斷淫。
+六齋及十齋日、佛菩薩聖誕日，未能全素、斷淫。
 平日早餐未能素食。
 任棄五穀或任何可食之物。
 不惜福，生活奢侈浪費。
@@ -81,14 +78,14 @@ var check100 =
 見好人好事未能心生歡喜。
 對親情、名利執著，尚有患得患失感。
 五慾六塵之慾念尚重，生活過得無踏實感。
-是非來臨無法及時觀照以平常心面對。
+是非來臨，無法及時觀照，以平常心面對。
 犯善小而不為，惡小而為之過。
 未能常思己過，反常見他人之過。
 妄想煩惱生起，無法及時觀照以佛號取代之。
 平時心無正念，雜念妄想紛飛。
-今日心離道，生活過的忙亂或煩燥。
+今日心離道，生活過得忙亂或煩燥。
 對父母師長、有緣善知識，無日懷感恩之心。
-看別人優點自我學習，見他人缺點自我反省，尚未落實。
+看別人優點自我學習，見他人缺陷自我反省，尚未落實。
 時時生慚愧，日日起懺悔，尚未落實。
 生活以平常心、平等心面對，尚未落實。
 晨起念佛生喜心，日中念佛持淨心，尚未落實。
@@ -103,30 +100,81 @@ var check100 =
 不忍吃眾生肉，菩薩慈悲精神，尚未落實。
 於人無爭，於世無求，尚未落實。`.split('\n');
 
-  var good = toSet(window['check100Good'] || []),
-      bad  = toSet(window['check100Bad'] || []),
-      i, buf  = new Buffer();
+function toHTML(lstFirst) {
+  var good = getGlobal('check100Good')||{}, bad = getGlobal('check100Bad')||{};
+  // Uncomment the next line to see the effect.
+  //good = { 1:'x' }; bad = { 2:'x', 3:'!' };
+  // Put the check100Good/check100Bad data in your env.js; see 9090.htm.
 
-  var goodCnt = Object.keys(good).length,
-      badCnt  = Object.keys(bad).length;
-  buf.w(`\n/TEXT339/【百過格】`)
-     .wIf(goodCnt || badCnt, `（認成${goodCnt}；未成${100-goodCnt}、含大失${badCnt}）`)
-     .w(`\n\n${COL_START}\n`);
+  // The list
+  var goodCnt = Object.keys(good).length, badCnt = Object.keys(bad).length,
+      simple = get('simple') || !goodCnt && !badCnt,
+      buf = new Buffer(), i, lst, grd;
 
+  // The list
   function showItem(txt) {
-    var tag = '<font';
-    if (good[i])     tag += ' style="color:green; opacity:0.3"';
-    else if (bad[i]) tag += ' style="color:red; font-weight:bold"';
+    if (simple) { buf.w(txt, '\n'); return; }
+    var tag = '<font', isBad = bad[i];
+    if (good[i])
+      tag += ' style="color:green; opacity:0.3" title="很好"';
+    else if (isBad)
+      tag += (isBad=='!')
+             ? ' style="color:red; background-color:yellow" title="正在修正中"'
+             : ' style="color:red" title="很差"';
     buf.w(`${tag}>${txt}</font>`, '\n');
   }
-
-  buf.w('/ol BQKaiTi14L/\n');
+  buf.w(`${COL_START}\n/ol BQKaiTi14L/\n`);
   for (i=1; i<=50; ++i) showItem(check100[i-1]);
-  buf.w(`//\n${COL_DIV}\n`);
-
-  buf.w(`/ol@${i} BQKaiTi14L/\n`);
+  buf.w(`//\n${COL_DIV}\n/ol@${i} BQKaiTi14L/\n`);
   for (; i<=100; ++i) showItem(check100[i-1]);
-  buf.w('//\n');
+  buf.w('//\n', COL_END);
+  lst = buf.render();
+  var baiguoge = `\n/TEXT339/【百過格】　<ail>（<a href="../../../個人文集/百過歌.html">百過歌</a>）</ail>`;
+  if (simple) return buf.w(baiguoge, '<br>&nbsp;', lst).render();
 
-  return buf.w(COL_END).render();
-})();
+  // The grid
+  const s100Segs = {
+    1:'生活待人', 19:'恭敬', 36:'精進', 47:'口業', 62:'心量', 72:'煩惱', 86:'行善'
+  };
+  var bgGray = true, x, y, seg;
+  function showCell(txt) {
+    if (s100Segs[i]) { bgGray = !bgGray; seg = s100Segs[i]; }
+    var disp;
+    if (good[i])     disp = `<lightgreen>◼</lightgreen>`;
+    else if (bad[i]) disp = `<red>◻</red>`;
+    else             disp = `<gray>◻</gray>`;
+    buf.w(`<td${bgGray&&' bgcolor="lightgray"'||''} title="【${seg}】${i}. ${txt}" align=center>&nbsp;&nbsp;${disp}&nbsp;&nbsp;</td>`, '\n');
+  }
+  var stats = [];
+  if (goodCnt) stats.push(`<lightgreen title="Confirmed OK">◼</lightgreen>：${goodCnt}`);
+  if (badCnt)  stats.push(`<red title="Confirmed POOR">◻</red>：${badCnt}`);
+  if (100-goodCnt-badCnt) stats.push(`<gray title="Unconfirmed">◻</gray>：${100-goodCnt-badCnt}`);
+  stats = stats.join('　　');
+  buf.w('<center><table cellpadding=0 cellspacing=0>')
+     .wIf(goodCnt || badCnt, `<caption style="font-size:12px; caption-side:bottom; margin-top:5px">${stats}</caption>`)
+     .w('<tr><th></th>');
+  for (y=1; y<=10; ++y) buf.w('<th>', y, '</th>');
+  buf.w('</tr>');
+  for (y=0; y<10; ++y) {
+    buf.w(`<tr><td align=right style="padding-right:10px">${y && (y*10+'+') || ''}</td>`);
+    for (x=0; x<10; ++x) {
+      i = y*10 + x + 1;
+      showCell(check100[i-1]);
+    }
+    buf.w('</tr>');
+  }
+  buf.w('</table></center>');
+  grd = buf.render();
+
+  buf.w(baiguoge)
+     .w(lstFirst ? lst : grd)
+     .wIf(!lstFirst, '<br>')
+     .w(lstFirst ? grd : lst);
+  return buf.render();
+}
+
+if (typeof XXSZ != 'undefined') {
+  XXSZ.sectionTitle = '百過格';
+  XXSZ.volNum = 6;
+  XXSZ.text = toHTML();
+}

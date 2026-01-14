@@ -368,9 +368,9 @@ function toW(n, w, c) {
   while (n.length < w) n = c + n;
   return n;
 }
-function to4d(n) { return toW(n, 4, '0'); }
-function to3d(n) { return toW(n, 3, '0'); }
-function to2d(n) { return toW(n, 2, '0'); }
+function to4d(n,fill) { return toW(n, 4, fill||'0'); }
+function to3d(n,fill) { return toW(n, 3, fill||'0'); }
+function to2d(n,fill) { return toW(n, 2, fill||'0'); }
 
 function yyyymmdd(d,sep) { sep = sep||''; return `${d.getFullYear()}${sep}${to2d(d.getMonth()+1)}${sep}${to2d(d.getDate())}`; }
 

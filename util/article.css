@@ -27,6 +27,7 @@ inv { opacity:0 }
 dim { opacity:0.3 }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }
 .contentW { border:0px red solid; width:900px; text-align:left; font-size:19px }
+.contentW2 { border:0px red solid; width:1000px; text-align:left; font-size:19px }
 .gatha   { text-align:center }
 ol.cjk   { list-style-type: cjk-ideographic; }
 

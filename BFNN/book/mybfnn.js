@@ -48,15 +48,22 @@ function P(txt,phon) { // for "phon" or "phonetic"
   return `<span class="myphon" title="${phon}">${txt}</span>`;
 }
 
-function colDiv(w) {
-  return `</td><td width="${w||10}px"></td><td valign=top>`;
+function colDiv(wsep, w) {
+  return `</td><td width="${wsep||10}px"></td><td width="${w||''}" valign=top>`;
+}
+function colStart(w) {
+  return `<center><table border=0><tr><td width="${w||''}" valign=top>`;
+}
+function nextRow(w) {
+  return `</td></tr><tr><td width="${w||''}" valign=top>`;
 }
 
-const COL_START = '<center><table border=0><tr><td valign=top>',
+const COL_START = colStart(),
       COL_DIV   = colDiv(),
       COL_DIV15 = colDiv(15),
       COL_DIV20 = colDiv(20),
       COL_DIV30 = colDiv(30),
+      NEXT_ROW  = '</td></tr><tr><td valign=top>',
       COL_END   = '</td></tr></table></center>',
       EXTERNAL  = '↗';
       LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';

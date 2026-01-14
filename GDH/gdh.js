@@ -317,11 +317,11 @@ class YPLine {
 
 (function() {
   var fauxamis = toSet(
-    '集習坑立泣疾急蜜畢吉訖迄乞漆禽禁坎堪尋品斤近貧熏勤仁新欽溪偽詣齎繫誦' +
+    '集習坑立泣疾急蜜畢吉訖迄乞漆禽禁坎堪尋品斤近貧熏勤懃仁新欽溪偽詣齎繫' +
     '及稽繼攜救愁據舉驅淳卻斫腳像羌祥響強棄器欺歧履俗熾寺棘竊設諂禪親許引' +
     '顯遣荊矜輕勸丸戀泉雪血速曲膝因休鄰逆誣繳劇井陷徙懈糺煢忪鋸剝兄犬牛伎' +
-    '乳邑懇雀攫赤輒臨什忽薰突屈欣幸' +
-    '攢差拖哽玷樂咄龕'); // 《地藏經》讀者發音迥異！
+    '誦乳邑懇雀攫赤輒臨什忽薰突屈欣幸殷慇溢' +
+    '闕攢差拖哽玷樂咄龕'); // 《地藏經》讀者發音迥異！
   function _isFA(zi) { return fauxamis[zi] }
 
   var ignoreLevels = [
@@ -506,14 +506,14 @@ ci3 hak1 co3 mok1 gim3 zo6 leon2 jyun4 caa1 geoi3 giu3 si1 gat1 tou3 caak1 leon6
 jin1 bou6 gang2/ang2/kang2 coeng3 daam6 aa2 kai2 tai4 wun6 song1 zi6 taan3 seoi4 sok3 joeng6 ji4
 奮奴妃妹姊姐婢孫完官宰寐審寺尸尿
 fan5 nou4 fei1 mui6 zi2 ze2 pei5 syun1 jyun4 gun1 zoi2 mei6 sam2 zi2 si1 niu6
-屋川幼庭廟廢彈彩忘忤悖悽惛愈慇慘
-uk1 cyun1 jau3 ting4 miu6 fai3 daan2 coi2 mong4 ng5 bui6 cai1 fan1 jyu6 jan1 caam2
+屋川幼庭廟廢彈彩忘忤悖悽惛愈慘
+uk1 cyun1 jau3 ting4 miu6 fai3 daan2 coi2 mong4 ng5 bui6 cai1 fan1 jyu6 caam2
 慰憐懃懇懺戟扶抱抽拋拖招拽捕接搏
 wai3 lin4 kan4 han2 caam3 gik1 fu4 pou5 cau1 paau1 to1 ziu1 jai6 bou6 zip3 bok3
 撞撲撻擁擔攜攢攫敕敵斤斫斬族旛
 zong2 pok3 taat3 jung2 daam1 kwai4 zaan2 fok3 cik1 dik6 gan1 zoek3 zaam2 zuk6 faan1
-暫替末枕某梁棒楚槍欽歧殷毗毘汁沸
-zaam6 tai3 mut6 zam2 mau5 loeng4 paang5 co2 coeng1 jam1 kei4 jan1 pei4 pei4 zap1 fai3
+暫替末枕某梁棒楚槍欽歧殷慇毗毘汁沸
+zaam6 tai3 mut6 zam2 mau5 loeng4 paang5 co2 coeng1 jam1 kei4 jan1 jan1 pei4 pei4 zap1 fai3
 油泔浪涌涕渡渧渴游湯溢漆澆澤炒烊
 jau4 gam1 long6 jung2 tai3 dou6 dai3 hot3 jau4 tong1 jat6 cat1 giu1 zaak6 caau2 joeng4
 爪牆牙牛犬狄狗狼獅獵獻玩玷煮燃燄
@@ -580,12 +580,16 @@ wai2 cyun1 nik6 hang4 han6 gon1 paau1 hei1 seon3 soek3 ling4 gai3 jung2 king4 ja
 sek3 zan3 lei5 jyun2 gam3 cing4 hung4 lou4 zaa3 jiu4 zaak6 taan4 je5 jiu4 zi2 daa2 hin1
 翹披瀝憫詳遶瞬炬芽遷移按昶毳泆緉翫憒
 kiu4 pei1 lik6 man5 coeng4 jiu2 seon3 geoi6 ngaa4 cin1 ji4 on3 cong2 ceoi3 jat6 loeng5 wun6 kui2
-絺㝹馱桓玻曼祴鶴鸚鵡頻鞞跋沮統勉攀
-ci1 nau4 to4 wun4 bo1 maan6 goi1 hok2 jing1 mou5 pan4 bing2 bat6 zeoi1/zeoi2 tung2 min5 paan1
-區展怯錯謬曀旨占促裹擬虔航淩祝徬徨憑閦
-keoi1 zin2 hip3 co3 mau6 ai3 zi2 zim3 cuk1 gwo2 ji5 kin4 hong4 ling4 zuk1 pong4 wong4 pang4 cuk1
+絺㝹馱桓玻曼祴鶴鸚鵡頻鞞跋沮統勉攀津
+ci1 nau4 to4 wun4 bo1 maan6 goi1 hok2 jing1 mou5 pan4 bing2 bat6 zeoi1/zeoi2 tung2 min5 paan1 zeon1
+區展怯錯謬曀旨占促裹擬虔航淩祝徬徨憑
+keoi1 zin2 hip3 co3 mau6 ai3 zi2 zim3 cuk1 gwo2 ji5 kin4 hong4 ling4 zuk1 pong4 wong4 pang4
 伴侶工姻畔剖呼傍朗誕隔垣覓巖縈蓊瓶
 bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaam4 jing4 jung2 ping4
+薝葡炭迹祈禱詈琰印怛閦諷序
+zim1 pou4 taan3 zik1 kei4 tou2 lei6 jim5 jan3 daat3 cuk1 fung3 zeoi6
+瀆竈訐髀
+duk6 zou3 kit3 bei2
 `.split('\n');
 
   function _getIgnoreLevel(zi) {

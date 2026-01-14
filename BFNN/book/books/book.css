@@ -73,9 +73,14 @@ ail   { color:#030; font-size:10.0pt; font-weight:normal } /* annotation in-line
 ail1  { color:#666; font-size:10.0pt; font-weight:normal } /* annotation in-line */
 .ail1 { color:#666; font-size:10.0pt; font-weight:normal } /* annotation in-line */
 red   { color:red }
-lightgreen { color:lightgreen }
+blue  { color:blue }
 black { color:black }
+brown { color:brown }
 purple{ color:purple }
+teal  { color:teal }
+gray  { color:gray }
+lightgray { color:lightgray }
+lightgreen { color:lightgreen }
 label { font-weight:normal; color:purple }
 inv { opacity:0 }
 dim { opacity:0.4 }

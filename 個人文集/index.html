@@ -28,7 +28,7 @@ for (var i=0; i<lines.length; ++i) {
     continue;
   }
   buf.w('<li>');
-  var row = ln.split('▄');
+  var row = ln.split(MULTI_SEP);
   for (var j=0; j<row.length; ++j) {
     if (j>0) buf.w('，');
     ln = row[j].split('|');

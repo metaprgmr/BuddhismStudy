@@ -1,7 +1,7 @@
 XXSZ.sectionTitle = '律要節錄';
 XXSZ.volNum = 5;
 XXSZ.text = `
-/TEXT339/【律要節錄】（<a href="9091.htm">悟道法師講記</a>）
+/TEXT339/【律要節錄】　<ail>（<a href="9091.htm">悟道法師講記</a>）</ail>
 /TEXT339C/卷上（71條）　　 <a#a02>卷下</a>（70條）
 /TEXT339:a01/卷上
 /bq/
@@ -154,5 +154,21 @@ XXSZ.text = `
 《因果經》云：「朋友有三要法：(1)見有失，輒相曉諫。(2)見好事，深生隨喜。(3)在苦厄，不相棄捨。」
 古人心地未通，不遠千里求師。須為尋師訪道，決擇生死；不宜觀山翫水，惟圖遊歷廣遠，誇示於人。
 //
-/_bq/`;
-
+/_bq/
+/VOLSEP/
+<center><table cellspacing=0 cellpadding=0 style="margin-bottom:-40px"><tr><td valign=top>
+/TEXT339/【附錄】</td><td>
+/TEXT339/沙彌十戒: 
+/olzh/
+不殺生　　　　　<ail>不殺害任何有情生命。</ail>
+不偷盜　　　　　<ail>不偷取他人財物。</ail>
+不淫　　　　　　<ail>斷絕一切性行為。</ail>
+不妄語　　　　　<ail>不說謊，包括惡口、兩舌、綺語。</ail>
+不飲酒　　　　　<ail>不飲酒，現代亦包含麻醉品。</ail>
+不著華鬘香油　　<ail>不塗抹香水、香油，不裝飾花鬘。</ail>
+不歌舞觀聽　　　<ail>不看、不聽歌舞、戲劇等娛樂。</ail>
+不坐高廣大床　　<ail>不使用高大、寬敞舒適的床鋪、座位。</ail>
+不非時食　　　　<ail>過午不食。</ail>
+不捉持金銀寶物　<ail>不持有、不蓄積金銀財寶。</ail>
+//
+</td></tr></table></center>`;

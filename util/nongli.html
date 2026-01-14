@@ -2,10 +2,25 @@
 <head>
 <meta charset="utf-8">
 <style>
+body { margin:0px; background-color:#d0d0d0 }
+.bodyLike { background-color:#d0d0d0 }
+.calBG { background-color:#FFFFFA }
+.monthBG { background-color:#FDFDFA }
+.borderT2 { border-top:2px solid #337 }
+.borderB1 { border-bottom:1px solid #337 }
 a { text-decoration:none }
 .jieqi { color:#3C3; font-weight:bold }
-.event { background-color:yellow; font-weight:bold }
+.today { border:2px solid red; background-color:yellow }
+.event { background-color:#fdf }
 .traditional { color:red; font-weight:bold }
+.idate { font-size:14px }
+.nextyear { color:teal; font-style:italic }
+.weekend  { color:red }
+.ZhaiRi   { font-size:14px; background-color:#DDF }
+.ZhaiYue  { font-size:14px; background-color:#FEF }
+.holy     { font-size:14px; color:red; background-color:gold }
+.nirvana  { font-size:14px; color:#DDF; background-color:red }
+.holyBD   { font-size:14px; color:gold; background-color:red }
 inv { opacity:0 }
 red { color:red }
 </style>
@@ -26,8 +41,8 @@ red { color:red }
     //console.log(e);
   }
 
-  var nlyr = get('year') || curIYear;
-  if (nlyr.length == 2) nlyr = `20${nlyr}`;
-  loadNongLiYear(nlyr, jnl);
-  showNongLiNian(nlyr, 'stg');
+  var yr = get('year');
+  if (yr && (yr.length == 2)) yr = `20${yr}`;
+  yr = loadNongLiYear(yr, jnl);
+  showNongLiNian(yr, 'stg');
 </script>

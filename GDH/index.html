@@ -12,9 +12,11 @@ function item(title, srcname, prefix, suffix, urlExtra) {
   if (!suffix) suffix = '》';
   if (!urlExtra) urlExtra = '';
   if (srcname.endsWith('.js')) srcname = 'gdhreader.html?s=content/' + srcname;
-  var LEVEL = 'level=-1&first=6';
-      LEVEL = 'level=1';
-  document.write(`<li>${prefix}<a href="${srcname}?${LEVEL}${urlExtra}">${title}${suffix}</li>`);
+//var LEVEL = 'level=-1&first=6';
+  var LEVEL = 'level=1';
+  LEVEL = (srcname.indexOf('?') ? '&' : '?') + LEVEL;
+  if (urlExtra) urlExtra = '&' + urlExtra;
+  document.write(`<li>${prefix}<a href="${srcname}${LEVEL}${urlExtra}">${title}${suffix}</li>`);
 }
 </script>
 </head>
