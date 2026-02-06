@@ -143,7 +143,7 @@ class My心地觀經Content extends MyContent {
 
 createGP('本生心地觀經要旨', CAT_經論) // 9029
 .setStyle(AIL + BOLD)
-.set('width', 50)
+.setWidth(50)
 .hasRightEdge()
 .run((gp) => { new My心地觀經Content(gp); })
 .setTree(`
@@ -380,15 +380,14 @@ createGP('本生心地觀經要旨', CAT_經論) // 9029
 〇〇若能具足受持讀習廣為人說，所得福利不可限量
 〇〇〇臨命終時，現前得見十方諸佛
 〇〇〇獲/see:十種身語意業清淨|十種身、語、意業清淨/
-
 `)
-;
+.src = 'lit-XDGJ-心地觀經.js';
 
 
 createGP('本生心地觀經大綱', CAT_經論) // 0970
 .setStyle(AIL + BOLD)
 .setNotGPSP('─')
-.set('width', 40)
+.setWidth(40)
 .hasRightEdge()
 .setTree(`
 /b|《大乘本生心地觀經》科判──太虛大師/
@@ -420,4 +419,4 @@ createGP('本生心地觀經大綱', CAT_經論) // 0970
 〇〇〇〇〇丁二、中根起大來行─十地入等覺─觀空後心相發心妙定─/b1|發心品/（相禪密）
 〇〇〇〇〇丁三、下根引大乘果─等覺入佛　─觀三種秘密即身成佛─/b1|成佛品/（禪密）
 〇〇甲三、依教奉行品──/b1|囑累品/`)
-;
+.src = 'lit-XDGJ-心地觀經.js';

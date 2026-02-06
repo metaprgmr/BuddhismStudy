@@ -4,6 +4,7 @@
 <title>地藏菩薩本願經科註</title>
 <link rel="stylesheet" href="../books/book.css">
 <script src="../../../util/utils.js"></script>
+<script src="../../../env.js"></script>
 <script src="../../../佛學基礎/《地藏菩薩本願經》/QingLian/dzjkz-common.js"></script>
 <script src="../mybfnn.js"></script>
 </head>
@@ -13,6 +14,7 @@
 
 <script>
 const TOCContent = `
+　　　　<a href="?vol=A">序</a>　　　　　　<br>
 卷一　　忉利天宮神通品　<a href="?vol=1">第一</a>　<br>
 　　　　分身集會品　　　<a href="?vol=1&pin=2">第二</a>　<br>
 卷二　　觀眾生業緣品　　<a href="?vol=2">第三</a>　<br>
@@ -25,7 +27,8 @@ const TOCContent = `
 卷五　　較量布施功德緣品<a href="?vol=5">第十</a>　<br>
 　　　　地神護法品　　　<a href="?vol=5&pin=11">第十一</a><br>
 卷六　　見聞利益品　　　<a href="?vol=6">第十二</a><br>
-　　　　囑累人天品　　　<a href="?vol=6&pin=13">第十三</a>`.trim();
+　　　　囑累人天品　　　<a href="?vol=6&pin=13">第十三</a><br>
+　　　　<a href="?vol=Z">後跋</a>　　　　　　　　　<br>`.trim();
 
 function showTOC() {
   var buf = new Buffer();
@@ -33,9 +36,7 @@ function showTOC() {
          .writeDoc('地藏菩薩本願經科注', `
 /TEXT030C/古鹽匡菴 青蓮苾芻　靈椉父 輯
 
-<span title="TODO">序</span>　　　　　　　　　　　　　　<br><br>
 ${TOCContent}<br>
-<span title="TODO">跋</span>　　　　　　　　　　　　　　<p/>
 `);
   buf.render('stg');
 } // showTOC().
@@ -44,39 +45,57 @@ function showVol(vol, pin) {
   addjs(`../../../佛學基礎/《地藏菩薩本願經》/QingLian/dzjkz${vol}.js`);
   var timer = setInterval(() => {
     if (VOLUMES.length == 0) return; // not ready yet
-    for (var i in VOLUMES) bfnnShow(VOLUMES[i], pin);
+    for (var i in VOLUMES) bfnnShow(VOLUMES[i], vol, pin);
     clearInterval(timer);
   }, 300);
   return true;
 }
 
-function bfnnShow(volume, pin) {
+function bfnnShow(volume, vol, pin) {
   var buf = new Buffer();
   new (class extends DocInfo {
     constructor() {
       super();
-      var zn = volume.volNum;
-      this.setBuffer(buf)
-          .setXG()
-          .reInit(9098, 6, volume.volNum)
-          .writeStart(`地藏菩薩本願經科注||卷${zn}`, `地藏經科注卷${zn}`)
+      this.setBuffer(buf).setXG().reInit(9098, 6, vol);
+      var vdisp = this.getVolDisp();
+      this.writeStart(`地藏菩薩本願經科注||${vdisp}`, `地藏經科注${vdisp}`)
           .w(SP, '<p class=TEXT030C>古鹽匡菴 青蓮苾芻　靈椉父 輯</p>', SP);
+      if (vol == 'A' || vol == 'Z') {
+        this.writeBody(volume, true);
+        return;
+      }
+
+      // regular volumes
       for (var i in volume.pins) {
         var p = volume.pins[i];
         for (var k in p.lines) {
           var li = p.lines[k];
-          if (!nokp || !li.isKePan()) {
+          if (!nokp || !li.isKePan())
             this.w(li.toDisp(), SP);
-          }
         }
       }
       this.w(`<p class=TEXT030 align=right>地藏菩薩本願經科注 卷${volume.volNum}　</p>`, SP)
           .writeEnd();
     }
 
+    getVolDisp() {
+      switch(this.volNum) {
+      case 'A': return '序';
+      case 'Z': return '後跋';
+      }
+      return '卷' + zNumber(this.volNum);
+    }
+
     writeSeriesNav(links) {
-      var id = '卷' + this.volNum;
+      var id = this.getVolDisp();
       this.w('<center><hr class=volsep>', TOCContent.replace(id, `<cur>${id}</cur>`), '</center>');
+    }
+
+    addMyTips() {
+      var a = getGlobal('DZJKZ_TIPS');
+      if (!a) return;
+      a = a.split('\n');
+      for (var i in a) this.addTip(a[i]);
     }
   })();
   buf.render('stg');

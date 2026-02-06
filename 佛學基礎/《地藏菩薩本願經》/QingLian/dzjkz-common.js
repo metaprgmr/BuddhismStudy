@@ -1,6 +1,3 @@
-console.log('TODO: 序(orig/dzjkz0.txt) and 跋(orig/dzjkz7.sgml) yet to be done.');
-
-
 const bookSrc   = "卍新纂大日本續藏經 第21冊 No.384";
 const bookLink  = 'https://cbetaonline.dila.edu.tw/zh/X0384';
 const authors   = '古鹽匡菴　青蓮苾芻　靈椉父　輯';

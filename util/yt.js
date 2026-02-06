@@ -16,7 +16,10 @@ class YTCollection {
       var lst = this.lists[i];
       buf.w(`<tr><td align=right>${this.tocNoNumber?'':((i+1)+'.')}&nbsp;</td>`);
       if (Array.isArray(lst) && lst.length > 1) { // a simple link
-        buf.w(`<td colspan=3><a href="javascript:${fxnName}(${i})">${lst[0]}</a></b></td></tr>`);
+        if (lst[1].startsWith('link='))
+          buf.w(`<td colspan=3><a href="${lst[1].substring(5)}">${lst[0]}</a></td></tr>`);
+        else
+          buf.w(`<td colspan=3><a href="javascript:${fxnName}(${i})">${lst[0]}</a></b></td></tr>`);
       } else {
         totalD += lst.totalDur;
         var a = lst.name.split('|'), more = '';
@@ -55,14 +58,8 @@ class YTVideo {
     this.id    = id;
     this.title = title;
     this.time  = time;
+    this.timeSecs = HHMMSS2Secs(time);
     extra && (this.extra = extra);
-
-    this.timeSecs = 0;
-    var a = time.split(':'), factor = 1, len = a.length;
-    for (var i=0; i<len; i++) {
-      this.timeSecs += a[len-i-1] * factor;
-      factor *= 60;
-    }
   }
 }
 

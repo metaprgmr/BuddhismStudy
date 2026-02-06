@@ -42,6 +42,7 @@ hr.volsep { border: none; height: 1px; background: rgba(255,0,0,0.3); }
 
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
 xg { text-decoration:underline; text-decoration-color:red; text-decoration-style:dashed }
+.xgtitle { color:teal }
 my   { }
 my_1 { }
 .topbar { border-top:1px solid gray }
@@ -49,15 +50,18 @@ my_1 { }
 .caption { font-size:36.0pt;font-family:標楷體;color:#f60;font-weight:bold; text-align:center }
 .kepan { color:#339 }
 kpDone { color:#339 }
+.paraname { color:red; font-size:8pt }
+.paraname::after { content:' ' }
 .volend { color:brown; text-indent:0.0pt; margin:0cm; margin-bottom:.0001pt;  }
 .seriesnav { background:#cec }
 .endImage { width:300px; height:30px; background-size:300px 30px; background-image:url('../books/sign.gif'); }
 .endImageXG { width:300px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); }
-.gathanum { float:left; color:black; opacity:0.4; font-size:10px; width:25pt; padding-top:3pt }
+.gathanum { float:left; color:black; opacity:0.6; font-size:10px; width:25pt; padding-top:3pt }
 .gatha { color:#038 }
 .gatha2 { color:teal }
+.gathaV { color:teal; font-weight:bold }
 .plain { color:black }
-plain { color:black }
+plain  { color:black; font-weight:normal }
 verseNum { color:#339; font-weight:normal }
  verseNum::before { content:'【' }
  verseNum::after  { content:'】 ' }
@@ -66,6 +70,8 @@ dcirc  { color:purple }
 small { color:brown }
 fs10  { font-size:10.0pt }
 fs8  { font-size:8.0pt }
+dil   { color:#777; font-weight:normal } /* dimmed in-line */
+.dil  { color:#777; font-weight:normal } /* dimmed in-line */
 cil   { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
 .cil  { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
 ail   { color:#030; font-size:10.0pt; font-weight:normal } /* annotation in-line */
@@ -81,6 +87,11 @@ teal  { color:teal }
 gray  { color:gray }
 lightgray { color:lightgray }
 lightgreen { color:lightgreen }
+done { color:#339 }
+c339 { color:#339 }
+.c339 { color:#339 }
+c030 { color:#030 }
+.c030 { color:#030 }
 label { font-weight:normal; color:purple }
 inv { opacity:0 }
 dim { opacity:0.4 }
@@ -102,18 +113,16 @@ mantra    { color:teal }
 .mantra   { color:teal }
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal }
 .MANTRAL  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:teal }
+.SECTION1 {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339; font-weight:bold }
+.SECTION {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339 }
 .TEXT     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt}
 .TEXTL    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt}
 .TEXTC    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center}
-.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
 .TEXTs10  {margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-indent:24.0pt}
 .TEXTs10L {margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-indent:0.0pt}
 .TEXTs10C {margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-align:center}
 .TEXT339s10{margin:0cm; margin-bottom:.0001pt; font-size:10.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
-c339 { color:#339 }
-.c339 { color:#339 }
-c030 { color:#030 }
-.c030 { color:#030 }
+.TEXT339  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#339}
 .TEXT339L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339}
 .TEXT339C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#339}
 .TEXT030  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#030}
@@ -124,8 +133,9 @@ c030 { color:#030 }
 .TEXT666C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#666}
 .TEXT1    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt;}
 .TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
-subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:24.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
+subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:20.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 .VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
+.VERSE9   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:#65350f;}
 .VERSEL   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; font-weight:bold; color:teal;}
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
 verse     { font-family:細明體; color:teal;}

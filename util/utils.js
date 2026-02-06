@@ -66,6 +66,11 @@ function parseZNumber(n) {
   }
   return ret;
 }
+function HHMMSS2Secs(hms) {
+  var ret = 0, a = hms.split(':'), f = 1, len = a.length;
+  for (var i=0; i<len; i++) { ret += a[len-i-1] * f; f *= 60; }
+  return ret;
+}
 
 var SAMSKRT_SCRIPT = 'Siddham'; // or 'Devaganari'
 function IAST(iast) {
@@ -203,7 +208,10 @@ function showOne() { // id's; last is 0-based index; if not a number, defaulted 
   for (var i=0; i<=endIdx; ++i)
     if (i == selIdx) showEl(arguments[i]); else hideEl(arguments[i]);
 }
-function jslnk(jscall, txt) { return `<a href="javascript:${jscall}">${txt}</a>`; }
+function jslnk(jscall, disp, help) {
+  help = help ? ` title="${help}"` : '';
+  return `<a href="javascript:${jscall}"${help}>${disp}</a>`;
+}
 function toOL(lst, extra) { return `<ol ${extra||''}><li>${lst.join('</li><li>')}</li></ol>`; }
 function toOLZH(lst) { return toOL(lst, 'class=cjk'); }
 function toUL(lst) { return `<ul><li>${lst.join('</li><li>')}</li></ul>`; }
@@ -561,7 +569,7 @@ class Buffer {
   }
 
   text() {
-    var s = this.bufList.join('')
+    var s = this.bufList.join('');
     this.bufList = [ s ];
     return s;
   }

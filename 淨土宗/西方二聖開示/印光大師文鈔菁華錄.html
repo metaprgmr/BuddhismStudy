@@ -7,13 +7,18 @@ body { font-family: KaiTi, 楷体, STKaiti, 华文楷体; font-size:20px; line-h
 td { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:120%; font-size:20px }
 sectionTitle { font-size:20px; font-weight:bold; line-height:300% }
 td.toc { font-family: KaiTi, 楷体, STKaiti, 华文楷体; line-height:90%; font-size:22px }
+td.toc1 { padding-left:6px }
 td.anno { font-size:16px; padding-top:5px }
 .synopsis { font-size:16px; padding-top:5px }
 a { text-decoration:none }
 em { font-style:normal; color:red; background-color:lightyellow }
+.em1 { background-color:#f8ffdd }
+.em2 { background-color:#f8ffdd; color:brown }
 comment { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:16px }
 anno { color:blue; font-family: "SimSong", "宋体", STSong, "华文宋体"; font-size:14px }
+LJT { color:blue }
 </style>
+<script src="../../env.js"></script>
 <script src="../../util/utils.js"></script>
 <script src="印光大師文鈔菁華錄.js"></script>
 <script>
@@ -60,7 +65,7 @@ w('<table border="0" style="background-color:white" cellspacing="10">',
 for (var i=0; i<TheBook.content.length; ++i) {
   var x = TheBook.content[i], sinfo;
   if (x.title) {
-    var num = '　&EmptySmallSquare;', t = x.title;
+    var num = '◻', t = x.title;
     if (x.sectionId) {
       sinfo = x.getSectionInfo();
       num = zNumber(x.sectionId) + '、';
@@ -78,8 +83,9 @@ for (var i=0; i<TheBook.content.length; ++i) {
       w('</table></td><td colspan="2" valign="top" align="right">',
         '<table border="0" width="320"><tr><td colspan=2 class="toc">　</td></tr><tr><td colspan=2>　</td></tr>');
 
-    var style = (is333 && !num.endsWith('、') ? ' style="opacity:0.5"' : '');
-    w('<tr><td class="toc" valign="top"', style, '>', num, '</td><td class="toc">', t);
+    var style = (is333 && !num.endsWith('、') ? ' style="opacity:0.5"' : ''), cls = 'toc';
+    if (num == '◻') cls += ' toc1';
+    w(`<tr><td class="${cls}" valign="top"${style}>${num}</td><td class="toc">`, t);
 
     if (x.titleAnno)
       w('<br><anno>', x.titleAnno, '</anno>');
@@ -128,6 +134,7 @@ if (is333) {
   w('<tr><td colspan="4"><hr></td></tr>');
   console.log(ziCnt, '字');
 } else {
+  var yg333 = getGlobal('YG333') || {};
   w('<table border="0" width="700">');
   for (var i in TheBook.content) {
     var p = TheBook.content[i];
@@ -139,7 +146,7 @@ if (is333) {
         var e = entries[k];
         if (e.text && e.id)
           w('<tr><td class="anno" align="right" valign="top"><a name="_', e.id, '">', e.id, '</a>.</td>',
-            '<td>', e.getFullText(), '</td></tr>');
+            `<td class="em${yg333[e.id]||''}">${e.getFullText()}</td></tr>`);
         else
           w('<tr><td colspan="2" class="sectionTitle"><a name="', e.subsecId, '"></a>', e.title, '</td></tr>');
       }

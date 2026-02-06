@@ -10,10 +10,12 @@ code { color:blue }
 a { text-decoration:none }
 cur { color:red; background-color:yellow; font-weight:bold }
 dim { opacity:0.4 }
-.sutra { background-color:#FF9 }
+.sastra { background-color:#FF9 }
+.sutra { background-color:#FDD }
 .orig  { background-color:#DFD }
 .extra { font-style:italic; color:brown }
 .todo  { background-color:pink }
+gdd    { color:#e00 } // 古大德
 FOSSIL  { text-decoration:underline; text-decoration-style:double }
 WORKING { background-color:#ccc }
 FF { font-style:italic; color:red }
@@ -167,7 +169,7 @@ function showAllArticles() {
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
     if (wk.isAvail()) {
-      if (isLeft && (wk.id >= 1000)) { isLeft = false; buf.w(MID); }
+      if (isLeft && (wk.id >= 1500)) { isLeft = false; buf.w(MID); }
       wk.render(buf);
     }
   }
@@ -232,7 +234,7 @@ if it is first cleansed via <code>BfnnCommon</code>, can use the <code>Cat</code
 <pre>
     book/books/     0<i>xxx</i>.htm
     book/books2/    1<i>xxx</i>.htm
-    book/books3/    2<i>xxx</i>.htm （但 2000-2016.htm 落在book2/，由於文章系列關係）
+    book/books3/    2<i>xxx</i>.htm （2000~16.htm 因文章系列之故而處 book2/）
     book/books9/    <font class=extra>9xxx</font>.htm （不屬於「般若文海」的其他文章）
 </pre>
 

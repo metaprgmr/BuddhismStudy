@@ -1,7 +1,7 @@
 createGP('三藏十二分教', CAT_基本)
 .setStyle(AIL + BOLD)
 .setNotGPSP('─')
-.set('width', 58)
+.setWidth(58)
 .hasRightEdge()
 .setTree(`
 /b|三藏/、/b|十二分教/
@@ -37,7 +37,7 @@ createGP('三藏十二分教', CAT_基本)
     .T(9, catStart+9,  'vaipulya')
     .T(9, catStart+10, 'adbhutadharma')
     .T(9, catStart+11, 'upadeśa')
-  ;
+    .src = 'lit-Tripitaka.js';
 });
 
 class My大正新脩大藏經Content extends MyContent {
@@ -147,7 +147,7 @@ class My大正新脩大藏經Content extends MyContent {
 createGP('大正新脩大藏經', CAT_基本)
 .setStyle(AIL + BOLD)
 .setNotGPSP('─')
-.set('width', 34)
+.setWidth(34)
 .hasRightEdge()
 .run((gp) => { new My大正新脩大藏經Content(gp); })
 .setTree(`
@@ -172,4 +172,5 @@ createGP('大正新脩大藏經', CAT_基本)
 〇〇/see:|史傳部/〰〰〰〰〰〰〰〰〰〰/cil|第49、50、51、52部，共95部經/
 〇〇/see:|事彙部/·/see:|外教部/·/see:|目錄部/〰〰/cil|第53、54、55部，共64部經/
 〇古逸部·疑似部〰〰〰〰〰〰〰/cil|第85部，共189部經/
-`);
+`)
+.src = 'lit-Tripitaka.js';

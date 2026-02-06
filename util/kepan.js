@@ -6,8 +6,14 @@ function ensureInt(x, defVal) {
 function flipVisible(eid, eid1) {
   var el = e(eid);
   if (el) {
-    if (el.style.display === 'none') el.style.display = 'block';
-    else el.style.display = 'none';
+    if (el.style.display === 'none') {
+      el.style.display = 'block';
+      localStorage.setItem('openEid', eid);
+    } else {
+      el.style.display = 'none';
+      if (eid == localStorage.getItem('openEid'))
+        localStorage.removeItem('openEid');
+    }
   }
 
   if (eid1) flipVisible(eid1);
@@ -18,6 +24,13 @@ function alpha2int(a) {
         _a = 'a'.charCodeAt(0), _z = 'z'.charCodeAt(0);
   var cc = a.charCodeAt(0);
   return cc - ((cc <= _Z) ? _A : _a)  + 1;
+}
+
+function hideLead0s(n) {
+  if (n[0] != '0') return n;
+  var i=1;
+  for (; n[i] == '0'; ++i);
+  return '<inv>' + n.substring(0, i) + '</inv>' + n.substring(i);
 }
 
 function getPartInfo(part) {
@@ -87,17 +100,31 @@ class KePanLine {
       txt = `<${cls}>${txt}</${cls}>`;
     this.text = before + txt + after;
   }
+  addChild(c) {
+    if (this.children) this.children.push(c);
+    else this.children = [ c ];
+  }
   debugDump() {
-    console.log('rawVerseNum', this.rawVerseNum, 'volNum', this.volNum, 'verseNum', this.verseNum, 'text', this.text, 'verseText', this.verseText);
+    console.log('rawVerseNum', this.rawVerseNum,
+                'volNum', this.volNum,
+                'verseNum', this.verseNum,
+                'text', this.text,
+                'verseText', this.verseText);
   }
   getVerseIDDisp(suggestedRawVerseNum, le10) {
     var v = this.volNum;
     var n = this.verseNum;
-    if (!v && suggestedRawVerseNum) {
-      v = suggestedRawVerseNum[0];
-      n = suggestedRawVerseNum.substring(1);
+    if (suggestedRawVerseNum) {
+      if (this.singleVol) {
+        v = 1;
+        n = suggestedRawVerseNum;
+      } else if (!v) {
+        v = suggestedRawVerseNum[0];
+        n = suggestedRawVerseNum.substring(1);
+      }
     }
     if (!v || !n) return '';
+    n = hideLead0s(n);
     switch (v) {
     case 'A': v = le10 ? '一' : '　一'; break;
     case 'B': v = le10 ? '二' : '　二'; break;
@@ -121,10 +148,60 @@ class KePanLine {
     case 's': v = '四五'; break;  case 't': v = '四六'; break; case 'u': v = '四七'; break;  case 'v': v = '四八'; break;
     case 'w': v = '四九'; break;  case 'x': v = '五十'; break; case 'y': v = '五一'; break;  case 'z': v = '五二'; break;
     case '_': v = '　　'; n = '<inv>000</inv>'; break;
+    default:  v = '　　'; break;
     }
-    return v + '&nbsp;' + n;
+    return `${v}&nbsp;${n}`;
   }
 } // end of KePanLine.
+
+class KePanElem {
+  constructor(id, verse, txt) {
+    this.id = id;
+    this.verse = verse;
+    this.text = txt;
+  }
+  addText(txt) {
+    if (this.text) this.text += '<br>&nbsp;<br>' + txt;
+    else this.text = txt;
+  }
+  toKePanLine(kepan) {
+    return new KePanLine(`　　${this.id||''}${kepan||''}`, this.verse, this.text);
+  }
+}
+
+class KePanItem
+{
+  constructor(kepan) {
+    this.elems = [];
+    if (kepan.startsWith('　　') && (kepan[6] === '　' || kepan[6] === '（')) {
+      var id = kepan.substring(2,6).trim();
+      if (id.length > 0)
+        this.elems.push([ id, '' ]);
+      this.kepan = kepan.substring(6);
+    } else {
+      this.kepan = kepan;
+    }
+  }
+  addText(id, txt) {
+    if (!txt) return;
+    if (this.elems.length === 0) this.elems.push(new KePanElem(id, '', txt));
+    else this.elems[this.elems.length-1].addText(txt);
+  }
+  addVerse(id, vrs) {
+    if (vrs) this.elems.push(new KePanElem(id, vrs.replaceAll('█', '<br>')));
+  }
+  addToDoc(kepanDoc) {
+    var len = this.elems.length;
+    if (len === 0)
+      kepanDoc.add(new KePanLine('　　' + '    ' + this.kepan));
+    else {
+      var kpl = this.elems[0].toKePanLine(this.kepan);
+      kepanDoc.add(kpl);
+      for (var i=1; i<len; ++i)
+        kpl.addChild(this.elems[i].toKePanLine());
+    }
+  }
+} // end of KePanItem.
 
 class KePanDoc {
   constructor(kpdocText) {
@@ -139,6 +216,7 @@ class KePanDoc {
     return this;
   }
   clearall() { this.lines = [] }
+  setSingleVol() { this.singleVol = true; return this; }
   addAll(kepan, verses, explanations) {
     var a = kepan.split('\n');
     for (var i in a) {
@@ -167,24 +245,39 @@ class KePanDoc {
     return '';
   }
   getVerseIDDisp(lineIdx, force) { // 0-based
-    return this.lines[lineIdx].getVerseIDDisp( this.getRawVerseID(lineIdx, force) );
+    var ln = this.lines[lineIdx];
+    ln.singleVol = this.singleVol;
+    return ln.getVerseIDDisp( this.getRawVerseID(lineIdx, force) );
   }
   writeAsTRs(buf, terseLevel, forceVerseIDs, showVerse) {
-    var td1 = '<td valign="top" nowrap style="font-size:12px; background-color:#e8e8e8; border-bottom:1px #fff solid">&nbsp;';
-    var td2 = '<td valign="top" align="right" nowrap style="font-size:12px; color:gray">';
-    var lastIDDisp = null;
-    for (var i=0; i<this.lines.length; ++i) {
-      var ln = this.lines[i];
+    // terseLevel:  0: KP-only, complete;
+    //              1: KP-only, terse;
+    //              2: KP+verse;
+    //             -1: verse-only.
+    var td1 = '<td valign="top" nowrap style="font-size:12px; background-color:#e8e8e8; border-bottom:1px #fff solid">&nbsp;',
+        td2 = '<td valign="top" align="right" nowrap style="font-size:12px; color:gray">',
+        lastIDDisp = null,
+        me = this;
+    function doTR(ln, isChild) {
       var anchor = ''; // TODO: use?
       if (!showVerse) {
-        if (!ln.isKey && terseLevel) continue;
-        if (terseLevel === 2 && ln.isKeySecondary) continue;
+        if (!ln.isKey && terseLevel) return;
+        if (terseLevel === 2 && ln.isKeySecondary) return;
       }
-      var idDisp = this.getVerseIDDisp(i, terseLevel && forceVerseIDs);
-      if (idDisp != lastIDDisp)
-        lastIDDisp = idDisp;
-      else
+      var idDisp;
+      if (!ln.verseText)
         idDisp = '';
+      else {
+        if (isChild) {
+          idDisp = hideLead0s(ln.verseNum);
+        } else {
+          idDisp = me.getVerseIDDisp(i, terseLevel && forceVerseIDs);
+          if (idDisp != lastIDDisp)
+            lastIDDisp = idDisp;
+          else
+            idDisp = '';
+        }
+      }
       if (idDisp.endsWith('000')) idDisp = '◼&nbsp;';
       buf.w('<tr>');
       if (terseLevel !== -1) {
@@ -192,24 +285,84 @@ class KePanDoc {
         if (idx > 0) txt = txt.substring(0, idx) + '<span class="keyline">' + txt.substring(idx) + '</span>';
         buf.w(td1, anchor, txt, '&nbsp;</td>', td2, idDisp, '&nbsp;</td>');
       }
-      else if (!ln.verseText)
-        continue;
+      else if (!ln.verseText) {
+        buf.w('</tr>');
+        return;
+      }
       if (showVerse) {
         if (!ln.plainText) {
-          buf.w('<td class=VERSE>', ln.verseText || '', '</td>');
+          buf.w(`<td class=VERSE>${ln.verseText || ''}</td>`);
         } else {
-          var eid = '_' + ln.verseNum;
-          var hint = ln.plainText, maxlen = 100;
+          var divPos = "padding-top:5px; padding-bottom:5px; ",
+              eid = '_' + ln.verseNum,
+              prevEid = localStorage.getItem('openEid'),
+              dispVal = (eid == prevEid) ? 'block' : 'none',
+              hint = ln.plainText,
+              maxlen = 100;
           if (hint.length > maxlen) hint = hint.substring(0,maxlen) + '......';
-          buf.w('<td onclick="flipVisible(\'', eid, '\')"><span class=VERSE>', ln.verseText || '',
-                '</span><span style="color:gray" title="', hint, '">□</span>',
-                '<div id="', eid, '" class=PLAIN style="padding-top:5px; padding-bottom:5px; display:none">', ln.plainText, '</div></td>');
+          buf.w(`<td onclick="flipVisible('${eid}')"><span class=VERSE>${ln.verseText || ''}</span>`)
+             .wIf(ln.verseText, '&nbsp;')
+             .w(`<span style="color:gray" title="${hint}">□</span>`,
+                `<div id="${eid}" class=PLAIN style="${divPos}display:${dispVal}">${ln.plainText}</div></td>`);
         }
       }
       buf.w('</tr>');
+    } // end of doTR().
+
+    for (var i=0; i<this.lines.length; ++i) {
+      var ln = this.lines[i];
+      doTR(ln);
+      if (showVerse && ln.children) {
+        for (var j in ln.children)
+          doTR(ln.children[j], true);
+      }
     }
   }
 } // end of KePanDoc.
+
+function toDoc(src, debug) {
+  var kepanItems = [], a = src.split('\n');
+  var verseCnt = 1, nonVerseCnt = 500;
+  var result = [], cur, lastType, keyPref = '[KEY:';
+  for (var i in a) {
+    var ln = a[i].trim();
+    if (ln.length === 0) continue;
+    if (ln.startsWith('[KEPAN]')) {
+      cur = new KePanItem(ln.substring(7));
+      result.push(cur);
+      lastType = 'KEPAN';
+    } else if (ln.startsWith('[VERSE]')) {
+      cur.addVerse(' ' + digit3(verseCnt++), ln.substring(7));
+      lastType = 'VERSE';
+    } else if (ln.startsWith('[TEXT]')) {
+      cur.addText('_' + digit3(nonVerseCnt), ln.substring(6));
+      if (lastType != 'TEXT') { ++nonVerseCnt; lastType = 'TEXT'; }
+    } else if (ln.startsWith(keyPref) && cur) { // [KEY:key=value]
+      var x = ln.indexOf(']', keyPref.length);
+      if (x > 0) {
+        x = ln.substring(5,idx).trim().split('=');
+        x[0] && (cur[x[0]] = x[1] || true);
+      }
+    }
+  }
+
+  // Verify
+  if (debug) {
+    for (var i in result) {
+      var lines = result[i].lines || [];
+      for (var i=0; i<lines.length; ++i) {
+        var ln = lines[i];
+        if (ln[0].startsWith('?')) continue;
+        console.log('[' + ln[0] + '] ' + ln[1]);
+      }
+    }
+  }
+
+  var doc = new KePanDoc();
+  for (var i in result)
+    result[i].addToDoc(doc);
+  return doc;
+}
 
 var lastDivId;
 

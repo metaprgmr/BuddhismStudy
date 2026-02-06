@@ -5,6 +5,9 @@
 <style>
 #left  { opacity:0.3; color:white; font-size:96px }
 #right { opacity:0.3; color:white; font-size:96px }
+h1 { font-weight:normal }
+bronze { color:#ff9800; text-shadow: 2px 2px 2px teal; font-weight:bold }
+bronze { opacity:1; color:#ff9800; text-shadow: 2px 2px 2px teal }
 </style>
 <script src="utils.js"></script>
 </head>
@@ -14,14 +17,23 @@
 <td align=center id=stg></td>
 <script>
 var n = get('n') || 1, buf = new Buffer();
-if (n == 'sk') {
-  buf.w('<h1 style="color:gold">Namo Bhagavate Śākyamunaye<br>',
+switch (n) {
+case 'sk':
+  buf.w('<h1 style="color:gold">Namo Bhagavate <bronze>Śākyamunaye</bronze><br>',
         `Tathāgatāyārhate Samyaksaṃbuddhāya</h1><a href="javascript:ender('Clicked')">`,
         '<img src="../images/釋迦牟尼佛.jpg" title="Click to be full screen." height="900px"></a>');
   n = 0;
-} else {
+  break;
+case 'dz':
+  buf.w(`<h1 style="color:gold">Nama'ria-<bronze>Kṣitigarbha</bronze><br>Bodhisattvāya Mahāsattvāya Mahā-Kāruṇikāya</h1>`,
+        `<a href="javascript:ender('Clicked')">`,
+        '<img src="../images/南無地藏王菩薩1.jpg" title="Click to be full screen." height="900px"></a>');
+  n = 0;
+  break;
+default:
   buf.w(`<a href="javascript:ender('Clicked')">`,
         `<img src="../images/南無阿彌陀佛.jpg" title="Click to start."></a>`);
+  break;
 }
 buf.render('stg');
 </script>

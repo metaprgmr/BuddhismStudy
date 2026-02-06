@@ -290,12 +290,13 @@ class NL2027 extends NongLiYear {
 const NLYearDefs = [ NL2023, NL2024, NL2025, NL2026 ];
 
 function loadNongLiYear(yr, events, loadAdj) {
+  var toCheck = !yr;
   yr = toInt(yr || curIYear);
   var clz = NLYearDefs[yr-2023];
   if (!clz) { alert(`農曆年${yr}尚未建立，抱歉。`); return; }
   var nln = new clz(events); // Created the main/only instance.
 
-  if (!nln.isIn()) nln = new (NLYearDefs[(--yr)-2023])(events);
+  if (toCheck && !nln.isIn()) nln = new (NLYearDefs[(--yr)-2023])(events);
 
   clz = NLYearDefs[yr-2024]; if (clz) { nln.setHasPrev(); if (loadAdj) new clz(events); }
   clz = NLYearDefs[yr-2022]; if (clz) { nln.setHasNext(); if (loadAdj) new clz(events); }

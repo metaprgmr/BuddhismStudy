@@ -22,7 +22,8 @@ buf.w('<center><table><tr><th>佛法</th><th>修行</th><th>雜論</th></tr>');
 buf.w('<tr><td valign="top"><ol>');
 for (var i=0; i<lines.length; ++i) {
   var ln = lines[i];
-  if (ln.startsWith('##')) {
+  if (ln.startsWith('xxxx')) break;
+  if (ln.startsWith('####')) {
     buf.w('</ol></td><td style="padding-left:30px" valign="top">',
           `<ol start="${idx}">`);
     continue;

@@ -68,7 +68,7 @@ createGP('啟示錄', CAT_外道)
 .setStyle(AIL + BOLD)
 .setNotGPSP('─')
 .setMarkNames(A2Z)
-.set('width', 50)
+.setWidth(50)
 .hasRightEdge()
 .setTree(`
 /b|《啟示錄》/
@@ -230,5 +230,7 @@ createGP('啟示錄', CAT_外道)
 〇〇〇〇〇〇城內街道當中一道生命水的河，從神和羔羊的寶座流出來
 〇〇〇〇/b|預言結束/
 `)
-.run((gp) => { new MyRevelationContent(gp); })
-;
+.run((gp) => {
+  new MyRevelationContent(gp);
+  gp.src = 'lit-Revelation.js';
+});

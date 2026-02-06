@@ -82,17 +82,29 @@ const FA_HUA_PINS = [
 
 class DocInfo {
   constructor() {
+    docInfo = this; // singleton
     this.defaultClass = 'TEXT';
     this.gathaClass = 'gatha';
     this.zdigits = '〇一二三四五六七八九十';
     this.setMetaDelim('/');
-    docInfo = this; // singleton
+    this.tips = {};
+    this.addMyTips();
   }
   reInit(firstVol, totalVols, vol, labels) {
     this.firstVolNum = firstVol;
     this.totalVols = totalVols;
     this.labels = labels;
     this.volNum = vol ? vol : 0;
+    return this;
+  }
+  addMyTips() {}
+  addTip(key, desc) {
+    if (!desc) {
+      var a = key.split('\|');
+      key  = a[0];
+      desc = a[1];
+    }
+    desc && (this.tips[key] = desc);
     return this;
   }
   getIdAt(i/*1-based*/) {
@@ -102,7 +114,7 @@ class DocInfo {
   setBuffer(buf) { this.buf = buf; return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
   setGathaClass(cls) { this.gathaClass = cls; return this; }
-  setXG(endCenter) { this.isXG = true; this.endCenter = endCenter; return this; }
+  setXG(endCenter,titleCls) { this.isXG = true; this.endCenter = endCenter; this.titleExtraCls = titleCls; return this; }
   setHints(hints) { this.hints = hints; return this; }
   set(k,v) { k && v && (this[k]=v); return this; }
   w() {
@@ -128,20 +140,23 @@ class DocInfo {
       this.w('<table><tr><td>');
 
     if (ttl) {
-      var idx = ttl.indexOf('|');
+      var idx = ttl.indexOf('|'), cls = '';
       if (idx > 0) {
         var sub = ttl.substring(idx+1);
         ttl = ttl.substring(0,idx);
+        if (this.titleExtraCls) cls = ` class="${this.titleExtraCls}"`;
         if (sub.startsWith('|')) {
           sub = sub.substring(1);
           if (!docTtl) docTtl = ttl + ' ' + sub;
-          ttl += `<br><subtitle>${sub}</subtitle>`;
+          ttl += `<br><subtitle${cls}>${sub}</subtitle>`;
         } else {
           if (!docTtl) docTtl = ttl + ' ' + sub;
-          ttl += ` <subtitle>${sub}</subtitle>`;
+          ttl += ` <subtitle${cls}>${sub}</subtitle>`;
         }
       }
-      this.w(`<p class=TITLE>${ttl}</p>`);
+      cls = 'TITLE';
+      if (this.titleExtraCls) TITLE += ' ' + this.titleExtraCls;
+      this.w(`<p class="${cls}">${ttl}</p>`);
     }
     document.title = docTtl || ttl;
     return this;
@@ -171,6 +186,7 @@ class DocInfo {
     return this;
   }
   writeSeriesNav(links) {
+    if (this.totalVols <= 1) return this;
     if (this.volumesInJS) return this.writeSeriesNavForJS(links);
 
     function fname(pnum) {
@@ -347,10 +363,17 @@ class DocInfo {
         this.gatha();
         this.inGatha = false;
       }
-      else if (this.gathaText)
-        this.gathaText += '\n' + ln;
-      else
-        this.gathaText = ln;
+      else {
+        if (ln.startsWith('/#')) { // special processing for paraName
+          var myidx = ln.indexOf('/', 2);
+          if (myidx > 2)
+            ln = `${ln.substring(myidx+1)}<sup class="paraname">${ln.substring(2,myidx).replaceAll(',',', ')}</sup>`;
+        }
+        if (this.gathaText)
+          this.gathaText += '\n' + ln;
+        else
+          this.gathaText = ln;
+      }
       return lnId;
     }
 
@@ -388,12 +411,14 @@ class DocInfo {
     }
 
     if (ln1.startsWith('<html:diagram')) { // e.g. 0970, 0115
+      // This does not work in JS's, probably for browser's security reasons.
+      // Use ${} in JS; see 9906/02.js
       idx1 = ln.indexOf('>');
       ln = ln1.substring(idx1+1).trim();
       if (!ln.endsWith('</html:diagram>'))
         throw '<html:diagram> must be closed on the same line.';
       ln = ln.substring(0, ln.length-15).trim();
-      this.w('<script> gpRepo.showDiagram("', ln, '"); </script>');
+      this.w(diagramSvg(ln));
       return lnId;
     }
 
@@ -447,8 +472,16 @@ class DocInfo {
 
     var idx = ln.indexOf(this.metaRight, 1);
     if (idx < 0) throw `Missing meta closing delimiter ${this.metaRight}: ${ln}`;
-    var cls = ln.substring(1,idx).split(':');
+    var cls, paraName = ln.substring(1,idx), idx1 = paraName.indexOf('#');
+    if (idx1 >= 0) {
+      cls = paraName.substring(0, idx1);
+      paraName = paraName.substring(idx1+1); // e.g. 1146
+    } else {
+      cls = paraName;
+      paraName = '';
+    }
     ln = ln.substring(idx+1);
+    cls = cls.split(':');
     if (cls.length > 1) {
       var anchors = cls[1].split(',');
       for (var k in anchors)
@@ -467,7 +500,10 @@ class DocInfo {
       ln += '　';
     if (append)
       cls = `"${this.defaultClass} ${cls}"`;
-    this.w(`<p class=${cls}>${ln}</p>`);
+    if (paraName)
+      this.w(`<p class="${cls || this.defaultClass}">${ln}<sup class="paraname">${paraName.replaceAll(',', ', ')}</sup></p>`);
+    else
+      this.w(`<p class="${cls || this.defaultClass}">${ln}</p>`);
     return lnId;
   }
 
@@ -521,6 +557,20 @@ class DocInfo {
 
   gatha() {
     const sp = '　', sp3 = '　　　';
+    function replaceSP(s) {
+      if (s.indexOf(' ') < 0) return s;
+      var ret = '';
+      for (var i=0; i<s.length; ++i) {
+        switch(s[i]) {
+        case ' ': ret += sp; break;
+        case '<': for (; i<s.length && s[i] != '>'; ret += s[i++]);
+                  ret += '>';
+                  break;
+        default:  ret += s[i]; break;
+        }
+      }
+      return ret;
+    }
     var a = this.gathaText.split('\n'), len = a.length, num = 1;
     for (var i=0; i<len; ++i) {
       var ln = a[i];
@@ -535,7 +585,7 @@ class DocInfo {
         this.w(LNSP);
       } else {
         this.w(`<p class="TEXTL ${this.gathaClass}"><span class="gathanum">`,
-          (len > 5) ? (num++) : '', '&nbsp;</span>', this.localProc(ln.replaceAll(' ', sp)));
+          (len > 5) ? (num++) : '', '&nbsp;</span>', this.localProc(replaceSP(ln)));
         if (anno) this.w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
         this.w(`</p>`);
       }

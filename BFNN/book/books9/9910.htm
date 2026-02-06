@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>大乘起信論講記</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../../../util/gridperfect.js"></script>
+<script src="9910/diagrams.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var QXL = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9910/${to2d(vol||1)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setXG().setBuffer(buf)
+            .setGathaClass('gathaV')
+            .reInit(9910, 34);
+        this.volNum = QXL.volNum;
+        this.writeStart(`大乘起信論講記|（第${zNumber(this.volNum)}集）`)
+            .writeBody(`\n/TEXT030C/淨界法師 講
+${QXL.text}
+
+/VOLSEP/`, true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // QXL
+
+QXL.show(get('vol')); // 卷
+
+</script>

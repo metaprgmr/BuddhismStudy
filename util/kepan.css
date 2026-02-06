@@ -9,6 +9,10 @@ h2 { letter-spacing:2px }
 
 hilite { color:red }
 inv { opacity:0 }
+dim { opacity:0.5 }
+ail { color:#008; font-size:11.0pt; font-weight:normal } /* annotation in-line */
+cil { color:#777; font-size:11.0pt; font-weight:normal } /* comment in-line */
+verse { color:teal }
 chapter { font-weight:bold; color:black; }
 .VERSE { color:teal; font-weight:bold }
 .VERSE a { color:teal; font-weight:bold }

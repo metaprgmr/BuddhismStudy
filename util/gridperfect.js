@@ -1,38 +1,39 @@
-const AIL    = '.ail  { font-size:12px; opacity:0.8 }\n' +
-               '.ailb { font-size:14px; opacity:0.8; stroke:brown }\n' +
-               '.ailb1{ font-size:14px; opacity:0.8; stroke:green }\n' +
-               '.ailb2{ font-size:14px; opacity:0.8; stroke:red }\n' +
-               '.ailb3{ font-size:14px; opacity:0.8; stroke:blue }\n' +
-               '.ailteal{ font-size:14px; opacity:0.8; stroke:teal }\n' +
-               '.ail339 { font-size:14px; opacity:0.8; stroke:#333399 }\n' +
-               '.ailinv { font-size:14px; opacity:0.0 }\n' +
-               '.cil { font-size:14px; opacity:0.8 }\n';
-const BOLD   = '.b { stroke:brown }\n' +
-               '.b1{ stroke:green }\n' +
-               '.b2{ stroke:red }\n' +
-               '.b3{ stroke:blue }\n' +
-               '.hl{ fill:red }\n' +
-               '.inv { opacity:0 }\n' +
-               '.mantra{ stroke:teal }\n' +
-               '.c339  { stroke:#333399 }\n' +
-               '.see   { cursor:pointer; text-decoration:underline }\n' +
-               '.see-b { cursor:pointer; text-decoration:underline; stroke:brown }\n' +
-               '.see-b1{ cursor:pointer; text-decoration:underline; stroke:green }\n' +
-               '.see-b2{ cursor:pointer; text-decoration:underline; stroke:red }\n' +
-               '.see-b3{ cursor:pointer; text-decoration:underline; stroke:blue }\n' +
-               '.see-hl{ cursor:pointer; text-decoration:underline; stroke:red }\n' +
-               '.see-mantra{ cursor:pointer; text-decoration:underline; stroke:teal }\n' +
-               '.see-c339  { cursor:pointer; text-decoration:underline; stroke:#333399 }\n' +
+const AIL    = '.ail  { font-size:12px; opacity:0.8 }' +
+               '.ailb { font-size:14px; opacity:0.8; stroke:brown }' +
+               '.ailb1{ font-size:14px; opacity:0.8; stroke:green }' +
+               '.ailb2{ font-size:14px; opacity:0.8; stroke:red }' +
+               '.ailb3{ font-size:14px; opacity:0.8; stroke:blue }' +
+               '.ailteal{ font-size:14px; opacity:0.8; stroke:teal }' +
+               '.ail339 { font-size:14px; opacity:0.8; stroke:#333399 }' +
+               '.ailinv { font-size:14px; opacity:0.0 }' +
+               '.cil { font-size:14px; opacity:0.8 }';
+const BOLD   = '.b { stroke:brown }' +
+               '.b1{ stroke:green }' +
+               '.b2{ stroke:red }' +
+               '.b3{ stroke:blue }' +
+               '.hl{ fill:red }' +
+               '.inv { opacity:0 }' +
+               '.mantra{ stroke:teal }' +
+               '.c339  { stroke:#333399 }' +
+               '.see   { cursor:pointer; text-decoration:underline }' +
+               '.see-b { cursor:pointer; text-decoration:underline; stroke:brown }' +
+               '.see-b1{ cursor:pointer; text-decoration:underline; stroke:green }' +
+               '.see-b2{ cursor:pointer; text-decoration:underline; stroke:red }' +
+               '.see-b3{ cursor:pointer; text-decoration:underline; stroke:blue }' +
+               '.see-hl{ cursor:pointer; text-decoration:underline; stroke:red }' +
+               '.see-mantra{ cursor:pointer; text-decoration:underline; stroke:teal }' +
+               '.see-c339  { cursor:pointer; text-decoration:underline; stroke:#333399 }' +
                '';
 const CAT_基本 = '基本';
 const CAT_唯識 = '唯識';
 const CAT_大乘 = '大乘';
 const CAT_小乘 = '小乘';
+const CAT_戒律 = '戒律';
 const CAT_經論 = '經論';
 const CAT_外道 = '外道';
 const CAT_ELSE = 'ELSE';
 const CAT_NONE = '　';
-const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_經論,CAT_外道,CAT_ELSE,CAT_NONE];
+const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_戒律,CAT_經論,CAT_外道,CAT_ELSE,CAT_NONE];
 
 const LINE='LINE', TEXT='TEXT', RECT='RECT', CIRCLE='CIRCLE',
       RIGHTEDGE='R_EDGE', INCL='INCL';
@@ -82,6 +83,7 @@ class GridPerfect {
   isGPSP(x) { // SP = space
     return x && (this.SPs.indexOf(x) >= 0);
   }
+  setWidth(w) { this.width = w; return this; }
   getNamedText(id) { return this.namedTexts && this.namedTexts[id]; }
   setNamedText(id,txt) {
     if (id) {
@@ -279,12 +281,16 @@ class GridPerfect {
     return null;
   }
   fanOut(xLeft, yTop, yBottom, numItems) { return this.FO(xLeft, yTop, yBottom, numItems); }
-  FO(xLeft, yTop, yBottom, numItems) { // returns yMiddle
+  FO(xLeft, yTop, yBottom, numItems, noIn) { // returns yMiddle. numItems can be [], for uneven branching
     if (!numItems) numItems = 2;
     this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom])
-        .L([xLeft+0.5, (yTop+yBottom)/2], "%l0.75")
         .L([xLeft+0.5, yTop], "%r0.5")
         .L([xLeft+0.5, yBottom], "%r0.5");
+    if (!noIn) this.L([xLeft+0.5, (yTop+yBottom)/2], "%l0.75")
+    if (Array.isArray(numItems)) {
+      for (var i=0; i<numItems.length; ++i)
+        this.L([xLeft+0.5, numItems[i]], "%r0.5");
+    }
     if (numItems > 2) {
       var dist = (yBottom-yTop) / (numItems-1);
       for (var i=1; i<numItems-1; ++i)
@@ -293,12 +299,18 @@ class GridPerfect {
     return this;
   }
   fanIn(xLeft, yTop, yBottom, numItems) { return this.FI(xLeft, yTop, yBottom, numItems); }
-  FI(xLeft, yTop, yBottom, numItems) {
+  GROUPL(xLeft, yTop, yBottom) { return this.FO(xLeft, yTop, yBottom, 2, true); }
+  GROUPR(xLeft, yTop, yBottom) { return this.FI(xLeft, yTop, yBottom, 2, true); }
+  FI(xLeft, yTop, yBottom, numItems, noOut) { // numItems can be [], for uneven branching
     if (!numItems) numItems = 2;
     this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom])
-        .L([xLeft+0.5, (yTop+yBottom)/2], "%r0.75")
         .L([xLeft+0.5, yTop], "%l0.5")
         .L([xLeft+0.5, yBottom], "%l0.5");
+    if (!noOut) this.L([xLeft+0.5, (yTop+yBottom)/2], "%r0.75")
+    if (Array.isArray(numItems)) {
+      for (var i=0; i<numItems.length; ++i)
+        this.L([xLeft+0.5, numItems[i]], "%l0.5");
+    }
     if (numItems > 2) {
       var dist = (yBottom-yTop) / (numItems-1);
       for (var i=1; i<numItems-1; ++i)
@@ -518,7 +530,7 @@ class GridPerfect {
         x2 = (shiftX + dx + inst.to[0])  * gw + gh/2;
         y2 = (shiftY + dy + inst.to[1])  * gh;
         extra = inst.extra || ' style="stroke:black;stroke-width:1px"';
-        buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" ${extra}/>\n`);
+        buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" ${extra}/>`);
         break;
       case TEXT:
         shft = this.getShifting(inst.x, inst.y);
@@ -527,7 +539,7 @@ class GridPerfect {
         x = (shiftX + dx + inst.x) * gw;
         y = (shiftY + dy + inst.y) * gh + gh/4;
         extra = inst.extra || '';
-        buf.w(`<text x="${x}" y="${y}" ${extra}>${inst.text}</text>\n`);
+        buf.w(`<text x="${x}" y="${y}" ${extra}>${inst.text}</text>`);
         break;
       }
     }
@@ -609,6 +621,10 @@ var gpRepo = new (class extends ResourceRepo {
 
   setElidTOC(id) { this.elidTOC = id; return this; }
   setElidStage(id) { this.elidStage = id; return this; }
+  getDiagramSvg(name, isLeft) {
+    var svg = this.showDiagram(name, 'STRING');
+    return isLeft ? svg : `<center>${svg}</center>`;
+  }
   showDiagram(name, elid, design) {
     if (!name) {
       name = localStorage.getItem('cur');
@@ -619,8 +635,17 @@ var gpRepo = new (class extends ResourceRepo {
     }
     var rsc = name && gpRepo.run(name, design);
     if (rsc) {
-      if (typeof rsc == 'string') renderText(elid || this.elidStage || document, rsc);
-      else rsc.wrap('<center>', '</center>').render(elid || this.elidStage || document);
+      if (elid == 'STRING') {
+        if (typeof rsc == 'string')
+          return rsc;
+        else // buffer
+          return rsc.render();
+      } else {
+        if (typeof rsc == 'string')
+          renderText(elid || this.elidStage || document, rsc);
+        else // buffer
+          rsc.wrap('<center>', '</center>').render(elid || this.elidStage || document);
+      }
       this.showTOC(name, design);
     }
   }
@@ -645,16 +670,18 @@ var gpRepo = new (class extends ResourceRepo {
       a.push(item.name);
     }
     var buf = new Buffer('<center><table border=0 style="min-width:750px">');
+//  var stats = [];
     for (var i in catNames) {
-      var c = catNames[i], names = categories[c];
+      var cat = catNames[i], c = cat, names = categories[c];
       if (!names) continue;
       if (c.trim().length > 0) c += '：&nbsp;';
       buf.w(`<tr><td valign=top nowrap>${c}</td><td>`);
       for (var j=0; j<names.length; ++j) {
         var n = names[j], rsc = gpRepo.get(n),
             alias = rsc.alias && ('/' + rsc.alias.join('/')) || '',
-            diagLnk = jslnk(`gpRepo.showDiagram('${n}')`, n+alias),
+            diagLnk = jslnk(`gpRepo.showDiagram('${n}')`, n+alias, rsc.gp.src),
             designLnk = '<sub>' + jslnk(`gpRepo.showDiagram('${n}',null,1)`, '🔍') + '</sub>';
+//      stats.push({ cat, name:n+alias, src:rsc.gp.src });
         if (n == cur)
           buf.w(design ? `<u style="background-color:yellow">${diagLnk}</u>　`
                        : `<b style="color:red">${n}${alias}</b>${designLnk}`);
@@ -664,10 +691,13 @@ var gpRepo = new (class extends ResourceRepo {
       buf.w(`</td></tr>`);
     }
     buf.w('</table><hr></center>').render(this.elidTOC);
+//  console.log(JSON.stringify(stats));
   }
 
-  show() { this.showTOC(); this.showDiagram(); }
+  show() { this.showDiagram(); }
 })();
+
+function diagramSvg(name, isLeft) { return gpRepo.getDiagramSvg(name, isLeft); }
 
 function getGP(name) {
   var item = gpRepo.get(name);

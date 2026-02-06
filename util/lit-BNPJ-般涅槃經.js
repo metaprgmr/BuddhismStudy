@@ -104,7 +104,7 @@ class My般涅槃經Content extends MyContent {
 createGP('大涅槃經', CAT_經論) // 9011
 .setStyle(AIL + BOLD)
 .setNotGPSP('─')
-.set('width', 50)
+.setWidth(50)
 .hasRightEdge()
 .run((gp) => { new My般涅槃經Content(gp); })
 .setTree(`
@@ -541,4 +541,4 @@ createGP('大涅槃經', CAT_經論) // 9011
 〇〇憍陳如求法〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰/c339|▸卷第三十五/
 〇〇〇/b|憍陳如品第二十五/
 `)
-;
+.src = 'lit-BNPJ-般涅槃經.js';

@@ -48,35 +48,43 @@ renderText('epithet', epithets[(Math.random() > 0.5) ? 0 : 1]);
 
 <tr>
 <td valign="top" align="right" width="160" nowrap><h3 style="margin-top:-3px">總目錄</h3></td>
-<td style="font-size:20px; line-height:120%" align="left" nowrap>
-&nbsp;&nbsp;&nbsp;【<a href="佛學基礎/index.html">佛學基礎</a>】　　　　　　　【<a href="getcontent.html" target="extra" style='font-family:"SimHei", "黑体", STHeiti, "华文黑体"; font-size:16px'>下載全部內容</a><span title="https://metaprgmr.github.io/BuddhismStudy">】</span><br>
-&nbsp;&nbsp;&nbsp;【<a href="淨土宗/index.html">淨土宗</a>　】<br>
-&nbsp;&nbsp;&nbsp;【<a href="陀羅尼/index.html">陀羅尼</a>　】<br>
-&nbsp;&nbsp;&nbsp;【<a href="佛學基礎/nonbud.html">古聖賢書</a>】<br>
-&nbsp;&nbsp;&nbsp;【<a href="個人文集/index.html">個人文集</a>】<br>
-&nbsp;&nbsp;&nbsp;【<a href="GDH/index.html">趣味修學</a>】　　　　　　　【<a href="BFNN/index.html" style='font-family:"SimHei", "黑体", STHeiti, "华文黑体"; font-size:16px'><u>般若文海</u>選讀</a>】
+<td style="padding-left:5px; font-size:20px; line-height:120%" align="left" nowrap>
+【<a href="佛學基礎/index.html">佛學基礎</a>】　<a href="BFNN/book/books/0592S.htm">《佛辭彙》</a>　<blue>【</blue><a href="getcontent.html" target="extra">全部下載</a><span title="https://metaprgmr.github.io/BuddhismStudy"><blue>】</blue></span><br>
+【<a href="淨土宗/index.html">淨土法門</a>】　<a href="util/repo-diagrams.html">《圖形庫》</a>
+<br>
+【<a href="陀羅尼/index.html">陀羅尼集</a>】　<a href="BFNN/book/books9/9090.htm?vol=6">《百過格》</a>　【<a href="GDH/dailywork.html">直心道場</a>】<br>
+【<a href="佛學基礎/nonbud.html">古聖賢書</a>】　　　　　　　【<a href="佛學基礎/《占察善惡業報經》/占察懺.html">占察懺會</a>】<br>
+【<a href="個人文集/index.html">個人文集</a>】　　　　　　　【<a href="util/KarmaDana.html">念佛維那</a>】<br>
+【<a href="GDH/index.html">趣味修學</a>】　<a href="util/nongli.html">《農曆年》</a>　【<a href="BFNN/index.html">經論選讀</a>】
 <script>
 if (window['OTHERS']) {
+  w('<br>');
   var a = window.OTHERS;
   for (var i=0; i<a.length; i+=2) {
-    var n = a[i], l = a[i+1], pref = '<br>&nbsp;&nbsp;&nbsp;';
+    var n = a[i], l = a[i+1], pref = '<br>';
     if (n.startsWith('$')) {
       n = n.substring(1).trim();
       pref = '';
     }
-    if (isLoc)
-      w(pref + '<a href="' + l + '" style="background-color:#afa" title="個人內容，未發表">' + n + '</a>　');
-    else
-      w(pref + '<a href="' + l + '" title="otro">' + n + '</a> ');
+    if (isLoc) {
+      if (l)
+        w(pref + '<a href="' + l + '" style="background-color:#afa" title="個人內容，未發表">' + n + '</a>　');
+      else
+        w(pref + '<span style="background-color:#afa" title="個人內容，未發表">' + n + '</span>　');
+    } else {
+      if (l)
+        w(pref + '<a href="' + l + '" title="otro">' + n + '</a> ');
+      else
+        w(pref + n + ' ');
+    }
   }
 }
 </script>
-<br>&nbsp;
 </td></tr>
 
 <tr>
 <td valign="top" align="right"><h3>推薦內容</h3></td>
-<td>
+<td style="padding-left:5px">
 <ol style="font-size:20px; line-height:120%">
 <li><a href="淨土宗/《無量壽經》/Jie.html" title="《佛說大乘無量壽莊嚴清淨平等覺經》黃念祖居士《註解》">《無量壽經•註解》閱讀器</a>　&nbsp;
 <img src="images/youtube_social_icon_red.png" height="12px">&nbsp;<a href="https://www.youtube.com/watch?v=CZSDlZgvq2A">加筆記書籤</a>&nbsp;
@@ -90,19 +98,12 @@ if (window['OTHERS']) {
 <img src="images/youtube_social_icon_red.png" height="12px">&nbsp;<a href="https://youtu.be/MOikSD7uP-s">梵文誦念</a></li>
 <li><a href="佛學基礎/《大佛頂首楞嚴經》/En-Zh/index.html">《楞嚴經•英中文對應》閱讀器</a></li>
 <li><a href="佛學基礎/《大佛頂首楞嚴經》/WangZhiPing/Wang.html">《楞嚴經•譯解》閱讀器</a></li>
-<li>《<a
-    href="淨土宗/《無量壽經》/JingKongKP.html">無量壽經</a>|<a
-    href="淨土宗/《佛說阿彌陀經》/蕅益大師《要解》.html">彌陀經</a>|<a
-    href="佛學基礎/《金剛經》/KEPANs.html">金剛經</a>|<a
-    href="佛學基礎/《大佛頂首楞嚴經》/HaiRengKePan/HaiReng科判.html">楞嚴經</a>|<a
-    href="佛學基礎/《地藏菩薩本願經》/QingLian/dzjkp.html">地藏經</a>：科判》</li>
-<li>【<a href="佛學基礎/《占察善惡業報經》/占察懺.html">占察懺法會</a>】【<a
- href="GDH/dailywork.html">直心道場</a>】【<a
- href="util/KarmaDana.html">念佛維那</a>、<a href="個人文集/念佛节奏.html#metronome">計算器</a>】</li>
-<li><a href="BFNN/book/books/0592S.htm">《佛學常見辭彙》</a><a
- href="util/repo-diagrams.html">《圖形庫》</a><a
- href="util/nongli.html">《農曆年》</a><a
- href="BFNN/book/books9/9090.htm?vol=6">《百過格》</a>
+<li>【科判】<a href="淨土宗/《無量壽經》/JingKongKP.html">無量壽經</a><red>•</red><a
+ href="淨土宗/《佛說阿彌陀經》/蕅益大師《要解》.html">彌陀經</a><red>•</red><a
+ href="佛學基礎/《金剛經》/KEPANs.html">金剛經</a><red>•</red><a
+ href="佛學基礎/《大佛頂首楞嚴經》/HaiRengKePan/HaiReng科判.html">楞嚴經</a><red>•</red><a
+ href="佛學基礎/《地藏菩薩本願經》/QingLian/dzjkp.html">地藏經</a><red>•</red><a
+ href="佛學基礎/《大乘起信論》/蕅益大師《大乘起信論裂網疏》.html">大乘起信論</a></li>
 </li>
 </ol>
 </td></tr>

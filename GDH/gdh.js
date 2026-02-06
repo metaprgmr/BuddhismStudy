@@ -588,8 +588,10 @@ keoi1 zin2 hip3 co3 mau6 ai3 zi2 zim3 cuk1 gwo2 ji5 kin4 hong4 ling4 zuk1 pong4 
 bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaam4 jing4 jung2 ping4
 薝葡炭迹祈禱詈琰印怛閦諷序
 zim1 pou4 taan3 zik1 kei4 tou2 lei6 jim5 jan3 daat3 cuk1 fung3 zeoi6
-瀆竈訐髀
-duk6 zou3 kit3 bei2
+瀆竈訐髀警慼讒
+duk6 zou3 kit3 bei2 ging2 cik1 caam4
+卷刹楊秋瑜傳衍脱卧掩片
+gyun2 saat3/caat3 joeng4 cau1 jyu4 cyun4 jin2/hin2 tyut3 ngo6 jim2 pin2/pin3
 `.split('\n');
 
   function _getIgnoreLevel(zi) {
