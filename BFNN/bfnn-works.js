@@ -20,6 +20,7 @@ class BfnnWork {
   getTopic()    { return this.topic || (!this.type ?'所有經論':'其他文章'); }
   isTopic(tpc)  { return tpc == this.getTopic(); }
   getCategory() { return this.type ? '經論' : (this.topic || '其他文章'); }
+  isSutraOrSastra() { return this.type == 'sutra' || this.type == 'sastra'; }
   isCategory(cat) { return cat == this.getCategory(); }
   setToken(tkn) { this.token = tpc; return this; }
   isAvail()     { return this.token != '-' && this.token != '?'; }
@@ -1542,7 +1543,8 @@ parseBfnnWorks(`
  　　    #9050=! 大寶積經 // (共120卷)
 -　　    #9051=! 佛說胞胎經|西晉月氏國三藏竺法護奉制譯
  戒律　　#9052=! 梵網經|後秦龜茲國三藏鳩摩羅什譯
- 戒律    #9060=! 優陂夷墮舍迦經|宋錄
+ 戒律    #9053=! 優陂夷墮舍迦經|宋錄
+-摩訶衍  #9060~! 大智度論|龍樹菩薩造，龜茲國三藏鳩摩羅什譯 // (共100卷)
  淨土　　#9090 淨宗同學修行守則|淨空法師
  戒律　　#9091 沙彌律儀|悟道法師 講 // (共47講)
  摩訶衍　#9093 覺林菩薩偈講解|夢參老和尚 講
@@ -1557,7 +1559,7 @@ s金剛經　#9868=! 金剛般若波羅密經|信裹居士編輯 // (經文特�
  華嚴經　#9902 大方廣佛華嚴經內容|宋溫陵比丘戒環集，信裹居士作圖
  大涅槃經#9903 大涅槃經內容|信裹居士作圖
  心地觀經#9904 大乘本生心地觀經內容|信裹居士作圖
- 摩訶衍　#9905~! 馬鳴菩薩 大乘起信論|馬鳴菩薩造，唐三藏法師實叉難陀譯
+ 摩訶衍　#9905~! 大乘起信論|馬鳴菩薩造，唐三藏法師實叉難陀譯
  摩訶衍　#9910 大乘起信論講記|淨界法師講 // (共34集)
        // 9910~9929 reserved for 淨界法師.
 `);
@@ -1662,6 +1664,7 @@ class ChoiceLists {
 
 #菩薩造經論
      |        | 釋迦譜
+     |        | 佛本生經
 1729 |人物    | 佛本行經             | 佛所行讚
 1146 |摩訶衍  | 大乘起信論
      |        | 大智度論

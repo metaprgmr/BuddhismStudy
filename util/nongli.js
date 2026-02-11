@@ -105,6 +105,11 @@ class NongLiYear {
   setHasPrev() { this.hasPrev = true; }
 
   _prepareDays() {
+    function checkZhai(i, is30) {
+       return (i==0)  || (i==7)  || (i==13) || (i==14) || (i==17) ||
+              (i==22) || (i==23) || (i==27) || (i==28) || (i == (is30 ? 29 : 26));
+    }
+
     // all components are 1-based
     var myMonths = Array.from(nlconsts.iMonths), monthCnt = this.daysOfMonths.length;
     if ((this.year % 4 === 0) && (this.year % 400 !== 0)) // international leap year
@@ -120,16 +125,16 @@ class NongLiYear {
         if (!yinLeapMonth) ++yinMonth;
         var is30 = (this.daysOfMonths[j] == 30);
         if (i<29 || is30) {
-          var zhai = (i==0)  || (i==7)  || (i==13) || (i==14) || (i==17) ||
-                     (i==22) || (i==23) || (i==27) || (i==28) || (i == (is30 ? 29 : 26)),
+          var zhai = checkZhai(i, is30), nextZhai = checkZhai(i+1, is30),
               o = { yinToken: (yinLeapMonth ? 'yiN' : 'yin') + toToken(this.year, yinMonth, i+1),
                     yx:       i + '_' + j,
                     zday,
                     yinMonth,       // 1-based
                     yinLeapMonth,
-                    yinDay: i+1     // 1-based
+                    yinDay: i+1,    // 1-based
+                    is齋日: checkZhai(i, is30),
+                    is齋日1: checkZhai(i+1, is30)
                   };
-              if (zhai) o.is齋日 = true;
           row.push(o);
         } else
           row.push({ zday:'' });

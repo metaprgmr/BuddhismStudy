@@ -137,7 +137,7 @@ function showList(topic) {
   if (topic == '文字處理') { showTextProcessing(); return; }
   var isAdded = (topic == '外加內容');
   function toShow(wk) {
-    return ((isAdded && (wk.id >= 9000)) || (topic == '所集佛經' && wk.isSutra)) ||
+    return ((isAdded && (wk.id >= 9000)) || (topic == '所集佛經' && wk.isSutraOrSastra())) ||
            (wk.isAvail() || wk.isToGet()) && wk.isTopic(topic);
   }
   var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);

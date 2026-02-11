@@ -8,7 +8,8 @@ li { font-family: "KaiTi", "楷体", STKaiti, "华文楷体"; font-size:18px; co
 li.sm { font-size:15px }
 .big { background-color:#ffd0d0 }
 .major { background-color:#ff0; color:red }
-.齋日 { color:white; font-size:18px }
+.齋日 { color:white; font-size:16px; background-color:#b00 }
+.齋日1 { color:lightblue; font-size:16px }
 </style>
 <title>佛修道場</title>
 <script src="../env.js"></script>
@@ -21,10 +22,11 @@ const TARGET = 'view';
 const LEVEL = 1;
 const EXT = 'xview';
 const 十小咒 = '../陀羅尼/十小咒.html';
+const 大悲咒 = '../陀羅尼/大悲咒.html';
 const liSM = '<li class=sm>';
 var curEID = 0, lastEId = null, lastLink = null,
     dayInfo = getDayInfo(yyyymmdd(new Date())),
-    is齋日 = dayInfo && dayInfo.is齋日;
+    is齋日 = dayInfo && dayInfo.is齋日, is齋日1 = dayInfo && dayInfo.is齋日1;
 class ImageMap {
   constructor() {
     this.imgMap = {
@@ -135,6 +137,7 @@ function PureLandSession() {
     '<li>', lnk('《發四宏願》', 'various.js', '_10', '四宏誓願.jpg'), '</li>',
     '<li>', mainlnk('《心經》', 'xinjing.js', null, '真誠清淨平等正覺慈悲看破放下自在隨緣念佛.jpg'), '</li>',
     '<li>', lnk('十咒語', 十小咒, null, '三寶佛.png'), '</li>',
+    '<li>', lnk('大悲咒', 大悲咒, null, '觀世音菩薩1.jpg'), '</li>',
     liSM, lnk('《迴向偈。普願文》', 'various.js', '_14', '回向偈.png'), '</li>',
     '<li>', lnk('《三自皈依》', 'various.js', '_10', '三寶佛.png'), '</li>',
     liSM, lnk('◎地藏菩薩論念佛號◎', 'various.js', '_43', '南無地藏王菩薩1.jpg'), '</li>',
@@ -220,6 +223,7 @@ function ShurangDharaniSession() {
     '<li>', lnk('《首楞嚴咒》', '../陀羅尼/楞嚴咒/Shurangama-mantra-信裹.html?l=s', '_28', '釋迦牟尼佛.jpg'), '</li>',
     liSM, lnk('《首楞嚴咒迴向法》', 'various.js', '_37', '釋迦牟尼佛.jpg'), '</li>',
     '<li>', lnk('《十小咒》', 十小咒, null, '三寶佛.png'), '</li>',
+    '<li>', lnk('大悲咒', 大悲咒, null, '觀世音菩薩1.jpg'), '</li>',
     '<li>', lnk('《普賢十願》', 'various.js', '_11', '普賢菩薩十大願.jpg'), '</li>',
     '<li>', lnk('《懺悔滅罪偈》', 'various.js', '_11', '普賢懺悔滅罪偈.png'), '</li>',
     '<li>', lnk('《發四宏願》', 'various.js', '_11', '四宏誓願.jpg'), '</li>',
@@ -279,9 +283,9 @@ setTimeout(() => openLnk(null, '../陀羅尼/諸真言.html'), 500); // iframe i
 <td nowrap style="padding-right:15px; min-width:200px; background-color:#ffd" align="center" valign="top">
 <script>
 w('<h2 style="font-size:24px; background-color:red; color:yellow; margin-top:0px; margin-right:-15px">');
-wIf(is齋日, '<sup class="齋日" style="opacity:0">齋日　</sup>');
+w(`<sup class="齋日1" ${is齋日1 ? '' : 'style="opacity:0"'}>明齋日</sup>&nbsp;`);
 w('<a href="javascript:StartSession(true)" style="color:yellow">直心道場</a>');
-wIf(is齋日, '<sup class="齋日">　齋日</sup>');
+w(`&nbsp;<sup class="齋日" ${is齋日 ? '' : 'style="opacity:0"'}>今齋日</sup>`);
 w('</h2>');
 </script>
 <div id="prgm">

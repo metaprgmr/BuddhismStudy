@@ -33,6 +33,7 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250530|淨界法師.html|【善知識】淨界法師
 #######
 251107|念佛节奏.html|念佛节奏計算器
+260210|念佛訣竅
 250917|發露懺悔
 250515|廿字加卅字
 241113|浪費時間
@@ -48,6 +49,7 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 230516|略言不言而喻之事
 240210|對自己好一點
 250802|圍棋與人生.html|棋道•人道•佛道
+260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
 230518|苦空無常之音.mp3|苦空無常之音
 230517|論飯桶，兼論素食
 231222|養生乎.html|養生，乎？
