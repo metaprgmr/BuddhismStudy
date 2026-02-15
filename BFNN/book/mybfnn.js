@@ -501,9 +501,9 @@ class DocInfo {
     if (append)
       cls = `"${this.defaultClass} ${cls}"`;
     if (paraName)
-      this.w(`<p class="${cls || this.defaultClass}">${ln}<sup class="paraname">${paraName.replaceAll(',', ', ')}</sup></p>`);
+      this.w(`<p class=${cls || this.defaultClass}>${ln}<sup class="paraname">${paraName.replaceAll(',', ', ')}</sup></p>`);
     else
-      this.w(`<p class="${cls || this.defaultClass}">${ln}</p>`);
+      this.w(`<p class=${cls || this.defaultClass}>${ln}</p>`);
     return lnId;
   }
 
@@ -647,16 +647,20 @@ class SeriesContainer { // prototype: 9010
   setLoadWait(msecs) { this.loadWait = msecs; return this; }
 
   isReady() { return !!this.text; } // default impl
-  loadJS(vol) { throw 'Must implement SeriesContainer.loadJS()'; }
+  loadJS(vol) { throw 'Must implement SeriesContainer.loadJS(). Return true to indicate immediate availability.'; }
   showPage() { throw 'Must implement SeriesContainer.showPage()'; }
 
   show(vol, anchor) {
-    this.loadJS(vol);
+    if (this.loadJS(vol)) {
+      this.volNum = vol;
+      this.showPage();
+      anchor && showTop(anchor);
+    }
     this.timer = setInterval(() => {
       if (!this.isReady()) return;
       this.showPage();
-      clearInterval(this.timer);
       anchor && showTop(anchor);
+      clearInterval(this.timer);
     }, this.loadWait);
   }
 }

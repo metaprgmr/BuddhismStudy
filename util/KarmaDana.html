@@ -231,10 +231,12 @@ class Agenda {
 function schemeChange(event) { agenda.startScheme(event.target.value); }
 
 var agenda = new Agenda('stg', 'audiop')
-    .addScheme(new Scheme('四小時二萬唸（90bpm）')
-       .setTotalDur(90, 4))
     .addScheme(new Scheme('四小時秒唸')
        .setTotalDur(60, 4))
+    .addScheme(new Scheme('四小時二萬唸（90bpm）')
+       .setTotalDur(90, 4))
+    .addScheme(new Scheme('四小時三萬唸（120bpm）')
+       .setTotalDur(120, 4))
     .addScheme(new Scheme('四小時四萬唸（175bpm）')
        .setTotalDur(175, 4)
        .setAt(0, 120, 140, 160)

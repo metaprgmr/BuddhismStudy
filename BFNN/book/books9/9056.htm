@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>《楞嚴百偽》案新資料</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+new (class extends SeriesContainer {
+  constructor() { super(); }
+  loadJS(vol) { return true; }
+
+  showPage() {
+    var buf = new Buffer(), vnum = this.volNum;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true).setBuffer(buf).setXG().reInit(9056, 10, vnum);
+        vnum = parseInt(vnum);
+        if (vnum)
+          this.writeBody(`<center><img src="9056/p${103+vnum}.png"></center>`, true)
+        else {
+          this.volNum = -1;
+          this.writeStart(`民國《楞嚴百偽》案重審之新資料補遺`)
+              .writeBody(`
+/TEXT339C/南开文学院博士研究生 刘军
+
+/BQKaiTi/取自<a href="https://zhuanlan.zhihu.com/p/412160509">網上這裡</a>。
+/VOLSEP/
+
+【摘要】<c339>《楞严经》</c339>的真伪是学术史一件悬而未决的大事，吕澂先生有<c339>《楞严百伪》</c339>，影响很大。然而长期以来，资料缺失，人们无意中遗漏了民国当年对吕澂的辩驳。其实，早在当年，吕澂已经被强力批驳。笔者据新发现的一些资料，还原民国时期楞严真伪之争的来龙去脉，对当年佛教界高僧等对吕澂等的批驳进行补遗。本文最大的特点是新发现了关于《楞严经》真伪之争的、自民国以来遗漏了79年的佛教界僧人等对吕澂反驳的资料，这对重新认识吕澂的《楞严百伪》有很大的作用，或将推动楞严真伪这一学术公案进入新的里程。
+
+/TEXTL/作者：　　<c339>刘军</c339>
+/TEXTL/机构地区：<c339>南开大学文学院</c339>
+/TEXTL/出处：　　<c339>《文学与文化》</c339> 2020年第2期104-113，共10页
+/TEXTL/分类号：　<c339>B94 [哲学宗教—宗教学] </c339>
+
+/VOLSEP/`, true);
+        }
+      }
+      writeSeriesNavForJS(links) {
+        function lnk(vnum, disp) {
+          return `<a class="seriesnav" href="?vol=${vnum}">${disp}</a>`;
+        }
+        if (this.volNum > 0)
+          this.w('【', lnk(0,'總目錄'), '】', this.tocSepLine ? '\n' : '&nbsp;');
+        if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
+        else this.w(lnk(this.volNum, '&laquo;'));
+        for (var i=1; i<=this.totalVols; ++i) {
+          var lbl = `p${103+i}`;
+          if (i == this.volNum) this.w(`&nbsp;<cur>${lbl}</cur>`);
+          else this.w('&nbsp;', lnk(i, lbl));
+        }
+        if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
+        else this.w('&nbsp;', lnk(this.volNum+1, '&raquo;'));
+        if (links) this.w('　', links);
+        return this;
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+
+})()
+.show(get('vol'), get('pin')); // 卷 品
+
+</script>

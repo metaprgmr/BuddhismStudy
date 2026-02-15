@@ -48,7 +48,7 @@ my_1 { }
 .topbar { border-top:1px solid gray }
 .bottombar { border-bottom:1px solid gray }
 .caption { font-size:36.0pt;font-family:標楷體;color:#f60;font-weight:bold; text-align:center }
-.kepan { color:#339 }
+.kepan { color:#339; font-weigth:normal }
 kpDone { color:#339 }
 .paraname { color:red; font-size:8pt }
 .paraname::after { content:' ' }

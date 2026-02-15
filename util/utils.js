@@ -514,33 +514,24 @@ class Buffer {
     var ret = '';
     for (var i in arguments) {
       var x = arguments[i];
-      if (x || (typeof x == 'number'))
-        ret += x;
+      if (x || (typeof x == 'number')) ret += x;
     }
     if (ret.length) this.bufList.push(ret);
     return (this.bufList.length < 1024) ? this : this.condense();
   }
 
   wIf() {
-    if (arguments[0]) {
-      arguments[0] = '';
-      this.w.apply(this, arguments);
-    }
+    if (arguments[0]) { arguments[0] = ''; this.w.apply(this, arguments); }
     return this;
   }
 
-  wIfElse(cond, a, b) { this.w(cond ? a : b); return this; }
+  wIfElse(cond, a, b) { return this.w(cond ? a : b); }
 
-  append(s) { // for performance
-    this.bufList.push(s);
-  }
+  append(s) { this.bufList.push(s); } // for performance
 
   prepend() {
     var ret = '';
-    for (var i in arguments) {
-      var x = arguments[i];
-      x && (ret += x);
-    }
+    for (var i in arguments) { var x = arguments[i]; x && (ret += x); }
     if (ret) this.bufList.unshift(ret);
     return this;
   }
@@ -850,18 +841,18 @@ class Astral {
   forEach (fn) { for (var i=0; i<this.length; i++) fn(this.charAt(i), i); }
 }
 
-const zpuncs = '，、；：。？！';
+const zpuncs = '，、；：。？！‧○';
 const zpuncs1L = '「『《（';
 const zpuncs1R = '」』》）—─…'; // '　' is punc?
 const zpuncs1 = zpuncs1L + zpuncs1R;
 const zpuncsAll = zpuncs + zpuncs1;
-const REGEX_CHINESE = /[\u3300-\u4dbf]|[\u4e00-\u9fff]|[\uf900-\ufaff]|[\ufe30-\ufe4f]|[\u20000-\u2a6df]|[\u2a700-\u2ceaf]|[\u2f800-\u2fa1f]/;
+const REGEX_ZH = /[\u3300-\u4dbf]|[\u4e00-\u9fff]|[\uf900-\ufaff]|[\ufe30-\ufe4f]|[\u20000-\u2a6df]|[\u2a700-\u2ceaf]|[\u2f800-\u2fa1f]/;
 function isPunc(z)  { return zpuncs.indexOf(z) >= 0; }
 function isPunc1L(z) { return zpuncs1L.indexOf(z) >= 0; }
 function isPunc1R(z) { return zpuncs1R.indexOf(z) >= 0; }
 function isPunc1(z) { return zpuncs1.indexOf(z) >= 0; }
-function isHanZi(x)       { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncsAll.indexOf(x) < 0); }
-function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_CHINESE.test(x) && (zpuncs.indexOf(x) < 0); }
+function isHanZi(x)       { return !isASCII(x) && REGEX_ZH.test(x) && (zpuncsAll.indexOf(x) < 0); }
+function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_ZH.test(x) && (zpuncs.indexOf(x) < 0); }
 function isASCII(str) { return /^[\x00-\xFF]*$/.test(str) }
 function isWhite(c) { return c && c.length && !c.trim().length; }
 function isDigit(c) {
