@@ -655,6 +655,7 @@ class SeriesContainer { // prototype: 9010
       this.volNum = vol;
       this.showPage();
       anchor && showTop(anchor);
+      return;
     }
     this.timer = setInterval(() => {
       if (!this.isReady()) return;

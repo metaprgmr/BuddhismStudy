@@ -404,5 +404,54 @@ function showNongLiNian(nlyr, elid) {
     buf.w('</tr>');
   }
   buf.w(`<tr><td colspan="${monthCnt}" class="borderT2 bodyLike">&nbsp;</td></tr></table>`);
+  buf.w(`<table bgcolor=white border=0><tr>
+<td rowspan=2 align=center class=winter><turn>冬至</turn><br>1215</td>
+<td class=arrow align=center>↗</td>
+<td align=center class=winter>小寒<br>1212</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=winter>大寒<br>1210</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=spring>立春<br>1207</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=spring>雨水<br>1205</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=spring>驚蟄<br>1202</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=spring><turn>春分</turn><br>1200</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=spring>清明<br>1157</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=spring>穀雨<br>1155</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=summer>立夏<br>1152</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=summer>小满<br>1150</td>
+<td class=arrow valign=top>→</td>
+<td align=center class=summer>芒種<br>1147</td>
+<td class=arrow>↘</td>
+<td rowspan=2 align=center class=summer><turn>夏至</turn><br>1145</td></tr>
+<tr><td class=arrow valign=top>↖</td>
+<td align=center class=winter>大雪<br>1212</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=winter>小雪<br>1210</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=winter>立冬<br>1207</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=fall>降霜<br>1205</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=fall>寒露<br>1202</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=fall><turn>秋分</turn><br>1200</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=fall>白露<br>1157</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=fall>處暑<br>1155</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=fall>立秋<br>1152</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=summer>大暑<br>1150</td>
+<td class=arrow valign=top>←</td>
+<td align=center class=summer>小暑<br>1147</td>
+<td class=arrow valign=top>↙</td></tr></table>`);
   buf.render(elid);
 }
