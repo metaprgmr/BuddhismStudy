@@ -45,8 +45,18 @@ FF::before { content:"Firefox" }
 </center></body></html>
 
 <script>
-const topics = '所集佛經　金剛經　楞嚴經　法華經　摩訶衍　淨土　禪修　善書　人生　外加內容|' +
-               '佛學基礎　圓覺經　地藏經　占察經　唯識論　戒律　理修　真偽　人物　文字處理';
+const topics = '所集佛經　金剛心經　楞嚴圓覺　大乘唯識　淨土法門　善書　外加內容|' +
+               '佛學基礎　地藏諸經　法華華嚴　戒律修行　人物人生　真偽　文字處理';
+const compositeTopics = {
+  金剛心經: [ '心經', '金剛經' ],
+  楞嚴圓覺: [ '楞嚴經', '圓覺經' ],
+  大乘唯識: [ '摩訶衍', '唯識論' ],
+  淨土法門: [ '淨土' ],
+  地藏諸經: [ '地藏經', '占察經' ],
+  法華華嚴: [ '法華經', '華嚴經' ],
+  戒律修行: [ '戒律', '禪修', '理修' ],
+  人物人生: [ '人物', '人生' ]
+};
 function showNav(topic) {
   var a = topics.split('|'), buf = new Buffer();
   for (var i=0; i<a.length; ++i) {
@@ -129,31 +139,49 @@ const TOP = '<td bgcolor="#f8f8f8" valign=top style="border-top:2px solid gray; 
 const MID = '</table></td><!-- LEFT --><td>&nbsp;&nbsp;</td>' + TOP;
 
 function showList(topic) {
-  if (!topic)
-    topic = localStorage.getItem('last') || '全部內容';
+  if (!topic) topic = localStorage.getItem('last') || '全部內容';
   localStorage.setItem('last', topic);
   showNav(topic);
-  if (topic == '全部內容') { showAllArticles(); return; }
-  if (topic == '文字處理') { showTextProcessing(); return; }
-  var isAdded = (topic == '外加內容');
-  function toShow(wk) {
-    return ((isAdded && (wk.id >= 9000)) || (topic == '所集佛經' && wk.isSutraOrSastra())) ||
-           (wk.isAvail() || wk.isToGet()) && wk.isTopic(topic);
+  switch (topic) {
+  case '全部內容': showAllArticles();    return;
+  case '文字處理': showTextProcessing(); return;
   }
-  var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
+  var isAdded = (topic == '外加內容'), topics = compositeTopics[topic],
+      lsts = [], lstMap;
+  if (!topics) {
+    lsts[0] = [];
+    if (topic) { lstMap = {}; lstMap[topic] = lsts[0]; }
+  } else {
+    lstMap = {};
+    for (var i in topics) {
+      var a = [];
+      lstMap[topics[i]] = a;
+      lsts.push(a);
+    }
+  }
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
-    toShow(wk) && wk.render(buf);
+    if (!wk.isAvail() && !wk.isToGet()) continue;
+    if (isAdded && wk.isAdded()) { lsts[0].push(wk); continue; }
+    if (topic == '所集佛經' && wk.isSutraOrSastra()) { lsts[0].push(wk); continue; }
+    var a = lstMap[wk.topic];
+    a && a.push(wk);
+  }
+
+  var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
+  for (var i in lsts) {
+    var l = lsts[i];
+    for (var j in l) l[j].render(buf);
   }
   buf.w('</table></td></tr></table>');
   if (topic == '所集佛經') showSutraList(buf);
-  buf.w('<p>&nbsp;</p><hr width="1200px" color=gray>')
+  buf.w('<p style="font-size:5px">&nbsp;</p><hr width="1200px" color=gray>')
      .render('stg');
 }
 
 function showSutraList(buf) {
   var lsts = new ChoiceLists(), len = lsts.collectionCount();
-  buf.w('<p>&nbsp;</p>',
+  buf.w('<p style="font-size:5px">&nbsp;</p>',
         ' <center><table border=0 bgcolor="white"><tr><td valign=top>');
   for (var i=0; i<len; ++i) {
     lsts.renderList(buf, i);

@@ -97,7 +97,7 @@ class NongLiYear {
   }
 
   isIn() {
-    var day1 = new Date(this.firstDay[0], this.firstDay[1], this.firstDay[2]);
+    var day1 = new Date(this.firstDay[0], this.firstDay[1]-1, this.firstDay[2]);
     return new Date().getTime() >= day1.getTime();
   }
 
@@ -298,7 +298,7 @@ function loadNongLiYear(yr, events, loadAdj) {
   var toCheck = !yr;
   yr = toInt(yr || curIYear);
   var clz = NLYearDefs[yr-2023];
-  if (!clz) { alert(`農曆年${yr}尚未建立，抱歉。`); return; }
+  if (!clz) throw `農曆年${yr}尚未建立，抱歉。`;
   var nln = new clz(events); // Created the main/only instance.
 
   if (toCheck && !nln.isIn()) nln = new (NLYearDefs[(--yr)-2023])(events);
