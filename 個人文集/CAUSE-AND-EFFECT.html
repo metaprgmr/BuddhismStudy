@@ -1,14 +1,10 @@
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <title>因果</title>
 <link rel="stylesheet" href="../util/article.css">
-<style>
-</style>
-<script src="../env.js"></script>
 <script src="../util/utils.js"></script>
-<script src="../util/reading.js"></script>
+<script src="registry.js"></script>
 </head>
 <body><center>
 <h1>因果 CAUSE AND EFFECT</h1>
@@ -23,10 +19,12 @@
 大衆功德為法界一切衆生<br>
 回向西方極樂淨土
 </center>
-<hr>
 </div>
-<div id="stg" class="content" style="width:1050"></div>
-<span class="copyright"></span>
+<div class="content" style="width:1050">
+<hr>
+<div id="stg"></div>
+<script> endOfArticle('250509'); </script>
+</div>
 </center></body></html>
 
 <script>
@@ -42,7 +40,6 @@ var PREFACE = [
 <p>由此可見，人命短促，無可否認。有說「來到人間之日，便是走向死亡之時。」這個娑婆世界，還有什麼可以留戀的呢？</p>
 <p>為了要脫離這個五濁惡世的娑婆世界，我修心，念佛！來日往生極樂世界;&hellip;</p>
 <p align="right" style="text-align:right">&mdash;${EDITOR}</p>`,
-
 `` ];
 
 var book = `
@@ -325,7 +322,7 @@ function display() {
     if (ln[0] == '#') { pgnum = ln.substring(1); continue; }
     buf.w('<li>', ln, `（第${pgnum}頁）</li>`);
   }
-  buf.w('</ol><hr>');
+  buf.w('</ol>');
   buf.render('stg');
 }
 

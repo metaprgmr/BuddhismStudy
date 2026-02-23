@@ -386,8 +386,8 @@ bin6 coi4 cong4 on1 zi1 bou6 jyu1 gaai3 zok3 lai4 nang4 sing3 hung1 to4 lo4 nei4
 si1 zung2 ci4 baak3 mui6 sam1 sim4 sik1 dou2 king2 pin3 haa5 dou6 tou2 ceoi4 faa3 mat6 ji3 zi6 gwo3 sam1
 可己拯濟負荷獲女色梵興悲愍情演慈分別語言
 ho2 gei2 cing2 zai2 fu6 ho6 wok6 neoi5 sik1 faan4 hing1 bei1 man5 cing4 jin2 ci4 fan1 bit6 jyu5 jin4
-獄餓鬼禽獸蜎飛蠕動類聽察若證令歡喜稽禮
-juk6 ngo6 gwai2 kam4 sau3 jyun1 fei1 jyu4 dung6 leoi6 ting1 caat3 joek6 zing3 ling6 fun1 hei2 kai2 lai5
+獄餓鬼禽獸蜎飛蠕動類聽察若證令歡喜憙稽禮
+juk6 ngo6 gwai2 kam4 sau3 jyun1 fei1 jyu4 dung6 leoi6 ting1 caat3 joek6 zing3 ling6 fun1 hei2 hei2 kai2 lai5
 須飲食衣服種場樹高殿樓池流補處除本諦勝
 seoi1 jam2 sik6 ji1 fuk6 zung2 coeng4 syu6 gou1 din6 lau4 ci4 lau4 bou2 cyu2 ceoi4 bun2 dai3 sing1
 合掌惡國麤不圓滿被弘誓鎧趣或永離繞匝樂
@@ -452,8 +452,8 @@ so1 po4 fu5 jam4 zi6 cyun4 haau3 gu1 suk6 zaak6 sau2 wang4 ji4 sat1 gei3 mat6 ho
 fun1 zoeng1 cam4 deoi3 siu2 soeng6 wong1 geoi1 cang4 lei5 sung4 ngai4 ceon4 zo2
 巧巨布帳帶幡年幾床底庶延廻式弟弱
 haau2 geoi6 bou3 zoeng3 daai3 faan1 nin4 gei2 cong4 dai2 syu3 jin4 wui4 sik1 dai6 joek6
-張影待律後徐徙御忉忠忽忿怖怡急怪
-zoeng1 jing2 doi6 leot6 hau6 ceoi4 saai2 jyu6 dou1 zung1 fat1 fan5 bou3 ji4 gap1 gwaai3
+張影待律後徐擯徙御忉忠忽忿怖怡急怪
+zoeng1 jing2 doi6 leot6 hau6 ceoi4 ban3 saai2 jyu6 dou1 zung1 fat1 fan5 bou3 ji4 gap1 gwaai3
 恐恣恩恭悅悕患惑惠感態慎慕慚慢慮
 hung2 zi1 jan1 gung1 jyut6 hei1 waan6 waak6 wai6 gam2 taai3 san6 mou6 caam4 maan6 leoi6
 慶憎憶懷懸懼戀戈截戲手承拔拘拜挂罣
@@ -588,10 +588,22 @@ keoi1 zin2 hip3 co3 mau6 ai3 zi2 zim3 cuk1 gwo2 ji5 kin4 hong4 ling4 zuk1 pong4 
 bun6 leoi5 gung1 jan1 bun6 fau2 fu1 bong6/pong4 long5 daan3 gaak3 wun4 mik6 ngaam4 jing4 jung2 ping4
 薝葡炭迹祈禱詈琰印怛閦諷序
 zim1 pou4 taan3 zik1 kei4 tou2 lei6 jim5 jan3 daat3 cuk1 fung3 zeoi6
-瀆竈訐髀警慼讒羂罥
-duk6 zou3 kit3 bei2 ging2 cik1 caam4 gyun3 gyun3
+瀆竈訐髀警慼讒羂罥汲沴顢頇僥倖
+duk6 zou3 kit3 bei2 ging2 cik1 caam4 gyun3 gyun3 kap1 leoi6 mun4 hon1 hiu1 hang6
 卷刹楊秋瑜傳衍脱卧掩片
 gyun2 saat3/caat3 joeng4 cau1 jyu4 cyun4 jin2/hin2 tyut3 ngo6 jim2 pin2/pin3
+台錄庚申晦悌恤昆炫遏佑祿冀苟叛
+toi2/toi4 luk6 gang1 san1 fui3 dai6 seot1 kwan1 jyun4/jyun6 aat3 jau6 luk6 kei3 gau2 bun6
+詐狠虐蔑擾賞辜誅貶排賂壅訕射蟄棲填
+zaa3 han2 joek6 mit6 jiu2 soeng2 gu1 zyu1 bin2 paai4 lou6 jung1 saan3 se6 zat6 cai1 tin4
+穴巢逞婚恥認嫁沽買包剪裁縠紊規模材埋
+jyut6 caau4 cing2 fan1 ci2 jing6 gaa3 gu1 maai5 baau1 zin2 coi4 huk6 man6 kwai1 mou4 coi4 maai4
+蠱傅擄掠苛嚇呵黨妾訓冒罔效鑒猥借慾餧
+gu2 fu6 lou5 loek6 ho1 haak3 ho2 dong2 cip3 fan3 mou6 mong5 haau6 gaam3 wui1 ze3 juk6 neoi5
+秤採姦壓謾驀婪誇舅姑挾灶跳僻臘舞朔唾
+cing3 coi2 gaan1 aat3 maan4 mak6 laam4 kwaa1 kau5 gu1 hip3 zou3 tiu3 pik1 laap6 mou5 sok3 to3
+吟柴裸虹霓燎龜脯鴆顒眄額劬轢褫寔
+ngam4 caai4 lo2 hung4 ngai4 liu4 gwai1 fu2 zam6 jung4 min5 ngaak2 keoi4 lik1 ci2 sat6
 `.split('\n');
 
   function _getIgnoreLevel(zi) {

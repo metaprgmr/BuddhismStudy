@@ -111,6 +111,7 @@ class DocInfo {
     var idx = (i || 1) - 1;
     return this.idMap ? this.idMap[idx] : (this.firstVolNum + idx);
   }
+  setNavBreakAt(n) { this.navBreakAt = n; return this; }
   setBuffer(buf) { this.buf = buf; return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
   setGathaClass(cls) { this.gathaClass = cls; return this; }
@@ -217,6 +218,7 @@ class DocInfo {
     if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
     else this.w(lnk(this.volNum, '&laquo;'));
     for (var i=1; i<=this.totalVols; ++i) {
+      if (this.navBreakAt && (i % this.navBreakAt == 1) && (i > 1)) this.w('<br>');
       var lbl = (i<=10) ? this.zdigits[i] : i;
       if (i == this.volNum) this.w(`&nbsp;<cur>${lbl}</cur>`);
       else this.w('&nbsp;', lnk(i, lbl));
@@ -384,7 +386,7 @@ class DocInfo {
         return lnId;
       }
       if (ln1.length > 0)
-        this.w(`<li class="cjk">${ln}</li>`);
+        this.w(`<li class="cjk">${this.localProc(ln)}</li>`);
       return lnId;
     }
 

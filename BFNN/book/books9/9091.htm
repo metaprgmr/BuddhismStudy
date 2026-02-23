@@ -25,14 +25,16 @@ var SMLY = new (class extends SeriesContainer {
         super();
         this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9091, 47);
         this.volNum = SMLY.volNum;
-        var lnk = `（檔名：<a target="extra" href="${base}${332210+this.volNum}">WD11-002-${to4d(this.volNum)}</a>）\n`;
+        var lnk = !this.volNum ? `<a href="${base}" target="extra">WD11-002</a>（共47集）`
+                               : `<a target="extra" href="${base}${332210+this.volNum}">WD11-002-${to4d(this.volNum)}</a>`;
         if (!this.volNum)
           this.writeStart(`沙彌律儀`)
-              .writeBody(`\n/TEXT030C/2008年 悟道法師 講於 廬江金剛寺\n${SMLY.text}\n\n/VOLSEP/`, true);
+              .writeBody(`\n/TEXT030C/悟道法師 主講 2008年 廬江金剛寺 【華藏檔名：${lnk}】\n${SMLY.text}\n\n/VOLSEP/`, true);
         else
           this.writeStart(`沙彌律儀|（第${zNumber(this.volNum)}講）`)
-              .writeBody(`\n/TEXT030C/2008年 悟道法師 講於 廬江金剛寺<br>${lnk}
-/TEXT339/【第${zNumber(this.volNum)}講】 ${lectures[this.volNum-1]}
+              .writeBody(`\n/TEXT030C/悟道法師 主講 2008年 廬江金剛寺 【華藏檔名：${lnk}】
+
+/SECTION/【第${zNumber(this.volNum)}講】 ${lectures[this.volNum-1]}
 ${SMLY.text}
 /VOLSEP/`, true);
       }

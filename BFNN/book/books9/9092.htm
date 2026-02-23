@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>太上感應篇講記</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var TSGYP = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9092/${to3d(vol||0)}.js`); }
+
+  showPage() {
+    var base = 'https://www.hwadzan.com/education/play?menuidparent=19&menuidchild=12&numbers=',
+        buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setNavBreakAt(30).setBuffer(buf).setXG().reInit(9092, 195);
+        this.volNum = TSGYP.volNum;
+        var lnk = !this.volNum ? `<a href="${base}" target="extra">19-012</a>（共195集）`
+                               : `<a target="extra" href="${base}${246407+this.volNum}">19-012-${to4d(this.volNum)}</a>`;
+        if (!this.volNum)
+          this.writeStart(`《太上感應篇》講記`);
+        else
+          this.writeStart(`《太上感應篇》講記|（第${zNumber(this.volNum)}集）`);
+        this.writeBody(`\n/TEXT030C/淨空法師 主講 1999年 新加坡淨宗學會 【華藏檔名：${lnk}】\n${TSGYP.text}\n\n/VOLSEP/`, true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // TSGYP
+
+TSGYP.show(get('vol')); // 卷
+
+// https://www.hwadzan.com/education/play?menuidparent=19&menuidchild=12&voice&mp4=0&numbers=246408
+// https://www.hwadzan.com/api/v2/playlist?src=https://cf.sanshi.uk/media/mp3/19/19-012/19-012-0001.mp3
+</script>

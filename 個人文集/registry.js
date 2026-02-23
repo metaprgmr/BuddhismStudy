@@ -19,19 +19,21 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 (() => {
   var jklb = 'JK-Learn-Buddhism-';
   lines = `
+260221|一念相應一念佛.html|「一念相應一念佛」
 240530|${jklb}認識佛教筆記.html|《認識佛教》筆記${MULTI_SEP}240608|${jklb}Review-Qs.html|復習
 250328|WLSJs_various.html|《無量壽經》諸版對照
-260205|YG333-synopsis.html|《印光大師文鈔菁華錄》梗概
-260123|DZJ-synopsis.html|《地藏菩薩本願經》梗概
+260220|彌陀要解精要.html|《彌陀要解》精要
 250828|地藏菩薩大智開示
+250801|《宗鏡錄》摘要
 251007|圓音講義
 251013|大慧總問
+260205|YG333-synopsis.html|《印光大師文鈔菁華錄》梗概
+260123|DZJ-synopsis.html|《地藏菩薩本願經》梗概
 250523|《八識規矩頌》內容
-250801|《宗鏡錄》摘要
-260107|百過歌
-260111|佛子根
 250530|淨界法師.html|【善知識】淨界法師
 #######
+260107|百過歌
+260111|佛子根
 251107|念佛节奏.html|念佛节奏計算器
 260210|念佛訣竅
 250917|發露懺悔
@@ -51,6 +53,7 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250802|圍棋與人生.html|棋道•人道•佛道
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
 230518|苦空無常之音.mp3|苦空無常之音
+250509|CAUSE-AND-EFFECT.html|因果
 230517|論飯桶，兼論素食
 231222|養生乎.html|養生，乎？
 231111|DuBist.html|Du Bist Was Du Isst

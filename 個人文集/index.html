@@ -4,6 +4,7 @@
 <title>《個人文集》目錄</title>
 <link rel="stylesheet" href="../util/article.css">
 <style>
+th { border-bottom:2px solid gray; font-size:24px }
 ol { font-size:20px; line-height:150% }
 </style>
 <script src="../util/utils.js"></script>
@@ -18,7 +19,7 @@ ol { font-size:20px; line-height:150% }
 
 <script>
 var buf = new Buffer(), idx = 1, testing = get('test');
-buf.w('<center><table><tr><th>佛法</th><th>修行</th><th>雜論</th></tr>');
+buf.w('<center><table cellspacing="5px" cellpadding="0"><tr><th>佛法</th><th>修行</th><th>雜論</th></tr>');
 buf.w('<tr><td valign="top"><ol>');
 for (var i=0; i<lines.length; ++i) {
   var ln = lines[i];

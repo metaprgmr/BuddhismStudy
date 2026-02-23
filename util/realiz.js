@@ -303,7 +303,8 @@ function getRuleSet(verbose) {
   var additional =
     '愍澂儱憍呬瞋鬘棸踰跢鞞佉頞罥羂' +
     '𭉨𡆗𡀔𭊃𠲿𭉨𠲜𠻬𫪛𭇔𭊗𭌆㗚𠸎𠵫𭉜𭍊𠷖𭈠𭊃𭌂𠼶𠻲𢛡𢤱𡺸㙛𤬪𮟨𭕷𭒂𧄼𦶇𧂐𤧕𤑫𭦉' +
-    '𣰆𣩠𦙱𣍦曀𪾼𥢶𥝟𤴨𦂅𥿞𥿫𧎴𦪑𨄈𨄔𨅊𧯞𧰃𨋶𩋵𪒠𪗦㝹𤚥𢍶隷𡖐𩭤𤙖𮩚';
+    '𣰆𣩠𦙱𣍦曀𪾼𥢶𥝟𤴨𦂅𥿞𥿫𧎴𦪑𨄈𨄔𨅊𧯞𧰃𨋶𩋵𪒠𪗦㝹𤚥𢍶隷𡖐𩭤𤙖𮩚' +
+    '𦖋顒躄眄憙𢫫遘䗍鎻玅虗䈥';
 
   // Note that for a 简体字, later rules will override previous ones.
   // To extend rules for particular contexts, use the customRules mechanism.
