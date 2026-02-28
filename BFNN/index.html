@@ -32,13 +32,12 @@ https://book.bfnn.org">
 </head>
 <body style="background-color:#ced"><center>
 <div align=center>
-  <table border=0 width="1200px"><tr>
-  <td width="200px" style="padding-left:0px"><img src="bfnn_title2.gif" width="200px" style="margin-top:-30px" usemap="#makarte"></td>
-  <td><h3 style="color:blue"><a href="javascript:showList('全部內容')">選讀</a></h3></td>
+  <table border=0 cellspacing=0 cellpadding=0><tr>
+  <td colspan=2 align=center style="color:darkgreen"><img src="bfnn_title2.gif" width="200px" style="margin-top:0px" usemap="#makarte" align=left nowrap>
+「般若文海」有大量可下載之佛經和文章資料，功德無量！感恩至深！<br>
+所收者已改為utf8編碼，常有合成字、錯字、句讀等補正。另時有新加。</td></tr>
+<tr><td width="200px" align=center valign=right style="font-size:28px"><a href="javascript:showList('全部內容')">選讀</a></td>
   <td id="nav" align=center nowrap></td>
-  <td nowrap align=right>「般若文海」載有大量佛經和文章資料，<br>
-  且可以全套下載，功德無量！非常感恩！<br>
-  所收者已改編碼、常有補正。另有新加。</td>
   </tr></table>
 </div>
 <div id="stg" align=center></div>
@@ -101,7 +100,7 @@ function showThem() {
             `<a href="#_s1800">1800</a>&nbsp; &nbsp; <a href="#_s2000">2000</a>&nbsp; &nbsp; ` +
             `<a href="#_s2100">2100</a></td></tr>`;
   var END = `<tr><td colspan=4 style="border-top:1px solid blue">&nbsp;</td></tr>`;
-  var buf = new Buffer(`<table border=0 width="1000px">`, TOP);
+  var buf = new Buffer(`<table border=0>`, TOP);
   var lastId = 0;
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
@@ -131,7 +130,7 @@ function showThem() {
           `<td>${ttl}</td><td align=right nowrap>${d.maker||''}&nbsp;</td></tr>`);
     lastId = wk.idEnd || wk.id;
   }
-  buf.w(END, `</table><p>${STATS}</p><hr width="1200px">`)
+  buf.w(END, `</table><p>${STATS}</p><hr width="1000px">`)
      .render('stg');
 }
 
@@ -176,7 +175,7 @@ function showList(topic) {
   }
   buf.w('</table></td></tr></table>');
   if (topic == '所集佛經') showSutraList(buf);
-  buf.w('<p style="font-size:5px">&nbsp;</p><hr width="1200px" color=gray>')
+  buf.w('<p style="font-size:5px">&nbsp;</p><hr width="1000px" color=gray>')
      .render('stg');
 }
 

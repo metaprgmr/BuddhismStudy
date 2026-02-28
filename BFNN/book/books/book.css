@@ -41,7 +41,6 @@ BODY {SCROLLBAR-FACE-COLOR: #09f; SCROLLBAR-HIGHLIGHT-COLOR: #09f; SCROLLBAR-SHA
 hr.volsep { border: none; height: 1px; background: rgba(255,0,0,0.3); }
 
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
-xg { text-decoration:underline; text-decoration-color:red; text-decoration-style:dashed }
 .xgtitle { color:teal }
 my   { }
 my_1 { }
@@ -87,6 +86,8 @@ teal  { color:teal }
 gray  { color:gray }
 lightgray { color:lightgray }
 lightgreen { color:lightgreen }
+famous { color:#e00 }
+.famous { color:#e00 }
 done { color:#339 }
 c339 { color:#339 }
 .c339 { color:#339 }

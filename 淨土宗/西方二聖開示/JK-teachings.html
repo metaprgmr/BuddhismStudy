@@ -47,25 +47,39 @@ if (idx && !isOrig) { // passage display
   w('<h2>', aTag, '淨空法師開示', len, (isOrig?'篇（詳細）':'篇'), '</a></h2>',
     '<p>空師法語，字字珠璣，句句精妙，實難擇分</p>',
     '<table cellpadding="0" cellspacing="0">');
-  var lastType = '???';
+  var lastType = '???', visited = {}, err = false;
   for (var i in JK.teachings) {
     lsn = JK.teachings[i];
     var cls = "toc";
     if (lsn.level) cls += ' ' + lsn.level;
     var type = TYPES[lsn.type] || (isOrig ? '' : '[未定]');
     if (!isOrig) { if (type !== lastType) lastType = type; else type = ''; }
+    if (!visited[lsn.id])
+      visited[lsn.id] = lsn.title;
+    else {
+      console.log(lsn.id, '\n', visited[lsn.id], '\n', lsn.title);
+      err = true;
+    }
     w('<tr>',
       '<td class="info" nowrap>', type || '', '</td>',
       '<td align="right" class="toc">', parseInt(i)+1, '.&nbsp;</td>',
       '<td class="', cls, '"><a href="?i=', lsn.id, '">', lsn.title, '</a></td>',
       '<td class="toc" width="20">&nbsp;</td>',
       '<td class="info" align="right">', lsn.ziCount(), '字&nbsp;&nbsp;</td>');
-    if (isOrig)
-      w('<td class="toc">', lsn.source || '', ' ', lsn.srcVol || '', '&nbsp;</td>',
+    if (isOrig) {
+      var src = lsn.source || '';
+      if (src.startsWith('淨土大經科註') ||
+          src.startsWith('淨土大經解演義') ||
+          src.startsWith('太上感應篇') ||
+          src.startsWith('大方廣佛華嚴經'))
+        src = '　　　　' + src;
+      w(`<td class="toc">${src} ${lsn.srcVol||''}&nbsp;</td>`,
         '<td class="ytid">', lsn.ytid || '&nbsp;', '</td>');
+    }
     w('</tr>');
   }
   w('</table>');
+  if (err) alert('Have errors. Check log.');
 }
 </script>
 

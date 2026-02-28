@@ -852,6 +852,13 @@ function write0944(n, body) {
          .writeBody(body, true);
 }
 
+// -- 佛教基本知識 正果法師著 --
+function write1293(n, body) {
+  docInfo.reInit(1293, 2, n)
+         .writeStart(`佛教基本知識|（${n==2?'下':'上'}）`)
+         .writeBody('/TEXT030C/正果法師著\n' + body + '\n/VOLSEP/', true);
+}
+
 // -- 楞嚴經通議 憨山大師 --
 function write1644(n, body) {
   docInfo.reInit(1644, 10, n)

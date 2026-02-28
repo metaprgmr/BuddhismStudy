@@ -969,6 +969,8 @@ function getYourName(yourTag, anyTag) {
   return !anyTag ? '某甲' : `<${anyTag} title="${help}">某甲</${anyTag}>`;
 }
 
+function isMe() { return getGlobal('MYNAME') == '信裹'; }
+
 function getGlobal(name) { return window[name]; }
 
 function formatTime(tm, simple) {
