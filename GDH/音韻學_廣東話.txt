@@ -1,0 +1,38 @@
+漢字→廣東話/粵語拼音轉換工具
+https://hongkongvision.com/tool/cc_py_conv_zh
+
+
+【學粵語】廣東話的6個聲調，一張圖搞清楚！就這麼簡單
+https://www.youtube.com/watch?v=40bpjVcHTSc
+ 阴平 第一声 55 诗  调值的代表字：周（zau1）
+ 阴上 第二声 24 史  调值的代表字：口（hau2）
+ 阴去 第三声 33 试  调值的代表字：店（dim3）
+ 阳平 第四声 31 时  调值的代表字：河（ho4）
+ 阳上 第五声 13 市  调值的代表字：姆（mou5）
+ 阳去 第六声 11 事  调值的代表字：渡（dou6）
+ 阴入 第七声 5  色
+ 中入 第八声 3  锡
+ 阳入 第九声 1  食
+
+
+粤语拼音
+
+例：
+  一 jat1    二 ji6     三 saam1    四 sei3    五 ng5
+  六 luk6    七 cat1    八 baat3    九 gau2    十 sap6
+
+声母：(19)
+  b     p     m     f
+  d     t     n     l
+  z     c     s     j
+  g     k     h    ng
+  gw    kw          w
+
+
+粵語 同步有聲朗讀 金庸武俠小說 倚天屠龍記，廣東話
+https://www.youtube.com/playlist?list=PLXde5yQuCSZm08EvhbSHsQiWVYW2zauUW
+
+何文匯主講：終身受用的學好中文方法（廣東話）
+ （第一集）平仄與聲調          （23:29） FsG0cP879uA
+ （第二集）認識反切與近體詩格律（16:36） hh4QMUiexPI
+ （第三集）近體詩格律 ── 應用篇（29:55） ZqIv86gqPdw

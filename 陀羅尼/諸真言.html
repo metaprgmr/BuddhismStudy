@@ -4,9 +4,13 @@
 <title>諸真言</title>
 <script>
 function show() {
-  for (var i=0; i<arguments.length; i+=2)
-    document.write('<tr><td valign="top" align="right">' + arguments[i] + '&nbsp;&nbsp;</td>' +
-                   '<td><pre style="margin-top:4px">' + arguments[i+1] + '</pre></td></tr>');
+  var len = arguments.length;
+  for (var i=0; i<len; i+=2) {
+    var name = arguments[i], txt = arguments[i+1], c0 = txt[0];
+    if ((c0 == 'o') || (c0 == 'n'))
+      txt = `<pre style="margin-top:4px">${txt}</pre>`;
+    document.write(`<tr><td valign="top" align="right">${name}：</td><td>${txt}</td></tr>`);
+  }
 }
 </script>
 </head>
@@ -15,6 +19,7 @@ function show() {
 <table>
 <script>
 show(
+  '文嘉今日歌', '今日復今日，今日何其少。今日又不為，此事何時了？',
   '不空摩尼供養咒', 'oṃ amogha pūja maṇi padma vajre tathagata vilokite samanta pra-sara huṃ',
   '三昧耶戒真言', 'oṃ samaya sadva vaṃ',
   '法界真⾔',     'oṃ vajra-dhātu vaṃ',

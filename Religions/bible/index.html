@@ -1,0 +1,299 @@
+<html>
+<head>
+<title>Bible Study Home</title>
+<link rel="stylesheet" href="../resources/styles.css">
+</head>
+<script>
+var ot_books = [
+  // the "type" is per Christian classification
+  { id:'genesis',      title:'Genesis',       type:'pentateuch', chapters:50, verses:1533, addedTitles:66,   reads:1 },
+  { id:'exodus',       title:'Exodus',        type:'pentateuch', chapters:40, verses:1213, addedTitles:83,   mods:true, reads:1 },
+  { id:'leviticus',    title:'Leviticus',     type:'pentateuch', chapters:27, verses:859,  addedTitles:43,   mods:true, reads:1 },
+  { id:'numbers',      title:'Numbers',       type:'pentateuch', chapters:36, verses:1288, addedTitles:64,   reads:1 },
+  { id:'deuteronomy',  title:'Deuteronomy',   type:'pentateuch', chapters:34, verses:959,  addedTitles:66,   reads:1 },
+
+  { id:'joshua',       title:'Joshua',        type:'historical', chapters:24, verses:658,  addedTitles:35,   reads:1 },
+  { id:'judges',       title:'Judges',        type:'historical', chapters:21, verses:618,  addedTitles:28,   reads:1 },
+  { id:'ruth',         title:'Ruth',          type:'historical', chapters:4,  verses:85,   addedTitles:5,    reads:1 },
+  { id:'1samuel',      title:'1 Samuel',      type:'historical', chapters:31, verses:810,  addedTitles:42,   reads:1 },
+  { id:'2samuel',      title:'2 Samuel',      type:'historical', chapters:24, verses:695,  addedTitles:37,   reads:1 },
+  { id:'1kings',       title:'1 Kings',       type:'historical', chapters:22, verses:816,  addedTitles:50,   reads:1 },
+  { id:'2kings',       title:'2 Kings',       type:'historical', chapters:25, verses:719,  addedTitles:54,   reads:1 },
+  { id:'1chronicles',  title:'1 Chronicles',  type:'historical', chapters:29, verses:942,  addedTitles:47,   reads:1 },
+  { id:'2chronicles',  title:'2 Chronicles',  type:'historical', chapters:36, verses:822,  addedTitles:51,   reads:1 },
+  { id:'ezra',         title:'Ezra',          type:'historical', chapters:10, verses:280,  addedTitles:16,   reads:1 },
+  { id:'nehemiah',     title:'Nehemiah',      type:'historical', chapters:13, verses:406,  addedTitles:16,   reads:1 },
+  { id:'esther',       title:'Esther',        type:'historical', chapters:10, verses:167,  addedTitles:12,   reads:1 },
+
+  { id:'job',          title:'Job',           type:'wisdom',     chapters:42, verses:1070, addedTitles:25,   chapterKeys:true, mods:true, reads:1 },
+  { id:'psalms',       title:'Psalms',        type:'wisdom',     chapters:150,verses:2461, addedTitles:27,   chapterKeys:true, mods:true, reads:1 },
+  { id:'proverbs',     title:'Proverbs',      type:'wisdom',     chapters:31, verses:915,  addedTitles:19,   chapterKeys:true, mods:true, reads:1 },
+  { id:'ecclesiastes', title:'Ecclesiastes',  type:'wisdom',     chapters:12, verses:222,  addedTitles:17,   chapterKeys:true, mods:true, reads:1 },
+  { id:'song_of_songs',title:'Song of Songs', type:'wisdom',     chapters:8,  verses:117,  addedTitles:9,    chapterKeys:true, mods:true, reads:1 },
+
+  { id:'isaiah',       title:'Isaiah',        type:'prophecy',   chapters:66, verses:1292, addedTitles:79,   reads:1 },
+  { id:'jeremiah',     title:'Jeremiah',      type:'prophecy',   chapters:52, verses:1364, addedTitles:63,   reads:1 },
+  { id:'lamentation',  title:'Lamentations',  type:'prophecy',   chapters:5,  verses:154,                    reads:1 },
+  { id:'ezekiel',      title:'Ezekiel',       type:'prophecy',   chapters:48, verses:1273, addedTitles:67,   reads:1 },
+  { id:'daniel',       title:'Daniel',        type:'prophecy',   chapters:12, verses:357,  addedTitles:18,   reads:1 },
+
+  { id:'hosea',        title:'Hosea',         type:'prophecy_m', chapters:14, verses:197,  addedTitles:12,   reads:1 },
+  { id:'joel',         title:'Joel',          type:'prophecy_m', chapters:3,  verses:73,   addedTitles:8,    reads:1 },
+  { id:'amos',         title:'Amos',          type:'prophecy_m', chapters:9,  verses:146,  addedTitles:13,   reads:1 },
+  { id:'obadiah',      title:'Obadiah',       type:'prophecy_m', chapters:1,  verses:21,                     reads:1 },
+  { id:'jonah',        title:'Jonah',         type:'prophecy_m', chapters:4,  verses:48,   addedTitles:4,    reads:1 },
+  { id:'micah',        title:'Micah',         type:'prophecy_m', chapters:7,  verses:105,  addedTitles:null, reads:1 },
+  { id:'nahum',        title:'Nahum',         type:'prophecy_m', chapters:3,  verses:47,   addedTitles:3,    reads:1 },
+  { id:'habakkuk',     title:'Habakkuk',      type:'prophecy_m', chapters:3,  verses:56,   addedTitles:5,    reads:1 },
+  { id:'zephaniah',    title:'Zephaniah',     type:'prophecy_m', chapters:3,  verses:53,   addedTitles:7,    reads:1 },
+  { id:'haggai',       title:'Haggai',        type:'prophecy_m', chapters:2,  verses:38,   addedTitles:4,    reads:1 },
+  { id:'zechariah',    title:'Zechariah',     type:'prophecy_m', chapters:14, verses:211,  addedTitles:22,   reads:1 },
+  { id:'malachi',      title:'Malachi',       type:'prophecy_m', chapters:4,  verses:55,   addedTitles:7,    reads:1 },
+];
+
+var nt_books = [
+  { id:'matthew',       title:'Matthew',        type:'canonical_gospel',  chapters:28, verses:1071, addedTitles:114,  mods:true, reads:1 },
+  { id:'mark',          title:'Mark',           type:'canonical_gospel',  chapters:16, verses:678,  addedTitles:67,   mods:true, reads:1 },
+  { id:'luke',          title:'Luke',           type:'canonical_gospel',  chapters:24, verses:1151, addedTitles:106,  mods:true, reads:1 },
+  { id:'john',          title:'John',           type:'canonical_gospel',  chapters:21, verses:879,  addedTitles:69,   mods:true, reads:1 },
+  { id:'acts',          title:'Acts',           type:'apostolic_history', chapters:28, verses:1007, addedTitles:66,   mods:true, reads:1 },
+  { id:'romans',        title:'Romans',         type:'pauline_epistle',   chapters:16, verses:433,  addedTitles:null, reads:1 },
+  { id:'1corinthians',  title:'1 Corinthians',  type:'pauline_epistle',   chapters:16, verses:437,  addedTitles:null, reads:1 },
+  { id:'2corinthians',  title:'2 Corinthians',  type:'pauline_epistle',   chapters:13, verses:257,  addedTitles:null, reads:1 },
+  { id:'galatians',     title:'Galatians',      type:'pauline_epistle',   chapters:6,  verses:149,  addedTitles:null, reads:1 },
+  { id:'ephesians',     title:'Ephesians',      type:'pauline_epistle',   chapters:6,  verses:155,  addedTitles:null, reads:1 },
+  { id:'philippians',   title:'Philippians',    type:'pauline_epistle',   chapters:4,  verses:104,  addedTitles:null, reads:1 },
+  { id:'colossians',    title:'Colossians',     type:'pauline_epistle',   chapters:4,  verses:95,   addedTitles:null, reads:1 },
+  { id:'1thessalonians',title:'1 Thessalonians',type:'pauline_epistle',   chapters:5,  verses:89,   addedTitles:null, reads:1 },
+  { id:'2thessalonians',title:'2 Thessalonians',type:'pauline_epistle',   chapters:3,  verses:47,   addedTitles:null, reads:1 },
+  { id:'1timothy',      title:'1 Timothy',      type:'pauline_epistle',   chapters:6,  verses:113,  addedTitles:null, reads:1 },
+  { id:'2timothy',      title:'2 Timothy',      type:'pauline_epistle',   chapters:4,  verses:83,   addedTitles:null, reads:1 },
+  { id:'titus',         title:'Titus',          type:'pauline_epistle',   chapters:3,  verses:46,   addedTitles:null, reads:1 },
+  { id:'philemon',      title:'Philemon',       type:'pauline_epistle',   chapters:1,  verses:25,   addedTitles:null, reads:1 },
+  { id:'hebrews',       title:'Hebrews',        type:'pauline_epistle',   chapters:13, verses:303,  addedTitles:null, reads:1 },
+  { id:'james',         title:'James',          type:'catholic_epistle',  chapters:5,  verses:108,  addedTitles:11,   mods:true, reads:1 },
+  { id:'1peter',        title:'1 Peter',        type:'catholic_epistle',  chapters:5,  verses:105,  addedTitles:9,    mods:true, reads:1 },
+  { id:'2peter',        title:'2 Peter',        type:'catholic_epistle',  chapters:3,  verses:61,   addedTitles:4,    reads:1 },
+  { id:'1john',         title:'1 John',         type:'catholic_epistle',  chapters:5,  verses:105,  addedTitles:9,    reads:1 },
+  { id:'2john',         title:'2 John',         type:'catholic_epistle',  chapters:1,  verses:13,   addedTitles:null, reads:1 },
+  { id:'3john',         title:'3 John',         type:'catholic_epistle',  chapters:1,  verses:15,   addedTitles:null, reads:1 },
+  { id:'jude',          title:'Jude',           type:'catholic_epistle',  chapters:1,  verses:25,   addedTitles:2,    reads:1 },
+  { id:'revelation',    title:'Revelation',     type:'apocalypse',        chapters:22, verses:404,  addedTitles:36,   reads:1 },
+];
+
+function displayBooks(books, rowWidth, types) {
+  var groupCounts = {};
+  for (i=0; i<types.length; ++i) { groupCounts[types[i]] = 0; groupCounts[types[i]+'_read'] = 0; }
+
+  w('<table border=0 cellpadding=5><tr>');
+  var totalVerses = 0;
+  var versesRead = 0;
+  var booksRead = 0;
+  for (var i=0; i<books.length; ++i) {
+    var bk = books[i];
+    var type = (bk.type == 'prophecy_m') ? "prophecy" : bk.type;
+    groupCounts[type] += bk.verses;
+    totalVerses += bk.verses;
+    if (bk.reads > 0) {
+      versesRead += bk.verses;
+      ++booksRead;
+    }
+    var title = '<b>' + bk.title + '</b>';
+    if (bk.title.length >= 11) title = '<font size="-1">' + title + '</title>';
+    if (i % rowWidth == 0 && i > 0 && i < books.length) w('</tr><tr>');
+    var stats = '';
+    if (bk.verses > 0) {
+      if (bk.reads > 0) {
+        stats += '<span class="is_read">' + bk.verses + '</span>/';
+        groupCounts[type+'_read'] += bk.verses;
+      }
+      else
+        stats += bk.verses + '/';
+    }
+    stats += '<b>' + bk.chapters + '</b>';
+    if (bk.addedTitles != null) stats += '<br>(' + bk.addedTitles + '&nbsp;captions)';
+//    if (bk.chapterKeys != null) // TODO: remove
+//      stats += ((bk.mods != null) ? ' * ###' : ' *');
+    w('<td align="center" valign="top" class=', bk.type, ' title="', bk.type.replace('_',' '),
+      '"><a href="reader.html?book=', bk.id, '">', title, '</a><br><font color="#339" size="-1">',
+      stats, '</font></td>');
+  }
+  w('</tr></table>');
+  w('<p><span class="is_read">', versesRead, '</span>');
+  if (versesRead < totalVerses)
+    w('/', totalVerses);
+  if (booksRead < books.length)
+    w(' verses in <span class="is_read">', booksRead, '</span>/<b>', books.length, ' books</b>');
+  else
+    w(' verses in <b><span class="is_read">', booksRead, '</span> books</b>');
+  w('.&nbsp;&nbsp;(');
+  for (i=0; i<types.length; ++i) {
+    if (i>0) w('&nbsp;&nbsp;');
+    var readCnt = groupCounts[types[i]+'_read'];
+    var textCnt = groupCounts[types[i]];
+    w('<span class="', types[i], '" title="', types[i].replace('_',' '), '">&nbsp;');
+    if (readCnt == textCnt)
+      w('<span class="is_read">', readCnt, '</span>&nbsp;</span>');
+    else
+      w('<span class="is_read">', readCnt, '</span>/', textCnt, '&nbsp;</span>');
+  }
+  w(')</p>');
+}
+
+function w() { for (var  i=0; i<arguments.length; ++i) document.write(arguments[i]) }
+</script>
+<body>
+<div class="container">
+<center>
+<h2>Bible Study Home</h2>
+
+<table width="800">
+<tr><td bgcolor="white" style="padding: 5px 10px 5px 10px">
+
+<h3>Old Testament</h3>
+
+<p>The <i>Hebrew Bible</i> (Masoretic Text) contains 24 books.
+The <i>Protestant OT</i> has the same books, but splits a few books into two:
+<i>Samuel</i>, <i>Kings</i>, <i>Chronicles</i>, and <i>Ezra and Nehemia</i>, and
+makes the 12 minor prophecies into separate books, totaling 39 books.
+The <i>Catholic</i> and <i>Eastern Orthodox OT</i> have more books and add more content
+to some existing books, totaling 46 and 49 books, respectively.
+<u>The following are the <b><i>Protestant</i></b> listing of 39 books</u>.
+</p>
+
+<script>displayBooks(ot_books, 10, [ 'pentateuch', 'historical', 'wisdom', 'prophecy' ])</script>
+<hr>
+
+<h3>New Testament</h3>
+
+<p>The New Testament canon has <b>27 books</b> in all Christian denominations.
+The <i>Roman Catholic</i> and <i>Protestant traditions</i> have the same book order; the
+<i>Eastern Orthodox</i>, <i>Armenian</i> and <i>Ethiopian traditions</i> different.</p>
+
+<script>displayBooks(nt_books, 9, [ 'canonical_gospel', 'apostolic_history', 'pauline_epistle', 'catholic_epistle', 'apocalypse' ])</script>
+
+<p>(The inserted captions in the texts for both OT and NT are from the <i>New International Version</i>.)</p>
+
+<hr>
+
+<h3>The OT Book List Differences Based on Wikipedia Listings</h3>
+
+<p>The <i>Hebrew Bible</i> (Masoretic Text) contains 24 books.
+The <i>Protestant</i> OT has the same books, but splits these books into two each:
+<i>Samuel</i>, <i>Kings</i>, <i>Chronicles</i>, and <i>Ezra and Nehemia</i>, and
+makes the 12 minor prophecies into separate books.
+The <i>Catholic</i> and <i>Eastern Orthodox</i> OT have 7/10 more books,
+and add more content to some existing books:
+
+<ul>
+<li><i>Tobit</i></li>
+<li><i>Judith</i></li>
+<li><i>2 Esdras</i> (EO only)</li>
+<li><i>1 Maccabees</i></li>
+<li><i>2 Maccabees</i></li>
+<li><i>3 Maccabees</i> (EO only)</li>
+<li><i>Wisdome</i> (or <i>Wisdom of Solomon</i> for EO)</li>
+<li><i>Sirach</i> (or <i>Ecclesiasticus</i> for C; <i>Wisdom of Sirach</i> for EO)</li>
+<li>Baruch (<i>the letter of Jeremiah</i> is ch6 in C and a separate book in EO)
+</ul>
+</p>
+
+<hr>
+
+<h3><u>Jan Bathys DeBeer</u> on the Books of <i>Enoch</i> and <i>Jubilees</i></h3>
+
+<p><i>(Reformatting by adding lists and emphasis, and italicing book titles.)</i></p>
+
+<p>Ancient books are divided into three groups to indicate their authority for Christian
+and Jewish faith and life. The books in the Bible are called “<u>Canonical</u>”, while the
+other books are divided into two groups: “<u>Apocryphal</u>” and “<u>Pseudepigraphical</u>”.
+The Apocryphal books were part of the Greek translation of the Hebrew Bible, called the
+Septuagint or LXX.  These books were also included in the Catholic Bible, called the
+Vulgate, as well as in some protestant Bibles, like the King James Version (KJV). The Old
+Testament Apocrypha are (the names in the Vulgate are given in brackets):
+<ul>
+<li><i>1 Esdras</i> (Vulgate 3 Esdras)</li>
+<li><i>2 Esdras</i> (Vulgate 4 Esdras)</li>
+<li><i>Tobit</i></li>
+<li><i>Judith</i></li>
+<li><i>Rest of Esther</i> (Vulgate Esther 10:4–16:24)</li>
+<li><i>Wisdom</i></li>
+<li><i>Ecclesiasticus</i> (also known as Sirach)</li>
+<li><i>Baruch and the Epistle of Jeremy</i> (all part of Vulgate Baruch)</li>
+<li><i>Song of the Three Children</i> (Vulgate Daniel 3:24–90)</li>
+<li><i>Story of Susanna</i> (Vulgate Daniel 13)</li>
+<li><i>The Idol Bel and the Dragon</i> (Vulgate Daniel 14)</li>
+<li><i>Prayer of Manasses</i> (Daniel)</li>
+<li><i>1 Maccabees</i></li>
+<li><i>2 Maccabees</i></li>
+</ul>
+</p>
+
+<p>The general definition of the Pseudepigrapha is books that were written in a Biblical
+style and given a name that is not believed to be the authentic author of the book. This
+is a very technical definition, since some of the Biblical books, like <i>Hebrews</i>,
+could also be classified this way. In reality, there was uncertainty about the
+authenticity of the books that falls within this category. For this reason, the list of
+Pseudepigrapha is not fixed and is determined by different factors, like the authenticity
+of the writer, the type of book, and available knowledge of a given book. Books that were
+traditionally assigned to the Pseudepigrapha, are:
+<ul>
+<li><i>Apocalypse of Abraham</i>
+<li><i>Apocalypse of Moses</i>
+<li><i>Letter of Aristeas</i>
+<li><i>Martyrdom and Ascension of Isaiah</i>
+<li><i>Joseph and Aseneth</i>
+<li><i>Life of Adam and Eve</i>
+<li><i>Lives of the Prophets</i>
+<li><i>Ladder of Jacob</i>
+<li><i>Jannes and Jambres</i>
+<li><i>History of the captivity in Babylon</i>
+<li><i>History of the Rechabites</i>
+<li><i>Eldad and Modad</i>
+<li><i>History of Joseph</i>
+<li><i>Odes of Solomon</i>
+<li><i>Prayer of Joseph</i>
+<li><i>Prayer of Jacob</i>
+<li><i>Vision of Ezra</i>
+</ul>
+</p>
+
+<p>Would <i>Enoch</i> or <i>Jubilees</i> have qualified as Apocryphal books for the
+rabbinical Judaism and included in the LXX? Contrary to common belief, the non-canonical
+books in the LXX that later became known as the Apocrypha, were not decided upon by the
+church, but by Pharisaic rabbinical scholars. <i>Jubilees</i> and <i>Enoch</i> were not
+included in the LXX because of the rabbinical Judaism’s rejection of prophecy after
+<i>Nehemia</i>. In rabbinical Jewish circles, the books of <i>Enoch</i>, and to a lesser
+degree the book of <i>Jubilees</i>, were treated sceptically not because of the
+Canonization of the Bible (Tanach), but because of the Canonization of
+prophetic/apocalyptic works. Prophetic and apocalyptic are very similar, since both have
+an element of future prophecy. Apocalyptic prophecy is more visionary of nature and
+makes use of visual symbolism or descriptions to prophesy of future events.
+The rabbinical theology during the first centuries BCE and BE established that prophecy
+and apocalypse ended in the time of Nehemia (ca. 400BCE). This means that no prophet,
+prophetic book or apocalyptic book could be incorporated into the Jewish collection of
+authoritative books after the time of Nehemia. For this reason, books like <i>Daniel</i>,
+<i>Esther</i> and <i>Chronicles</i> were incorporated as part of the Writings (Ketubim)
+section of the Tanach, but <i>Enoch</i> and <i>Jubilees</i> were not considered because
+of its apocalyptic nature. It is important to note that <i>Enoch</i> and <i>Jubilees</i>
+were not excluded because of its non-canonical nature, but because of its apocalyptic
+nature that disqualified it for rabbinical Pharisaic Judaism.</p>
+
+<p>There are, however, two exceptions to the approach of the rabbinical Judaism, the
+Ethiopian Jews and the Qumran <i>Yachad</i> community. The Ethiopian Jews retained the
+books of <i>Enoch</i> and <i>Jubilees</i> as part of their Canon, until today. The
+Qumran <i>Yachad</i> community did not only view these books as authoritative, they
+even regarded Jubilees on a higher level as the Masoretic text of the Torah.</p>
+
+</td></tr></table>
+</center>
+</div>
+<div class="fixed-footer">
+<div class="container"><center><div id="footer">
+<a href="">Top</a> &nbsp;&nbsp;||&nbsp;&nbsp;
+Source of <a href="https://www.wordproject.org/bibles/parallel/e/french.htm">French (Louis Segond - 1910)</a> &nbsp;&nbsp;||&nbsp;&nbsp;
+<a href="../index.html" target="allbooks">All Books</a>
+</div></center></div>
+</div>
+</body>
+</html>

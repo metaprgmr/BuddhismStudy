@@ -1,0 +1,29 @@
+<html>
+<head> <meta charset="utf8">
+<link rel="stylesheet" href="../resources/styles.css">
+<script> var SEMOI = true; </script>
+<script src="../../env.js"></script>
+<script src="../resources/parallel-reader.js"></script>
+<script src="quran.js"></script>
+<script src="quran-NOTES.js"></script>
+</head>
+
+<script>
+function readQuran() {
+  quran.render(getReadParams());
+
+  // customize the footer
+  var links = [ book.chapterNavLinks ];
+  var lineCnt = book.getCurChapterLineCount();
+  if (lineCnt != null)
+    links.push('<font size="-1">(' + lineCnt  + ' verses)</font>');
+  links.push('<font size="-1" title="Book Stats">' + book.bookStatsLinks + '</font>');
+  links.push('<a href="quran.html"><i>Quran</i> Home</a>');
+  links.push('<a href="../index.html" target="allbooks">All Books</a>');
+  setContent("footer", links.join(NAVDIV));
+}
+
+readQuran();
+
+</script>
+</html>

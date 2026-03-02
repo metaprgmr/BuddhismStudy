@@ -1,0 +1,71 @@
+body{
+    margin-top:     0px;
+    background:     #ff9;
+    padding-top:    0px;
+    margin-left:    0px;
+    margin-right:   0px;
+    padding-bottom: 40px;
+}
+.fixed-footer{
+    width: 100%;
+    position: fixed;
+    padding: 10px 0;
+    bottom: 0;
+    background: #aaf;
+}
+.container{
+    width: 100%;
+    margin: 0 auto; /* Center the DIV horizontally */
+}
+
+table { font-family:helvetica }
+a     { text-decoration:none  }
+li    { padding-top:5px }
+
+.pentateuch        { background: #FFAAFF }
+.torah             { background: #FFAAFF }
+.historical        { background: #AAFFFF }
+.prophecy          { background: #FFFF66 }
+.prophecy_m        { background: #FFFF99 }
+.neviim            { background: #FFFF66 }
+.wisdom            { background: #AAAAFF }
+.ketuvim           { background: #AAFFAA }
+.canonical_gospel  { background: #FFAAFF }
+.apostolic_history { background: #AAFFFF }
+.pauline_epistle   { background: #FFFF66 }
+.catholic_epistle  { background: #AAAAFF }
+.apocalypse        { background: #FF6699 }
+
+.is_read { color: red }
+
+/* .soft_indent   { display:inline-block; text-indent:0px; padding-left:25px } */
+.soft_indent   {}
+.block_indent  { display:inline-block; text-indent:0px; padding-left:25px }
+.indented      { display:inline-block; text-indent:-25px; padding-left:50px }
+.unit_text     { display:inline-block; padding-left:5px; padding-right:5px }
+.salute        { font-style:italic }
+.added_title   { color:black; font-weight:bold }
+.chapter_title { color:brown; font-weight:bold; font-style:italic }
+.note_text     { color:brown; padding-left:5px; background:#9f9 }
+.note_text_ind { color:brown; padding-left:5px }
+.right         { text-align: right }
+.li_level1     { padding-top:10px }
+
+/* for note hilites */
+.hl1 { background:#ff6 }
+.hl2 { background:pink }
+.hl3 { background:orange }
+.hl4 { background:magenta; color:white }
+.hl5 { background:red; color:yellow }
+.q1  { background:#bbb }
+.q2  { background:#000; color:yellow }
+.q3  { background:#000; color:orange }
+.see { font-style:italic; font-weight:normal }
+.new_word { border-bottom-style:dotted; border-color: red }
+.voc_word { padding-right:30px; font-weight:normal }
+
+/* in the source */
+.word    { color:red }
+.person  { }
+.place   { }
+
