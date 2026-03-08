@@ -9,8 +9,8 @@ class YTCollection {
   setTOCNoNumber(yes) { this.tocNoNumber = yes; return this; }
   renderTOC(fxnName, buf) {
     if (!buf) buf = new Buffer();
-    buf.w('<center><hr color="lightgray"><table style="margin-left:20px" border=0>',
-          `<h2>${this.title}</h2>`);
+    buf.w('<center><table style="margin-left:20px" border=0>',
+          `<h2 class="listheader">${this.title}</h2>`);
     var totalD = 0, len = this.lists.length;
     for (var i=0; i<len; ++i) {
       var lst = this.lists[i];
@@ -23,7 +23,7 @@ class YTCollection {
       } else {
         totalD += lst.totalDur;
         var a = lst.name.split('|'), more = '';
-        if (a.length > 1) more = ` <i style="opacity:0.4; font-size:14px">${a[1]}</i>`;
+        if (a.length > 1) more = ` <ytauthor>${a[1]}</ytauthor>`;
         buf.w(`<td><b><a href="javascript:${fxnName}(${i})">${a[0]}</a>${more}</b>`,
               '&nbsp;&nbsp;&nbsp;</td>',
               `<td align="right"><code>${formatTime(lst.totalDur)}</code></td>`,
@@ -32,7 +32,7 @@ class YTCollection {
     }
     buf.w('<tr><td colspan="2">&nbsp;</td>',
           `<td align="right" style="border-top:1px solid black"><code>${formatTime(totalD)}</code></td>`,
-          '<td colspan="2">&nbsp;</td></tr></table><hr color="lightgray"></center>');
+          '<td colspan="2">&nbsp;</td></tr></table></center>');
     return buf;
   }
 

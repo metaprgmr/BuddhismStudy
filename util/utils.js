@@ -401,6 +401,12 @@ function toSet(lst) {
     ret[lst] = true;
   return ret;
 }
+function reverse(s) {
+  if (s == null || s.length <= 1) return s;
+  var ret = '';
+  for (var i=s.length-1; i>=0; --i) ret += s[i];
+  return ret;
+}
 
 function dateShift(adate, num, unit) { // unit: 'y', 'm', 'd', 'w'. Default 'd'.
   var y = adate.getFullYear(), m = adate.getMonth(), d = adate.getDate();

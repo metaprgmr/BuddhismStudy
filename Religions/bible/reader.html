@@ -18,7 +18,6 @@ function readBible(readParams) {
   if (lineCnt != null)
     links.push('<font size="-1">(' + lineCnt  + ' verses)</font>');
   links.push('<font size="-1" title="Book Stats">' + bkObj.bookStatsLinks + '</font>');
-  links.push('<a href="../notes/Bible.notes.html">My Notes</a>');
   links.push('<a href="index.html"><i>Bible</i> Home</a>');
   links.push('<a href="../index.html" target="allbooks">All Books</a>');
   setContent("footer", links.join(NAVDIV));

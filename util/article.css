@@ -45,6 +45,8 @@ ol.cjk   { list-style-type: cjk-ideographic; }
   content: '信裹（鼓瞍、一〇）居士自然版權所有。無限制使用、更改、轉發。若有改動並且公布，請自註明，文責自負。';
 }
 
+ytauthor { opacity:0.4; font-size:12px; font-style:italic }
+
 @media screen {
   .noprint { font-family:細明體; font-size:14px; text-align:center; padding-top:10px }
 }

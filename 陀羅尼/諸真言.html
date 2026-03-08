@@ -9,14 +9,14 @@ function show() {
     var name = arguments[i], txt = arguments[i+1], c0 = txt[0];
     if ((c0 == 'o') || (c0 == 'n'))
       txt = `<pre style="margin-top:4px">${txt}</pre>`;
-    document.write(`<tr><td valign="top" align="right">${name}：</td><td>${txt}</td></tr>`);
+    document.write(`<tr><td valign="top" align="right">${name}：&nbsp;</td><td>${txt}</td></tr>`);
   }
 }
 </script>
 </head>
 <body><center>
 <h2>諸真言</h2>
-<table>
+<table cellpadding=0>
 <script>
 show(
   '文嘉今日歌', '今日復今日，今日何其少。今日又不為，此事何時了？',
@@ -33,8 +33,7 @@ show(
   '滅業障真言',   'oṃ āloliki svāhā',
   '解冤真言',     'oṃ saṃdara ghāta svāhā',
   '普供養真言',   'oṃ gagana saṃbhava vajra hūṃ',
-  '安⼟地真言',   'namaḥ samanta buddhānāṃ.\n' +
-                  'oṃ dhuru dhuru pṛthivīye svāhā',
+  '安⼟地真言',   'namaḥ samanta buddhānāṃ. oṃ dhuru dhuru pṛthivīye svāhā',
   '般若無盡藏真言','namo bhagavate prajñā pāramitāyai.\n' +
                    'tadyathā oṃ hrīh dhīh śrīh śruti smṛti vijaye svāhā',
   '金剛心真言',   'oṃ ūrṇi svāhā',

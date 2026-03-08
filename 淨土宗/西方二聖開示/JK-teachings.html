@@ -25,10 +25,15 @@ verse { color:teal }
 
 <script>
 var lsn, idx = get('i'), isOrig = (idx === 'orig');
-if (idx == 'random') idx = JK.getRandomID();
-if (!isOrig) JK.sort();
-if (idx && !isOrig) { // passage display
-  lsn = JK.getLesson(idx);
+if (idx == 'random')
+  lsn = JK.getRandomLesson();
+else if ('randomall' == (idx || '').toLowerCase())
+  lsn = JK.getRandomLesson(true);
+else if (!isOrig) {
+  JK.sort();
+  if (idx) lsn = JK.getLesson(idx);
+}
+if (lsn) {
   w('<table width="900px">',
     '<tr><td align="center"><h2>', lsn.title, '</h2>');
   lsn.source && w('<p class="subttl">【', lsn.source, ' ', lsn.srcVol || '', '】&nbsp;&nbsp;');
