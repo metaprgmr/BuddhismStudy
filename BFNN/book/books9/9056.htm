@@ -24,10 +24,14 @@ new (class extends SeriesContainer {
         vnum = parseInt(vnum);
         if (vnum)
           this.writeBody(`<center><img src="9056/p${103+vnum}.png"></center>`, true)
-        else {
-          this.volNum = -1;
-          this.writeStart(`民國《楞嚴百偽》案重審之新資料補遺`)
-              .writeBody(`
+        else
+          this.writeHomePage();
+      }
+
+      writeHomePage() {
+        this.volNum = -1;
+        this.writeStart(`民國《楞嚴百偽》案重審之新資料補遺`)
+            .writeBody(`
 /TEXT339C/南开文学院博士研究生 刘军
 
 /BQKaiTi/取自<a href="https://zhuanlan.zhihu.com/p/412160509">網上這裡</a>。
@@ -41,8 +45,8 @@ new (class extends SeriesContainer {
 /TEXTL/分类号：　<c339>B94 [哲学宗教—宗教学] </c339>
 
 /VOLSEP/`, true);
-        }
       }
+
       writeSeriesNavForJS(links) {
         function lnk(vnum, disp) {
           return `<a class="seriesnav" href="?vol=${vnum}">${disp}</a>`;

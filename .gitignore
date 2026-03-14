@@ -11,6 +11,7 @@ repo-else.js
 *.tmp
 *save
 *~
+tmp/*
 alfa*
 beta*
 gamma*

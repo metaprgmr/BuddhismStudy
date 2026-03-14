@@ -86,8 +86,13 @@ teal  { color:teal }
 gray  { color:gray }
 lightgray { color:lightgray }
 lightgreen { color:lightgreen }
-famous { color:#e00 }
+famous  { color:#e00 }
 .famous { color:#e00 }
+key     { color:#060 }
+.key    { color:#060 }
+notable { color:#060 }
+.notable{ color:#060 }
+ord { opacity:0.5 }
 done { color:#339 }
 c339 { color:#339 }
 .c339 { color:#339 }

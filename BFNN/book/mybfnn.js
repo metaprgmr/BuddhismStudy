@@ -166,6 +166,7 @@ class DocInfo {
     if (this.firstVolNum) {
       this.w(SP, '<div class=endBar>');
       if (this.volNum || !this.hasTOCJS) this.writeSeriesNav(links);
+      else if (this.finalLinks) this.w('<center>', this.finalLinks, '</center>');
       this.w('</div>');
     } else if (links) {
       this.w(SP, '<div class=endBar>', links, '</div>');
@@ -665,6 +666,7 @@ class SeriesContainer { // prototype: 9010
       anchor && showTop(anchor);
       clearInterval(this.timer);
     }, this.loadWait);
+    return this;
   }
 }
 

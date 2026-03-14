@@ -31,9 +31,10 @@ const CAT_小乘 = '小乘';
 const CAT_戒律 = '戒律';
 const CAT_經論 = '經論';
 const CAT_外道 = '外道';
+const CAT_中華 = '中華';
 const CAT_ELSE = 'ELSE';
 const CAT_NONE = '　';
-const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_戒律,CAT_經論,CAT_外道,CAT_ELSE,CAT_NONE];
+const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_戒律,CAT_經論,CAT_中華,CAT_外道,CAT_ELSE,CAT_NONE];
 
 const LINE='LINE', TEXT='TEXT', RECT='RECT', CIRCLE='CIRCLE',
       RIGHTEDGE='R_EDGE', INCL='INCL';

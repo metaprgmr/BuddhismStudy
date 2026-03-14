@@ -11,8 +11,16 @@ public class BfnnCommon {
     default void println(String ln) { out.println(ln); }
   }
 
+  public static void fail(String msg) {
+    throw new RuntimeException(msg);
+  }
+
   public static void main(String[] args) throws Exception {
-    concatParaTag(args, null);
+    String s = "如是修[A20]已，[＊]詣彼佛所[1]，(之後略)";
+    out.println(s);
+    s = trimBrackets(s);
+    out.println(s);
+    out.println(parenToTag(s, "<cil>（", "）</cil>"));
   }
 
   public static BufferedReader openFile(String name) throws IOException {
@@ -22,6 +30,11 @@ public class BfnnCommon {
   public static PrintWriter openFileToWrite(String name) throws IOException {
     return new PrintWriter(new BufferedWriter(
       new OutputStreamWriter(new FileOutputStream(name), StandardCharsets.UTF_8)));
+  }
+
+  public static String myClassName() {
+    StackTraceElement[] st = Thread.currentThread().getStackTrace();
+    return st[st.length-1].getClassName();
   }
 
   public static String digitN(int i, int n) {
@@ -239,4 +252,128 @@ public class BfnnCommon {
     }
   }
 
-} // end.
+  private static final String[] ZH_DIGITS = {"〇","一","二","三","四","五","六","七","八","九"};
+  private static final String[] ZH_UNITS = {"","十","百","千"};
+  private static final String[] ZH_LARGE_UNITS = {"","万","亿","兆"};
+
+  public static String zNum(int number) {
+    if (number == 0)
+      return ZH_DIGITS[0]; // "〇"
+
+    StringBuilder sb = new StringBuilder();
+    String s = String.valueOf(number); // Convert the number to a string
+    int len = s.length();
+    int unitIndex = 0;
+
+    for (int i = len - 1; i >= 0; i--) {
+      int digit = Character.getNumericValue(s.charAt(i));
+      String digitChar = ZH_DIGITS[digit];
+      String unitChar = ZH_UNITS[unitIndex % 4];
+
+      if (digit != 0) // Handle the combination of digit and unit
+        sb.insert(0, digitChar + unitChar);
+      else // Handle zeros to avoid "零零"
+        if (i < len - 1 && Character.getNumericValue(s.charAt(i + 1)) != 0 && !sb.toString().startsWith("零"))
+          sb.insert(0, ZH_DIGITS[0]);
+
+      // Add large units (万, 亿, etc.) at appropriate positions
+      if (unitIndex % 4 == 3) // Adjust index for large units
+        sb.insert(0, ZH_LARGE_UNITS[unitIndex / 4]);
+      unitIndex++;
+    }
+
+    // Handle the special case for "十" at the beginning for numbers 10-19
+    s = sb.toString();
+    return s.startsWith("一十") ? s.substring(1) : s;
+  }
+
+  /**
+   * @return { info, name, others }, where name/others can be null.
+   */
+  public static String[] guessSanghaNameInfo(String ln) {
+    String[] ret = { ln, null, null };
+    int idx;
+    if (ln.endsWith(")")) {
+      idx = ln.lastIndexOf('(');
+      ret[2] = ln.substring(idx+1, ln.length()-1).trim().replaceAll("　", "•");
+      ln = ln.substring(0, idx).trim();
+    }
+    String[] keys = { 
+      "上座", "沙門", "梵僧", "天竺僧", "僧統", "大僧正", "大律都", "逸僧",
+      "院", "寺", "蘭若", "道場", "精舍", "庵", "宮", 
+      "峯", "峰", "巖", "嶽", "溪", "山",
+      "縣", "國", "州", "府", "鄉", "京師", "隋", "唐", "宋", "今", "齊",
+      "西域", "京兆", "長水", "洛陽", "洛京", "晉陽", "巴東", "河東", "南瓦窰",
+      "鄴都", "鄴上", "鄴中", "鄴下", "吳興", "嘉禾", "吳郡", "觀音臺"
+    };
+    for (int i=0; i<keys.length; ++i) {
+      String k = keys[i];
+      idx = ln.lastIndexOf(k);
+      if (idx > 0) {
+        idx += k.length();
+        ret[0] = ln.substring(0, idx);
+        ret[1] = ln.substring(idx);
+        idx = ret[1].lastIndexOf('傳');
+        if (idx > 0) ret[1] = ret[1].substring(0, idx);
+        break;
+      }
+    }
+    return ret;
+  }
+
+  /**
+   * For use of naive optimization: betting on
+   *   1. indexOf/lastIndexOf() faster than regexp, and
+   *   2. usually the pattern occurs sparsely.
+   *
+   * @param start retained in result
+   * @param end   retained in result
+   * @return { head, <start>...<end>, tail }
+   */
+  public static String[] toThreeParts(String s, String start, String end) {
+    String orig = s;
+    String[] ret = { "", orig, "" };
+    int idx = s.indexOf(start);
+    if (idx < 0) return ret;
+
+    ret[0] = s.substring(0, idx);
+    s = s.substring(idx);
+    idx = s.lastIndexOf(']');
+    if (idx >= 0) {
+      ret[2] = s.substring(idx+1);
+      ret[1] = s.substring(0, idx+1);
+    } else { // ignore
+      ret[1] = ret[1];
+      ret[0] = ret[2] = "";
+    }
+    return ret;
+  }
+
+  public static String trimBrackets(String s) {
+    String[] a = toThreeParts(s, "[", "]");
+    Pattern pattern = Pattern.compile("\\[(A*\\d+|＊)]");
+    s = pattern.matcher(a[1]).replaceAll("");
+    return a[0] + s + a[2];
+  }
+
+  public static String parenToTag(String s, String openTag, String closeTag) {
+    String[] a = toThreeParts(s, "(", ")");
+    Pattern pattern = Pattern.compile("(\\()|(\\))");
+    s = pattern.matcher(a[1]).replaceAll(match -> {
+          if (match.group(1) != null) return openTag;
+          if (match.group(2) != null) return closeTag;
+          return match.group(); // Should not happen
+        });
+    return a[0] + s + a[2];
+  }
+
+  private static boolean _okToDel(char c) {
+    switch(c) {
+    case '0': case '1': case '2': case '3': case '4':
+    case '5': case '6': case '7': case '8': case '9':
+    case 'A': case 'B': case '＊': return true;
+    }
+    return false;
+  }
+
+} // la Fin.

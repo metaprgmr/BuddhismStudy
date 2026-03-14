@@ -10,6 +10,7 @@ code { color:blue }
 a { text-decoration:none }
 cur { color:red; background-color:yellow; font-weight:bold }
 dim { opacity:0.4 }
+darkgreen { color:darkgreen }
 .sastra { background-color:#FF9 }
 .sutra { background-color:#FDD }
 .orig  { background-color:#DFD }
@@ -20,6 +21,7 @@ FOSSIL  { text-decoration:underline; text-decoration-style:double }
 WORKING { background-color:#ccc }
 FF { font-style:italic; color:red }
 FF::before { content:"Firefox" }
+.myruby { ruby-position:under; text-decoration:underline; text-decoration-color:red }
 </style>
 <script src="../env.js"></script>
 <script src="../util/utils.js"></script>
@@ -33,9 +35,10 @@ https://book.bfnn.org">
 <body style="background-color:#ced"><center>
 <div align=center>
   <table border=0 cellspacing=0 cellpadding=0><tr>
-  <td colspan=2 align=center style="color:darkgreen"><img src="bfnn_title2.gif" width="200px" style="margin-top:0px" usemap="#makarte" align=left nowrap>
-「般若文海」有大量可下載之佛經和文章資料，功德無量！感恩至深！<br>
-所收者已改為utf8編碼，常有合成字、錯字、句讀等補正。另時有新加。</td></tr>
+  <td colspan=2 align=center><img src="bfnn_title2.gif" width="200px" style="margin-top:0px" usemap="#makarte" align=left nowrap>
+<darkgreen>「般若文海」有大量可下載之佛經和文章資料，功德無量！感恩至深！<br>
+所收者已改為utf8編碼，常有合成字、錯字、句讀等補正。另時有新加。</darkgreen><br>
+<span style="opacity:0.5">（或問：網上資訊無量，何煩再造？<a href="javascript:showPorque()" style="background-color:lightgreen">見答於此</a>。）</span></td></tr>
 <tr><td width="200px" align=center valign=right style="font-size:28px"><a href="javascript:showList('全部內容')">選讀</a></td>
   <td id="nav" align=center nowrap></td>
   </tr></table>
@@ -45,7 +48,7 @@ https://book.bfnn.org">
 </center></body></html>
 
 <script>
-const topics = '所集佛經　金剛心經　楞嚴圓覺　大乘唯識　淨土法門　善書　外加內容|' +
+const topics = '所集佛經　金剛心經　楞嚴圓覺　大乘唯識　淨土法門　善書　增加內容|' +
                '佛學基礎　地藏諸經　法華華嚴　戒律修行　人物人生　真偽　文字處理';
 const compositeTopics = {
   金剛心經: [ '心經', '金剛經' ],
@@ -65,7 +68,7 @@ function showNav(topic) {
     for (var j in b) {
       var tpc = b[j], filler = tpc.endsWith('〇') ? '　' : '';
       tpc = tpc.replace('〇','');
-      var pad = (tpc == '外加內容') || (tpc == '文字處理') ? '•' : '';
+      var pad = (tpc == '增加內容') || (tpc == '文字處理') ? '•' : '';
       if (tpc == topic) b[j] = `${pad}<cur>${tpc}</cur>${filler}${pad}`;
       else b[j] = `${pad}<a href="javascript:showList('${tpc}')">${tpc}</a>${filler}${pad}`;
     }
@@ -146,7 +149,7 @@ function showList(topic) {
   case '全部內容': showAllArticles();    return;
   case '文字處理': showTextProcessing(); return;
   }
-  var isAdded = (topic == '外加內容'), topics = compositeTopics[topic],
+  var isAdded = (topic == '增加內容'), topics = compositeTopics[topic],
       lsts = [], lstMap;
   if (!topics) {
     lsts[0] = [];
@@ -209,7 +212,7 @@ function showAllArticles() {
 function showTextProcessing() {
   var textproc =
 `<a name="toutf"></a>
-<h4 style="font-size:25px; margin-top:-10px; margin-bottom:0px">文字處理操作</h4>
+<h4 style="font-size:25px; margin-top:0px; margin-bottom:0px">文字處理操作</h4>
 <table border=1 bordercolor=red cellpadding="10px" bgcolor="white" style="margin-top:10px">
 <tr><td>
 <h4 style="color:blue; margin-bottom:-10px">最近的流程</h4>
@@ -266,9 +269,30 @@ if it is first cleansed via <code>BfnnCommon</code>, can use the <code>Cat</code
     book/books9/    <font class=extra>9xxx</font>.htm （不屬於「般若文海」的其他文章）
 </pre>
 
-</td></tr></table><p>&nbsp;</p><hr width="1200px" color=gray>`;
+</td></tr></table><p>&nbsp;</p><hr width="1000px" color=gray>`;
 
   renderText('stg', textproc);
+}
+
+function showPorque() {
+  function R(txt,rub) { return `<ruby class="myruby">${txt}<rt>${rub}</rt></ruby>`; }
+  showNav();
+  renderText('stg',
+`<h4 style="font-size:25px; margin-bottom:5px">何以另集文本？</h4>
+<table border=1 bordercolor=red cellpadding="10px" bgcolor="white" width="800px"><tr><td>
+<p>　　或問：「如今網上資訊無量，何煩再造？豈無囤積狂之嫌耶？」</p>
+<p>　　誠難排除囤積狂之嫌。然更有實由。當先明，在下乃是讀者，非惟匠人，故於內容之正確、美觀，頗為潔癖，（如<a href="../陀羅尼/楞嚴咒/Shurangama-mantra-信裹.html">楞嚴咒之處理</a>所示現。）所選錄之內容或已讀、或在讀、或將讀，幾無例外。於是衍生如下諸事：</p>
+<ol class=cjk>
+<li>公開內容多有瑕疵，或有意或無意。無意者，OCR出錯極為自然、又無人工勘誤，在在皆是，譬如「已/巳」「曰/日」「入/人」「士/土」等。又，古文無標點，有加句讀者並未理解，不乏謬誤或略欠貼切；甚或後加標點不甚合我意（如「、/，」之用）而欲改之，並無因果。所有內容歡迎下載；如此，無論外部世界天翻地覆若何，閣下終究還有一份私人拷貝，以資參比。</li>
+<li>諸多文本之輸入略有年代，其時生僻字等常無字符對應，權以複合表達式替代。現代漢字字符集持續改善，譬如Hanozono、Jimgo、乃至未來更新者，故清除難字複合表達式甚為迫切。</li>
+<li>既然古文無有標點，重新斷句則不非法。佛經常有大段排比或類似文句，重新編排，賞心悅目。</li>
+<li>古代文字終究人為，謬誤難免。雖高僧大德告誡勿得修改原文，經文時有明顯文字之謬無疑。<a href="https://cbeta.org/" title="Comprehensive Buddhist Electronic Text Archive Foundation" style="font-style:italic" target="extra">CBETA</a>作了相當多的勘誤，以紅字標示改動，十分妥貼。在此常接受其為正確版，不再
+贅示其改。</li>
+<li>尤為要者，文歸本地，即可任加注解、詮釋、筆記、難字${R('注音','zhùyīn')}，乃至重新排版（如目錄部分，鮮持原型）。原文註釋多以&lt;ail&gt;字體<ail>annotation-in-line</ail>標記；個人標註則用&lt;cil&gt;字體<cil>（comment-in-line）</cil>。<br>對於古大德的註解等，更加上了<verse>引用經文</verse>、<kepan>科判</kepan>、註解等不同文字風格，特別醒目。</li>
+<li>又，資料性內容可抽象為數據（如<a href="book/books/0592S.htm">佛學辭彙</a>、史實<a href="book/books9/9070.htm">傳記</a>等），便於構建專用閱讀、檢索工具。</li>
+<li>文本處理看似幸苦，不同人等感受各異。縱然巨論大作，或許久不閱讀，於過程中，因頻繁整理、乃至重新編排，得以了解大概，至少主要內容框架、體量，隨機規劃學習。雖未得其味，多少嗅其香。又類手撫經書、貝葉，雖未獲其實，不諦結善緣，其樂也乎！更遑論統一規範，便於瀏覽、檢索。</li>
+</ol>
+</td></tr></table><p>&nbsp;</p><hr width="1000px" color=gray>`);
 }
 
 showList();
