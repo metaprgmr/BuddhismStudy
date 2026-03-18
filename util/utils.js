@@ -187,7 +187,7 @@ var urlMyName = get('myname');
 function setLang(l)         { var cur = localStorage.getItem('lang'); localStorage.setItem('lang',l); return cur!=l; }
 function getLang()          { return localStorage.getItem('lang'); }
 function addjs(uri)         { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
-function addStyleTag(s)     { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); }
+function addStyleTag(s)     { if (s) { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); } }
 function toEl(x)  { return (typeof x=='string')?document.getElementById(x):x; }
 function e(id)    { return document.getElementById(id) }
 function showEl() { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
@@ -1096,3 +1096,5 @@ class ResourceRepo {
     return ret;
   }
 }
+
+addStyleTag(getGlobal('xgStyles') || getGlobal('xgStyle'));

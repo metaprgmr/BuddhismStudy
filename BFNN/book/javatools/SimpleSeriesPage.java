@@ -3,6 +3,9 @@ import java.io.PrintWriter;
 import static java.lang.System.out;
 import static java.lang.System.err;
 
+/**
+ * Has become a misnomer. It also does simple processing other than series pages.
+ */
 public class SimpleSeriesPage extends BfnnCommon {
 
   public static boolean needVolTitle = false;
@@ -11,38 +14,59 @@ public class SimpleSeriesPage extends BfnnCommon {
   public static String  parenProc = null;
   public static String  varName;
 
-  public static void main(String[] args) throws Exception {
+  public static void leave(String args) {
+    final String msg =
+      "FAILED TO RUN: java " + myClassName() + " " + args + '\n' +
+      "Usage: java " + myClassName() + '\n' +
+      "            -DneedVolTitle=[t/f]    -- default: false\n" +
+      "            -DpageNumLen=[int]      -- default: 2\n" +
+      "            -DjsFilePrefix=[string] -- default: empty\n" +
+      "            -Dparen = [ail|cil|dil|AIL|CIL|DIL|<any>]\n" +
+      "            -DvarName (string)      -- if none, simply write as-is\n" +
+      "            infile [volNum|outfile] -- varName is set, is volNum and required;\n" +
+      "                                    -- otherwise, is outfile and optional.\n";
+    err.println(msg);
+    System.exit(0);
+  }
+
+  public static void readProperties() {
     String x;
     x = System.getProperty("varName");      if (x!=null) varName = x;
     x = System.getProperty("jsFilePrefix"); if (x!=null) jsFilePrefix = x;
     x = System.getProperty("pageNumLen");   if (x!=null) pageNumLen = Integer.parseInt(x);
     x = System.getProperty("needVolTitle"); if (x!=null) needVolTitle = x.toLowerCase().startsWith("t");
     x = System.getProperty("paren");        if (x!=null) parenProc = x;
-    if (args.length < 2 || varName == null) {
-      final String msg =
-        "FAILED TO RUN: java " + myClassName() + " " + String.join(" ", args) + '\n' +
-        "Usage: java " + myClassName() + '\n' +
-        "            -DneedVolTitle=[t/f]    -- default: false\n" +
-        "            -DpageNumLen=[int]      -- default: 2\n" +
-        "            -DjsFilePrefix=[string] -- default: empty\n" +
-        "            -Dparen = [ail|cil|dil|AIL|CIL|DIL|<any>]\n" +
-        "            -DvarName (string)      -- required!\n" +
-        "            infile volNum\n";
-      err.println(msg);
-      System.exit(0);
+  }
+
+  public static PrintWriter getOutput(String fname) throws Exception {
+    return (fname != null) ? openFileToWrite(fname) : new PrintWriter(System.out, true);
+  }
+
+  public static void main(String[] args) throws Exception {
+    readProperties();
+    if (args.length < 1 || (varName != null && args.length < 2))
+      leave(String.join(" ", args));
+
+    int volNum = -1;
+    String fname = null;
+    if (varName == null) {
+      if (args.length > 1)
+        fname = args[1];
+    } else {
+      volNum = Integer.parseInt(args[1]);
+      fname = String.valueOf(volNum);
+      while (fname.length() < pageNumLen) fname = "0" + fname;
+      fname = jsFilePrefix + fname + ".js";
     }
 
-    int volNum = Integer.parseInt(args[1]);
-    String fname = String.valueOf(volNum);
-    while (fname.length() < pageNumLen) fname = "0" + fname;
-    fname = jsFilePrefix + fname + ".js";
-
     try (BufferedReader br = openFile(args[0])) {
-      try (PrintWriter pw = openFileToWrite(fname)) {
-        pw.println(varName + ".volNum = " + volNum + ';');
-        if (needVolTitle)
-          pw.println(varName + ".volTitle = '';");
-        pw.println(varName + ".text = `");
+      try (PrintWriter pw = getOutput(fname)) {
+        if (volNum >= 0) {
+          pw.println(varName + ".volNum = " + volNum + ';');
+          if (needVolTitle)
+            pw.println(varName + ".volTitle = '';");
+          pw.println(varName + ".text = `");
+        }
         // Write the content from input
         String ln;
         while ((ln = br.readLine()) != null) {
@@ -60,9 +84,11 @@ public class SimpleSeriesPage extends BfnnCommon {
             default:    pw.println(parenToTag(ln, "<"+parenProc+">", "</"+parenProc+">")); break;
             }
         }
-        pw.println("`;");
+        if (volNum >= 0)
+          pw.println("`;");
         pw.flush();
-        err.println("Written to " + fname);
+        if (fname != null)
+          err.println("Written to " + fname);
       }
     }
   }

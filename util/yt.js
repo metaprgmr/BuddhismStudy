@@ -23,7 +23,8 @@ class YTCollection {
       } else {
         totalD += lst.totalDur;
         var a = lst.name.split('|'), more = '';
-        if (a.length > 1) more = ` <ytauthor>${a[1]}</ytauthor>`;
+        if (a.length > 1) { more = a[1]; if (more == '@善知識') more = '@amtb'; }
+        more = ` <ytauthor>${more}</ytauthor>`;
         buf.w(`<td><b><a href="javascript:${fxnName}(${i})">${a[0]}</a>${more}</b>`,
               '&nbsp;&nbsp;&nbsp;</td>',
               `<td align="right"><code>${formatTime(lst.totalDur)}</code></td>`,
@@ -56,10 +57,22 @@ class YTCollection {
 class YTVideo {
   constructor(id, title, time, extra) {
     this.id    = id;
-    this.title = title;
     this.time  = time;
     this.timeSecs = HHMMSS2Secs(time);
     extra && (this.extra = extra);
+
+    this.title = title;
+    this.titleLen = title.length;
+    var idx = title.indexOf('★'); // summary at the end?
+    if (idx > 0) this.titleLen = idx+1;
+  }
+  getTitleDisp() {
+    var idx = this.title.indexOf('★'); // summary at the end?
+    if (idx <= 0) return this.title;
+    this.titleLen = idx+1;
+    var x = this.title.substring(idx+1).trim();
+    x = x ? ` title="${x}" style="color:blue"` : ` title="精要總結"`;
+    return this.title.substring(0,idx) + ` <span ${x}>★</span>`;
   }
 }
 
@@ -86,6 +99,7 @@ class YTList {
         if (idx > 0) { extra = `= ${r.name}&nbsp;[${idx}]`; break; }
       }
     }
+
     this.videos.push(new YTVideo(id, title, time, extra));
     this.totalDur += this.lastVideo().timeSecs;
     return this;
@@ -93,24 +107,28 @@ class YTList {
   render(buf) {
     buf.w('<h3 style="margin-bottom:5px">')
     var a = this.name.split('|'), more = '';
-    var name = a[0];
+    var name = a[0], knownDur = 0;
     if (a.length > 1) more = ` <i style="opacity:0.4">${a[1]}</i>`;
     buf.wIfElse(this.id, // if null, just a collection of videos
                 `<a href="${ytListURL(this.id)}" target="extnl">${name}</a>${more}【${this.videos.length}個節目】`,
                 `${name}${more}【${this.videos.length}個節目】`)
        .w('</h3><table bgcolor="white" style="margin-left:20px">');
     for (var i=0; i<this.videos.length; ++i) {
-      var v = this.videos[i], viewed = YTViewing[v.id];
+      var v = this.videos[i], viewed = YTViewing[v.id] || '';
+      if (viewed) knownDur += v.timeSecs;
+      var ttl = v.getTitleDisp(), idx = (v.titleLen <= 55) ? -1 : ttl.indexOf('|');
+      if (idx > 0) ttl = ttl.substring(0,idx) + '<br>' + ttl.substring(idx);
       buf.w(`<tr><td valign=top align=right>${i+1}.&nbsp;</td>`,
-            `<td valign=top nowrap style="padding-top:5px"${viewed?' class=viewed':''}>`,
+            `<td valign=top nowrap valign=center style="font-size:8px; padding-top:5px"${viewed?' class=viewed':''} title="${viewed}">`,
             `<code><a href="${ytVideoURL(v.id)}" target="extnl">${v.id}</a></code></td>`,
             `<td valign=top align=right>&nbsp;<code>${v.time}</code></td>`,
-            `<td style="padding-left:10px" nowrap>${v.title}`)
+            `<td style="padding-left:10px" nowrap>${ttl}`)
          .wIf(v.extra, `<br><span style="opacity:0.5">${v.extra}</span>`)
          .w('</td></tr>');
     }
+    knownDur = !knownDur ? '' : `&nbsp;(<font class=viewed>${formatTime(knownDur)}）`;
     buf.w('<tr><td></td><td colspan=2 align=right style="border-top:1px solid gray">總時長：&nbsp;<code>',
-          formatTime(this.totalDur), '</code></td></tr></table>');
+          formatTime(this.totalDur), '</code></td><td style="border-top:1px solid gray">', knownDur, '</td></tr></table>');
     return buf;
   }
 }

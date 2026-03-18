@@ -33,7 +33,7 @@
 
 <p>　　雖然，畢竟還有些福報；蓋佛法尚未滅盡，亦有大善知識住世，拯救群迷。導師者，若德行、學識、功力有瑕，不敢盲從。淨空法師是大威德，我常以之為標竿，審判他人。有大學者名淨界法師，專修淨土，精研《楞嚴》《法華》《唯識》，深契我欲。然「淨界」「淨空」雖謬僅一字，卻不多見關聯。故首務乃是論證；別無人緣，唯依公開資訊。法師宅心仁厚、平易近人之態，又無斂財、雙修、一貫道之聞，不攻擊人，專心修道度衆，德行上未見其病。佛學知識，恰我所仰，不在話下。教學風格，不高踞下凌、而如朋似友、推心置腹、循循善誘、切中要害；無我境界，悲智雙馨。若非故聖，祝願法師百忙中不耽修行、度人度己、早成佛道、普渡衆生。</p>
 
-<p>　　肉眼檢擇通過。遂放下心來，刻意收集法師的教學資料。主要來源有YouTube「<u>淨土教觀學苑</u><a href="https://www.youtube.com/@淨土教觀學苑">⇗</a>」。「<u>善知識</u><a href="https://www.youtube.com/@amtb-io/playlists">⇗</a>」也羅列許多，有的比前者更完整或精細。感恩諸善知識！</p>
+<p>　　肉眼檢擇通過。遂放下心來，刻意收集法師的教學資料。主要來源有YouTube「<u>淨土教觀學苑</u><a href="https://www.youtube.com/@淨土教觀學苑">⇗</a>」。「<u>善知識</u><a href="https://www.youtube.com/@amtb-io/playlists">⇗</a>」也羅列許多，有的比前者更完整或精細。感恩諸善知識<a href="javascript:clearListShow()">！</a></p>
 
 </td><td width="20px"></td><td valign=top bgcolor="#eee" style="padding-right:10px">
 <div id="stg"></div>
@@ -48,15 +48,22 @@
 </center></body></html>
 
 <script>
-var ytcoll = new YTCollection('淨界法師教學資料')
-    .add(list0a, list1, list7, list3, list3a, list2, list4, list4a, list5, list6, list6a, list8, list9a, list9, list9b);
-ytcoll.renderTOC('showMyList').render('stg');
-
+function clearListShow() {
+  localStorage.removeItem('curJJList');
+  renderText('perlist', '');
+}
 function showMyList(i) {
+  localStorage.setItem('curJJList', i);
   var buf = new Buffer('<center>');
   ytcoll.renderList(i, buf)
         .w('<hr color=lightgray></center>')
         .render('perlist');
 }
 
+var ytcoll = new YTCollection('淨界法師教學資料')
+    .add(list6, list3, list3a, list1, list7, list9a, list9, list9b, list0a, list6a, list2, list4, list4a, list5, list8)
+ytcoll.renderTOC('showMyList').render('stg');
+
+var cur = localStorage.getItem('curJJList');
+if (cur != null) showMyList(cur);
 </script>

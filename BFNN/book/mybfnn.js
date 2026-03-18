@@ -172,13 +172,10 @@ class DocInfo {
       this.w(SP, '<div class=endBar>', links, '</div>');
     }
     this.w('</div>'); // ...content ends
-    if (this.isXG)
-      this.w(this.endCenter
-        ? '</td></tr><tr><td><div class=endImageXG></div></td></tr></table>'
-        : '<div class=endImageXG></div>');
-    else
-      this.w('<div class=endImage title="本頁經信裹居士重新編碼、清理、補正"></div>');
-    this.w('</body></html>');
+    var tag = this.isXG ? '<div class=endImageXG>' : '<div class=endImage title="本頁經信裹居士重新編碼、清理、補正">';
+    tag += '【<a href="../../index.html">經論選讀</a>】 【<a href="../../../index.html">返回主頁</a>】</div>';
+    this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
+           '</body></html>');
     return this;
   }
   setVolumesInJS(hasTOC, tocSepLine) {
@@ -668,6 +665,14 @@ class SeriesContainer { // prototype: 9010
     }, this.loadWait);
     return this;
   }
+}
+
+class SectionHeader {
+  constructor(idSize) {
+    this.size = idSize || 2;
+    this.num = 0;
+  }
+  next() { return `/SECTION:a${toW(++this.num, this.size, '0')}/`; }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

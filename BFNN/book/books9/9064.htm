@@ -11,27 +11,27 @@
 </body></html>
 
 <script>
-var JTSXL = new (class extends SeriesContainer {
+var SYFTJ = new (class extends SeriesContainer {
   constructor() { super(); }
 
-  loadJS(vol) { addjs(`9075/${to2d(vol||0)}.js`); }
+  loadJS(vol) { addjs(`9064/${to2d(vol||0)}.js`); }
 
   showPage() {
     var buf = new Buffer(), me = this;
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9075, 9);
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9064, 4);
         this.volNum = me.volNum;
-        var ttl = '淨土聖賢錄', author = '淨業學人彭際清撰';
+        var ttl = '思益梵天所問經', xlator = '姚秦龜茲國三藏鳩摩羅什譯';
         if (!me.volNum) {
           this.writeStart(ttl)
-              .writeBody(`\n/TEXT030C/${author}\n${me.text}\n/VOLSEP/`, true);
+              .writeBody(`\n/TEXT030C/${xlator}\n${me.text}\n/VOLSEP/`, true);
         } else {
           var zvol = zNumber(me.volNum), juan = ttl + zvol;
           this.writeStart(`${ttl}|（卷${zvol}）`)
-              .writeBody(`\n/TEXT030C/${author}\n` +
-                         `/SECTION/${juan}\n${me.text}\n/TEXT339R/${juan}\n/VOLSEP/`, true);
+              .writeBody(`\n/TEXT030C/${xlator}\n` +
+                         `${me.text}\n\n/TEXT339R/${juan}\n/VOLSEP/`, true);
         }
       }
     })(); // class extends DocInfo
