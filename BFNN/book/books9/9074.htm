@@ -1,0 +1,159 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link href="../books/book.css" rel="stylesheet" type="text/css">
+<style>
+th { color:red; font-size:18px; font-weight:bold; border-bottom:1px solid green }
+h2 { margin-top:5px; margin-bottom:0px }
+</style>
+<script> var noInitRepoDiagrams = true; </script>
+<script src="../../../util/utils.js"></script>
+<script src="../../../util/gridperfect.js"></script>
+<script src="../../../util/repo-diagrams.js"></script>
+<script src="../mybfnn.js"></script>
+<script src="9070/base.js"></script>
+<script src="9070/A.js"></script>
+<script src="9070/B.js"></script>
+<script src="9070/C.js"></script>
+<script src="9070/D.js"></script>
+</head>
+
+<script>
+var A = get高僧傳().setBase('9070.htm'),
+    B = get唐高僧傳().setBase('9071.htm'),
+    C = get宋高僧傳().setBase('9072.htm'),
+    D = get明高僧傳().setBase('9073.htm');
+
+(() => {
+  // prepare 禪宗宗門傳承:
+  var lmap = {};
+  function lm(name, bk, vol, id) { lmap[name] = bk.personLink(vol,id); }
+  lm('達摩', A,  2, '_3' );
+  lm('慧可', B, 16, '_6' );
+  lm('僧璨', B,  9, '_14');
+  lm('道信', B, 20, '_33');
+  lm('慧海', B, 11, '_3' );
+  lm('弘忍', C,  8, '_1' );
+  lm('惠能', C,  8, '_2' );
+  lm('神會', C,  8, '_5' );
+  lm('惟忠', C,  9, '_8' );
+  lm('宗密', C,  6, '_11');
+  lm('法如', C, 29, '_21');
+  lm('行思', C,  9, '_1' );
+  lm('曇晟', C, 11, '_11');
+  lm('崇信', C, 10, '_10');
+  lm('懷讓', C,  9, '_3' );
+  lm('道一', C, 10, '_1' );
+  lm('希遷', C,  9, '_9' );
+  lm('道悟', C, 10, '_10');
+  lm('懷海', C, 10, '_13');
+  lm('義玄', C, 12, '_6' );
+  lm('希運', C, 20, '_22');
+  lm('靈祐', C, 11, '_20');
+  lm('慧寂', C, 12, '_17');
+  lm('良价', C, 12, '_8' );
+  lm('義存', C, 12, '_14');
+  lm('師備', C, 13, '_5' );
+  lm('桂琛', C, 13, '_9' );
+  lm('文益', C, 13, '_14');
+  lm('普願', C, 11, '_10');
+  lm('本寂', C, 13, '_8' );
+  lm('曇晟', C, 11, '_11');
+  lm('從諗', C, 11, '_13');
+  gp禪宗傳承('禪宗宗門傳承', lmap);
+
+  lmap = {};
+  function jt(n,vol,id) { lmap[n+'大師'] = !id ? vol : `9075.htm?vol=${vol}&pin=${id}`; }
+  lm('慧遠', A,  6, '_1' ); jt('慧遠', 2, '3慧遠');
+  lm('曇鸞', B,  6, '_3' ); jt('曇鸞', 2, '3曇鸞');
+  lm('道綽', B, 20, '_9' ); jt('道綽', 2, '3道綽');
+  lm('善導', B, 27, '_10'); jt('善導', 3, '3善道');
+                            jt('承遠', 3, '3承遠');
+  lm('法照', C, 21, '_4' ); jt('法照', 3, '3法照');
+  lm('少康', C, 25, '_3' ); jt('少康', 3, '3少康');
+  lm('延壽', C, 28, '_12'); jt('延壽', 3, '3延壽');
+                            jt('省常', 3, '3省常');
+                            jt('蕅益', "../books2/1127.htm");
+                            jt('印光', "../books/0835.htm");
+                            jt('淨空', "9076.htm");
+  gp淨宗祖師('淨土宗祖師', lmap);
+
+  lmap = {};
+  lm('慧文', A, 11,'b_10');
+  lm('慧思', B, 17, '_2' );
+  lm('智者', B, 17, '_3' );
+  lm('章安', B,  5, '_9' );
+  lm('智威', C,  8, '_11');
+  lm('慧威', C,  6, '_5' );
+  lm('玄朗', C, 26, '_7' );
+  lm('湛然', C,  6, '_6' );
+  lm('義寂', C,  7, '_23');
+  gp天台宗祖師(null, lmap);
+
+  lmap = {};
+  lm('杜順', B, 25, '_29');
+  lm('智儼', B, 25, '_29');
+  lm('法藏', C,  5, '_1' );
+  lm('澄觀', C,  5, '_12');
+  lm('宗密', C,  6, '_11');
+  gp華嚴宗祖師(null, lmap);
+
+  lmap = {};
+  lm('玄奘', B,  4, '_1' );
+  lm('窺基', C,  4, '_1' );
+  lm('慧沼', C,  4, '_10');
+  lm('智周', B, 19, '_4' );
+  gp法相宗祖師(null, lmap);
+})();
+
+docInfo.setXG().writeDoc('四朝高僧傳總表||暨漢傳佛教諸宗祖師', '四朝高僧傳總表', `
+/TEXT030C/信裹居士匯集
+
+/C/<a#a_5>漢傳佛教諸宗祖師　<a#a_1>梁高僧傳</a>　<a#a_2>唐高僧傳</a>　<a#a_3>宋高僧傳</a>　<a#a_4>明高僧傳</a>
+/VOLSEP/
+<center>
+<h2 id="a_5">漢傳佛教諸宗祖師</h2>
+/class TEXTL/
+<table border="0" cellpadding=0 cellspacing="5px">
+<tr>
+<th bgcolor="#dfd">法相宗</th>
+<th bgcolor="#dfd">華嚴宗</th>
+<th bgcolor="#dfd">禪宗</th>
+<th bgcolor="#dfd">天台宗</th>
+<th bgcolor="#dfd">淨土宗</th>
+</tr>
+<tr>
+<td valign=top>
+<html:diagram>法相宗祖師</html:diagram>
+</td>
+<td valign=top>
+<html:diagram>華嚴宗祖師</html:diagram>
+</td>
+<td valign=top>
+<html:diagram>禪宗宗門傳承</html:diagram>
+</td>
+<td valign=top>
+<html:diagram>天台宗祖師</html:diagram>
+</td>
+<td valign=top>
+<html:diagram>淨土宗祖師</html:diagram>
+</td>
+</tr>
+</table>
+/VOLSEP/
+<table border=0>
+<tr><td colspan=5 id="a_1" align=center><h2>梁高僧傳</h2></td></tr>
+${A.toTRs()}
+<tr><td colspan=5 id="a_2" align=center><h2>唐高僧傳</h2></td></tr>
+${B.toTRs()}
+<tr><td colspan=5 id="a_3" align=center><h2>宋高僧傳</h2></td></tr>
+${C.toTRs()}
+<tr><td colspan=5 id="a_4" align=center><h2>明高僧傳</h2></td></tr>
+${D.toTRs()}
+</table>
+/_class/
+</center>
+/VOLSEP/`);
+
+showTop(get('pin'));
+</script>

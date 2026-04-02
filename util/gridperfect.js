@@ -15,6 +15,7 @@ const BOLD   = '.b { stroke:brown }' +
                '.inv { opacity:0 }' +
                '.mantra{ stroke:teal }' +
                '.c339  { stroke:#333399 }' +
+               '.href  { cursor:pointer; text-decoration:underline; stroke:blue; }' +
                '.see   { cursor:pointer; text-decoration:underline }' +
                '.see-b { cursor:pointer; text-decoration:underline; stroke:brown }' +
                '.see-b1{ cursor:pointer; text-decoration:underline; stroke:green }' +
@@ -45,6 +46,121 @@ const SPLIT = '〰';
 // They can also be declared in the diagram itself;
 //   currently it works for lines but not text, as the
 //   marks will collide with text.
+
+class GPInstBase {
+  constructor(type, gp, extra) { this.act = type; this.gridPerf = gp; this.extra = extra; }
+}
+
+class GPRightEdgeInst extends GPInstBase {
+  constructor(gp, color) { super(RIGHTEDGE, gp); this.color = color; }
+}
+
+class GPIncludeInst extends GPInstBase {
+  constructor(gp, diagram, x, y, ignoreStyle) {
+    super(INCL, gp);
+    this.diagram = diagram;
+    this.x = x;
+    this.y = y;
+    this.ignoreStyle = ignoreStyle;
+  }
+}
+
+class GPLineInst extends GPInstBase {
+  constructor(gp, from, to, extra) {
+    super(LINE, gp, extra);
+    this.from = from;
+    this.to = to;
+  }
+}
+
+class GPRectInst extends GPInstBase {
+  constructor(gp, x, y, width, height, extra) {
+    super(RECT, gp, extra);
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+
+class GPCircleInst extends GPInstBase {
+  constructor(gp, x, y, r, extra) {
+    super(CIRCLE, gp, extra);
+    this.x = x;
+    this.y = y;
+    this.r = r;
+  }
+}
+
+class GPTextInst extends GPInstBase {
+  constructor(gp, x, y, txt, extra) {
+    super(TEXT, gp, extra);
+    this.x = x;
+    this.y = y;
+    if (txt) this.setText(txt,extra);
+    if (!this.text) this.text = '';
+  }
+  append(x) { this.text += x; return this; }
+  finishText() { this.setText(this.text); return this; }
+  wrapTextInClass(cls) {
+    this.text = `<tspan class="${cls}">${this.text}</tspan>`;
+    return this;
+  }
+  setText(txt, extra) {
+    this.text = this._procText(txt);
+    if (extra) this.extra = extra;
+  }
+  _procText(s) { // turn 「/ail|你好/」 into 「<tspan class="ail">你好</tspan>」
+    if ((s.indexOf('</')>=0) || (s.indexOf('/>')>=0))
+      return s; // don't handle those with </tag> and <tag/>; leave as-is
+    var ret='', idx1=0, idx=s.indexOf('/');
+    if (idx < 0) return s;
+    while (true) {
+      idx1 = s.indexOf('/', idx+1);
+      if (idx1 < 0) { ret += s; break; }
+      ret += s.substring(0, idx);
+      var a = s.substring(idx+1,idx1).split('|'),
+          first = a[0], txt = a[1], idx2 = first.indexOf(':'),
+          tscls = first, tsextra = '';
+      if (idx2 > 0) {
+        var type = first.substring(0,idx2).trim();
+        first = first.substring(idx2+1).trim();
+        if (type.startsWith('see')) { // popup
+          if (!gpRepo.canPopup()) {
+            tscls = '';
+            console.log('Cannot popup. ' + first);
+          } else {
+            tsextra = ` onclick="gpRepo.showDialog('${this.gridPerf.name}', '${first || txt}')"`;
+            tscls = type;
+          }
+        } else if (type.startsWith('href')) { // external link
+          // e.g. /href:https://www.yahoo.com/  -- open in this window
+          //      /href@extra:https://www.yahoo.com/ -- open in window "extra"
+          //      /href:=達摩/ -- open in this window, if this.gridPerf.linkMap is set with the entry of 達摩.
+          var lm = this.gridPerf.linkMap,
+              a = type.split('@'),
+              tgt = (a.length > 1) ? a[1] : '_self';
+          if (first[0] == '=')
+            first = lm && lm[first.substring(1)] || null;
+          if (first) {
+            tsextra = ` onclick="window.open('${first}', '${tgt}')"`;
+            tscls = type;
+          }
+        } else {
+          tsextra = ` title="Don't know what to do for [${type}:${first}|${txt}]"`;
+          tscls = type;
+          console.log(msg);
+        }
+      }
+      ret += `<tspan class="${tscls}"${tsextra}>${txt}</tspan>`;
+      s = s.substring(idx1+1);
+      idx = s.indexOf('/');
+      if (idx < 0) { ret += s; break; }
+    }
+    return ret;
+  }
+
+} // end of GPTextInst.
 
 class GridPerfect {
   constructor() {
@@ -81,7 +197,7 @@ class GridPerfect {
       this.SPs = this.SPs.replaceAll(s[i], '');
     return this;
   }
-  isGPSP(x) { // SP = space
+  isGPSP(x) { // GP = GridPerfect, SP = space
     return x && (this.SPs.indexOf(x) >= 0);
   }
   setWidth(w) { this.width = w; return this; }
@@ -99,7 +215,7 @@ class GridPerfect {
   clone() {
     var prgm = []; // deep copy
     for (var i in this.program) {
-      var o = this.program[i], c = Object.assign({}, o);
+      var o = this.program[i], c = shallowClone(o);
       if (c.act == INCL) c.diagram = o.diagram.clone();
       prgm.push(c);
     }
@@ -217,49 +333,48 @@ class GridPerfect {
   }
   getShifting(x, y) { return this.shiftings[`${x}_${y}`]; }
 
+  setLinkMap(lm) { this.linkMap = lm; return this; }
   setStyle(styleBlk) { this.styleBlock = styleBlk; return this; }
   include(diagram, x, y, ignoreStyle) {
-    this.program.push({ act:INCL, diagram, x, y, ignoreStyle });
+    this.addInst(new GPIncludeInst(this, diagram, x, y, ignoreStyle));
     return this;
   }
-  hasRightEdge(color) { this.rightEdge = { act:RIGHTEDGE, color }; return this; }
+  addInst(inst) { this.program.push(inst); return this; }
+  hasRightEdge(color) { this.rightEdge = new GPRightEdgeInst(this, color); return this; }
   line(f,t,e) { return this.L(f,t,e); }
   // [from] can be a string for a defined point, or an [x,y].
   // [to] can be like from, but can also take derivitives:
   // '%r9', '%l9', '%u9', '%d' for going right, left, up and down.
-  L(from, to, extra) { this.program.push({ act:LINE, from, to, extra }); return this; }
+  L(from, to, extra) { this.addInst(new GPLineInst(this, from, to, extra)); return this; }
   textClass(x,y,c) { return this.TC(x,y,c); }
   TC(x, y, cls) {
-    var tspan = `<tspan class="${cls}">`;
     for (var i in this.program) {
       var inst = this.program[i];
       if ((inst.act==TEXT) && (inst.x==x && (inst.y==y)))
-        inst.text = tspan + inst.text + '</tspan>';
+        inst.wrapTextInClass(cls);
     }
     return this;
   }
   circle(x,y,r,extra) { // TODO: impl
-    this.program.push({ act:CIRCLE, x, y, r, extra});
+    this.addInst(new GPCircleInst(this, x, y, r, extra));
     return this;
   }
   rect(x,y,width,height,extra) { // TODO: impl
-    this.program.push({ act:RECT, x, y, width, height, extra});
+    this.addInst(new GPRectInst(this, x, y, width, height, extra));
     return this;
   }
   text(x,y,t,e) { return this.T(x,y,t,e); }
   T(x, y, txt, extra) {
-    txt = this._procText(txt);
     var replaced = false;
     for (var i in this.program) {
       var inst = this.program[i];
       if ((inst.act==TEXT) && (inst.x==x) && (inst.y==y)) {
-        inst.text = txt;
-        inst.extra = extra;
+        inst.setText(txt, extra);
         replaced = true;
       }
     }
     if (!replaced) // not found, set it
-      this.program.push({ act:TEXT, x, y, text:txt, extra });
+      this.addInst(new GPTextInst(this, x, y, txt, extra));
     return this;
   }
   vtext(x,y,t,e) { return this.VT(x,y,t,e); }
@@ -270,13 +385,13 @@ class GridPerfect {
     return this;
   }
   removeText(x, y) {
-    this.program = this.program.filter((a) => (a.act=='TEXT') && (a.x==x) && (a.y==y));
+    this.program = this.program.filter((a) => (a.act==TEXT) && (a.x==x) && (a.y==y));
     return this;
   }
   findText(t) {
     for (var i in this.program) {
       var inst = this.program;
-      if ((inst.act == TEXT) && (inst.text == t))
+      if ((inst.act==TEXT) && (inst.text==t))
         return inst;
     }
     return null;
@@ -319,48 +434,13 @@ class GridPerfect {
     }
     return this;
   }
-  _procText(s) { // turn 「/ail|你好/」 into 「<tspan class="ail">你好</tspan>」
-    if ((s.indexOf('</')>=0) || (s.indexOf('/>')>=0))
-      return s; // don't handle those with </tag> and <tag/>; leave as-is
-    var ret='', idx1=0, idx=s.indexOf('/');
-    if (idx < 0) return s;
-    while (true) {
-      idx1 = s.indexOf('/', idx+1);
-      if (idx1 < 0) { ret += s; break; }
-      ret += s.substring(0, idx);
-      var a = s.substring(idx+1,idx1).split('|'),
-          first = a[0], txt = a[1], idx2 = first.indexOf(':'),
-          tscls = first, tsextra = '';
-      if (idx2 > 0) {
-        var type = first.substring(0,idx2).trim();
-        first = first.substring(idx2+1).trim();
-        if (type.startsWith('see')) { // popup
-          if (!gpRepo.canPopup()) {
-            tscls = '';
-            console.log('Cannot popup. ' + first);
-          } else {
-            tsextra = ` onclick="gpRepo.showDialog('${this.name}', '${first || txt}')"`;
-            tscls = type;
-          }
-        } else {
-          tsextra = ` title="Don't know what to do for [${type}:${first}|${txt}]"`;
-          tscls = type;
-          console.log(msg);
-        }
-      }
-      ret += `<tspan class="${tscls}"${tsextra}>${txt}</tspan>`;
-      s = s.substring(idx1+1);
-      idx = s.indexOf('/');
-      if (idx < 0) { ret += s; break; }
-    }
-    return ret;
-  }
   _initLayout() {
     this.program   = [];
     this.marks     = {}; // name => [x,y]; for runtime
     this.xyToMarks = {}; // x_y => name; for layout design view
     this.shiftings = {}; // x_y => [dx,dy]; only apply to starting points
 
+    // Process declared texts in the layout (versus via T())
     var i, j, curInst;
     for (var i=1; i<=this.height; ++i) {
       var row = this.getLayoutLine(i-1);
@@ -368,22 +448,20 @@ class GridPerfect {
         var c = row[j-1];
         if (this.isGPSP(c)) {
           if (curInst) {
-            curInst.text = this._procText(curInst.text);
+            curInst.finishText();
             curInst = null;
           }
         } else if (this.isMark(c)) {
           this.defMark(c, j, i);
         } else { // not GPSP nor mark
           if (c == SPLIT) c = '　';
-          if (curInst) {
-            curInst.text += c;
-          } else {
-            curInst = { act:TEXT, x:j, y:i, text:c };
-            this.program.push(curInst);
-          }
+          if (!curInst)
+            this.addInst(curInst = new GPTextInst(this, j,i));
+          curInst.append(c);
         }
       }
-      if (curInst && curInst.text) curInst.text = this._procText(curInst.text);
+      if (curInst && curInst.text)
+        curInst.finishText();
       curInst = null;
     }
   }
@@ -393,7 +471,7 @@ class GridPerfect {
   _compile() { // into instructions for SVG generation
     const me = this;
     function compileLine(inst) { // turn textual from/to into xy's
-      var ret = Object.assign({}, inst), xy;
+      var ret = shallowClone(inst), xy;
       if (typeof ret.from == 'string') { // otherwise, should be [x,y]
         xy = me.marks[ret.from];
         if (!xy) throw `From-point not found: ${ret.from}`;
@@ -636,17 +714,12 @@ var gpRepo = new (class extends ResourceRepo {
     }
     var rsc = name && gpRepo.run(name, design);
     if (rsc) {
-      if (elid == 'STRING') {
-        if (typeof rsc == 'string')
-          return rsc;
-        else // buffer
-          return rsc.render();
-      } else {
-        if (typeof rsc == 'string')
-          renderText(elid || this.elidStage || document, rsc);
-        else // buffer
-          rsc.wrap('<center>', '</center>').render(elid || this.elidStage || document);
-      }
+      if (elid == 'STRING')
+        return (typeof rsc == 'string') ? rsc : rsc.render(); // rsc is buffer
+      if (typeof rsc == 'string')
+        renderText(elid || this.elidStage || document, rsc);
+      else // buffer
+        rsc.wrap('<center>', '</center>').render(elid || this.elidStage || document);
       this.showTOC(name, design);
     }
   }
@@ -718,8 +791,9 @@ function addGP(name, gp, category) {
   return gp;
 }
 
-function createGP(name, category, cfg) {
+function createGP(name, category, cfg, extraCfg) {
   var gp = new GridPerfect(cfg || gpRepo.config);
+  extraCfg && Object.assign(gp, extraCfg); // do at your own risk; be conservative!
   addGP(name, gp, category);
   return gp;
 }

@@ -125,7 +125,7 @@ class DojoBuffer extends Buffer {
                .lnk ('《發四宏願》',       'various.js', '_11', '四宏誓願.jpg')
                .lnkS('《迴向偈。普願文》', 'various.js', '_14', '回向偈.png')
                .lnk ('《三自皈依》',       'various.js', '_10', '三寶佛.png')
-               .lnkS('《迴向補闕圓滿真⾔》', null, null, '三寶佛.png');
+               .lnkS('《迴向補闕圓滿真⾔》', '../陀羅尼/諸真言.html', null, '三寶佛.png');
   }
   renderIt(asis) {
     if (!asis && !this.text().endsWith('</ol>')) this.w('</ol>');
@@ -276,8 +276,11 @@ class DojoBuffer extends Buffer {
 
 loadNongLiYear(null, null, true);
 
-var dayInfo = getDayInfo(yyyymmdd(new Date())),
-    is齋日 = dayInfo && dayInfo.is齋日, is齋日1 = dayInfo && dayInfo.is齋日1,
+var d = new Date(),
+    dayInfo  = getDayInfo(yyyymmdd(d)),
+    dayInfo1 = getDayInfo(yyyymmdd(dateShift(d, 1))),
+    is齋日   = dayInfo  && (dayInfo.is齋日 || dayInfo.聖賢日),
+    is齋日1  = dayInfo1 && (dayInfo1.is齋日 || dayInfo1.聖賢日),
     dojo = new DojoBuffer();
 
 dojo.w(

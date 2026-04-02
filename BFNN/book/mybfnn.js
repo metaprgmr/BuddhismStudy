@@ -749,6 +749,14 @@ function write0608(n, body) {
          .writeBody(body, true);
 }
 
+
+// -- 印光大師年譜 沈去疾居士 --
+function write0835(n, subttl, body) {
+  docInfo.reInit(835, 5, n)
+         .writeStart(`印光大師年譜||（${subttl}）`, `印光大師年譜之${zNumber(n)}`)
+         .writeBody('/TEXT030C/沈去疾居士編著\n' + body + '\n\n/VOLSEP/', true);
+}
+
 // -- 佛頂文句 智旭大師 --
 function write0881(n, body) {
   var zn = zNumber(n);
@@ -767,7 +775,7 @@ function write0881(n, body) {
 function write0970(n, subttl, body) {
   docInfo.reInit(970, 13, n)
          .writeStart(`大乘本生心地觀經講記||${subttl}`, `心地觀經講記${subttl}`)
-         .w(SP, '<p class=TEXT030C>太虛大師講述<br>二十一年十二月在閩南佛學院<p>')
+         .w(SP, '/TEXT030C/太虛大師講述<br>二十一年十二月在閩南佛學院')
          .writeBody(body)
          .writeEnd(n==0 ? null : '<a href="0969.htm">懸論</a>');
 }

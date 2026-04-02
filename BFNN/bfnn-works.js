@@ -106,7 +106,11 @@ class BfnnWork {
          .wIf(a.length>0, `<dim>又名</dim>${a.join('<dim>、</dim>')}`)
          .w(`<dim>${n}</dim></td>`);
     }
-    buf.w(`<td nowrap valign=top align=right>${(this.author||this.translator||'').replaceAll('|','，')}</td></tr>`);
+    var workers = (this.author || this.translator || '').replaceAll('|','，');
+    var idx = workers.indexOf('信裹居士');
+    if (idx >= 0)
+      workers = `${workers.substring(0, idx)}<span class="xgauth">${workers.substring(idx,idx+4)}</span>${workers.substring(idx+4)}`;
+    buf.w(`<td nowrap valign=top align=right>${workers}</td></tr>`);
     nxtln && buf.w(`<tr${bgc}><td></td><td colspan=2>${nxtln}</td></tr>`);
   }
 
@@ -695,7 +699,7 @@ parseBfnnWorks(`
 -華嚴經　#832 大方廣佛華嚴經入不思議解脫境界普賢行願品輯要疏|諦閑法師
 -人物　　#833 廣公上人事蹟初編（附神異篇）|承天禪寺編印
 -淨土　　#834 蓮宗正範|陳海量居士編輯
--人物　　#835~9 印光大師年譜|沈去疾居士編
+ 人物　　#835~9 印光大師年譜|沈去疾居士編
 -　　　　#840 勸發菩提心文講義錄要|諦閑法師
 -　　　　#841 菩薩學處|太虛大師
  淨土　　#842 入香光室|了然法師
@@ -717,7 +721,7 @@ parseBfnnWorks(`
 -人生　　#858 放生殺生現報錄|江慎修居士選錄
 -　　　　#859 印光大師法語擷錄|<gdd>印光</gdd>大師著述
 -　　　　#860 佛遺教經解|明古吳<gdd>蕅益釋智旭</gdd>述
--　　　　#861 佛說四十二章經解|明古吳<gdd>蕅益釋智旭</gdd>
+ 　　　　#861 佛說四十二章經解|明古吳<gdd>蕅益釋智旭</gdd>
 -　　　　#862 八大人覺經略解|明<gdd>蕅益釋智旭</gdd>解
 -　　　　#863 放生儀軌
 -　　　　#864 戒殺放生嘉言
@@ -854,7 +858,7 @@ parseBfnnWorks(`
 -　　　　#1121 選佛譜—淨土橫超門|靈峰<gdd>蕅益</gdd>大師著
 -淨土　　#1122 蕅益大師四十八願文|靈峰<gdd>蕅益</gdd>大師著
 -淨土　　#1123~6 蕅益大師淨土選集|靈峰<gdd>蕅益大</gdd>師著
--人物　　#1127 蕅益大師年譜|弘一大師撰
+ 人物　　#1127 蕅益大師年譜|弘一大師撰
 -　　　　#1128 戒殺長壽的真相|了凡弘法學會譯整
 -　　　　#1129 人鑑|李圓淨編著
 -人物　　#1130 旅行者言—印光大師生西紀念|李圓淨編著
@@ -1043,7 +1047,7 @@ parseBfnnWorks(`
  人物　　#1517 圓瑛老法師事略|皈依弟子葉性禮謹識
 -　　　　#1518 百喻故事廣釋|聖法法師著
 -淨土　　#1519 龍舒增廣淨土文|王日休居士譔
--淨土　　#1520 無量壽經起信論|清•彭際清居士述
+-淨土　　#1520 無量壽經起信論|清•<gdd>彭際清</gdd>居士述
 -　　　　#1521 談心|耕雲先生講述
 -　　　　#1522 安祥之光|耕雲先生講述
 -　　　　#1523 「證道歌」淺釋|耕雲先生講述
@@ -1553,11 +1557,14 @@ parseBfnnWorks(`
  　　    #9062=! 佛說觀佛三昧海經|東晉天竺三藏佛陀跋陀羅譯
  　　    #9063=! 佛說箭喻經|譯人名失
  　　    #9064=! 思益梵天所問經|姚秦龜茲國三藏鳩摩羅什譯
+ 　　    #9065=! 摩诃摩耶经 佛昇忉利天為母說法|簫齊沙門釋曇景譯
+ 故事    #9069 東漢佛教始傳入，建洛陽白馬寺|釋永真，彭殿清 撰集
  人物　  #9070~! 高僧傳|南梁會稽嘉祥寺沙門釋慧皎撰       // (共14卷)
  人物　  #9071~! 續高僧傳|大唐西明寺沙門釋道宣撰         // (共30卷)
  人物　  #9072~! 宋高僧傳|北宋天壽寺賜紫沙門贊寧等奉勅撰 // (共30卷)
  人物　  #9073~! 明高僧傳|皇明天台山慈雲禪寺沙門釋如惺撰 // (共8卷)
- 人物　  #9075 淨土聖賢錄|清淨業學人彭際清撰 // (共9卷)
+ 人物　  #9074 四朝高僧傳總表暨漢傳佛教諸宗祖師|信裹居士匯集
+ 人物　  #9075~! 淨土聖賢錄|清淨業學人<gdd>彭際清</gdd>撰 // (共9卷)
 -善書　  #9080 群書治要// (共50卷)
  人物　　#9088 如何才堪稱為淨土宗祖師|大安法師講
  人物　　#9089 馬祖道一禪師語錄|南宋沈孟柈作
@@ -1585,7 +1592,9 @@ class ChoiceItem {
   constructor(readId, topic, name, otherName) {
     this.readId = readId && readId.trim() || '';
     this.topic = topic && topic.trim() || '';
-    this.name = name && name.trim() || '';
+    var a = (name && name.trim() || '').split('%');
+    this.name = a[0];
+    this.suffix = a[1];
     this.otherName = otherName && otherName.trim() || '';
   }
   render(buf, lastTopic) {
@@ -1600,7 +1609,7 @@ class ChoiceItem {
       case '2': uri += '3'; break;
       case '9': uri += '9'; break;
       }
-      buf.w(`<a href="${uri}/${id}.htm" title="${this.otherName}">${this.name}</a>`);
+      buf.w(`<a href="${uri}/${id}.htm" title="${this.otherName}">${this.name}</a>${this.suffix||''}`);
     } else
       buf.w(this.name);
   }
@@ -1672,7 +1681,7 @@ class ChoiceLists {
      |        | 大般若經
 
 #淨土法門
-0360 |淨土    | 無量壽經             | 佛說大乘無量壽莊嚴清淨平等覺經
+0360 |淨土    | 無量壽經%<ail>多版</ail>    | 佛說大乘無量壽莊嚴清淨平等覺經
 0086 |淨土    | 阿彌陀經             | 佛說阿彌陀經
 0031 |淨土    | 觀無量壽佛經         | 佛說觀無量壽佛經
 0008 |華嚴經  | 普賢行願品           | 大方廣佛華嚴經普賢行願品
@@ -1724,6 +1733,7 @@ class ChoiceLists {
      |        | 淨名經
 0084 |        | 遺教經               | 佛垂般涅槃略說教誡經
 9008 |        | 法滅盡經             | 佛說法滅盡經
+9065 |        | 摩訶摩耶經
 0057 |        | 四十二章經           | 佛說四十二章經
 0085 |        | 八大人覺經           | 佛說八大人覺經
 9017 |        | 毗尼經               | 佛說決定毗尼經

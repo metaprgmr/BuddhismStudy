@@ -12,9 +12,9 @@ class PersonDesc {
     this.name = a[0];
     if (a.length > 1) this.others = a[1].split('•');
   }
-  toHtml() {
+  toHtml(base) {
     var others = this.others && `<ail>（${this.others.join('、')}）</ail>` || '';
-    return `<a href="?vol=${this.volNum}&pin=${this.id}" title="${this.where}">${this.name}</a>${others}`;
+    return `<a href="${base||''}?vol=${this.volNum}&pin=${this.id}" title="${this.where}">${this.name}</a>${others}`;
   }
 }
 
@@ -59,14 +59,16 @@ class VolList {
     return ret;
   }
 
+  setBase(base) { this.base = base; return this; }
+
   writeTRs(buf, lastType) {
+    var i, zvol = zNumber(this.volNum), type = this.type, me = this;
     function writeItems(items) {
       buf.w(`<td nowrap valign=top align=right><ail>${items.length}人</ail>&nbsp;</td><td>`);
-      for (var i=0; i<items.length; ++i) buf.w(items[i].toHtml(), '　');
+      for (var i=0; i<items.length; ++i) buf.w(items[i].toHtml(me.base), '　');
       buf.w('</td></tr>');
     }
 
-    var i, zvol = zNumber(this.volNum), type = this.type;
     buf.w(`<tr><td nowrap valign=top><a href="?vol=${this.volNum}">卷${zvol}</a></td>`);
     if (type.startsWith('雜科') && type.length > 2) type = '雜科<br>' + type.substring(2);
     buf.w(`<td nowrap valign=top>${this.type == lastType ? '' : type}</td><td>`);
@@ -87,6 +89,13 @@ class BiographyBook {
     this.volIndex = {};
   }
 
+  setBase(base) {
+    this.base = base;
+    for (var i in this.volumes)
+      this.volumes[i].setBase(base);
+    return this;
+  }
+
   addVol(volList) {
     this.volIndex[volList.volNum] = volList;
     this.volumes.push(volList);
@@ -98,6 +107,12 @@ class BiographyBook {
     for (var i=0; i<this.volumes.length; ++i)
       this.volumes[i].writeTRs(buf, (i==0) ? null : this.volumes[i-1].lastType());
     return buf.render();
+  }
+
+  personLink(vol, pin, name) {
+    if (pin) pin = '&pin=' + pin; else pin = '';
+    return !name ? `${this.base||''}?vol=${vol}${pin}`
+                 : `<a href="${this.base||''}?vol=${vol}${pin}">${name}</a>`;
   }
 
   processPersons(volNum, txt) {

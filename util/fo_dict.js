@@ -91,6 +91,7 @@ addFoTerms('śūnyatā',          '舜若多', INT, '空性');
 addFoTerms('gāthā',            '伽他', '偈佗', '偈陀', '偈', INT, '偈頌');
 addFoTerms('āraṇya',           '阿練若', '阿蘭若', '阿蘭那', INT, '寂靜處', '無諍處', '叢林', '佛寺', '禪寺');
 
+addFoTerms('sukhāmatī',        '須摩提', '須阿提', '須呵摩提', '須呵摩持', INT, '西方極樂世界');
 addFoTerms('kāmadhātu',        INT, '慾界', 'Desire realm');
 addFoTerms('rūpadhātu',        INT, '色界', 'Form realm');
 addFoTerms('ārūpyadhātu',      INT, '無色界', 'Formless realm');
@@ -121,7 +122,7 @@ bodhisatva('gandha-hastin',    '乾陀訶提菩薩');
 bodhisatva('nityodyukta',      '常精進菩薩');
 addFoTerms('vairocana',        '毘盧遮那', INT, '遍一切處');
 addFoTerms('vimalakīrti',      '維摩羅詰', '毗摩羅詰', INT, '淨名', '無垢稱');
-addFoTerms('cakravartin',      '轉輪王');
+addFoTerms('cakravartin',      '斫迦羅伐剌底', '遮迦越羅', '遮迦羅跋帝', INT, '轉輪王', '轉輪聖王');
 addFoTerms('upāsaka',          '優婆塞', '烏婆塞', '伊蒲塞', '優婆婆柯', '鄔波索迦',
                                INT, '居士', '清信士', '近事男', '近善男', '善宿男', '善男', '信男', '信士');
 addFoTerms('upāsikā',          '優婆夷', '優婆私柯', '优婆斯', '优波赐迦', '邬婆斯迦', '邬波斯迦', '优波赐迦',

@@ -1,3 +1,4 @@
+// TODO: make diagram instantiation on-demand, in this repo at least.
 //
 // 圖形名字有影響，比如《佛學常用辭彙》的對應關係等。
 //
@@ -11,7 +12,8 @@
  * 6. Code for a self-contained part is commented with discernable textual hint.
  * 7. Use the gp.include() API to reduce code duplication.
  */
-(() => {
+function initRepoDiagrams() {
+
 const js = 'repo-diagram.js';
 
 createGP('教乘', CAT_基本) // 1067
@@ -1629,4 +1631,139 @@ createGP('四分律', CAT_戒律).setLayout(`
   .L([13,5],"%r3").L([21,5],"%r5")
 .src = js;
 
-})();
+gp禪宗傳承();
+gp淨宗祖師();
+gp天台宗祖師();
+gp華嚴宗祖師();
+gp法相宗祖師();
+}
+
+function masterLink(pref, n, suff, suffKey) { // m: master
+  if (!suff)        suff = '';
+  else if (suffKey) suff = `/href:=${suffKey}|${suff}/`;
+  return `${pref}/href:=${n}|${n}/ ${suff}`;
+}
+function gp禪宗傳承(name, linkMap) {
+  var gp =
+  createGP(name || '禪宗傳承', CAT_大乘, null, linkMap && {"linkMap":linkMap})
+  .setStyle(AIL+BOLD)
+  .setWidth(23)
+  .setTree(`
+/b|【禪宗傳承】/
+〇${masterLink('','達摩','祖師')}→${masterLink('','慧可')}→${masterLink('','僧璨')}→${masterLink('','道信')}→${masterLink('','弘忍')}→/ail| （衣缽相傳）/
+〇〇韶州${masterLink('','惠能')}/ail| (638-713)/
+〇〇〇菏澤${masterLink('','神會')}/ail| (670-762)/
+〇〇〇〇${masterLink('','法如')}/ail| (638-689)/
+〇〇〇〇〇${masterLink('','惟忠')}/ail| (705-782)/
+〇〇〇〇〇〇圭峰${masterLink('','宗密')}/ail| (780-841)/
+〇〇〇南嶽${masterLink('','懷讓')}/ail| (677-744)/
+〇〇〇〇馬祖${masterLink('','道一')}/ail| (709-788)/
+〇〇〇〇〇南泉${masterLink('','普願')}/ail| (748-834)/
+〇〇〇〇〇〇趙州${masterLink('','從諗')}/ail| (778-897)/
+〇〇〇〇〇百丈${masterLink('','懷海')}/ail| (720-814)/
+〇〇〇〇〇〇潙山${masterLink('','靈祐')}/ail| (771-853)/
+〇〇〇〇〇〇〇仰山${masterLink('','慧寂')}/ail| (807-883)/〰/b|潙仰宗/
+〇〇〇〇〇〇黃檗${masterLink('','希運')}/ail| (?-850)/
+〇〇〇〇〇〇〇臨濟${masterLink('','義玄')}/ail| (?-837)/〰/b|臨濟宗/
+〇〇〇〇〇〇〇〇石霜${masterLink('','楚圓')}/ail| (986-1039)/
+〇〇〇〇〇〇〇〇〇黃龍${masterLink('','慧南')}/ail| (1002-1069)/〰/b1|黃龍派/
+〇〇〇〇〇〇〇〇〇楊岐${masterLink('','方會')}/ail| (996-1049)/〰/b1|楊岐派/
+〇〇〇〇〇大珠${masterLink('','慧海')}
+〇〇〇青原${masterLink('','行思')}/ail| (660-740)/
+〇〇〇〇石頭${masterLink('','希遷')}/ail| (700-790)/
+〇〇〇〇〇藥山${masterLink('','惟儼')}/ail| (751-834)/
+〇〇〇〇〇〇雲巖${masterLink('','曇晟')}/ail| (751-834)/
+〇〇〇〇〇〇〇洞山${masterLink('','良价')}/ail| (807-869)/
+〇〇〇〇〇〇〇〇曹山${masterLink('','本寂')}/ail| (840-900)/〰/b|曹洞宗/
+〇〇〇〇〇天皇${masterLink('','道悟')}/ail| (748-807)/
+〇〇〇〇〇〇龍潭${masterLink('','崇信')}
+〇〇〇〇〇〇〇德山${masterLink('','宣鑑')}/ail| (782-865)/
+〇〇〇〇〇〇〇〇雪峰${masterLink('','義存')}/ail| (822-908)/
+〇〇〇〇〇〇〇〇〇玄沙${masterLink('','師備')}/ail| (835-908)/
+〇〇〇〇〇〇〇〇〇〇羅漢${masterLink('','桂琛')}/ail| (867-928)/
+〇〇〇〇〇〇〇〇〇〇〇法眼${masterLink('','文益')}/ail| (885-958)/〰/b|法眼宗/
+〇〇〇〇〇〇〇〇〇雲門${masterLink('','文偃')}/ail|(846-949)/〰/b|雲門宗/`);
+  gp.src = 'repo-diagram.js';
+}
+
+function gp淨宗祖師(name, linkMap) {
+  function m(pref, n) { return masterLink(pref, n, '大師', n+'大師'); }
+  var gp =
+  createGP(name || '淨宗祖師', CAT_大乘, null, linkMap && {"linkMap":linkMap})
+  .setStyle(AIL+BOLD)
+  .setWidth(10)
+  .setTree(`
+/b|【淨土宗祖師】/
+〇${m('/b|初祖/廬山','慧遠')}
+〇${    m('',        '曇鸞')}
+〇〇${  m('',        '道綽')}
+〇〇〇${m('/b|二祖/','善導')}
+〇${m('/b|三祖/',    '承遠')}
+〇${m('/b|四祖/',    '法照')}
+〇${m('/b|五祖/',    '少康')}
+〇${m('/b|六祖/永明','延壽')}
+〇${m('/b|七祖/',    '省常')}
+〇${m('/b|八祖/',    '蓮池')}
+〇${m('/b|九祖/',    '蕅益')}
+〇${m('/b|十祖/',    '截流')}
+〇${m('/b|十一祖/',  '省庵')}
+〇${m('/b|十二祖/',  '徹悟')}
+〇${m('/b|十三祖/',  '印光')}`);
+  gp.src = 'repo-diagram.js';
+}
+
+function gp天台宗祖師(name, linkMap) {
+  function m(pref, n, suff) { return masterLink(pref||'　　', n, suff||'大師'); }
+  var gp =
+  createGP(name || '天台宗祖師', CAT_大乘, null, linkMap && {"linkMap":linkMap})
+  .setStyle(AIL+BOLD)
+  .setWidth(8)
+  .setTree(`
+/b|【天台宗祖師】/
+〇${m('',    '慧文','禪師')}
+〇${m('',    '慧思','禪師')}
+〇${m('',    '智者')}
+〇${m('',    '章安')}
+〇${m('',    '智威')}
+〇${m('',    '慧威')}
+〇${m('左溪','玄朗')}
+〇${m('荊溪','湛然')}
+〇${m('',    '義寂','法師')}
+〇${m('四明','知禮')}
+〇${m('幽溪','傳燈')}
+〇${m('',    '諦閑')}`);
+  gp.src = 'repo-diagram.js';
+}
+
+function gp華嚴宗祖師(name, linkMap) {
+  function m(pref, n, suff) { return masterLink(pref, n, suff||'大師'); }
+  var gp =
+  createGP(name || '華嚴宗祖師', CAT_大乘, null, linkMap && {"linkMap":linkMap})
+  .setStyle(AIL+BOLD)
+  .setWidth(8)
+  .setTree(`
+/b|【華嚴宗祖師】/
+〇${m('終南','杜順','大師')}
+〇${m('雲華','智儼','大師')}
+〇${m('賢首','法藏','國師')}
+〇${m('清涼','澄觀','大師')}
+〇${m('圭峰','宗密','大師')}`);
+  gp.src = 'repo-diagram.js';
+}
+
+function gp法相宗祖師(name, linkMap) {
+  function m(n) { return masterLink('', n, '大師'); }
+  var gp =
+  createGP(name || '法相宗祖師', CAT_大乘, null, linkMap && {"linkMap":linkMap})
+  .setStyle(AIL+BOLD)
+  .setWidth(7)
+  .setTree(`
+/b|【法相宗祖師】/
+〇${m('玄奘')}
+〇${m('窺基')}
+〇${m('慧沼')}
+〇${m('智周')}`);
+  gp.src = 'repo-diagram.js';
+}
+
+if (!getGlobal('noInitRepoDiagrams')) initRepoDiagrams();

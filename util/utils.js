@@ -184,6 +184,12 @@ function useLang(l) { multiLang && multiLang.useLang(l); }
 
 var urlMyName = get('myname');
 
+function shallowClone(o) {
+  if (typeof o.clone == 'function') return o.clone();
+  var c = Object.assign({}, o);
+  o.__proto__ && Object.setPrototypeOf(c, o.__proto__);
+  return c;
+}
 function setLang(l)         { var cur = localStorage.getItem('lang'); localStorage.setItem('lang',l); return cur!=l; }
 function getLang()          { return localStorage.getItem('lang'); }
 function addjs(uri)         { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }

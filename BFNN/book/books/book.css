@@ -140,6 +140,10 @@ mantra    { color:teal }
 .TEXT666L {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#666}
 .TEXT666C {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-align:center; color:#666}
 .TEXT1    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt;}
+h1 { font-family:標楷體; color:#f60 }
+h2 { font-family:標楷體; color:#f60 }
+h3 { font-family:標楷體; color:#f60 }
+h4 { font-family:標楷體; color:#f60 }
 .TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:20.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 .VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}

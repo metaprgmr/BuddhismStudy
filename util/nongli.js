@@ -132,8 +132,7 @@ class NongLiYear {
                     yinMonth,       // 1-based
                     yinLeapMonth,
                     yinDay: i+1,    // 1-based
-                    is齋日: checkZhai(i, is30),
-                    is齋日1: checkZhai(i+1, is30)
+                    is齋日: checkZhai(i, is30)
                   };
           row.push(o);
         } else

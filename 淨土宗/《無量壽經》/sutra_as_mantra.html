@@ -191,7 +191,8 @@ function forRead(ch) { // ch: 1-based
   document.body.style.color = 'lightyellow';
   const HELP = '打印宜用chrome；其他瀏覽器的直排漢字打印恐不佳。\n打印參數：landscape; margin l/r 0.5, t/b 0.31 inches';
 
-  var leadsp = '&nbsp;';
+  var leadsp = '　', // '&nbsp;',
+      circ = '<font style="opacity:0.4; font-weight:normal">◎</font>';
   w('<center><div id="reader" style="width:1000px; overflow:auto; left:9000px" title="', HELP, '">',
     '<table cellpadding="0" cellspacing="0"><tr><td nowrap class="reading">',
     '<h3>', leadsp, '佛說大乘無量壽莊嚴清淨平等覺經</h3>');
@@ -201,13 +202,14 @@ function forRead(ch) { // ch: 1-based
     if (i > 0) w('<br>　<br>');
     var c = chapters[i];
 
-    w('　　', c.title, '<br>', leadsp);
+    w(circ, c.title, '<br>', leadsp);
     var ln = c.text;
     for (var j=0; j<ln.length; ++j) {
       if (j % LINELEN === 0 && j > 0) w(leadsp, '<br>', leadsp); // cut in 20s
       w(ln[j]);
     }
   }
+  w(`<h3>${leadsp}佛說大乘無量壽莊嚴清淨平等覺經${circ}</h3>`);
   w('</td></tr></table>',
     '</div></center>');
 

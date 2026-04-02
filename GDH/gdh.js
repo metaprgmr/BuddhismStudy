@@ -390,8 +390,8 @@ ho2 gei2 cing2 zai2 fu6 ho6 wok6 neoi5 sik1 faan4 hing1 bei1 man5 cing4 jin2 ci4
 juk6 ngo6 gwai2 kam4 sau3 jyun1 fei1 jyu4 dung6 leoi6 ting1 caat3 joek6 zing3 ling6 fun1 hei2 hei2 kai2 lai5
 須飲食衣服種場樹高殿樓池流補處除本諦勝
 seoi1 jam2 sik6 ji1 fuk6 zung2 coeng4 syu6 gou1 din6 lau4 ci4 lau4 bou2 cyu2 ceoi4 bun2 dai3 sing1
-合掌惡國麤不圓滿被弘誓鎧趣或永離繞匝樂
-hap6 zoeng2 ok3 gwok3 cou1 bat1 jyun4 mun5 bei6 wang4 sai6 hoi2 ceoi3 waak6 wing5 lei4 jiu2 zaap3 lok6/ngaau6/ngo3
+合掌惡國麤不圓滿被弘誓鎧趣或永離繞匝樂康
+hap6 zoeng2 ok3 gwok3 cou1 bat1 jyun4 mun5 bei6 wang4 sai6 hoi2 ceoi3 waak6 wing5 lei4 jiu2 zaap3 lok6/ngaau6/ngo3 hong1
 取退爾從告偈頌建當雨珍震閉塞昔散然尅果冥
 ceoi2 teoi3 ji5 cung4 gou3 gai2 zung6 gin3 dong1 jyu5 zan1 zan3 bai3 sak1 sik1 saan2 jin4 hak1 gwo2 ming4
 厄倦譏他虛偽諂曲志必至戒忍辱精進落眷屬
@@ -476,8 +476,8 @@ hon3 zim1 git3 jeon6 cit3 zuk6 joeng5 laan4 zoi1 jim4 fan4 jim6 fan1 hei1 jit6 c
 ziu1 siu1 jing4 mau4 lou4 kong4 seoi6 jing4 gam1 sam6 jung6 ning6 gaap3 wai3 loek6
 病瘂瘖盈盛盜直瞻矜短石碎磨祥禁禍秘
 beng6 aa2 jam1 jing4 sing4 dou6 zik6 zim1 ging1 dyun2 sek6 seoi3 mo4 coeng4 gam3 wo6 bei3
-積穢竭端競笑算節範籍約紅索累絕
-zik1 wai3 kit3 dyun1 ging6 siu3 syun3 zit3 faan6 zik6 joek3 hung4 sok3 leoi3 zyut2
+積穢竭端競笑算節範籍約紅索累絕霹
+zik1 wai3 kit3 dyun1 ging6 siu3 syun3 zit3 faan6 zik6 joek3 hung4 sok3 leoi3 zyut2 pik1
 絡給綠綺緜緩縱縶繒繩繫續缺缽罪罰耀
 lok3 kap1 luk6 ji2 min4 wun6 zung1 zap1 zang1 sing4 hai6 zuk6 kyut3 but3 zeoi6 fat6 jiu6
 老耳耽聰聾肩肯胄胸腋腰膝臣臭致
@@ -498,10 +498,10 @@ jap1 dou1 zau2 cau4 sik1 lei5 cung4 but3 ngan4 geng3 wok6 haan4 jim4 cin2 pik1 h
 haam6 jan2 ngaa5 syut3 lou6 ling4 zing6 mei5 hoeng2 jyu6 deon6 tau4 geng2 gu3 piu1
 馥駛驚髮鬥鬱魂鳥黑鼻齊齋齎冰刃飯
 fuk1 sai2 ging1 faat3 dau3 wat1 wan4 niu5 hak1 bei6 cai4 zaai1 zai1 bing1 jan6 faan6
-丸鞭乖乳井付侍停儻充全公兼再
-jyun2 bin1 gwaai1 jyu5 zeng2 fu6 si6 ting4 tong2 cung1 cyun4 gung1 gim1 zoi3
-刺刻剉剝劍助卵原叉句叫司吉吐吒吝咄
-ci3 hak1 co3 mok1 gim3 zo6 leon2 jyun4 caa1 geoi3 giu3 si1 gat1 tou3 caak1 leon6 deot1
+丸鞭乖乳井付侍停儻充全公兼再灰
+jyun2 bin1 gwaai1 jyu5 zeng2 fu6 si6 ting4 tong2 cung1 cyun4 gung1 gim1 zoi3 fui1
+刺刻剉剝劍助卵原叉句叫司吉吐吒吝悋咄
+ci3 hak1 co3 mok1 gim3 zo6 leon2 jyun4 caa1 geoi3 giu3 si1 gat1 tou3 caak1 leon6 leon6 deot1
 咽哺哽唱啗啞啟啼喚喪嗣嘆垂塑壤夷
 jin1 bou6 gang2/ang2/kang2 coeng3 daam6 aa2 kai2 tai4 wun6 song1 zi6 taan3 seoi4 sok3 joeng6 ji4
 奮奴妃妹姊姐婢孫完官宰寐審寺尸尿
@@ -600,10 +600,12 @@ zaa3 han2 joek6 mit6 jiu2 soeng2 gu1 zyu1 bin2 paai4 lou6 jung1 saan3 se6 zat6 c
 jyut6 caau4 cing2 fan1 ci2 jing6 gaa3 gu1 maai5 baau1 zin2 coi4 huk6 man6 kwai1 mou4 coi4 maai4
 蠱傅擄掠苛嚇呵黨妾訓冒罔效鑒猥借慾餧
 gu2 fu6 lou5 loek6 ho1 haak3 ho2 dong2 cip3 fan3 mou6 mong5 haau6 gaam3 wui1 ze3 juk6 neoi5
-秤採姦壓謾驀婪誇舅姑挾灶跳僻臘舞朔唾
-cing3 coi2 gaan1 aat3 maan4 mak6 laam4 kwaa1 kau5 gu1 hip3 zou3 tiu3 pik1 laap6 mou5 sok3 to3
-吟柴裸虹霓燎龜脯鴆顒眄額劬轢褫寔
-ngam4 caai4 lo2 hung4 ngai4 liu4 gwai1 fu2 zam6 jung4 min5 ngaak2 keoi4 lik1 ci2 sat6
+秤採姦壓謾驀婪誇舅姑挾灶跳僻臘舞朔唾屎
+cing3 coi2 gaan1 aat3 maan4 mak6 laam4 kwaa1 kau5 gu1 hip3 zou3 tiu3 pik1 laap6 mou5 sok3 to3 si2
+吟柴裸虹霓燎龜脯鴆顒眄額劬轢褫寔蘄掇
+ngam4 caai4 lo2 hung4 ngai4 liu4 gwai1 fu2 zam6 jung4 min5 ngaak2 keoi4 lik1 ci2 sat6 kei4 zyut3
+遁遯駢髫麓
+deon6 deon6 pin4/ping4 tiu4 luk1
 `.split('\n');
 
   function _getIgnoreLevel(zi) {
