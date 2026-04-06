@@ -1,4 +1,7 @@
-function toEl(x)     { return (typeof x=='string')?document.getElementById(x):x; }
+function getGlobal(name) { return window[name]; }
+function toEl(x) { return (typeof x=='string')?e(x):x; }
+function e(id) { return document.getElementById(id); }
+function renderText(id,t) { var el = e(id); el ? (el.innerHTML=t) : document.write(t); }
 function showTop(id) { var el=toEl(id); el && el.scrollIntoView(); }
 function zNumber(n) { // 0 to 999
   const zdigits = '〇一二三四五六七八九十';
@@ -21,6 +24,7 @@ function trimLead0s(n) {
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
 }
+var queryParams;
 function get(name) {
   if (!queryParams) { // singleton, instantiated on-demand
     queryParams = {};
@@ -68,7 +72,7 @@ const COL_START = colStart(),
       EXTERNAL  = '↗';
       LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
 
-var terse = get('terse'),
+var terse = get('terse');
     queryParams, url=document.URL, a=url.indexOf('s/j'),
     isDebug = (a>url.indexOf(':/')) && (a<url.indexOf('g/'));
 
@@ -458,8 +462,25 @@ class DocInfo {
       return lnId;
     }
 
-    if (ln1.startsWith('/VOLSEP/')) { // e.g. 9011
-      this.w('<hr class=volsep>');
+    if (ln1.startsWith('/FOOTNOTE')) { // e.g. 9076/03.js
+      this.w('<table><tr><td style="border-top:1px solid gray; padding-top:5px">');
+      return lnId;
+    }
+    if (ln1.startsWith('/_FOOTNOTE')) { // e.g. 9076/03.js
+      this.w('</td></tr></table>');
+      return lnId;
+    }
+
+    if (ln1.startsWith('/xia:')) { // e.g. 0360-HAN.htm
+      if (!xia)
+        this.w('<p class=KEPAN>', ln1, '</p>'); // show it as-is
+      else {
+        ln1 = ln1.substring(5);
+        idx1 = ln1.indexOf('/');
+        var a = (idx1 > 0) ? [ ln1.substring(0,idx1), ln1.substring(idx1+1) ] : [ ln1 ],
+            b = a[0].split(':');
+        this.w(xia.toLine(b[0], b[1], a[1]));
+      }
       return lnId;
     }
 
@@ -488,6 +509,10 @@ class DocInfo {
         ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
     }
     cls = cls[0] || '';
+    if (cls == 'VOLSEP') { // e.g. 9011
+      this.w(ln, '<hr class=volsep>');
+      return lnId;
+    }
     var append = (cls[0] == '+');
     if (append) cls = cls.substring(1);
     if (cls == 'L' || cls == 'R' || cls == 'C')

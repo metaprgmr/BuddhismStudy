@@ -81,6 +81,8 @@ red   { color:red }
 blue  { color:blue }
 black { color:black }
 brown { color:brown }
+green  { color:green }
+darkgreen  { color:darkgreen }
 purple{ color:purple }
 teal  { color:teal }
 gray  { color:gray }
@@ -146,17 +148,24 @@ h3 { font-family:標楷體; color:#f60 }
 h4 { font-family:標楷體; color:#f60 }
 .TITLE    {margin:0cm; margin-bottom:.0001pt; font-size:36.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:20.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
+.subtitle {margin:0cm; margin-bottom:.0001pt; font-size:20.0pt; font-family:標楷體; text-align:center; font-weight:bold; color:#f60;}
 .VERSE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
 .VERSE9   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:#65350f;}
 .VERSEL   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; font-weight:bold; color:teal;}
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
-verse     { font-family:細明體; color:teal;}
-v         { font-family:細明體; color:teal;}
+verse     { color:teal;}
+v         { color:teal;}
 quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:#000077;}
 .bglightyellow { background-color:lightyellow }
 .COMPONENT{margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
+.XIA1     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#939; }
+.XIA      {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#939; }
+.XIA::before { content:'✶ ' }
+XB       { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体"; font-weight:bold; background-color:#fea }
 KEPAN     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 .KEPAN    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 hrAdd { font-weight:normal; color:black; opacity:0.5; }
 .myruby { ruby-position:under; text-decoration:underline; text-decoration-color:red }
 .myphon { text-decoration:underline; text-decoration-color:red }
+z { opacity:0.2 } // for XiaLianJu comparison, when its explicit style is not present.
+thru { }

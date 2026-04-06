@@ -1,0 +1,39 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<style>
+img { padding-left:10px }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var jieUri = '../../../淨土宗/《無量壽經》/Jie.html';
+var JT14 = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9076/${to2d(vol||1)}.js`); }
+
+  showPage() {
+    var buf = new Buffer(), me = this;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(false, true).setBuffer(buf).setXG().reInit(9076, 5);
+        this.volNum = me.volNum;
+        var ttl = '淨空法師是觀世音菩薩為新時代而來', zvol = zNumber(me.volNum), juan = ttl+zvol;
+        this.writeStart(`${ttl}||第${zvol}篇 ${me.subttl}`, '觀音菩薩與新時代之'+zvol)
+            .writeBody(`\n/TEXT030C/信裹居士 著於 丙午年觀世音菩薩聖誕\n\n${me.text}\n\n/TEXT339R/第${zvol}篇 ${me.subttl}\n/VOLSEP/`, true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+
+})()
+.show(get('vol')); // 卷
+</script>
