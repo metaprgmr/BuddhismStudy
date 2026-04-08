@@ -52,8 +52,51 @@ function P(txt,phon) { // for "phon" or "phonetic"
   return `<span class="myphon" title="${phon}">${txt}</span>`;
 }
 
-function colDiv(wsep, w) {
-  return `</td><td width="${wsep||10}px"></td><td width="${w||''}" valign=top>`;
+function nVolsTOC(txt, sepW, singlePage) { // e.g. 9051/00.js for non-singlePage
+  var a = txt.split('\n'), pinNum,
+      buf = new Buffer(), sep = colDiv(sepW), hasCols = false;
+  buf.w('<table border=0>');
+  for (var i in a) {
+    var ln = a[i].trim();
+    if (!ln) continue;
+    if (ln.startsWith('===')) {
+      buf.w('</table>', sep, '<table>');
+      hasCols = true;
+      continue;
+    }
+    var b = ln.split(':'), col = b[0], pt;
+    buf.w('<tr><td valign=top nowrap style="padding-right:10px">',
+          col && `卷${zNumber(col)}` || '', '</td>');
+    col = b[1].trim();
+    if (col) pinNum = '第'+zNumber(col);
+    pt  = (b[3]||'').trim();
+    col = (b[2]||'').trim();
+    if (!col) buf.w('<td></td>');
+    else {
+      idx = col.indexOf('#');
+      if (idx > 0) {
+        b = col.substring(0,idx).split(',');
+        col = col.substring(idx+1).trim();
+        var ref = b[0].trim();
+        if (singlePage)
+          col = `<a href="javascript:showTop('${ref}')">${col}</a>`;
+        else if (b.length > 1)
+          col = `<a href="?vol=${ref}&pin=${b[1].trim()}">${col}</a>`;
+        else
+          col = `<a href="?vol=${ref}">${col}</a>`;
+      }
+      if (pt) pt = `<small style="color:black">之${pt}</small>`;
+      buf.w('<td valign=top nowrap>', col, pinNum, pt, '</td>');
+    }
+    buf.w('</tr>');
+  }
+  buf.w('</table>', hasCols ? COL_END : '</center>');
+  buf.prepend('\n', hasCols ? COL_START : '<center>');
+  return buf.render();
+}
+
+function colDiv(sepW, w) {
+  return `</td><td width="${sepW||10}px"></td><td width="${w||''}" valign=top>`;
 }
 function colStart(w) {
   return `<center><table border=0><tr><td width="${w||''}" valign=top>`;
@@ -75,14 +118,6 @@ const COL_START = colStart(),
 var terse = get('terse');
     queryParams, url=document.URL, a=url.indexOf('s/j'),
     isDebug = (a>url.indexOf(':/')) && (a<url.indexOf('g/'));
-
-const FA_HUA_PINS = [
-  '序品', '方便品', '譬喻品', '信解品', '藥草喻品', '授記品', '化城喻品',
-  '五百弟子授記品', '授學無學人記品', '法師品', '見寶塔品', '提婆達多品', '勸持品',
-  '安樂行品', '從地涌出品', '如來壽量品', '分別功德品', '隨喜功德品', '法師功德品',
-  '常不輕菩薩品', '如來神力品', '囑累品', '藥王菩薩本事品', '妙音菩薩品',
-  '觀世音菩薩普門品', '陀羅尼品', '妙莊嚴王本事品', '普賢菩薩勸發品',
-];
 
 class DocInfo {
   constructor() {
@@ -725,12 +760,21 @@ function write0119(filenum, body) {
         pi.volNum = i+1;
         if (pi.id == filenum) curIdx = i;
       }
-      this.setHints(FA_HUA_PINS)
+      this.setMyHints()
           .reInit(119, 28, this.volNum)
           .writeStart(`妙法蓮華經${FA_HUA_PINS[curIdx]}淺釋`)
           .w(SP, '<p class=TEXT030C>姚秦三藏法師鳩摩羅什譯</p>',
                  '<p class=TEXT030C>美國萬佛聖城宣化上人講述</p>')
           .writeBody(body, true);
+    }
+    setMyHints() {
+      return this.setHints([
+        '序品', '方便品', '譬喻品', '信解品', '藥草喻品', '授記品', '化城喻品',
+        '五百弟子授記品', '授學無學人記品', '法師品', '見寶塔品', '提婆達多品', '勸持品',
+        '安樂行品', '從地涌出品', '如來壽量品', '分別功德品', '隨喜功德品', '法師功德品',
+        '常不輕菩薩品', '如來神力品', '囑累品', '藥王菩薩本事品', '妙音菩薩品',
+        '觀世音菩薩普門品', '陀羅尼品', '妙莊嚴王本事品', '普賢菩薩勸發品',
+      ]);
     }
   })();
 }

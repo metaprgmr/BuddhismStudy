@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<style>
+img { padding-left:10px }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var BKZYJ = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9051/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer(), me = this;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9051, 30);
+        this.volNum = me.volNum;
+        var ttl='不空羂索神變真言經', subttl='羂索經', zvol=zNumber(me.volNum),
+            txt = `\n/TEXT030C/大唐天竺三藏菩提流志譯\n${me.text}`;
+        if (!me.volNum)
+          this.writeStart(ttl, subttl).writeBody(txt, true);
+        else {
+          txt += `\n\n/TEXT339R/第${zvol}卷\n/VOLSEP/`;
+          this.writeStart(`${ttl}第${zvol}`, `卷${subttl}${zvol}`).writeBody(txt, true);
+        }
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+
+})()
+.show(get('vol')); // 卷
+</script>
