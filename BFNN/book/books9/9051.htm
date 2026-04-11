@@ -27,12 +27,12 @@ var BKZYJ = new (class extends SeriesContainer {
         this.volNum = me.volNum;
         var ttl='不空羂索神變真言經', subttl='羂索經', zvol=zNumber(me.volNum),
             txt = `\n/TEXT030C/大唐天竺三藏菩提流志譯\n${me.text}`;
-        if (!me.volNum)
-          this.writeStart(ttl, subttl).writeBody(txt, true);
-        else {
+        if (me.volNum) {
+          subttl = `卷${subttl}${zvol}`;
+          ttl += '第' + zvol;
           txt += `\n\n/TEXT339R/第${zvol}卷\n/VOLSEP/`;
-          this.writeStart(`${ttl}第${zvol}`, `卷${subttl}${zvol}`).writeBody(txt, true);
         }
+        this.writeStart(ttl, subttl).writeBody(txt, true);
       }
     })(); // class extends DocInfo
     buf.render('stg');

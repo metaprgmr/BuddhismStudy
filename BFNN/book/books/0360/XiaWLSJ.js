@@ -93,12 +93,17 @@ class XiaWLSJ {
     return zNumber(i);
   }
 
-  preamble() {
-    var vowcnt = this.vows.length;
-    var extra = (vowcnt!=48) ? `惟${zNumber(vowcnt)}願，異於主流四十八願之數` : '具四十八願之數';
-    extra = `\n/BQKaiTi/本經凡${this.zicnt}萬字（對比<XB>夏蓮居會集本</XB>1.6萬字）。${extra}。<a#xgrpt>信裹居士研習報告</a>見下。\n`;
-    if (this.type == 'SONG')
-      extra += '/BQKaiTi/原經之最後六願落在第二卷；在此被提上第一卷，且略去了其中之引導句「<verse>若我證得無上菩提</verse>」。\n';
+  preamble(noSep) {
+    function ckvows(me) {
+      var cnt = me.vows.length;
+      return (cnt!=48) ? `惟${zNumber(cnt)}願，異於主流四十八願之數` : '具四十八願之數';
+    }
+    var extra =
+      `\n/BQKaiTi/本經凡${this.zicnt}萬字（對比<XB>夏蓮居會集本</XB>1.6萬字）。${ckvows(this)}。<a#xgrpt>信裹居士研習報告</a>見下。\n`;
+    switch (this.type) {
+    case 'SONG': extra += this.songExtra(); break;
+    case 'TANG': extra += this.tangExtra(); break;
+    }
     return `/TEXT030C/<ail>（信裹居士對照夏蓮居會本研習）</ail>
 
 /VOLSEP/
@@ -107,7 +112,62 @@ class XiaWLSJ {
 /BQKaiTi/◼ <XB>夏本</XB>${this.jyA()}精研本</a>可逐條文句比對。例如：<kepan>${this.toRef(25,2)}</kepan>指<XB>會集本</XB>第二十五品第②句。之後可跟隨任何文字說明。
 /BQKaiTi/◼ <XB>夏本</XB>第六品<ail>〈發大誓願〉</ail>專項處理，直接標願號：<kepan>【夏•願&nbsp;⑤ <ail>〈身無差別〉</ail>】</kepan>。
 /BQKaiTi/◼ <font class=XIA>普通評註如此標示。</font>
-${extra||''}/VOLSEP/
+${extra||''}${noSep ? '' : '/VOLSEP/\n'}`;
+  }
+  songExtra() {
+    return '/BQKaiTi/原經之最後六願落在第二卷；在此被提上第一卷，且略去了其中之引導句「<verse>若我證得無上菩提</verse>」。\n';
+  }
+  tangExtra() {
+return `/BQKaiTi/分品原無；取自於CBTA-T0310《大寶積經》。
+
+${COL_START}
+<a#p01>法會聖眾第一</a>
+<a#p02>阿難啟請第二</a>
+<a#p03>佛許宣說第三</a>
+<a#p04>古佛出興第四</a>
+<a#p05>法處讚佛第五</a>
+<a#p06>攝受淨剎第六</a>
+<a#p07>發大誓願第七</a>
+<a#p08>說頌自要第八</a>
+<a#p09>修菩薩行第九</a>
+<a#p10>成佛時處第十</a>
+${COL_DIV15}
+<a#p11>明無量第十一</a>
+<a#p12>聖眾無量第十二</a>
+<a#p13>壽命無量第十三</a>
+<a#p14>國界嚴淨第十四</a>
+<a#p15>寶樹莊嚴第十五</a>
+<a#p16>佛菩提樹第十六</a>
+<a#p17>地平無山第十七</a>
+<a#p18>河流妙聲第十八</a>
+<a#p19>不聞惡名第十九</a>
+<a#p20>受用自然第二十</a>
+${COL_DIV15}
+<a#p21>人如六天第二十一</a>
+<a#p22>雨華布地第二十二</a>
+<a#p23>華光出佛第二十三</a>
+<a#p24>離分別相第二十四</a>
+<a#p25>究竟極果第二十五</a>
+<a#p26>十方佛讚第二十六</a>
+<a#p27>三輩往生第二十七</a>
+<a#p28>十方禮覲第二十八</a>
+<a#p29>一生補處第二十九</a>
+<a#p30>聖眾身光第三十</a>
+${COL_DIV15}
+<a#p31>妙相勝德第三十一</a>
+<a#p32>常了宿命第三十二</a>
+<a#p33>供他方佛第三十三</a>
+<a#p34>菩薩功德第三十四</a>
+<a#p35>極樂現前第三十五</a>
+<a#p36>彌勒述見第三十六</a>
+<a#p37>疑悔處胎第三十七</a>
+<a#p38>菩薩當生第三十八</a>
+<a#p39>付囑彌勒第三十九</a>
+<a#p40>說頌諄囑第四十</a>
+${COL_DIV}
+<a#p41>聞經獲益第四十一</a>
+<a#p42>地動現瑞第四十二</a>
+${COL_END}
 `;
   }
 

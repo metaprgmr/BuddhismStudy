@@ -207,6 +207,7 @@ class NongLiYear {
     addHolyMemorial( 1,  1, '彌勒菩薩聖誕');
     addHolyMemorial( 2,  8, '釋迦牟尼佛出家');
     addHolyMemorial( 2,  9, '六祖惠能聖誕');
+    addHolyMemorial( 2, 10, '淨空法師聖誕');
     addHolyMemorial( 2, 15, '釋迦牟尼佛涅槃');
     addHolyMemorial( 2, 19, '觀世音菩薩聖誕');
     addHolyMemorial( 2, 21, '普賢菩薩聖誕');
@@ -214,6 +215,7 @@ class NongLiYear {
     addHolyMemorial( 4,  8, '釋迦牟尼佛聖誕');
     addHolyMemorial( 6,  3, '韋馱尊者聖誕');
     addHolyMemorial( 6, 19, '觀世音菩薩成道');
+    addHolyMemorial( 6, 28, '淨空法師圓寂');
     addHolyMemorial( 7, 13, '大勢至菩薩聖誕');
     addHolyMemorial( 7, 15, '佛歡喜日');
     addHolyMemorial( 7, 24, '龍樹菩薩聖誕');
@@ -383,6 +385,10 @@ function showNongLiNian(nlyr, elid) {
         cls = 'holy';
         if (memorial == '釋迦牟尼佛涅槃') {
           wd = '釋佛涅槃';
+          cls = 'nirvana';
+        }
+        if (memorial == '淨空法師圓寂') {
+          wd = '淨師圓寂';
           cls = 'nirvana';
         }
         else if (memorial.endsWith('聖誕')) {

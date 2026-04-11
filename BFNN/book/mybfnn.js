@@ -150,6 +150,7 @@ class DocInfo {
     var idx = (i || 1) - 1;
     return this.idMap ? this.idMap[idx] : (this.firstVolNum + idx);
   }
+  setDepth(d) { this.depth = d; return this; }
   setNavBreakAt(n) { this.navBreakAt = n; return this; }
   setBuffer(buf) { this.buf = buf; return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
@@ -173,8 +174,9 @@ class DocInfo {
   writeStart(ttl, docTtl) {
     // ttl can have | indicating subtitle; or || for subtitle with line break
 
+    var base = (this.depth == 1) ? '../..' : '..';
     if (!this.buf)
-      this.w(`<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">`);
+      this.w(`<body link=blue vlink=purple background="${base}/books/textbackground.jpg" class="Normal">`);
     this.w(`<div class=bookClean style='layout-grid:18.0pt'>`); // content starts...
     if (this.isXG && this.endCenter)
       this.w('<table><tr><td>');
@@ -211,8 +213,9 @@ class DocInfo {
       this.w(SP, '<div class=endBar>', links, '</div>');
     }
     this.w('</div>'); // ...content ends
-    var tag = this.isXG ? '<div class=endImageXG>' : '<div class=endImage title="本頁經信裹居士重新編碼、清理、補正">';
-    tag += '【<a href="../../index.html">經論選讀</a>】 【<a href="../../../index.html">返回主頁</a>】</div>';
+    var base = (this.depth == 1) ? '../../..' : '../..';
+    var tag = '<div class=endImage' + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
+              `>【<a href="${base}/index.html">經論選讀</a>】 【<a href="${base}/../index.html">返回主頁</a>】</div>`;
     this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
            '</body></html>');
     return this;
