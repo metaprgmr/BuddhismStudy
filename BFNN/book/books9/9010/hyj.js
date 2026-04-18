@@ -65,7 +65,7 @@ function visit(n) {
   var zn = zNumber(n);
   var t = VISITS53[n-1].teacher;
   if (Array.isArray(t))
-    t = t.shift() + '，又稱' + t.join('、');
+    t = t.shift() + '，<small>又稱 </small>' + t.join('、');
   return needN ? `/TEXT339s10:can${n}/【第${zn}參：${t}】`
                : `/TEXT339s10/【第${zn}參：${t}】`
 }

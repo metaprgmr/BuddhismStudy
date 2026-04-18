@@ -45,7 +45,6 @@ function ZhiShou20Qs() {
 SC.volNum = 14;
 SC.text = `
 /TEXT030C/淨行品第十一　　<a#p12>賢首品第十二之一</a>
-
 /SECTION/淨行品第十一　<cil>（淨行以成就十信：信心、念心、精進心、慧心、定心、不退心、迴向心、護法心、戒心、願心。）　</cil>
 
 ${ZhiShou20Qs()}

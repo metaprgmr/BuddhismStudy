@@ -18,9 +18,10 @@ function visit(n) {
   if (!needN) n = -n;
   var zn = zNumber(n),
       v = VISITS53[n-1],
-      t = v.teacher40 || v.teacher;
-  if (Array.isArray(t))
-    t = t.shift();
+      t80 = v.teacher;
+  if (Array.isArray(t80)) t80 = t80.shift();
+  var t = v.teacher40 || t80;
+  if (t != t80) t = `${t}，<small>又稱 </small>${t80}`;
   return needN ? `/SECTION:can${n}/【第${zn}參：${t}】`
                : `/SECTION/【第${zn}參：${t}】`
 }
