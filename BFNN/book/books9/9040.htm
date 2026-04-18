@@ -24,16 +24,22 @@ function visit(n) {
   return needN ? `/SECTION:can${n}/【第${zn}參：${t}】`
                : `/SECTION/【第${zn}參：${t}】`
 }
-function link(n) {
+var lastvol = 0;
+function toclink(n, isLeft) {
   var zn = zNumber(n),
       v = VISITS53[n-1],
       t = v.teacher40 || v.teacher;
   if (Array.isArray(t))
     t = t.shift();
   var url = `?vol=${v.volInHY40}&pin=can${n}`, zn = `第${zNumber(n)}参`;
+  var vol = isLeft ? '　　　' : '　　　　', max = isLeft ? 3 : 4;
+  if (v.volInHY40 != lastvol) {
+    vol = '卷' + zNumber(lastvol = v.volInHY40);
+    while (vol.length < max) vol += '　';
+    vol = `<a href="?vol=${lastvol}">${vol}</a>`;
+  }
   while(zn.length < 5) zn += '　';
-  return `<ail>${zn}&nbsp;</ail><a href="${url}">${t}</a>`;
-
+  return `<ail>${vol}　${zn}&nbsp;</ail><a href="${url}">${t}</a>`;
 }
 
 new (class extends HYJContainer {
@@ -48,16 +54,17 @@ new (class extends HYJContainer {
         this.setBuffer().setXG().setVolumesInJS(true).reInit(9040,40);
         this.volNum = SC.volNum;
         var ttl = '大方廣佛華嚴經||入不思議解脫境界普賢行願品',
+            ttl1 = '入不思議解脫境界普賢行願品',
             zn = zNumber(this.volNum),
-            ending = (this.volNum == 40) ? `${ttl}竟` : `${ttl}卷${zn}`;
+            ending = (this.volNum == 40) ? `${ttl1}竟` : `${ttl1}卷${zn}`;
         if (!this.volNum)
           this.writeStart(`${ttl}`, `四十華嚴`)
               .writeBody(`\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n${SC.text}`, true);
         else
           this.writeStart(`${ttl} 卷${zn}`, `四十華嚴 卷${SC.volNum}`)
               .writeBody('\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n' +
-                         `/SECTION/${ttl}卷${zn}\n${SC.text}` +
-                         `\n/TEXT339R/${ending}\n/VOLSEP/`, true);
+                         `/SECTION/${ttl1}卷${zn}\n${SC.text}` +
+                         `\n/END/${ending}\n/VOLSEP/`, true);
       }
     })(); // class extends DocInfo
 
