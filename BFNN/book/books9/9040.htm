@@ -5,38 +5,67 @@
 <link rel="stylesheet" href="../books/book.css">
 <script src="../../../util/utils.js"></script>
 <script src="../mybfnn.js"></script>
+<script src="9010/visits-53.js"></script>
+<script src="9010/hyj40.js"></script>
 </head>
 <body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
 <div id="stg"></div>
 </body></html>
 
 <script>
-var HY40 = new (class extends SeriesContainer {
-  constructor() { super(); }
-  loadJS(vol) { addjs(`9040/${to2d(vol||1)}.js`); }
+function visit(n) {
+  var needN = n > 0;
+  if (!needN) n = -n;
+  var zn = zNumber(n),
+      v = VISITS53[n-1],
+      t = v.teacher40 || v.teacher;
+  if (Array.isArray(t))
+    t = t.shift();
+  return needN ? `/SECTION:can${n}/【第${zn}參：${t}】`
+               : `/SECTION/【第${zn}參：${t}】`
+}
+function link(n) {
+  var zn = zNumber(n),
+      v = VISITS53[n-1],
+      t = v.teacher40 || v.teacher;
+  if (Array.isArray(t))
+    t = t.shift();
+  var url = `?vol=${v.volInHY40}&pin=can${n}`, zn = `第${zNumber(n)}参`;
+  while(zn.length < 5) zn += '　';
+  return `<ail>${zn}&nbsp;</ail><a href="${url}">${t}</a>`;
+
+}
+
+new (class extends HYJContainer {
+  constructor() { super(true); }
+
+  loadJS(vol) { addjs(`9040/${to2d(vol||0)}.js`); }
 
   showPage() {
-    var buf = new Buffer();
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setBuffer(buf).setXG().setVolumesInJS(true).reInit(9040,40);
-        this.volNum = HY40.volNum;
-        var ttl = '大方廣佛華嚴經入不思議解脫境界普賢行願品',
-            zn = zNumber(this.volNum);
-        this.writeStart(`${ttl}|卷${zn}`, `四十華嚴 卷${HY40.volNum}`)
-            .writeBody('\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n' +
-                       `/TEXT339/${ttl}卷${zn}\n` +
-                       HY40.text +
-                       `\n\n/TEXT339R/${ttl}卷${zn}\n\n/VOLSEP/\n`, true);
+        this.setBuffer().setXG().setVolumesInJS(true).reInit(9040,40);
+        this.volNum = SC.volNum;
+        var ttl = '大方廣佛華嚴經||入不思議解脫境界普賢行願品',
+            zn = zNumber(this.volNum),
+            ending = (this.volNum == 40) ? `${ttl}竟` : `${ttl}卷${zn}`;
+        if (!this.volNum)
+          this.writeStart(`${ttl}`, `四十華嚴`)
+              .writeBody(`\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n${SC.text}`, true);
+        else
+          this.writeStart(`${ttl} 卷${zn}`, `四十華嚴 卷${SC.volNum}`)
+              .writeBody('\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n' +
+                         `/SECTION/${ttl}卷${zn}\n${SC.text}` +
+                         `\n/TEXT339R/${ending}\n/VOLSEP/`, true);
       }
     })(); // class extends DocInfo
 
-    buf.render('stg');
+    docInfo.buf.render('stg');
   }
-})(); // HY40
+})();
 
-HY40.show(get('vol')); // 卷
+SC.show(get('vol'),get('pin')); // 卷
 
 // 經文來源：https://zh.wikisource.org/zh-hant/大方廣佛華嚴經四十卷
 </script>

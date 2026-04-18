@@ -1,6 +1,6 @@
-BKZYJ.volTitle = '不空羂索神變真言經'; // matters not
-BKZYJ.volNum = 0;
-BKZYJ.text = nVolsTOC(`
+SC.volTitle = '不空羂索神變真言經'; // matters not
+SC.volNum = 0;
+SC.text = nVolsTOC(null, `
  1 : 1:1#母陀羅尼真言序品
  2 : 2:祕密心真言品
    : 3:祕密成就真言品:一

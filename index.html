@@ -7,6 +7,31 @@
 <script src="util/utils.js"></script>
 <script src="env-sample.js"></script>
 <script src="env.js"></script>
+<script>
+function extra() {
+  var a = getGlobal('OTHERS'); if (!a) return;
+  w('<table border=0><tr><td>');
+  for (var i=0; i<a.length; i+=2) {
+    var n = a[i], l = a[i+1], pref = '<br>';
+    if (n.startsWith('$')) {
+      n = n.substring(1).trim();
+      pref = '';
+    }
+    if (isLoc) {
+      if (l)
+        w(`${pref}<a href="${l}" style="background-color:#afa" title="個人內容，未發表">${n}</a>　`);
+      else
+        w(`${pref}<span style="background-color:#afa" title="個人內容，未發表">${n}</span>　`);
+    } else {
+      if (l)
+        w(`${pref}<a href="${l}" title="otro">${n}</a>　`);
+      else
+        w(`${pref}${n}　`);
+    }
+  }
+  w('</td></tr></table>');
+}
+</script>
 </head>
 <body><center>
 
@@ -26,16 +51,16 @@ if (isLoc) {
 <h3 id="epithet" class="epithet"></h3>
 <script>
 var epithets = [
-      '無上甚深微妙法　百千萬劫難遭遇<inv>*</inv><br>' +
-      `我今見聞得受持　願解如來真實義<dim><a href="javascript:renderText('epithet', epithets[1])">*</a></dim>`,
-      '多讀大乘以廣其心　勤修觀行以銷其障<inv>*</inv><br>' +
-      `常求加被以開其慧　教宗般若行在彌陀<dim><a href="javascript:renderText('epithet', epithets[0])">*</a></dim>` ];
+      ' &nbsp;無上甚深微妙法　百千萬劫難遭遇 <inv>*</inv><br>' +
+      ` &nbsp;我今見聞得受持　願解如來真實義 <dim><a href="javascript:renderText('epithet', epithets[1])">*</a></dim>`,
+      ' &nbsp;多讀大乘以廣其心　勤修觀行以銷其障 <inv>*</inv><br>' +
+      ` &nbsp;常求加被以開其慧　教宗般若行在彌陀 <dim><a href="javascript:renderText('epithet', epithets[0])">*</a></dim>` ];
 renderText('epithet', epithets[(Math.random() > 0.5) ? 0 : 1]);
 </script>
 
-<table border="0" width="750">
-<tr><td colspan="2" class="zFangSongTi" align="center">
-
+<table border="0">
+<tr><td colspan="2" align="center">
+<div class="zFangSongTi">
 <p style="margin-top:-5px">余自學佛始、歡喜欣樂，於佛經咒、講經說法，如饑似渴。<br>
 然福薄慧淺、障厚業深，無以廣求、精擇己樂，懵懵懂懂。<br>
 又積習難改、把玩文字，樂此不疲、耽於修學，招神恥笑。</p>
@@ -43,49 +68,23 @@ renderText('epithet', epithets[(Math.random() > 0.5) ? 0 : 1]);
 <p style="margin-bottom:25px">雖然，或有拙作可益衆生；倘沒於塵，疑有違大乘之義也。<br>
 遂擇良示世，或器或文。但有饒益，吾心慰焉。是為因緣。<br>
 倘有諸功德者，悉數回向法界、西方極樂世界及一切衆生。</p>
+</div>
 
-</td></tr>
-
-<tr>
-<td valign="top" align="right" width="160" nowrap><h3 style="margin-top:-3px">總目錄</h3></td>
-<td style="padding-left:5px; font-size:20px; line-height:120%" align="left" nowrap>
+<p style="font-size:20px; line-height:120%">
 【<a href="佛學基礎/index.html">佛學基礎</a>】　<a href="BFNN/book/books/0592S.htm">《佛辭彙》</a>　<blue>【</blue><a href="getcontent.html" target="extra">全部下載</a><span title="https://metaprgmr.github.io/BuddhismStudy"><blue>】</blue></span><br>
-【<a href="淨土宗/index.html">淨土法門</a>】　<a href="util/repo-diagrams.html">《圖形庫》</a>
-<br>
-【<a href="陀羅尼/index.html">陀羅尼集</a>】　<a href="BFNN/book/books9/9090.htm?vol=6">《百過格》</a>　【<a href="GDH/dailywork.html">直心道場</a>】<br>
-【<a href="佛學基礎/nonbud.html">古聖賢書</a>】　　　　　　　【<a href="佛學基礎/《占察善惡業報經》/占察懺.html">占察懺會</a>】<br>
-【<a href="個人文集/index.html">個人文集</a>】　　　　　　　【<a href="util/KarmaDana.html">念佛維那</a>】<br>
-【<a href="GDH/index.html">趣味修學</a>】　<a href="util/nongli.html">《農曆年》</a>　【<a href="BFNN/index.html">經論選讀</a>】
-<script>
-if (window['OTHERS']) {
-  w('<br>');
-  var a = window.OTHERS;
-  for (var i=0; i<a.length; i+=2) {
-    var n = a[i], l = a[i+1], pref = '<br>';
-    if (n.startsWith('$')) {
-      n = n.substring(1).trim();
-      pref = '';
-    }
-    if (isLoc) {
-      if (l)
-        w(pref + '<a href="' + l + '" style="background-color:#afa" title="個人內容，未發表">' + n + '</a>　');
-      else
-        w(pref + '<span style="background-color:#afa" title="個人內容，未發表">' + n + '</span>　');
-    } else {
-      if (l)
-        w(pref + '<a href="' + l + '" title="otro">' + n + '</a> ');
-      else
-        w(pref + n + ' ');
-    }
-  }
-}
-</script>
+【<a href="淨土宗/index.html">淨土法門</a>】　<a href="util/repo-diagrams.html">《圖形庫》</a>　　　　　　　<br>
+【<a href="BFNN/index.html">經論選讀</a>】　<a href="BFNN/book/books9/9090.htm?vol=6">《百過格》</a>　【<a href="GDH/dailywork.html">直心道場</a>】<br>
+【<a href="陀羅尼/index.html">陀羅尼集</a>】　　　　　　　【<a href="佛學基礎/《占察善惡業報經》/占察懺.html">占察懺會</a>】<br>
+【<a href="佛學基礎/nonbud.html">古聖賢書</a>】　　　　　　　【<a href="util/KarmaDana.html">念佛維那</a>】<br>
+【<a href="個人文集/index.html">個人文集</a>】　<a href="util/nongli.html">《農曆年》</a>　【<a href="GDH/index.html">趣味修學</a>】</p>
+<script>extra();</script>
 </td></tr>
 
 <tr>
-<td valign="top" align="right"><h3>推薦內容</h3></td>
+<td valign="top" style="border-right:1px solid lightgray; padding-right:5px; padding-left:60px">
+<h3 style="margin-top:-3px">推<br>薦<br>內<br>容</h3></td>
 <td style="padding-left:5px">
-<ol style="font-size:20px; line-height:120%">
+<ol style="font-size:18px; line-height:120%; margin-top:0px">
 <li><a href="淨土宗/《無量壽經》/Jie.html" title="《佛說大乘無量壽莊嚴清淨平等覺經》黃念祖居士《註解》">《無量壽經•註解》閱讀器</a>　&nbsp;
 <img src="images/youtube_social_icon_red.png" height="12px">&nbsp;<a href="https://www.youtube.com/watch?v=c_gbEVujmyY">功能介紹</a>&nbsp;
 <img src="images/youtube_social_icon_red.png" height="12px">&nbsp;<a href="https://www.youtube.com/watch?v=CZSDlZgvq2A">加筆記書籤</a>
@@ -110,7 +109,7 @@ if (window['OTHERS']) {
 </ol>
 </td></tr>
 
-<tr><td colspan="2"><hr></td></tr>
+<tr><td colspan="2"><hr width="680px" color="#FCA"></td></tr>
 </table>
 
 </div>

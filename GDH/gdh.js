@@ -315,7 +315,32 @@ class YPLine {
   }
 }
 
-(function() {
+(()=>{
+  function init(ignoreLevels, a) {
+    a = a.split('\n');
+    function _getIgnoreLevel(zi) {
+      var len = ignoreLevels.length;
+      for (var i=0; i<len; ++i)
+        if (ignoreLevels[i][zi]) return i;
+      return GENERAL;
+    }
+    var len1 = a.length-1;
+    for (i=0; i<len1; i+=2) {
+      var zis = a[i].replaceAll(' ', '');
+      var yps = a[i+1].trim().split(' ');
+      if (zis.length != yps.length) {
+        throw `"${zis}" ${zis.length}; phonetics: ${yps.length}. PLEASE FIX AND REDO.`;
+        continue;
+      }
+
+      for (var j=0; j<zis.length; ++j) {
+        var zi = zis[j], yp = yps[j], x = dict[zi];
+        if (x) x.addYP(yp);
+        else dict.add(new ZiInfo(zi, yp, _getIgnoreLevel(zi), _isFA(zi)));
+      }
+    }
+  } // init().
+
   var fauxamis = toSet(
     '集習坑立泣疾急蜜畢吉訖迄乞漆禽禁坎堪尋品斤近貧熏勤懃仁新欽溪偽詣齎繫' +
     '及稽繼攜救愁據舉驅淳卻斫腳像羌祥響強棄器欺歧履俗熾寺棘竊設諂禪親許引' +
@@ -604,29 +629,9 @@ gu2 fu6 lou5 loek6 ho1 haak3 ho2 dong2 cip3 fan3 mou6 mong5 haau6 gaam3 wui1 ze3
 cing3 coi2 gaan1 aat3 maan4 mak6 laam4 kwaa1 kau5 gu1 hip3 zou3 tiu3 pik1 laap6 mou5 sok3 to3 si2
 吟柴裸虹霓燎龜脯鴆顒眄額劬轢褫寔蘄掇
 ngam4 caai4 lo2 hung4 ngai4 liu4 gwai1 fu2 zam6 jung4 min5 ngaak2 keoi4 lik1 ci2 sat6 kei4 zyut3
-遁遯駢髫麓甄猨猴
-deon6 deon6 pin4/ping4 tiu4 luk1 jan1 jyun4 hau4
-`.split('\n');
+遁遯駢髫麓甄猨猴僉
+deon6 deon6 pin4/ping4 tiu4 luk1 jan1 jyun4 hau4 cim1
+`;
 
-  function _getIgnoreLevel(zi) {
-    for (var i=0; i<ignoreLevels.length; ++i)
-      if (ignoreLevels[i][zi]) return i;
-    return GENERAL;
-  }
-
-  for (i=0; i<a.length-1; i+=2) {
-    var zis = a[i].replaceAll(' ', '');
-    var yps = a[i+1].trim().split(' ');
-    if (zis.length != yps.length) {
-      throw `"${zis}" ${zis.length}; phonetics: ${yps.length}. PLEASE FIX AND REDO.`;
-      continue;
-    }
-
-    for (var j=0; j<zis.length; ++j) {
-      var zi = zis[j], yp = yps[j], x = dict[zi];
-      if (x) x.addYP(yp);
-      else dict.add(new ZiInfo(zi, yp, _getIgnoreLevel(zi), _isFA(zi)));
-    }
-  }
-
+  init(ignoreLevels, a);
 })();

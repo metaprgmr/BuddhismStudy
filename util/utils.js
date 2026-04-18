@@ -15,6 +15,7 @@ const A2Z = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const a2z = 'abcdefghijklmnopqrstuvwxyz';
 
 const zdigits = '〇一二三四五六七八九';
+const Zdigits = '０１２３４５６７８９';
 const znumeric = zdigits + '零十百千萬億兆';
 function zNumber(n) { // 0 to 999
   if (typeof n == 'string') n = parseInt(n);
@@ -26,6 +27,16 @@ function zNumber(n) { // 0 to 999
   var d1   = n - d100 * 100 - d10 * 10;
   var ret = (d100 > 0 ? zdigits[d100] : '') + zdigits[d10] + zdigits[d1];
   while (ret.length > 1 && ret.startsWith('〇')) ret = ret.substring(1);
+  return ret;
+}
+function ZNumber(n) { // 0 to 999
+  if (typeof n == 'string') n = parseInt(n);
+  if (n == 0) return Zdigits[0];
+  var ret = '';
+  while (n>0) {
+    ret = `${Zdigits[n%10]}${ret}`;
+    n = Math.floor(n/10);
+  }
   return ret;
 }
 function isZDigit(c) { return znumeric.indexOf(c) >= 0; }
@@ -288,6 +299,9 @@ function showTableData(data, tableExtra, sep, colfxn) {
   colfxn && buf.w(colfxn('', '/table'));
   buf.w('</table>');
   return buf.render();
+}
+function rtrim(s, n) {
+  return !s ? s : ((s.length < n) ? '' : s.substring(0,s.length-n));
 }
 function trimFirstBlankLine(txt) {
   if (!txt) return txt;
@@ -588,6 +602,53 @@ class Buffer {
 const NULL = { j:'suinil' };
 function isNil(x) { return (x == null) || (x === NULL); }
 function ensureNULL(x) { return (x == null) ? NULL : x; }
+
+function brItems(s) {
+  if (s.indexOf('<br>') > 0) // manipulated already
+    return s;
+
+  var start = 2, type = s[0], mk0 = '', mk = s[1]||'', f; // number-to-string converter
+  if (type == '１')
+    f = ZNumber;
+  else if (type == '一') {
+    if (mk != '、') return s; // Only '一、'
+    f = zNumber;
+  }
+  else if (type == '1')
+    f = (i)=>`${i}`;
+
+  if (!f) {
+    var idx = s.indexOf('第一');
+    if (idx >= 0 && s.indexOf('第二') > idx) {
+      mk0 = '第';
+      mk = s[idx+2];
+      f = zNumber;
+      start = idx ? 1 : 2;
+    }
+    else if ((s.indexOf('一、') > 0) && (s.indexOf('１') < 0)) { // simple inner '一、'
+      type = '一';
+      mk = '、';
+      f = zNumber;
+      start = 1;
+    }
+    else // give up
+      return s;
+  }
+
+  var buf = new Buffer(), lastIdx = 0;
+  for (var i=start; ; ++i) {
+    var idx = s.indexOf(mk0+f(i)+mk, lastIdx);
+    if (idx > 0) {
+      var subs = s.substring(lastIdx, idx);
+      if (subs.length > 0) buf.w(subs, '<br>');
+      lastIdx = idx;
+    } else {
+      buf.w(s.substring(lastIdx));
+      break;
+    }
+  }
+  return buf.render();
+}
 
 class Counter {
   constructor() { this.counts = {}; this.second = {}; }

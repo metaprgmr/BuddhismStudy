@@ -1,6 +1,6 @@
-HYJ.volNum = 78;
-HYJ.text = `
-/TEXT339/入法界品第三十九之十九
+SC.volNum = 78;
+SC.text = `
+/SECTION/入法界品第三十九之十九
 
 爾時，善財童子合掌恭敬，重白彌勒菩薩摩訶薩言：
 

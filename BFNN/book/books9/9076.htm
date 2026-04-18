@@ -14,24 +14,27 @@ img { padding-left:10px }
 
 <script>
 var jieUri = '../../../淨土宗/《無量壽經》/Jie.html';
-var JT14 = new (class extends SeriesContainer {
+new (class extends SeriesContainer {
   constructor() { super(); }
 
   loadJS(vol) { addjs(`9076/${to2d(vol||1)}.js`); }
 
   showPage() {
-    var buf = new Buffer(), me = this;
+    var me = this;
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setVolumesInJS(false, true).setBuffer(buf).setXG().reInit(9076, 5);
+        this.setVolumesInJS(false, true).setBuffer().setXG().reInit(9076, 5);
         this.volNum = me.volNum;
-        var ttl = '淨空法師是觀世音菩薩為新時代而來', zvol = zNumber(me.volNum), juan = ttl+zvol;
+        var ttl = '淨空法師是觀世音菩薩為新時代而來', zvol = zNumber(me.volNum),
+            fn = me.footnotes || '';
+        if (fn) fn = `${fn}\n`;
         this.writeStart(`${ttl}||第${zvol}篇 ${me.subttl}`, '觀音菩薩與新時代之'+zvol)
-            .writeBody(`\n/TEXT030C/信裹居士 著於 丙午年觀世音菩薩聖誕\n\n${me.text}\n\n/TEXT339R/第${zvol}篇 ${me.subttl}\n/VOLSEP/`, true);
+            .writeBody(`\n/TEXT030C/信裹居士 著於 丙午年觀世音菩薩聖誕\n\n${me.text}\n\n` +
+                       `/END/第${zvol}篇 ${me.subttl}\n${fn}/VOLSEP/`, true);
       }
     })(); // class extends DocInfo
-    buf.render('stg');
+    docInfo.buf.render('stg');
   }
 
 })()

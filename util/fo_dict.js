@@ -57,6 +57,12 @@ addFoTerms('dharma-kāya',      '法身', '性身', '真实身');
 addFoTerms('nirmāṇakāya',      '應身', '应化身', '应化法身', '化身');
 
 addFoTerms('pratyeka-buddha',  '辟支佛');
+addFoTerms('sāvaka',           '聲聞');
+addFoTerms('srotāpanna',       '須陀洹', INT, '初果', '預流果');
+addFoTerms('sakṛd-āgāmin',     '斯陀含', INT, '二果', '一還果');
+addFoTerms('anāgāmin',         '阿那含', INT, '三果', '不還果');
+addFoTerms('arhat',            '阿羅漢', '阿羅訶', '阿羅呵', '阿拉漢',
+                               INT, '四果', '意譯應供', '應', '無著', '無所著', '真人', '至真', '應真');
 addFoTerms('śrāmaṇera',        '沙彌');
 addFoTerms('śrāmaṇeri',        '沙彌尼');
 addFoTerms('avinivartanīya',   '阿惟越致', '阿鞞跋致', '阿毘跋致',

@@ -23,15 +23,15 @@ var NJ = new (class extends SeriesContainer {
         super();
         this.setVolumesInJS(true).setBuffer(buf).setXG().reInit(9011, 36);
         this.volNum = NJ.volNum;
-        var zn = zNumber(NJ.volNum);
+        var ttl = '大般涅槃經', zn = zNumber(NJ.volNum);
         if (NJ.volNum) // write the volume content
-          this.writeStart(`大般涅槃經||卷${zn}`, `大般涅槃經 卷${NJ.volNum}`)
+          this.writeStart(`${ttl}||卷${zn}`, `${ttl} 卷${NJ.volNum}`)
               .writeBody('\n/TEXT030C/宋代沙門慧嚴等依泥洹經加之\n\n' +
                          `/TEXT339/大般涅槃經卷${zn}` +
                          NJ.text +
-                         `\n/TEXT339R/大般涅槃經卷${zn}\n/VOLSEP/`);
+                         `\n/END/大般涅槃經卷${zn}\n/VOLSEP/`);
         else // write the grand TOC
-          this.writeStart(`大般涅槃經`).writeBody(NJ.text);
+          this.writeStart(ttl+'||Mahāparinirvāṇa Sūtra').writeBody(NJ.text);
         this.writeEnd();
       }
     })(); // class extends DocInfo

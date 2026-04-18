@@ -1,6 +1,6 @@
-BKZYJ.volNum = 1;
-BKZYJ.volTitle = '';
-BKZYJ.text = `
+SC.volNum = 1;
+SC.volTitle = '';
+SC.text = `
 /SECTION/母陀羅尼真言序品第一
 
 如是我聞：

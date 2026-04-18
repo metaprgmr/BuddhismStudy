@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var ytids = [ 'R9IFyLkf35k', 'joMmb9sTkz8', 'hEsE1Vny-ZI', 'QvhF0F6kVzk', 'at_IAEzYHe0' ];
+function origin(ep) { // episode, 1-based
+  return `《<a href="https://www.hwazan.org/videos/view/12?episode=${ep}">發大誓願（第一集）</a>》2015/4/${21+ep}　台灣華藏衛星電視台　檔名：02-043-000${ep}　<a href="https://www.youtube.com/watch?v=${ytids[ep-1]}"><img src="../../../images/youtube_social_icon_red.png" height="12px"></a>`;
+}
+
+new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9078/${vol||1}.js`); }
+
+  showPage() {
+    var buf = new Buffer(), me = this;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9078, 5);
+        this.volNum = me.volNum;
+        var ttl = '發大誓願', nvol = me.volNum, zvol=zNumber(nvol),
+            txt = `\n/TEXT030C/淨空法師 講\n\n/BQKaiTi/${origin(nvol)}\n/VOLSEP/\n${me.text}`;
+        this.writeStart(`${ttl}|（第${zvol}集）`, `${ttl}#${nvol}`)
+            .writeBody(`${txt}\n\n/END/第${zvol}集\n/VOLSEP/`, true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+
+})()
+.show(get('vol')); // 卷
+</script>

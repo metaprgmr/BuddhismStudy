@@ -22,7 +22,7 @@ pre { line-height:18px }
 <body link=blue vlink=purple background="textbackground.jpg" class="Normal">
 <div class=bookClean style='layout-grid:18.0pt'>
   <p class=TITLE>佛學常用辭彙</p>
-  <p class=TEXT030C>陳義孝居士　 <a href="0592.htm">原編</a><br>信裹居士 製作拓展</p>
+  <p class=TEXT030C>陳義孝居士　<a href="0592.htm">文本原編</a><br>　信裹居士　製作拓展</p>
   <LNSP></LNSP>
 
   <div id="index"><center>
@@ -141,7 +141,17 @@ function showTermLink(buf, t, openAll) {
 }
 
 function showZiLink(buf, zi) {
-  buf.w(`<a href="javascript:showTerms(null,'${zi}')">${zi}</a>`);
+  var showLimit = 10, dimLimit = 20, redLimit = 50;
+  var c = cntTermsPerZi(zi);
+  if (c <= showLimit)
+    buf.w(`<a href="javascript:showTerms(null,'${zi}')" title="${c}">${zi}</a>`);
+  else {
+    var styl = '';
+    if (c <= dimLimit) styl = ' style="opacity:0.3"';
+    else if (c > redLimit) styl = ' style="color:red"';
+    zi = `<a href="javascript:showTerms(null,'${zi}')">${zi}</a>`;
+    buf.w(`<ruby style="ruby-position: under">${zi}<rt${styl}>${c}</rt></ruby>`);
+  }
 }
 
 function showList(cur, zis, selectedZi, dontShowTerms) { // cur: strokes or bpmf
@@ -229,6 +239,11 @@ function showTermDetails(buf, term, openAll) {
         s.substring(idx1+2);
   }
   buf.w(`<tr><td nowrap valign=top>【${term.term}】</td><td valign=top>${s}</td></tr>`);
+}
+
+function cntTermsPerZi(zi) {
+  var tg = foTerms.getTermsPerZi(zi);
+  return tg && tg.terms.length || 0;
 }
 
 function showTerms(curTerm, zi, openAll) { // curTerm or zi; not simultaneously

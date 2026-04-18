@@ -49,8 +49,7 @@ var list = `
 `.trim().split('\n');
 
 var buf = new Buffer();
-buf.w(`/TEXTC/Mahāparinirvāṇa Sūtra
-
+buf.w(`
 /TEXT030C/宋代沙門慧嚴等依泥洹經加之
 
 /VOLSEP/

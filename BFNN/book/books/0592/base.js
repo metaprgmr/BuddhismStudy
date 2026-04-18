@@ -27,6 +27,9 @@ class TermInfo {
     return this;
   }
   _preproc(s) {
+    // Pre-break numbered items
+    s = brItems(s);
+
     // Turn 見...條 into 見[[...]]條; let displaying handle [[...]].
     for (var idx = 0;;) {
       idx = s.indexOf('見', idx);

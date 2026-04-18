@@ -6,90 +6,40 @@
 <script src="../../../util/utils.js"></script>
 <script src="../mybfnn.js"></script>
 <script src="9010/visits-53.js"></script>
+<script src="9010/hyj.js"></script>
+<script src="9010/hyj40.js"></script>
 </head>
 <body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
 <div id="stg"></div>
 </body></html>
 
 <script>
-function visit(n) {
-  var needN = n > 0;
-  if (!needN) n = -n;
-  var zn = zNumber(n);
-  var t = VISITS53[n-1].teacher;
-  if (Array.isArray(t))
-    t = t.shift() + '，又稱' + t.join('、');
-  return needN ? `/TEXT339s10:can${n}/【第${zn}參：${t}】`
-               : `/TEXT339s10/【第${zn}參：${t}】`
-}
-
-var pinsUri = [ // 0-based
-  "?vol=1",          // 卷第一　　　世主妙嚴品　　　　 第一
-  "?vol=6",          // 卷第六　　　如來現相品　　　　 第二
-  "?vol=7",          // 卷第七　　　普賢三昧品　　　　 第三
-  "?vol=7&pin=p04",  // 　　　　　　世界成就品　　　　 第四
-  "?vol=8",          // 卷第八　　　華藏世界品　　　　 第五
-  "?vol=11",         // 卷第十一　　毘盧遮那品　　　　 第六
-  "?vol=12",         // 卷第十二　　如來名號品　　　　 第七
-  "?vol=12&pin=p08", // 　　　　　　四聖諦品　　　　　 第八
-  "?vol=13",         // 卷第十三　　光明覺品　　　　　 第九
-  "?vol=13&pin=p10", // 　　　　　　菩薩問明品　　　　 第十
-  "?vol=14",         // 卷第十四　　淨行品　　　　　　 第十一
-  "?vol=14&pin=p12", // 　　　　　　賢首品　　　　　　 第十二
-  "?vol=16",         // 卷第十六　　昇須彌山頂品　　　 第十三
-  "?vol=16&pin=p14", // 　　　　　　須彌頂上偈讚品　　 第十四
-  "?vol=16&pin=p15", // 　　　　　　十住品　　　　　　 第十五
-  "?vol=17",         // 卷第十七　　梵行品　　　　　　 第十六
-  "?vol=17&pin=p17", // 　　　　　　初發心功德品　　　 第十七
-  "?vol=18",         // 卷第十八　　明法品　　　　　　 第十八
-  "?vol=19",         // 卷第十九　　昇夜摩天宮品　　　 第十九
-  "?vol=19&pin=p20", // 　　　　　　夜摩宮中偈讚品　　 第二十
-  "?vol=19&pin=p21", // 　　　　　　十行品　　　　　　 第二十一
-  "?vol=21",         // 卷第二十一　十無盡藏品　　　　 第二十二
-  "?vol=22",         // 卷第二十二　昇兜率天宮品　　　 第二十三
-  "?vol=23",         // 卷第二十三　兜率宮中偈讚品　　 第二十四
-  "?vol=23&pin=p25", // 　　　　　　十迴向品　　　　　 第二十五
-  "?vol=34",         // 卷第三十四　十地品　　　　　　 第二十六
-  "?vol=40",         // 卷第四十　　十定品　　　　　　 第二十七
-  "?vol=44",         // 卷第四十四　十通品　　　　　　 第二十八
-  "?vol=44?pin=p29", // 　　　　　　十忍品　　　　　　 第二十九
-  "?vol=45",         // 卷第四十五　阿僧祇品　　　　　 第三十
-  "?vol=45?pin=p31", // 　　　　　　壽量品　　　　　　 第三十一
-  "?vol=45?pin=p32", // 　　　　　　諸菩薩住處品　　　 第三十二
-  "?vol=46",         // 卷第四十六　佛不思議法品　　　 第三十三
-  "?vol=48",         // 卷第四十八　如來十身相海品　　 第三十四
-  "?vol=48?pin=p35", // 　　　　　　如來隨好光明功德品 第三十五
-  "?vol=49",         // 卷第四十九　普賢行品　　　　　 第三十六
-  "?vol=50",         // 卷第五十　　如來出現品　　　　 第三十七
-  "?vol=53",         // 卷第五十三　離世間品　　　　　 第三十八
-  "?vol=60",         // 卷第六十　　入法界品 　　　　　第三十九
-];
-var HYJ = new (class extends SeriesContainer {
+var HYJ = new (class extends HYJContainer {
   constructor() { super(); }
 
   loadJS(vol) { addjs(`9010/${to2d(vol||0)}.js`); }
 
   showPage() {
-    var buf = new Buffer();
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setBuffer(buf).setXG().reInit(9010, 80);
-        this.volNum = HYJ.volNum;
-        var zn = zNumber(HYJ.volNum), ttl = '大方廣佛華嚴經';
-        if (HYJ.volNum) // write the volume content
-          this.writeStart(`${ttl}|卷${zn}`, `華嚴經 卷${HYJ.volNum}`)
+        this.setBuffer().setXG().reInit(9010, 80);
+        this.volNum = SC.volNum;
+        var zn = zNumber(SC.volNum), ttl = '大方廣佛華嚴經';
+        if (SC.volNum) // write the volume content
+          this.writeStart(`${ttl}|卷${zn}`, `華嚴經 卷${SC.volNum}`)
               .writeBody('\n/TEXT030C/唐于闐實叉難陀譯\n\n' +
-                         `/TEXT339/${ttl}卷${zn}` +
-                         HYJ.text +
-                         `\n/TEXT339R/${ttl}卷${zn}\n\n/VOLSEP/\n`);
+                         `/SECTION/${ttl}卷${zn}` +
+                         SC.text +
+                         `\n/END/${ttl}卷${zn}\n/VOLSEP/\n`);
         else // write the grand TOC
-          this.writeStart(ttl, `華嚴經`).writeBody(HYJ.text);
+          this.writeStart(ttl+'||Mahāvaipulya Buddhāvataṃsaka Sūtra', `華嚴經`)
+              .writeBody('\n/TEXT030C/唐于闐實叉難陀譯\n' + SC.text);
         this.writeEnd();
       }
 
       writeSeriesNav(links) {
-        var cur=HYJ.volNum, me=this, pinNo=1, meeting7pins=
+        var cur=SC.volNum, me=this, pinNo=1, meeting7pins=
 `十定品 十通品 十忍品 阿僧祇品 壽量品
 諸菩薩住處品 佛不思議法品 如來十身相海品
 如來隨好光明功德品 普賢行品 如來出現品`;
@@ -141,11 +91,14 @@ var HYJ = new (class extends SeriesContainer {
       }
     } // class extends DocInfo
     )();
-    buf.render('stg');
-  }
-})(); // HYJ
 
-HYJ.show(get('vol'), get('pin')||get('loc')); // 卷 品/部分
+    docInfo.buf.render('stg');
+  }
+})();
+
+var vol = get('vol');
+if (vol >= 60) SC.use五十三參();
+SC.show(vol, get('pin')||get('loc')); // 卷 品/部分
 
 // 經文來源，例如：https://budaedu.org/budaedu/buda2_04.php
 </script>

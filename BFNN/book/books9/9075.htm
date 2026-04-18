@@ -16,11 +16,11 @@ var JTSXL = new (class extends SeriesContainer {
   loadJS(vol) { addjs(`9075/${to2d(vol||0)}.js`); }
 
   showPage() {
-    var buf = new Buffer(), me = this;
+    var me = this;
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9075, 9);
+        this.setVolumesInJS(true, true).setBuffer().setXG().reInit(9075, 9);
         this.volNum = me.volNum;
         var ttl = '淨土聖賢錄', author = '淨業學人彭際清撰';
         if (!me.volNum) {
@@ -30,11 +30,11 @@ var JTSXL = new (class extends SeriesContainer {
           var zvol = zNumber(me.volNum), juan = ttl + zvol;
           this.writeStart(`${ttl}|（卷${zvol}）`)
               .writeBody(`\n/TEXT030C/${author}\n` +
-                         `/SECTION/${juan}\n${me.text}\n/TEXT339R/${juan}\n/VOLSEP/`, true);
+                         `/SECTION/${juan}\n${me.text}\n/END/${juan}\n/VOLSEP/`, true);
         }
       }
     })(); // class extends DocInfo
-    buf.render('stg');
+    docInfo.buf.render('stg');
   }
 
 })()

@@ -504,18 +504,17 @@ buf.w('</div><br>',
 for (i=0; i<vols.length; ++i) {
   var a = vols[i], len = a.length;
   for (var j=0; j<len; ++j) {
-    var ln0='', end='', ln = a[j], idx = ln.indexOf('<10'),
-        anchor = `<a name="_${aNum}" id="_${aNum}"></a>`;
+    var ln0='', end='', ln = a[j], idx = ln.indexOf('<10');
     if (idx > 0) { ln0 = ln.substring(0,idx); ln = ln.substring(idx+6); }
     idx = ln.lastIndexOf('。', ln.length-2);
     if (idx > 0) { end = '<end>' + ln.substring(idx+1) + '</end>'; ln = ln.substring(0,idx+1); }
     q = qs[aNum-1];
     if (q.startsWith('何等為')) q = '何等為<br>'+q.substring(3);
     else if (q.startsWith('何故') || q.startsWith('云何')) q = q.substring(0,2)+'<br>'+q.substring(2);
-    buf.w('<tr><td align=center>', aNum, '.</td>',
+    buf.w(`<tr name="_${aNum}" id="_${aNum}"><td align=center>${aNum}.</td>`,
           '<td align=center>', q, '</td>',
           `<td>${53+i}</td>`,
-          `<td width="800px"><h4>${anchor}${ln0.replace('PSMS','菩薩摩訶薩')}</h4>`,
+          `<td width="800px"><h4>${ln0.replace('PSMS','菩薩摩訶薩')}</h4>`,
           numbering(ln), end, '</td></tr>');
     ++aNum;
   }

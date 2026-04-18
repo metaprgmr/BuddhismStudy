@@ -18,11 +18,24 @@ function zNumber(n) { // 0 to 999
   if (d1 > 0) ret += zdigits[d1];
   return ret;
 }
+function cilzn(n) { return `<cil>（${zNumber(n)}）</cil>`; }
+function to2d(n) { for (n =''+n; n.length<2; n='0'+n); return n; }
+function to3d(n) { for (n =''+n; n.length<3; n='0'+n); return n; }
 function to4d(n) { for (n =''+n; n.length<4; n='0'+n); return n; }
+function repeat(x, n) { var r=''; for(var i=0; i<n; ++i) r+=x; return r; }
 function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
+}
+var _namedSeq = {};
+function seqNext(name, def) {
+  var i = _namedSeq[name];
+  if (typeof i == 'undefined')
+    i = (def === 0) ? 0 : (def || 1);
+  else ++i;
+  _namedSeq[name] = i;
+  return i;
 }
 var queryParams;
 function get(name) {
@@ -52,8 +65,8 @@ function P(txt,phon) { // for "phon" or "phonetic"
   return `<span class="myphon" title="${phon}">${txt}</span>`;
 }
 
-function nVolsTOC(txt, sepW, singlePage) { // e.g. 9051/00.js for non-singlePage
-  var a = txt.split('\n'), pinNum,
+function nVolsTOC(ttl, txt, sepW, singlePage) { // e.g. 9051/00.js for non-singlePage
+  var a = (txt||'').split('\n'), pinNum, lastCol,
       buf = new Buffer(), sep = colDiv(sepW), hasCols = false;
   buf.w('<table border=0>');
   for (var i in a) {
@@ -77,6 +90,8 @@ function nVolsTOC(txt, sepW, singlePage) { // e.g. 9051/00.js for non-singlePage
       if (idx > 0) {
         b = col.substring(0,idx).split(',');
         col = col.substring(idx+1).trim();
+        if (col == lastCol) col = repeat('〰', col.length); // '　'
+        else lastCol = col;
         var ref = b[0].trim();
         if (singlePage)
           col = `<a href="javascript:showTop('${ref}')">${col}</a>`;
@@ -84,15 +99,48 @@ function nVolsTOC(txt, sepW, singlePage) { // e.g. 9051/00.js for non-singlePage
           col = `<a href="?vol=${ref}&pin=${b[1].trim()}">${col}</a>`;
         else
           col = `<a href="?vol=${ref}">${col}</a>`;
+      } else {
+        lastCol = col;
       }
-      if (pt) pt = `<small style="color:black">之${pt}</small>`;
+      if (pt) pt = `<small>之${pt}</small>`;
       buf.w('<td valign=top nowrap>', col, pinNum, pt, '</td>');
     }
     buf.w('</tr>');
   }
   buf.w('</table>', hasCols ? COL_END : '</center>');
   buf.prepend('\n', hasCols ? COL_START : '<center>');
+  if (ttl)
+    buf.prepend('<center>\n/SECTION/', ttl, '</center>');
   return buf.render();
+}
+
+function inPageStart(newPin, id, pastPin, newprefix) {
+  id = id ? `:${id}` : '';
+  pastPin = pastPin ? `/END/ ${pastPin}\n` : '';
+  return `${pastPin}/VOLSEP${id}/\n${newprefix||''}/SECTION/${newPin}`;
+}
+
+// start can be a number or like '59|p12'
+function simpleTOC(name, start, end, cur) {
+  if (!cur) cur = 1;
+  var b = new Buffer(`/TEXT030C/【${name}】`), pin='';
+  if (typeof start == 'string') {
+    var i = start.indexOf('\|');
+    if (i > 0) {
+      pin = `&pin=${start.substring(i+1)}`;
+      start = parseInt(start.substring(0,i));
+    }
+  }
+  for (i=start; i<=end; ++i) {
+    var num = i-start+1;
+    if (num > 1) pin = '';
+    b.w('　');
+    if (num == cur)
+      b.w('之', zNumber(num));
+    else
+      b.w(`<a href="?vol=${i}${pin}">之${zNumber(num)}</a>`);
+  }
+  return b.render();
 }
 
 function colDiv(sepW, w) {
@@ -115,7 +163,7 @@ const COL_START = colStart(),
       EXTERNAL  = '↗';
       LNSP = '<LNSP></LNSP>', SP = '<br>', ASIS = 'asis';
 
-var terse = get('terse');
+var terse = get('terse'),
     queryParams, url=document.URL, a=url.indexOf('s/j'),
     isDebug = (a>url.indexOf(':/')) && (a<url.indexOf('g/'));
 
@@ -126,6 +174,8 @@ class DocInfo {
     this.gathaClass = 'gatha';
     this.zdigits = '〇一二三四五六七八九十';
     this.setMetaDelim('/');
+    this.volNumStart = 1;
+    this.tocJS = 0;
     this.tips = {};
     this.addMyTips();
   }
@@ -151,8 +201,9 @@ class DocInfo {
     return this.idMap ? this.idMap[idx] : (this.firstVolNum + idx);
   }
   setDepth(d) { this.depth = d; return this; }
+  setVolNumStart(n) { this.volNumStart = n; return this; }
   setNavBreakAt(n) { this.navBreakAt = n; return this; }
-  setBuffer(buf) { this.buf = buf; return this; }
+  setBuffer(buf) { this.buf = buf || new Buffer(); return this; }
   setMetaDelim(l, r) { this.metaLeft = l; this.metaRight = r||l; return this; }
   setGathaClass(cls) { this.gathaClass = cls; return this; }
   setXG(endCenter,titleCls) { this.isXG = true; this.endCenter = endCenter; this.titleExtraCls = titleCls; return this; }
@@ -217,6 +268,7 @@ class DocInfo {
     var tag = '<div class=endImage' + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
               `>【<a href="${base}/index.html">經論選讀</a>】 【<a href="${base}/../index.html">返回主頁</a>】</div>`;
     this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
+           '<div style="position:absolute; top:0; left:0; width:30px; height:15px;" onclick="flipPRIV()"></div>',
            '</body></html>');
     return this;
   }
@@ -254,16 +306,17 @@ class DocInfo {
       return `<a class="seriesnav" href="?vol=${vnum}">${disp}</a>`;
     }
     if (this.hasTOCJS)
-      this.w('【', lnk(0,'總目錄'), '】', this.tocSepLine ? '\n' : '&nbsp;');
-    if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
-    else this.w(lnk(this.volNum, '&laquo;'));
-    for (var i=1; i<=this.totalVols; ++i) {
-      if (this.navBreakAt && (i % this.navBreakAt == 1) && (i > 1)) this.w('<br>');
+      this.w('【', lnk(this.tocJS,'總目錄'), '】', this.tocSepLine ? '\n' : '&nbsp;');
+    if (this.volNum <= this.volNumStart) this.w('<inv>&laquo;</inv>');
+    else this.w(lnk(this.volNum-1, '&laquo;'));
+    var vnEnd = this.volNumStart+this.totalVols-1;
+    for (var i=this.volNumStart; i<=vnEnd; ++i) {
+      var i1 = i - this.volNumStart + 1;
+      if (this.navBreakAt && (i1 % this.navBreakAt == 1) && (i1 > 1)) this.w('<br>');
       var lbl = (i<=10) ? this.zdigits[i] : i;
-      if (i == this.volNum) this.w(`&nbsp;<cur>${lbl}</cur>`);
-      else this.w('&nbsp;', lnk(i, lbl));
+      this.w('&nbsp;', (i == this.volNum) ? `<cur>${lbl}</cur>` : lnk(i, lbl));
     }
-    if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
+    if (this.volNum >= vnEnd) this.w('&nbsp;<inv>&raquo;</inv>');
     else this.w('&nbsp;', lnk(this.volNum+1, '&raquo;'));
     if (links) this.w('　', links);
     return this;
@@ -321,6 +374,17 @@ class DocInfo {
   }
   writeln(ln, lnnum) {
     var ln1 = ln && ln.trim(), lnId, idx1, idx2;
+
+    if (ln[1] == 'H' && ln[2] == 'Y') {
+      idx1 = ln.indexOf('/', 2);
+      ln1 = ln.substring(1, idx1).split('=');
+      switch (ln1[0].trim()) {
+      case 'HY':   ln1 = ln = section40(ln1[1].trim()); break;
+      case 'HYSK': ln1 = ln = visit(ln1[1].trim()); break;
+      default: throw `Unknown HY line: [${ln}]`;
+      }
+    }
+
     if (ln1[0] == '/') {
       idx1 = ln1.indexOf('/', 1);
       idx2 = ln1.indexOf('|', 1);
@@ -500,15 +564,6 @@ class DocInfo {
       return lnId;
     }
 
-    if (ln1.startsWith('/FOOTNOTE')) { // e.g. 9076/03.js
-      this.w('<table><tr><td style="border-top:1px solid gray; padding-top:5px">');
-      return lnId;
-    }
-    if (ln1.startsWith('/_FOOTNOTE')) { // e.g. 9076/03.js
-      this.w('</td></tr></table>');
-      return lnId;
-    }
-
     if (ln1.startsWith('/xia:')) { // e.g. 0360-HAN.htm
       if (!xia)
         this.w('<p class=KEPAN>', ln1, '</p>'); // show it as-is
@@ -547,13 +602,17 @@ class DocInfo {
         ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
     }
     cls = cls[0] || '';
-    if (cls == 'VOLSEP') { // e.g. 9011
+    switch (cls) {
+    case 'END':
+      cls = 'TEXT339R'; // alias it for now.
+      break;
+    case 'VOLSEP': // e.g. 9011
       this.w(ln, '<hr class=volsep>');
       return lnId;
     }
     var append = (cls[0] == '+');
     if (append) cls = cls.substring(1);
-    if (cls == 'L' || cls == 'R' || cls == 'C')
+    if (cls.length == 1) // e.g. L R C S
       cls = 'TEXT' + cls;
     if (cls.startsWith('TEXT') && cls.endsWith('R'))
       cls = cls.substring(0, cls.length-1) + ' align=right';
@@ -572,7 +631,15 @@ class DocInfo {
 
   localProc(ln) {
     // process inline function call; e.g. 9028 for "{R...}", "{P...}"
-    var idx = ln.indexOf('{');
+    var toHL, idx;
+    if (ln[0] == '!') { // e.g. 9010/16.js
+      idx = ln.indexOf('!', 2);
+      if (idx < 0) throw `Expect a second !: ${ln}`;
+      toHL = ln.substring(1,idx);
+      ln = ln.substring(idx+1);
+    }
+
+    idx = ln.indexOf('{');
     if (idx >= 0) {
       var ret = '';
       while (idx >= 0) {
@@ -604,6 +671,8 @@ class DocInfo {
       }
       ln = ret;
     }
+
+    if (toHL) ln = hiliteFirst(ln, toHL);
 
     // process <a!999>; e.g. 0010
     ln = ln.replace(/<a!\d+>/g,
@@ -666,6 +735,10 @@ class DocInfo {
     return `<KEPAN><font style="font-size:10pt">【${lnId}】&nbsp;</font></KEPAN>`;
   }
 
+  writeDBJJ(ttl, txt) { // 專為《大寶積經》
+    return this.setXG().setDepth(1).writeDoc(`<a href="../9050.htm">大寶積經卷</a>•${ttl}`, ttl, txt);
+  }
+
   writeDoc(ttl) { // convenience method for writing the whole doc
     var docTtl, bodyTxt;
     switch(arguments.length) {
@@ -701,14 +774,18 @@ function xref(num) {
 }
 
 // typically for long series, where preloading all js files is a waste.
+var SC; // singleton
 class SeriesContainer { // prototype: 9010
   constructor() {
+    SC = this;
     this.volNum = undefined; // default impl
     this.text   = undefined; // default impl
     this.loadWait = 300;
+    this.tocJS  = 0;
   }
   setLoadWait(msecs) { this.loadWait = msecs; return this; }
 
+  setTOCJS(n) { this.tocJS = n; return this; }
   isReady() { return !!this.text; } // default impl
   loadJS(vol) { throw 'Must implement SeriesContainer.loadJS(). Return true to indicate immediate availability.'; }
   showPage() { throw 'Must implement SeriesContainer.showPage()'; }
@@ -738,7 +815,38 @@ class SectionHeader {
   next() { return `/SECTION:a${toW(++this.num, this.size, '0')}/`; }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+function footnotes() {
+  var styl;
+  function c(v, center) {
+    var ret = `<td style="${styl}"`;
+    if (center) ret += ' align=center';
+    return `${ret}>${v}</td>`;
+  }
+  var len = arguments.length;
+  if (len <= 0) return;
+  var ret = '<table border=0 cellspacing=0 cellpadding=0>';
+  for (var i=0; i<len; ++i) {
+    styl = 'padding-top:4px';
+    if (i>0) styl += '; border-top:0px solid white';
+    else     styl += '; border-top:1px solid black';
+    ret += `<tr>${c('&nbsp;[')}${c(i+1,1)}${c(']&nbsp;&nbsp;')}${c(arguments[i]+'　')}</tr>`;
+  }
+  return ret + '</table>';
+}
+
+var OWN = isLocal(), hlite = 'key';
+function c(x) { return OWN ? `<${hlite}>${x}</${hlite}>` : x; }
+function hiliteSeg(s, start, end) { // start:inclusive, end:exclusive
+  return s.substring(0,start) + c(s.substring(start,end)) + s.substring(end);
+}
+function hiliteFirst(ln, toHL) {
+  if (!ln) return ln;
+  var idx = ln.indexOf(toHL);
+  if (idx < 0) return ln;
+  return hiliteSeg(ln, idx, idx+toHL.length);
+}
+
+//================================================================================
 // The following are for series, typically used for >3 in size.
 
 // -- 妙法蓮華經淺釋 宣化上人` --
@@ -1136,6 +1244,17 @@ function write1472(n, body) {
       if (links) w('　', links);
     }
   })();
+}
+
+var __privOn = 'none';
+
+function flipPRIV() {
+  var els = document.querySelectorAll('p.PRIV');
+  __privOn = __privOn == 'block' ? 'none' : 'block';
+  for (var i in els) {
+    var el = els[i];
+    el.style && (el.style.display = __privOn);
+  }
 }
 
 // -- 大佛頂首楞嚴經正脈疏 交光大師 --
