@@ -27,6 +27,7 @@ function zNumber(n) { // 0 to 999
   var d1   = n - d100 * 100 - d10 * 10;
   var ret = (d100 > 0 ? zdigits[d100] : '') + zdigits[d10] + zdigits[d1];
   while (ret.length > 1 && ret.startsWith('〇')) ret = ret.substring(1);
+  while (ret.length > 1 && ret.endsWith('〇')) ret = rtrim(ret,1);
   return ret;
 }
 function ZNumber(n) { // 0 to 999
@@ -39,6 +40,7 @@ function ZNumber(n) { // 0 to 999
   }
   return ret;
 }
+function z10(n) { return n<=10 ? zNumber(n) : n; }
 function isZDigit(c) { return znumeric.indexOf(c) >= 0; }
 function parseZNumber(n) {
   var len = n.length, ret = 0;
@@ -203,8 +205,19 @@ function shallowClone(o) {
 }
 function setLang(l)         { var cur = localStorage.getItem('lang'); localStorage.setItem('lang',l); return cur!=l; }
 function getLang()          { return localStorage.getItem('lang'); }
-function addjs(uri)         { document.write('<s'+`cript src="${uri}"></sc`+'ript>') }
-function addStyleTag(s)     { if (s) { var el = document.createElement('style'); el.textContent = s; document.head.appendChild(el); } }
+function addHeadEl(tag, attrs) {
+  var el = document.createElement(tag);
+  attrs && Object.assign(el, attrs);
+  document.head.appendChild(el);
+  return el;
+}
+function addjs() {
+  for (var i in arguments) {
+    var uri = (arguments[i] || '').trim();
+    if (uri) w('<sc' + 'ript sr' + 'c="' + uri + '">' + '</s' + 'cri' + 'pt>');
+  }
+}
+function addStyleTag(s)     { s && addHeadEl('style', { "textContent":s }); }
 function toEl(x)  { return (typeof x=='string')?document.getElementById(x):x; }
 function e(id)    { return document.getElementById(id) }
 function showEl() { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
@@ -359,6 +372,20 @@ function containsAny() {
     for (var i=1; i<len; ++i)
       if (s.indexOf(arguments[i]) >= 0) return true;
   return false;
+}
+
+function hiliteSeg(s, start, end, tag, endtag) { // start:inclusive, end:exclusive
+  var seg = s.substring(start,end);
+  if (typeof tag == 'function') seg = tag(seg);
+  else seg = tag + seg + endtag;
+  return s.substring(0,start) + seg + s.substring(end);
+}
+
+function hiliteFirst(ln, toHL, tag, endtag) {
+  if (!ln) return ln;
+  var idx = ln.indexOf(toHL);
+  if (idx < 0) return ln;
+  return hiliteSeg(ln, idx, idx+toHL.length, tag, endtag);
 }
 
 function range(from, to) { // inclusive

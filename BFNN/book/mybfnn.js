@@ -13,12 +13,17 @@ function zNumber(n) { // 0 to 999
   var d1   = n - d100 * 100 - d10 * 10;
   var ret = '';
   if (d100 > 0)
-    return zdigits[d100] + '百' + zNumber(n - d100*100);
-  ret += zdigits[d10] + '十';
-  if (d1 > 0) ret += zdigits[d1];
+    ret = zdigits[d100] + '百' + zNumber(n - d100*100);
+  else {
+    ret += zdigits[d10] + '十';
+    if (d1 > 0) ret += zdigits[d1];
+  }
+  while (ret.length > 1 && ret.startsWith('〇')) ret = ret.substring(1);
+  while (ret.length > 1 && ret.endsWith('〇')) ret = rtrim(ret,1);
   return ret;
 }
-function cilzn(n) { return `<cil>（${zNumber(n)}）</cil>`; }
+function z10(n) { return n<=10 ? zNumber(n) : n; }
+function cilzn(n, left, right) { return `<cil>${left||'（'}${zNumber(n)}${right||'）'}</cil>`; }
 function to2d(n) { for (n =''+n; n.length<2; n='0'+n); return n; }
 function to3d(n) { for (n =''+n; n.length<3; n='0'+n); return n; }
 function to4d(n) { for (n =''+n; n.length<4; n='0'+n); return n; }
@@ -155,6 +160,7 @@ function nextRow(w) {
 
 const COL_START = colStart(),
       COL_DIV   = colDiv(),
+      COL_DIV1  = colDiv(1),
       COL_DIV15 = colDiv(15),
       COL_DIV20 = colDiv(20),
       COL_DIV30 = colDiv(30),
@@ -174,6 +180,7 @@ class DocInfo {
     this.gathaClass = 'gatha';
     this.zdigits = '〇一二三四五六七八九十';
     this.setMetaDelim('/');
+    this.divClass = 'bookClean';
     this.volNumStart = 1;
     this.tocJS = 0;
     this.tips = {};
@@ -201,6 +208,8 @@ class DocInfo {
     return this.idMap ? this.idMap[idx] : (this.firstVolNum + idx);
   }
   setDepth(d) { this.depth = d; return this; }
+  setDivClass(c) { this.divClass = c; return this; }
+  setPageLinks(lnks) { this.links = lnks; return this; }
   setVolNumStart(n) { this.volNumStart = n; return this; }
   setNavBreakAt(n) { this.navBreakAt = n; return this; }
   setBuffer(buf) { this.buf = buf || new Buffer(); return this; }
@@ -227,8 +236,8 @@ class DocInfo {
 
     var base = (this.depth == 1) ? '../..' : '..';
     if (!this.buf)
-      this.w(`<body link=blue vlink=purple background="${base}/books/textbackground.jpg" class="Normal">`);
-    this.w(`<div class=bookClean style='layout-grid:18.0pt'>`); // content starts...
+      this.w(`<body link=blue vlink=purple>`);
+    this.w(`<div class=${this.divClass}>`); // content starts...
     if (this.isXG && this.endCenter)
       this.w('<table><tr><td>');
 
@@ -257,18 +266,25 @@ class DocInfo {
   writeEnd(links) {
     if (this.firstVolNum) {
       this.w(SP, '<div class=endBar>');
-      if (this.volNum || !this.hasTOCJS) this.writeSeriesNav(links);
+      if (this.volNum || !this.hasTOCJS) this.writeSeriesNav();
       else if (this.finalLinks) this.w('<center>', this.finalLinks, '</center>');
       this.w('</div>');
-    } else if (links) {
-      this.w(SP, '<div class=endBar>', links, '</div>');
     }
     this.w('</div>'); // ...content ends
     var base = (this.depth == 1) ? '../../..' : '../..';
+    if (!links)
+      links = '';
+    else if (Array.isArray())
+      links = '【' + links.join('】 【') + '】';
+    else {
+      if ((links.indexOf('《') < 0) && (links.indexOf('【') < 0))
+        links = `【${links}】`;
+    }
     var tag = '<div class=endImage' + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
-              `>【<a href="${base}/index.html">經論選讀</a>】 【<a href="${base}/../index.html">返回主頁</a>】</div>`;
+              ' style="text-align:right"' +
+              `>${links} 【<a href="${base}/index.html">經論選讀</a>】 【<a href="${base}/../index.html">返回主頁</a>】</div>`;
     this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
-           '<div style="position:absolute; top:0; left:0; width:30px; height:15px;" onclick="flipPRIV()"></div>',
+           '<div class=noprint style="position:absolute; top:0; left:0; width:30px; height:15px;" onclick="flipPRIV()"></div>',
            '</body></html>');
     return this;
   }
@@ -286,6 +302,7 @@ class DocInfo {
       pnum = to4d(pnum);
       return terse ? `${pnum}.htm?terse` : `${pnum}.htm`;
     }
+    this.w('<div class=noprint>');
     if (this.volNum <= 1) this.w('<inv>&laquo;</inv>');
     else this.w(`<a href="${fname(this.getIdAt(this.volNum-1))}">&laquo;</a>`);
     for (var i=1; i<=this.totalVols; ++i) {
@@ -299,12 +316,14 @@ class DocInfo {
     if (this.volNum >= this.totalVols) this.w('&nbsp;<inv>&raquo;</inv>');
     else this.w(`&nbsp;<a href="${fname(this.getIdAt(this.volNum+1))}">&raquo;</a>`);
     if (links) this.w('　', links);
+    this.w('</div>');
     return this;
   }
   writeSeriesNavForJS(links) {
     function lnk(vnum, disp) {
       return `<a class="seriesnav" href="?vol=${vnum}">${disp}</a>`;
     }
+    this.w('<div class=noprint>');
     if (this.hasTOCJS)
       this.w('【', lnk(this.tocJS,'總目錄'), '】', this.tocSepLine ? '\n' : '&nbsp;');
     if (this.volNum <= this.volNumStart) this.w('<inv>&laquo;</inv>');
@@ -319,6 +338,7 @@ class DocInfo {
     if (this.volNum >= vnEnd) this.w('&nbsp;<inv>&raquo;</inv>');
     else this.w('&nbsp;', lnk(this.volNum+1, '&raquo;'));
     if (links) this.w('　', links);
+    this.w('</div>');
     return this;
   }
   writeBody(txt, withEnd) {
@@ -373,7 +393,14 @@ class DocInfo {
     return buf;
   }
   writeln(ln, lnnum) {
-    var ln1 = ln && ln.trim(), lnId, idx1, idx2;
+    var toHL, idx1, idx2;
+    if (ln[0] == '!') { // e.g. 9010/16.js
+      idx1 = ln.indexOf('!', 2);
+      if (idx1 < 0) throw `Expect a second !: ${ln}`;
+      toHL = ln.substring(1,idx1);
+      ln = ln.substring(idx1+1);
+    }
+    var ln1 = ln && ln.trim(), lnId;
 
     if (ln[1] == 'H' && ln[2] == 'Y') {
       idx1 = ln.indexOf('/', 2);
@@ -468,6 +495,7 @@ class DocInfo {
       if (ln1.startsWith('//')) {
         this.gatha();
         this.inGatha = false;
+        delete this.gathaStart;
       }
       else {
         if (ln.startsWith('/#')) { // special processing for paraName
@@ -528,8 +556,15 @@ class DocInfo {
       return lnId;
     }
 
-    if (ln1.startsWith('/gatha/')) { // e.g. 0875
+    if (ln1.startsWith('/gatha')) { // e.g. 0875
       this.inGatha = true;
+      this.gathaStart = null;
+      idx1 = ln1.indexOf('!'); // set this.gathaStart. e.g. 9069
+      if (idx1 > 0) {
+        idx2 = ln1.lastIndexOf('/');
+        if (idx2 > idx1)
+          this.gathaStart = parseInt(ln1.substring(idx1+1,idx2).trim());
+      }
       return lnId;
     }
 
@@ -577,7 +612,7 @@ class DocInfo {
       return lnId;
     }
 
-    ln = this.localProc(ln);
+    ln = this.localProc(ln, toHL);
 
     if (ln1[0] != this.metaLeft) {
       this.w(`<p class=${this.defaultClass}>${ln}</p>`);
@@ -629,17 +664,9 @@ class DocInfo {
     return lnId;
   }
 
-  localProc(ln) {
+  localProc(ln, toHL) {
     // process inline function call; e.g. 9028 for "{R...}", "{P...}"
-    var toHL, idx;
-    if (ln[0] == '!') { // e.g. 9010/16.js
-      idx = ln.indexOf('!', 2);
-      if (idx < 0) throw `Expect a second !: ${ln}`;
-      toHL = ln.substring(1,idx);
-      ln = ln.substring(idx+1);
-    }
-
-    idx = ln.indexOf('{');
+    var idx = ln.indexOf('{');
     if (idx >= 0) {
       var ret = '';
       while (idx >= 0) {
@@ -672,7 +699,7 @@ class DocInfo {
       ln = ret;
     }
 
-    if (toHL) ln = hiliteFirst(ln, toHL);
+    if (toHL) ln = hiliteFirst(ln, toHL, '<key>', '</key>');
 
     // process <a!999>; e.g. 0010
     ln = ln.replace(/<a!\d+>/g,
@@ -703,7 +730,8 @@ class DocInfo {
       }
       return ret;
     }
-    var a = this.gathaText.split('\n'), len = a.length, num = 1;
+    var a = this.gathaText.split('\n'), len = a.length,
+        num = this.gathaStart || 1, needNum = this.gathaStart || (len > 5);
     for (var i=0; i<len; ++i) {
       var ln = a[i];
       var idx = ln.indexOf('|'), anno;
@@ -716,8 +744,13 @@ class DocInfo {
       if (ln.trim().length == 0) {
         this.w(LNSP);
       } else {
+        var skipNum = false;
+        if (ln[0] == '-') {
+          ln = ln.substr(1);
+          skipNum = true;
+        }
         this.w(`<p class="TEXTL ${this.gathaClass}"><span class="gathanum">`,
-          (len > 5) ? (num++) : '', '&nbsp;</span>', this.localProc(replaceSP(ln)));
+          (!skipNum && needNum) ? (num++) : '', '&nbsp;</span>', this.localProc(replaceSP(ln)));
         if (anno) this.w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
         this.w(`</p>`);
       }
@@ -746,8 +779,9 @@ class DocInfo {
     case 2:  bodyTxt = arguments[1]; break;
     default: bodyTxt = arguments[2]; docTtl = arguments[1]; break;
     }
-    this.writeStart(ttl, docTtl).writeBody(bodyTxt, true);
-    return this;
+    return this.writeStart(ttl, docTtl)
+               .writeBody(bodyTxt)
+               .writeEnd(this.links)
   }
 
 } // end of DocInfo.
@@ -791,17 +825,17 @@ class SeriesContainer { // prototype: 9010
   showPage() { throw 'Must implement SeriesContainer.showPage()'; }
 
   show(vol, anchor) {
+    this.volNum = vol;
     if (this.loadJS(vol)) {
-      this.volNum = vol;
       this.showPage();
       anchor && showTop(anchor);
       return;
     }
     this.timer = setInterval(() => {
       if (!this.isReady()) return;
+      clearInterval(this.timer);
       this.showPage();
       anchor && showTop(anchor);
-      clearInterval(this.timer);
     }, this.loadWait);
     return this;
   }
@@ -836,15 +870,6 @@ function footnotes() {
 
 var OWN = isLocal(), hlite = 'key';
 function c(x) { return OWN ? `<${hlite}>${x}</${hlite}>` : x; }
-function hiliteSeg(s, start, end) { // start:inclusive, end:exclusive
-  return s.substring(0,start) + c(s.substring(start,end)) + s.substring(end);
-}
-function hiliteFirst(ln, toHL) {
-  if (!ln) return ln;
-  var idx = ln.indexOf(toHL);
-  if (idx < 0) return ln;
-  return hiliteSeg(ln, idx, idx+toHL.length);
-}
 
 //================================================================================
 // The following are for series, typically used for >3 in size.

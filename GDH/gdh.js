@@ -539,8 +539,8 @@ wai3 lin4 kan4 han2 caam3 gik1 fu4 pou5 cau1 paau1 to1 ziu1 jai6 bou6 zip3 bok3
 zong2 pok3 taat3 jung2 daam1 kwai4 zaan2 fok3 cik1 dik6 gan1 zoek3 zaam2 zuk6 faan1
 暫替末枕某梁棒楚槍欽歧殷慇毗毘汁沸
 zaam6 tai3 mut6 zam2 mau5 loeng4 paang5 co2 coeng1 jam1 kei4 jan1 jan1 pei4 pei4 zap1 fai3
-油泔浪涌涕渡渧渴游湯溢漆澆澤炒烊
-jau4 gam1 long6 jung2 tai3 dou6 dai3 hot3 jau4 tong1 jat6 cat1 giu1 zaak6 caau2 joeng4
+油泔浪涌涕渡渧渴游湯溢漆澆沼澤炒烊
+jau4 gam1 long6 jung2 tai3 dou6 dai3 hot3 jau4 tong1 jat6 cat1 giu1 ziu2 zaak6 caau2 joeng4
 爪牆牙牛犬狄狗狼獅獵獻玩玷煮燃燄
 zaau2 coeng4 ngaa4 ngau4 hyun2 dik6 gau2 long4 si1 lip6 hin3 waan4 dim3 zyu2 jin4 jim6
 產畋畜畢畫疫疲瘡瘵癃癒皮盞盤省
@@ -623,14 +623,24 @@ toi2/toi4 luk6 gang1 san1 fui3 dai6 seot1 kwan1 jyun4/jyun6 aat3 jau6 luk6 kei3 
 zaa3 han2 joek6 mit6 jiu2 soeng2 gu1 zyu1 bin2 paai4 lou6 jung1 saan3 se6 zat6 cai1 tin4
 穴巢逞婚恥認嫁沽買包剪裁縠紊規模材埋
 jyut6 caau4 cing2 fan1 ci2 jing6 gaa3 gu1 maai5 baau1 zin2 coi4 huk6 man6 kwai1 mou4 coi4 maai4
-蠱傅擄掠苛嚇呵黨妾訓冒罔效鑒猥借慾餧
-gu2 fu6 lou5 loek6 ho1 haak3 ho2 dong2 cip3 fan3 mou6 mong5 haau6 gaam3 wui1 ze3 juk6 neoi5
+蠱傅擄掠苛嚇呵黨妾訓冒罔效鑒猥借慾餧謁
+gu2 fu6 lou5 loek6 ho1 haak3 ho2 dong2 cip3 fan3 mou6 mong5 haau6 gaam3 wui1 ze3 juk6 neoi5 jit3
 秤採姦壓謾驀婪誇舅姑挾灶跳僻臘舞朔唾屎
 cing3 coi2 gaan1 aat3 maan4 mak6 laam4 kwaa1 kau5 gu1 hip3 zou3 tiu3 pik1 laap6 mou5 sok3 to3 si2
 吟柴裸虹霓燎龜脯鴆顒眄額劬轢褫寔蘄掇
 ngam4 caai4 lo2 hung4 ngai4 liu4 gwai1 fu2 zam6 jung4 min5 ngaak2 keoi4 lik1 ci2 sat6 kei4 zyut3
-遁遯駢髫麓甄猨猴僉
-deon6 deon6 pin4/ping4 tiu4 luk1 jan1 jyun4 hau4 cim1
+遁遯駢髫麓甄猨猴瞿翦陂圃耘操羨寢愜枳
+deon6 deon6 pin4/ping4 tiu4 luk1 jan1 jyun4 hau4 keoi3 zin2 bei1 pou2 wan4 cou1 sin6 cam2 hip3 zi2
+僉譣聳擢橋術赴殄曩歿涯霈蠲迥騖矚凝睟
+cim1 him2 sung2 zok6 kiu4 seot6 fu6 tin5 nong5 mut6 ngaai4 pui3 gyun1 gwing2 mou6 zuk1 jing4 seoi6
+輝逈漩循垽陛渟蕊墠埤堄秀蚌嗥櫓鳴巾馭
+fai1 gwing2 syun4 ceon4 ngan6 bai6 ting4 jeoi5 sin6 bei3 ngai6 sau3 pong5 hou4 lou5 ming4 gan1 jyu6
+瑿癰噬駭臻扇樵鑽燧稚射躡猗娛裙愧嚼謙坌
+ji1 jung1 sai6 haai5 zeon1 sin3 ciu4 zyun3 seoi6 zi6 se6 nip6 ji1 jyu4 kwan4 kwai3 zoek3 him1 ban6
+蹲踞稟嬾灑饌鋋輦匹弧矢衄罥隘屍唇喉吻
+deon1 geoi3 laan5 saa2 zaan6 sin4 lin5 pat1 wu4 ci2 nuk6 gyun3 zuk6 aai3 si1 seon4 hau4 man5
+紹洽舛軀橈嚚
+siu6 hap1 cyun2 keoi1 naau4 ngan4
 `;
 
   init(ignoreLevels, a);

@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../books/book.css">
 <script src="../../../util/utils.js"></script>
 <script src="../../../util/gridperfect.js"></script>
-<script src="9910/diagrams.js"></script>
+<script src="9151/diagrams.js"></script>
 <script src="../mybfnn.js"></script>
 </head>
 <body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
@@ -16,7 +16,7 @@
 var QXL = new (class extends SeriesContainer {
   constructor() { super(); }
 
-  loadJS(vol) { addjs(`9910/${to2d(vol||1)}.js`); }
+  loadJS(vol) { addjs(`9151/${to2d(vol||1)}.js`); }
 
   showPage() {
     var buf = new Buffer();
@@ -25,13 +25,12 @@ var QXL = new (class extends SeriesContainer {
         super();
         this.setVolumesInJS(true, true).setXG().setBuffer(buf)
             .setGathaClass('gathaV')
-            .reInit(9910, 34);
+            .reInit(9151, 34);
         this.volNum = QXL.volNum;
         this.writeStart(`大乘起信論講記|（第${zNumber(this.volNum)}集）`)
-            .writeBody(`\n/TEXT030C/淨界法師 講
-${QXL.text}
-
-/VOLSEP/`, true);
+            .writeBody(`\n/TEXT030C/淨界法師 講\n${QXL.text}\n\n/VOLSEP/`)
+            .writeEnd('《<a href="9150.htm">大乘起信論</a>》　' +
+                      '《<a href="../books2/1148.htm">大乘起信論裂網疏</a>》　');
       }
     })(); // class extends DocInfo
     buf.render('stg');

@@ -1,5 +1,8 @@
 SC.volNum = 70;
-SC.text = `
+SC.text = 'CALL setSCText().';
+
+function setSCText() {
+  SC.text = `
 /SECTION:can34/入法界品第三十九之十一
 
 /HYSK=-34/
@@ -156,3 +159,4 @@ SC.text = `
 「善男子！去此不遠，有主夜神，名：寂靜音海，坐摩尼光幢莊嚴蓮華座，百萬阿僧祇主夜神前後圍遶。汝詣彼問：菩薩云何學菩薩行、修菩薩道？」
 
 時，善財童子頂禮其足，遶無數匝，慇懃瞻仰，辭退而去。`;
+}

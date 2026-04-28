@@ -26,19 +26,18 @@ function visit(n) {
                : `/SECTION/【第${zn}參：${t}】`
 }
 var lastvol = 0;
-function toclink(n, isLeft) {
+function toclink(n, maxw) {
+  if (!maxw) maxw = 4;
   var zn = zNumber(n),
       v = VISITS53[n-1],
       t = v.teacher40 || v.teacher;
   if (Array.isArray(t))
     t = t.shift();
   var url = `?vol=${v.volInHY40}&pin=can${n}`, zn = `第${zNumber(n)}参`;
-  var vol = isLeft ? '　　　' : '　　　　', max = isLeft ? 3 : 4;
-  if (v.volInHY40 != lastvol) {
-    vol = '卷' + zNumber(lastvol = v.volInHY40);
-    while (vol.length < max) vol += '　';
-    vol = `<a href="?vol=${lastvol}">${vol}</a>`;
-  }
+  var vol = '', showit = (v.volInHY40 != lastvol) && (v.volInHY40 != 4);
+  if (showit) vol = '卷' + zNumber(lastvol = v.volInHY40);
+  while (vol.length < maxw) vol += '　';
+  if (showit) vol = `<a href="?vol=${lastvol}">${vol}</a>`;
   while(zn.length < 5) zn += '　';
   return `<ail>${vol}　${zn}&nbsp;</ail><a href="${url}">${t}</a>`;
 }
@@ -60,12 +59,14 @@ new (class extends HYJContainer {
             ending = (this.volNum == 40) ? `${ttl1}竟` : `${ttl1}卷${zn}`;
         if (!this.volNum)
           this.writeStart(`${ttl}`, `四十華嚴`)
-              .writeBody(`\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n${SC.text}`, true);
+              .writeBody(`\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n${SC.text}`);
         else
           this.writeStart(`${ttl} 卷${zn}`, `四十華嚴 卷${SC.volNum}`)
               .writeBody('\n/TEXT030C/罽賓國三藏般若奉詔譯\n\n' +
                          `/SECTION/${ttl1}卷${zn}\n${SC.text}` +
-                         `\n/END/${ending}\n/VOLSEP/`, true);
+                         `\n/END/${ending}\n/VOLSEP/`)
+        this.writeEnd('《<a href="9010.htm">大方廣佛華嚴經</a>》　' +
+                      '《<a href="../../../佛學基礎/《大方廣佛華嚴經》/善財童子五十三參.html">五十三參對照</a>》　');
       }
     })(); // class extends DocInfo
 
@@ -73,7 +74,7 @@ new (class extends HYJContainer {
   }
 })();
 
-SC.show(get('vol'),get('pin')); // 卷
+SC.show(get('vol'),get('loc')||get('pin')); // 卷
 
 // 經文來源：https://zh.wikisource.org/zh-hant/大方廣佛華嚴經四十卷
 </script>

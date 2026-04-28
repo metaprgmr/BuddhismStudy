@@ -1,5 +1,8 @@
 SC.volNum = 77;
-SC.text = `
+SC.text = 'CALL setSCText().';
+
+function setSCText() {
+  SC.text = `
 /SECTION:can50/入法界品第三十九之十八
 
 /HYSK=-50/
@@ -249,3 +252,4 @@ SC.text = `
 「我念善知識，　億劫難值遇；　今得咸親近，　而來詣尊所。
 　我以文殊故，　見諸難見者；　彼大功德尊，　願速還瞻覲。」
 //`;
+}

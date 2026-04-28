@@ -1,5 +1,8 @@
 SC.volNum = 75;
-SC.text = `
+SC.text = 'CALL setSCText().';
+
+function setSCText() {
+  SC.text = `
 /SECTION:can40/入法界品第三十九之十六
 
 爾時，善財童子向迦毘羅城，思惟修習受生解脫，增長廣大，憶念不捨。
@@ -343,3 +346,4 @@ SC.text = `
 //
 
 爾時，善財童子頂禮其足，遶無數匝，辭退而去。`;
+}

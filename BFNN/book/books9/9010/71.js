@@ -1,5 +1,8 @@
 SC.volNum = 71;
-SC.text = `
+SC.text = 'CALL setSCText().';
+
+function setSCText() {
+  SC.text = `
 /SECTION:can35/入法界品第三十九之十二
 
 /HYSK=-35/
@@ -152,3 +155,4 @@ SC.text = `
 //
 
 時，善財童子說此頌已，禮夜神足，遶無量匝，慇懃瞻仰，辭退而去。`;
+}

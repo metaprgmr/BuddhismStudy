@@ -1,15 +1,6 @@
-.Normal
-        {margin:0cm;
-        margin-bottom:.0001pt;
-        font-size:12.0pt;
-        font-family:"Times New Roman";}
-.MsoPlainText
-        {margin:0cm;
-        margin-bottom:.0001pt;
-        font-size:12.0pt;
-        font-family:細明體;}
+body { background-image:url('textbackground.jpg'); margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:"Times New Roman" }
 
-.KAITI {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; text-indent:24.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+.KAITI      { margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; text-indent:24.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .KaiTi      { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 KaiTi       { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
 .FangSongTi { font-family: FangSong, "仿宋", STFangsong, "华文仿宋" }
@@ -35,7 +26,12 @@ li.cjk { margin-bottom:3.0pt; }
 blockquote.quote { color:teal; }
 ul { margin-left:-16.0pt; }
 a { text-decoration:none; }
-.bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px }
+.bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px; border-right:1px solid lightgray; padding-right:10px }
+.book1100 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1100px; border-right:1px solid lightgray; padding-right:10px }
+.book1200 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1200px; border-right:1px solid lightgray; padding-right:10px }
+.book1300 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1300px; border-right:1px solid lightgray; padding-right:10px }
+.book1400 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1400px; border-right:1px solid lightgray; padding-right:10px }
+.book1500 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1500px; border-right:1px solid lightgray; padding-right:10px }
 BODY {SCROLLBAR-FACE-COLOR: #09f; SCROLLBAR-HIGHLIGHT-COLOR: #09f; SCROLLBAR-SHADOW-COLOR: #069; SCROLLBAR-3DLIGHT-COLOR: #00FFFF; SCROLLBAR-ARROW-COLOR: #B5FFFF; SCROLLBAR-TRACK-COLOR: #95BAF7; SCROLLBAR-DARKSHADOW-COLOR: #00354F; } 
 .endBar { text-align:center }
 hr.volsep { border: none; height: 1px; background: rgba(255,0,0,0.3); }
@@ -53,7 +49,7 @@ kpDone { color:#339 }
 .paraname::after { content:' ' }
 .volend { color:brown; text-indent:0.0pt; margin:0cm; margin-bottom:.0001pt;  }
 .seriesnav { background:#cec }
-.endImage { width:1000px; height:30px; background-size:300px 30px; background-image:url('../books/sign.gif'); background-repeat: no-repeat; text-align:center }
+.endImage { width:1000px; height:30px; background-size:300px 30px; background-image:url('sign.gif'); background-repeat: no-repeat; text-align:center }
 .endImageXG { width:1000px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); background-repeat: no-repeat; text-align:center }
 .gathanum { float:left; color:black; opacity:0.6; font-size:10px; width:25pt; padding-top:3pt }
 .gatha { color:#038 }
@@ -173,3 +169,7 @@ hrAdd { font-weight:normal; color:black; opacity:0.5; }
 z { opacity:0.2 } // for XiaLianJu comparison, when its explicit style is not present.
 thru { }
 .PRIV   { display:none; background-color:#A00; color:white; text-indent:5pt; margin-left:0.0pt; margin-top:0pt; margin-bottom:.0001pt; font-size:14.0pt; font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体" }
+
+@media print  { .noprint  { display:none } }
+@media screen { .forprint { display:none } }
+

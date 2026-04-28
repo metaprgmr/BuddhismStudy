@@ -3,9 +3,12 @@
 <meta http-equiv=Content-Type content="text/html; charset=utf-8">
 <title>大方廣佛華嚴經</title>
 <link rel="stylesheet" href="../books/book.css">
+<style>
+.qxnruby { ruby-align:center }
+.qxnrt   { color:#339; padding-bottom:5px; font-size:14px }
+</style>
 <script src="../../../util/utils.js"></script>
 <script src="../mybfnn.js"></script>
-<script src="9010/visits-53.js"></script>
 <script src="9010/hyj.js"></script>
 <script src="9010/hyj40.js"></script>
 </head>
@@ -15,9 +18,34 @@
 
 <script>
 new (class extends HYJContainer {
-  constructor() { super(); }
+  constructor() {
+    super();
+    this.loadTries = 0;
+  }
 
-  loadJS(vol) { addjs(`9010/${to2d(vol||0)}.js`); }
+  loadJS(vol) {
+    addjs(`9010/${to2d(vol||0)}.js`);
+    if (vol >= 53)
+      addjs(vol<60 ? "9010/deuxcents.js" : "9010/visits-53.js");
+  }
+
+  isReady() {
+    if (this.volNum >= 60) { // check visits-53.js readiness
+      if (getGlobal('VISITS53') && SC.text) {
+        SC.use五十三參();
+        setSCText(); // defined in 60-80.js
+        return true;
+      }
+    }
+    if (this.volNum >= 53) { // check deuxcents.js readiness
+      if (getGlobal('q200') && SC.text) {
+        setSCText(); // defined in 53-59.js
+        return true;
+      }
+      return false;
+    }
+    return super.isReady();
+  }
 
   showPage() {
     new (class extends DocInfo {
@@ -27,15 +55,16 @@ new (class extends HYJContainer {
         this.volNum = SC.volNum;
         var zn = zNumber(SC.volNum), ttl = '大方廣佛華嚴經';
         if (SC.volNum) // write the volume content
-          this.writeStart(`${ttl}|卷${zn}`, `華嚴經 卷${SC.volNum}`)
+          this.writeStart(`${ttl}|卷${zn}`, `華嚴經：卷${z10(SC.volNum)}`)
               .writeBody('\n/TEXT030C/唐于闐實叉難陀譯\n\n' +
                          `/SECTION/${ttl}卷${zn}` +
                          SC.text +
                          `\n/END/${ttl}卷${zn}\n/VOLSEP/\n`);
         else // write the grand TOC
-          this.writeStart(ttl+'||Mahāvaipulya Buddhāvataṃsaka Sūtra', `華嚴經`)
+          this.writeStart(ttl+'||Mahāvaipulya Buddhāvataṃsaka Sūtra', '華嚴經：目錄')
               .writeBody('\n/TEXT030C/唐于闐實叉難陀譯\n' + SC.text);
-        this.writeEnd();
+        this.writeEnd(`【<b>${SC.volNum ? '<a href="?">完整目錄</a>' : '<dim>完整目錄</dim>' }</b>】` +
+          '《<a href="9040.htm" title="四十華嚴">普賢行願品</a>》《<a href="9061.htm">妄盡還源觀</a>》');
       }
 
       writeSeriesNav(links) {
@@ -43,27 +72,33 @@ new (class extends HYJContainer {
 `十定品 十通品 十忍品 阿僧祇品 壽量品
 諸菩薩住處品 佛不思議法品 如來十身相海品
 如來隨好光明功德品 普賢行品 如來出現品`;
-        function writePin(name) {
-          me.w(`　<a href="${pinsUri[pinNo-1]}">${name}</a>`,
-               `<sup>${pinNo++}</sup>`);
+        function writePin(name, nolink) {
+          if (nolink)
+            me.w(`　<dim>${name}</dim>`);
+          else
+            me.w(`　<a href="${pinsUri[pinNo-1]}">${name}</a><sup>${pinNo++}</sup>`);
         }
-        function row(meeting, start, end, pins, m7pins) {
+        function row(meeting, start, end, pins, m7pins, last) {
           pins = pins && pins.replaceAll('品', '').split(' ');
-          var n, cols = pins ? ` colspan=${m7pins?2:3}` : '';
-          me.w(`<tr><td valign=top>【${meeting}】</td><td valign=top${cols}>`) ;
+          var n, cols = pins ? ` colspan=${m7pins||last?2:3}` : '';
+          me.w(`<tr><td valign=top nowrap>【${meeting}】</td><td valign=top${cols} nowrap>`) ;
           me.w(`<span style="display:inline-block; width:260px">`);
-          for (n = start; n <= end; ++n) {
-            me.w(n == 70 ? '<br>' : ' ');
-            var isCur = (n == cur), zn = (n<=10) ? zNumber(n) : n;
-            me.w(isCur ? `<cur>${zn}</cur>` : `<a href="?vol=${n}">${zn}</a>`);
+          if (!start) {
+            me.w(`<dim>（梵文未來）</dim>`);
+          } else {
+            for (n = start; n <= end; ++n) {
+              me.w(n == 70 ? '<br>' : ' ');
+              var isCur = (n == cur), zn = (n<=10) ? zNumber(n) : n;
+              me.w(isCur ? `<cur>${zn}</cur>` : `<a href="?vol=${n}">${zn}</a>`);
+            }
           }
           me.w('</span>');
           if (!pins)
             me.w('</td><td align=right nowrap>⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯</td>'); // （共11品）
           else
-            for (n=0; n<pins.length; ++n) writePin(pins[n]);
+            for (n=0; n<pins.length; ++n) writePin(pins[n], !start);
           if (m7pins) {
-            me.w('</td><td valign=top rowspan=3 style="border-left:1px solid #999">');
+            me.w('</td><td valign=top rowspan=3 nowrap style="border-left:1px solid #999">');
             var a = m7pins.split('\n');
             for (var i=0; i<a.length; ++i) {
               pins = a[i].replaceAll('品', '').split(' ');
@@ -71,23 +106,31 @@ new (class extends HYJContainer {
               for (n=0; n<pins.length; ++n) writePin(pins[n]);
             }
           }
-          me.w('</td></tr>');
+          me.w('</td>');
+          if (last == 'LAST') {
+            me.w('<td valign=bottom align=center nowrap style="border-top:0px solid black">',
+                 '<hr style="color:#999; margin-top:15px; margin-bottom:0px">',
+                 '《<a href="9010/hygathas.htm">偈集</a>》 ',
+                 '《<a href="../books/0907.htm">要解</a>》 ',
+                 '《<a href="9902.htm">科分</a>》 ',
+                 '《<a href="../../../佛學基礎/《大方廣佛華嚴經》/善財童子五十三參.html">五十三參對照</a>》 ',
+                 '</td>');
+          }
+          me.w('</tr>');
         }
 
         this.w('<center><table border=0 style="margin-top:-30"><tr>');
-        row('初會菩提場', 1, 11, '世主妙嚴品 如來現相品 普賢三昧品 世界成就品 華藏世界品 毘盧遮那品');
-        row('二會普光明殿', 12, 15, '如來名號品 四聖諦品 光明覺品 菩薩問明品 淨行品 賢首品');
-        row('三會忉利天宮', 16, 18, '昇須彌山頂品 須彌頂上偈讚品 十住品 梵行品 初發心功德品 明法品');
-        row('四會夜摩天宮', 19, 21, '昇夜摩天宮品 夜摩宮中偈讚品 十行品 十無盡藏品');
-        row('五會兜率天宮', 22, 33, '昇兜率天宮品 兜率宮中偈讚品 十迴向品');
-        row('六會他化自在天', 34, 39, '十地品', meeting7pins)
-        row('七再會重普光殿', 40, 52); // see above
-        row('八三會普光明殿', 53, 59, '離世間品');
-        row('九會逝多林', 60, 80, '入法界品');
-        this.w('</tr>')
-            .wIf(this.volNum, `<tr><td colspan=2>&nbsp;</td><td colspan=2>`,
-                 `<b>&nbsp;<a href="?">完整目錄</a></b>　　　<a href="9040.htm">普賢行願品</a>（四十華嚴）</td></tr>`) 
-            .w('</table></center>');
+        row('初會　　 菩提場', 1, 11, '世主妙嚴品 如來現相品 普賢三昧品 世界成就品 華藏世界品 毘盧遮那品');
+        row('二首會 普光明殿', 12, 15, '如來名號品 四聖諦品 光明覺品 菩薩問明品 淨行品 賢首品');
+        row('三會　 忉利天宮', 16, 18, '昇須彌山頂品 須彌頂上偈讚品 十住品 梵行品 初發心功德品 明法品');
+        row('四會　 夜摩天宮', 19, 21, '昇夜摩天宮品 夜摩宮中偈讚品 十行品 十無盡藏品');
+        row('五會　 兜率天宮', 22, 33, '昇兜率天宮品 兜率宮中偈讚品 十迴向品');
+        row('六會 他化自在天', 34, 39, '十地品')
+        row('七會　　 三禪天', null, null, '十一地品', meeting7pins)
+        row('八再會 重普光殿', 40, 52); // see above
+        row('九三會 普光明殿', 53, 59, '離世間品', null, true);
+        row('十會　　 逝多林', 60, 80, '入法界品', null, 'LAST');
+        this.w('</table></center>');
       }
     } // class extends DocInfo
     )();
@@ -96,9 +139,7 @@ new (class extends HYJContainer {
   }
 })();
 
-var vol = get('vol');
-if (vol >= 60) SC.use五十三參();
-SC.show(vol, get('pin')||get('loc')); // 卷 品/部分
+SC.show(get('vol'), get('pin')||get('loc')); // 卷 品/部分
 
 // 經文來源，例如：https://budaedu.org/budaedu/buda2_04.php
 </script>

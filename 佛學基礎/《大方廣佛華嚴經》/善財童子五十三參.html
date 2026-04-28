@@ -67,11 +67,11 @@ const ziCounts = [
 <body><center>
 <h2>善財童子五十三參</h2>
 
-<div class="content" style="width:880px; text-align:left">
+<div class="content" style="width:1100px; text-align:left">
 <p>《華嚴經·入法界品第三十九》（《八十華嚴》之卷六十二至八十；品第三十九始於卷六十）説：善財童子最初從文殊菩薩處發菩提心，次第南行，先後向菩薩、佛母、比丘、比丘尼、優婆塞、天神、地神、主夜神、王者、城主、長者、居士、童子、天女、童女、外道、婆羅門等五十三位善知識參訪請教，並依教奉行，終於獲證善果。這個故事在民間流傳甚廣，善財童子因此成為佛教虛心求法，廣學多聞的典範。如明·高濂《玉簪記·鬧會》：“這壁廂是什麼菩薩？這是五十三參形容改。”</p>
 
 <table border="1" cellspacing="0" cellpadding="2px" bgcolor="white">
-<tr bgcolor="lightgray"><th>參</th><th colspan="2">善知識</th>
+<tr bgcolor="lightgray"><th>參</th><th colspan="3">善知識　 <ail>八十華嚴、四十華嚴、梵文</ail></th>
 <th>地方</th><th>善知識教</th><th>字數</th><th title="八十華嚴之第三十九品卷數">80</th><th>40</th></tr>
 <script>
   function w() { for (var i in arguments)document.write(arguments[i]); }
@@ -107,25 +107,30 @@ const ziCounts = [
     var t = r.teacher, cnt = ziCounts[i-1],
         url80  = `../../BFNN/book/books9/9010.htm?vol=${59+r.volInHY80}&loc=can${i}`,
         url40  = r.volInHY40 ? `../../BFNN/book/books9/9040.htm?vol=${r.volInHY40}&loc=can${i}` : '',
-        d = (typeof t === 'string') ? t : t.join('<br>'),
-        idx = d.indexOf('<br>');
+        d80 = (typeof t === 'string') ? t : t.join('<br>'),
+        d40 = r.getTeacher40();
+        idx = d80.indexOf('<br>');
+    switch (d40) {
+    case '守護一切眾生大願精進力光明主夜神': d40 = '守護一切眾生<br>大願精進力光明主夜神'; break;
+    case '普救護一切眾生威德吉祥主夜神':     d40 = '普救護一切眾生<br>威德吉祥主夜神'; break;
+    }
     if (idx > 0)
-      d = `<a href="${url80}">${d.substring(0,idx)}</a><dim>${d.substring(idx)}</dim>`;
+      d80 = `<a href="${url80}">${d80.substring(0,idx)}</a><dim>${d80.substring(idx)}</dim>`;
     else
-      d = `<a href="${url80}">${d}</a>`;
+      d80 = `<a href="${url80}">${d80}</a>`;
     total += cnt;
     w(`<tr><td align="center">${i}</td>`,
-      `<td align="center" nowrap>${d}</td>`,
-      url40 ? `<td align="center"><a href="${url40}">${r.sanskrit}</a></td>`
-            : `<td align="center">${r.sanskrit}</td>`,
+      `<td align="center" nowrap>${d80}</td>`,
+      `<td align="center" nowrap><a href="${url40}">${d40}</a></td>`,
+      `<td align="center">${r.sanskrit}</td>`,
       `<td align="center" nowrap>${r.where}</td>`,
       `<td>${r.teaching}</td>`,
-      `<td align="right">${cnt}</td>`,
+      `<td align="right" nowrap>${cnt}</td>`,
       r.rowspan80 > 0 ? `<td rowspan=${r.rowspan80} align=center>${59+r.volInHY80}</td>` : '',
       r.rowspan40 > 0 ? `<td rowspan=${r.rowspan40} align=center>${r.volInHY40}</td>` : '',
       '</tr>');
   }
-  w(`<tr bgcolor="lightgray"><td colspan="6" align="right">總字數：${total}</td><td colspan=2></td></tr>`)
+  w(`<tr bgcolor="lightgray"><td colspan="7" align="right">總字數：${total}</td><td colspan=2></td></tr>`)
 </script>
 </table>
 </div>

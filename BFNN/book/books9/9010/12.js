@@ -1,8 +1,9 @@
 // Pin-7
 
+var cnt = 0;
 function p07FromOther(dir,world,buda,pusa) {
-  return `/I/${c(dir)}方過十佛剎微塵數世界，有世界，名：${c(world)}，佛號：${c(buda)}。彼世界中，有菩薩，名：${c(pusa)}，
-/I/　與十佛剎微塵數諸菩薩俱，來詣佛所，到已作禮，即於${dir}方化作蓮華藏師子之座，結跏趺坐。`;
+  return `/I/${c(dir)}方過十佛剎微塵數世界，有世界，名：${c(world)}，佛號：${c(buda)}。彼世界中，有菩薩，名：${c(pusa)}，　${simpleSeq(++cnt)}
+/I/　與十佛剎微塵數諸菩薩俱，來詣佛所，到已作禮，即於${c(dir)}方化作蓮華藏師子之座，結跏趺坐。`;
 }
 
 var ttgtInWorlds = {};
@@ -10,7 +11,8 @@ function ttgtW(world) { return ttgtInWorlds[world].write(); }
 
 (() => {
   class TathagataNames {
-    constructor(lead, names) {
+    constructor(lead, names, num) {
+      this.num = num;
       this.names = names;
       this.parseLead(lead);
       ttgtInWorlds[this.world || SAHA] = this;
@@ -20,17 +22,22 @@ function ttgtW(world) { return ttgtInWorlds[world].write(); }
       this.tail = '如是等，其數十千，令諸眾生各別知見。';
       var colonIdx = s.lastIndexOf('：'), commaIdx = s.indexOf('，'), startIdx;
       if (colonIdx > 0) this.world = s.substring(colonIdx+1);
-      if (s.startsWith('此娑婆世界'))     startIdx = 5;
-      else if (s.startsWith('此四天下'))  startIdx = 4;
-      else if (s != '如來於此四天下中，') throw `TathagataNames ERROR: ${s}`;
-      if (startIdx)
+      if      (s.startsWith('此娑婆世界'))     startIdx = 5;
+      else if (s.startsWith('此四天下'))       startIdx = 4;
+      else if (s.startsWith('如來於此四天下')) startIdx = -999;
+      else throw `TathagataNames ERROR: ${s}`;
+      if (startIdx == -999)
+        this.lead = s.substring(0,commaIdx-1) + c(s.substring(commaIdx-1,commaIdx)) + '，';
+      else if (startIdx)
         this.lead = s.substring(0,startIdx) + c(s.substring(startIdx,commaIdx)) +
                     s.substring(commaIdx,colonIdx+1) + c(this.world) + '。如來於彼，';
       else
         this.tail = '如是等百億萬種種名號，令諸眾生各別知見。';
     }
     write() {
-      return `「諸佛子！${this.lead}
+      var n = (this.num > 10) ? (this.num-10) : this.num;
+      var n = n && simpleSeq(n) || '';
+      return `「諸佛子！${this.lead}${n}
 /I/${或名list(this.names.split('\|'))}……。
 /L/${this.tail}
 `;
@@ -103,11 +110,11 @@ function ttgtW(world) { return ttgtInWorlds[world].write(); }
 勇猛幢|無量寶|樂大施|天光|吉興|超境界|一切主|不退輪|離眾惡|一切智
 `;
 
-  var a = data.split('\n'), len = a.length;
+  var a = data.split('\n'), len = a.length, cnt = 0;
   for (var i=0; i<len; ++i) {
     var ln = a[i];
     if (ln[0] == '#')
-      new TathagataNames(ln.substring(1), a[++i]);
+      new TathagataNames(ln.substring(1), a[++i], cnt++);
   }
 })();
 
@@ -117,8 +124,9 @@ function casW(world) { return casInWorlds[world].write(); }
 
 (() => {
   class CatuAriaSaccani {
-    constructor(world,duk,sam,nir,mag) { // i.e. the names of [catu-aria-saccani] in [world]
+    constructor(world,duk,sam,nir,mag,num) { // i.e. the names of [catu-aria-saccani] in [world]
       casInWorlds[world] = this;
+      this.num = num;
       this.world = (world == SAHA) ? null : world;
       this.catu = [duk,sam,nir,mag]; // each is |-separeted, no spaces
       this.CATU = [ '苦', '苦滅', '苦集', '苦滅道' ];
@@ -148,8 +156,9 @@ function casW(world) { return casInWorlds[world].write(); }
                      .render();
     }
     writeNames(lead, num) {
-      var a = this.catu[num].split('\|');
-      this.buf.w(lead, '\n/I/', 或名list(a), '。\n');
+      var a = this.catu[num].split('\|'),
+          n = (!num && this.num) ? simpleSeq(this.num) : '';
+      this.buf.w(lead, `${n}\n/I/${或名list(a)}。\n`);
     }
 
   } // end of CatuAriaSaccani {
@@ -169,7 +178,6 @@ function casW(world) { return casInWorlds[world].write(); }
 
 #最勝
 恐怖|分段|可厭惡|須承事|變異|招引怨|能欺奪|難共事|妄分別|有勢力
-所言苦集聖諦者，彼最勝
 敗壞|癡根|大怨|利刃|滅味|仇對|非己物|惡導引|增黑闇|壞善利
 大義|饒益|義中義|無量|所應見|離分別|最上調伏|常平等|可同住|無為
 能燒然|最上品|決定|無能破|深方便|出離|不下劣|通達|解脫性|能度脫
@@ -223,11 +231,11 @@ function casW(world) { return casInWorlds[world].write(); }
 觀察|能摧敵|了知印|能入性|難敵對|無限義|能入智|和合道|恆不動|殊勝義
 `;
 
-  var a = data.split('\n'), len = a.length;
+  var a = data.split('\n'), len = a.length, cnt=0;
   for (var i=0; i<len; ++i) {
     var ln = a[i];
     if (ln[0] == '#')
-      new CatuAriaSaccani(ln.substring(1), a[++i], a[++i], a[++i], a[++i]);
+      new CatuAriaSaccani(ln.substring(1), a[++i], a[++i], a[++i], a[++i], cnt++);
   }
 })();
 
@@ -235,19 +243,19 @@ function casW(world) { return casInWorlds[world].write(); }
 SC.volNum = 12;
 SC.text = `
 /TEXT030C/如來名號品第七　　<a#p08>四聖諦品第八</a>
-
 /SECTION/如來名號品第七
 
 爾時，世尊在摩竭提國阿蘭若法菩提場中，始成正覺，於普光明殿坐蓮華藏師子之座，妙悟皆滿，二行永絕；達無相法，住於佛住；得佛平等，到無障處；不可轉法，所行無礙；立不思議，普見三世。與十佛剎微塵數諸菩薩俱，莫不皆是一生補處，悉從他方而共來集，普善觀察諸眾生界、法界、世界、涅槃界，諸業果報、心行次第、一切文義，世、出世間，有為、無為，過、現、未來。
 
-時，諸菩薩作是思惟：「若世尊見愍我等，願隨所樂，開示
-/I/佛剎、　　　佛住、　　　佛剎莊嚴、　佛法性、　　佛剎清淨、　<cil>（依報；清涼法師配對）</cil>
-/I/佛所說法、　佛剎體性、　佛威德、　　佛剎成就、　佛大菩提。　<cil>（正報）</cil>
-/L/如十方一切世界諸佛世尊，為成就一切菩薩故，令如來種性不斷故，救護一切眾生故，令諸眾生永離一切煩惱故，了知一切諸行故，演說一切諸法故，淨除一切雜染故，永斷一切疑網故，拔除一切希望故，滅壞一切愛著處故，說諸菩薩
-/I/十住、　十行、　十迴向、　十藏、　十地、　十願、　十定、　十通、　十頂，
-/L/及說
-/I/如來地、　如來境界、　如來神力、　如來所行、　如來力、　如來無畏、　如來三昧、　如來神通、　如來自在、　如來無礙、
-/I/如來眼、　如來耳、　　如來鼻、　　如來舌、　　如來身、　如來意、　　如來辯才、　如來智慧、　如來最勝。
+時，諸菩薩作是思惟：「若世尊見愍我等，願隨所樂，
+/L/開示　　　佛剎、　　　佛住、　　　佛剎莊嚴、　佛法性、　　佛剎清淨、　<cil>（依報）（清涼法師配對）</cil>
+/L/　　　　　佛所說法、　佛剎體性、　佛威德、　　佛剎成就、　佛大菩提。　<cil>（正報）</cil>
+/L/如十方一切世界諸佛世尊，為成就一切菩薩故，令如來種性不斷故，救護一切眾生故，
+/L/令諸眾生　永離一切煩惱故，　了知一切諸行故，　演說一切諸法故，　淨除一切雜染故，
+/L/　　　　　永斷一切疑網故，　拔除一切希望故，　滅壞一切愛著處故，
+/L/說諸菩薩　十住、　十行、　十迴向、　十藏、　十地、　十願、　十定、　十通、　十頂，
+/L/及說　　　如來地、　如來境界、　如來神力、　如來所行、　如來力、　如來無畏、　如來三昧、　如來神通、　如來自在、　如來無礙、
+/L/　　　　　如來眼、　如來耳、　　如來鼻、　　如來舌、　　如來身、　如來意、　　如來辯才、　如來智慧、　如來最勝。
 /L/願佛世尊，亦為我說！」
 
 爾時，世尊知諸菩薩心之所念，各隨其類，為現神通。現神通已，
@@ -264,7 +272,7 @@ ${p07FromOther('上', '平等色', '觀察智', '賢首')}
 
 爾時，文殊師利菩薩摩訶薩，承佛威力，普觀一切菩薩眾會而作是言：
 
-「此諸菩薩甚為希有！諸佛子！佛國土不可思議，佛住、佛剎莊嚴、佛法性、佛剎清淨、佛說法、佛出現、佛剎成就、佛阿耨多羅三藐三菩提皆不可思議。何以故？諸佛子！十方世界一切諸佛，知諸眾生樂欲不同，隨其所應，說法調伏，如是乃至等法界、虛空界。
+「此諸菩薩甚為希有！諸佛子！佛國土不可思議，佛住、佛剎莊嚴、佛法性、佛剎清淨、佛說法、佛出現、佛剎成就、佛阿耨多羅三藐三菩提，皆不可思議。何以故？諸佛子！十方世界一切諸佛，知諸眾生樂欲不同，隨其所應，說法調伏，如是乃至等法界、虛空界。
 
 「諸佛子！如來於此娑婆世界諸四天下，種種身、種種名、種種色相、種種修短、種種壽量、種種處所、種種諸根、種種生處、種種語業、種種觀察，令諸眾生各別知見。
 

@@ -1,4 +1,10 @@
-const VISITS53 = [ // Sudhanakumāra
+class SKVisit {
+  constructor(o) { Object.assign(this,o); }
+  getTeacher80() { return Array.isArray(this.teacher) ? this.teacher[0] : this.teacher; }
+  getTeacher40() { return this.teacher40 || this.getTeacher80(); }
+}
+
+var VISITS53 = [ // Sudhanakumāra
   { teacher:[ '德雲比丘', '功德雲比丘', '吉祥雲比丘' ], sanskrit:'Meghaśrī-bhikşu', where:'勝樂國妙峯山', num: 1,
     teacher40: '吉祥雲比丘',
     volInHY80: 3, // 入法界品第三十九之三
@@ -248,12 +254,12 @@ const VISITS53 = [ // Sudhanakumāra
     teaching:'“無依處道場解脱法門”'
   },
   { teacher:[ '堅固解脱長者', '堅固長者' ], sanskrit:'Muktā-sāra', where:'沃田城', num: 46,
-    volInHY80: 32, // 入法界品第三十九之十七
+    volInHY80: 17, // 入法界品第三十九之十七
     volInHY40: 32,
     teaching:'“無著念清淨莊嚴解脱”'
   },
   { teacher:'妙月長者', sanskrit:'Sucandra', where:'', num: 47,
-    volInHY80: 32, // 入法界品第三十九之十七
+    volInHY80: 17, // 入法界品第三十九之十七
     volInHY40: 32,
     teaching:'“淨智光明解脱法門”'
   },
@@ -289,3 +295,7 @@ const VISITS53 = [ // Sudhanakumāra
   },
 ];
 
+(() => {
+  for (var i=0; i<VISITS53.length; ++i)
+    VISITS53[i] = new SKVisit(VISITS53[i]);
+})();

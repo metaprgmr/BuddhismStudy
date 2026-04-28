@@ -19,6 +19,7 @@ verse { color:teal }
 </style>
 <script src="../../util/utils.js"></script>
 <script src="JK-teachings.js"></script>
+<script src="xg--JK-teachings.js"></script>
 </head>
 <body style="margin:20px; background:#dfd">
 <center>
@@ -55,8 +56,8 @@ if (lsn) {
   var lastType = '???', visited = {}, err = false;
   for (var i in JK.teachings) {
     lsn = JK.teachings[i];
-    var cls = "toc";
-    if (lsn.level) cls += ' ' + lsn.level;
+    var cls = "toc", lvl = lsn.getLevel();
+    if (lvl) cls += ' ' + lvl;
     var type = TYPES[lsn.type] || (isOrig ? '' : '[未定]');
     if (!isOrig) { if (type !== lastType) lastType = type; else type = ''; }
     if (!visited[lsn.id])
@@ -79,8 +80,9 @@ if (lsn) {
           src.startsWith('大方廣佛華嚴經'))
         src = '　　　　' + src;
       w(`<td class="toc">${src} ${lsn.srcVol||''}&nbsp;</td>`,
-        '<td class="ytid">', lsn.ytid || '&nbsp;', '</td>');
-    }
+        '<td class="ytid" nowrap>', lsn.ytid || '&nbsp;', '</td>');
+    } else if (lsn.xlabel)
+      w('<td class="info" align="right">', lsn.xlabel, '</td>');
     w('</tr>');
   }
   w('</table>');

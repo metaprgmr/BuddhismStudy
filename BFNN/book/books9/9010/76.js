@@ -1,5 +1,8 @@
 SC.volNum = 76;
-SC.text = `
+SC.text = 'CALL setSCText().';
+
+function setSCText() {
+  SC.text = `
 /SECTION:can41/入法界品第三十九之十七
 
 /HYSK=-41/
@@ -149,3 +152,4 @@ SC.text = `
 「善男子！於此南方，有城名：妙意華門；彼有童子，名曰：德生；復有童女，名為：有德。汝詣彼問：菩薩云何學菩薩行、修菩薩道？」
 
 時，善財童子於法尊重，禮婆羅門足，遶無數匝，戀仰而去。`;
+}

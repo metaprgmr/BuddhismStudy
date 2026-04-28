@@ -471,6 +471,9 @@ Oṃ muni muni mahā-muni śākya-munaye svāhā
 
 #= 得明教義
 多讀大乘以廣其心。勤修觀行以銷其障。常求加被以開其慧。
+
+#= 禮敬八菩薩摩訶薩
+南無　觀世音、彌勒、虛空藏、普賢王、金剛手、妙吉祥、除蓋障、地藏王-菩薩摩訶薩
 `)
 .useLineBreak()
 .useHrBeforeTitle();

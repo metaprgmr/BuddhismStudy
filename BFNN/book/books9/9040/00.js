@@ -1,37 +1,41 @@
 SC.volNum = 0;
 SC.text =
 `${COL_START}
-${toclink(1,1)}
-${toclink(2,1)}
-${toclink(3,1)}
-${toclink(4,1)}
-${toclink(5,1)}
-${toclink(6,1)}
-${toclink(7,1)}
-${toclink(8,1)}
-${toclink(9,1)}
-${toclink(10,1)}
-${toclink(11,1)}
-${toclink(12,1)}
-${toclink(13,1)}
-${toclink(14,1)}
-${toclink(15,1)}
-${toclink(16,1)}
-${toclink(17,1)}
-${toclink(18,1)} *
-${toclink(19,1)} *
-${toclink(20,1)}
-${toclink(21,1)}
-${toclink(22,1)}
-${toclink(23,1)}
-${toclink(24,1)}
-${toclink(25,1)}
-${toclink(26,1)}
-${toclink(27,1)}
-${toclink(28,1)}
-${toclink(29,1)}
-${toclink(30,1)}
+<ail><a href="?vol=1">卷一</a>　　</ail>${link40('sk01')}
+<ail><a href="?vol=2&pin=sk02">卷二</a>　　</ail>${link40('sk02')}
+<ail><a href="?vol=3">卷三</a>　　</ail>${link40('sk03')}
+<ail><a href="?vol=4">卷四</a>　　</ail>${link40('sk04')}
+${toclink(1,3)}
+${toclink(2,3)}
+${toclink(3,3)}
+${toclink(4,3)}
+${toclink(5,3)}
+${toclink(6,3)}
+${toclink(7,3)}
+${toclink(8,3)}
+${toclink(9,3)}
+${toclink(10,3)}
+${toclink(11,3)}
+${toclink(12,3)}
+${toclink(13,3)}
+${toclink(14,3)}
+${toclink(15,3)}
+${toclink(16,3)}
+${toclink(17,3)}
+${toclink(18,3)} *
+${toclink(19,3)} *
+${toclink(20,3)}
+${toclink(21,3)}
+${toclink(22,3)}
+${toclink(23,3)}
+${toclink(24,3)}
+${toclink(25,3)}
 ${COL_DIV}
+${toclink(26,3)}
+${toclink(27,3)}
+${toclink(28,3)}
+${toclink(29,3)}
+${toclink(30,3)}
 ${toclink(31)}
 ${toclink(32)}
 ${toclink(33)}
@@ -55,11 +59,4 @@ ${toclink(50)}
 ${toclink(51)}
 ${toclink(52)}
 ${toclink(53)}
-
-
-
-<ail>　　<a href="?vol=1">卷一</a>　</ail>${link40('sk01')}
-<ail>　　<a href="?vol=2&pin=sk02">卷二</a>　</ail>${link40('sk02')}
-<ail>　　<a href="?vol=3">卷三</a>　</ail>${link40('sk03')}
-<ail>　　<a href="?vol=4">卷四</a>　</ail>${link40('sk04')}
 ${COL_END}`;

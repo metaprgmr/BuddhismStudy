@@ -11,8 +11,8 @@ class HYJContainer extends SeriesContainer {
     this.isHY40 = isHY40;
     if (isHY40) this.use五十三參();
   }
-  use五十三參() { if (!this.hy40Sections) return this.parseSections(); }
-  parseSections(txt) {
+  use五十三參() {
+    if (this.hy40Sections) return this;
     this.hy40Sections = {};
     var a = HY40SECTIONS.split('\n');
     for (var i in a) {

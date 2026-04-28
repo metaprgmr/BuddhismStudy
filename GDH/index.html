@@ -14,7 +14,7 @@ function item(title, srcname, prefix, suffix, urlExtra) {
   if (srcname.endsWith('.js')) srcname = 'gdhreader.html?s=content/' + srcname;
 //var LEVEL = 'level=-1&first=6';
   var LEVEL = 'level=1';
-  LEVEL = (srcname.indexOf('?') ? '&' : '?') + LEVEL;
+  LEVEL = (srcname.indexOf('?') >= 0 ? '&' : '?') + LEVEL;
   if (urlExtra) urlExtra = '&' + urlExtra;
   document.write(`<li>${prefix}<a href="${srcname}${LEVEL}${urlExtra}">${title}${suffix}</li>`);
 }
@@ -53,6 +53,7 @@ function item(title, srcname, prefix, suffix, urlExtra) {
   item('普賢行願品', 'puxian.js');
   item('太上感應篇', 'tsgyp.js');
   item('道德經', 'ddj.html');
+  item('粵拼字集', 'ypdict.html', '【', '】');
 </script>
 </ul></td></tr>
 </table>

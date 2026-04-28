@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link href="../../books/book.css" rel="stylesheet" type="text/css">
+<script src="../../../../util/utils.js"></script>
+<script src="../../mybfnn.js"></script>
+<script>
+// fake to trash sutra stuff
+  var SC = {}, hylabel = ()=>'', link40 = hylabel, link80 = hylabel;
+</script>
+<script src="hyj.js"></script>
+<script src="02.js"></script>
+<script src="03.js"></script>
+<script src="04.js"></script>
+<script src="05.js"></script>
+<script src="06.js"></script>
+<script src="07.js"></script>
+<script src="08.js"></script>
+<script src="13.js"></script>
+<script src="16.js"></script>
+<script src="19.js"></script>
+<script src="23.js"></script>
+<script src="52.js"></script>
+<script src="60.js"></script>
+</head>
+
+<script>
+function writeGC() {
+  var gcols = [ '' ], curGC = sessionStorage.getItem('CUR_GC'),
+      buf = new Buffer('\n'), keys = Object.keys(gathaRepo).sort(),
+      a=[ '' ], maxl=0, maxr=0, i;
+
+  // Write TOC
+  for (i in keys) {
+    var o = gathaRepo[keys[i]];
+    if (o.isCollection) {
+      gcols.push(o);
+      var name = o.name, idx = name.indexOf('品'),
+          rlen = name.length-idx-1;
+      if (idx > maxl) maxl = idx;
+      if (rlen > maxr) maxr = rlen;
+      a.push([ idx, name.substring(0,idx+1) + ' ' + name.substring(idx+1), rlen]);
+    }
+  }
+  buf.w(COL_START, '\n');
+  for (i=1; i<a.length; ++i) {
+    var g = a[i], gname = g[1], j;
+    if (gname.indexOf('第二品 三頌') >= 0 ||
+        gname.indexOf('第十品 十菩薩偈') >= 0)
+      buf.w(COL_DIV30, '\n');
+    buf.w('/L/');
+    var lim = i<=11 ? 0 : maxl-g[0];
+    for (j=0; j<lim; ++j) buf.w('　');
+    if (i == curGC)
+      buf.w(gname);
+    else
+      buf.w(`<a href="javascript:showColl(${i})">${gname}</a>`);
+    buf.w('\n');
+  }
+  buf.w(COL_END, '\n/VOLSEP/\n');
+
+  // Write gathas in a collection
+  var gc = gcols[curGC];
+  if (!gc) return buf.render();
+
+  buf.w(`/SECTION/${gc.name}\n\n${COL_START}\n`);
+
+  var gathas = gc.gathas, needAuthor = !gc.singleAuthor, len = gathas.length;
+  for (i=0; i<len; ++i) {
+    var g = gathas[i];
+    buf.wIf( needAuthor && (len >  1), `/TEXT339C/<ail>（${zNumber(i+1)}） </ail>${g.author || g.title || ''}\n\n`)
+       .wIf( needAuthor && (len == 1), `/TEXT339C/${g.author || g.title || ''}\n\n`)
+       .wIf(!needAuthor && (len >  1), `/TEXT339C/<ail>（${zNumber(i+1)}）</ail>\n\n`)
+       .wIf(g.desc, g.desc, '\n\n')
+       .w(g.write(true,true), '\n', i%2==0 ? COL_DIV : NEXT_ROW, '\n');
+  }
+  buf.w(COL_END, '\n');
+  return buf.render();
+}
+
+function showColl(idx) {
+  sessionStorage.setItem('CUR_GC',idx);
+  window.location.reload();
+}
+
+docInfo.setXG().setDepth(1).setDivClass('book1400')
+       .writeStart('《華嚴經》偈集', '華嚴經偈集')
+       .writeBody(writeGC())
+       .writeEnd('《<a href="../9010.htm">華嚴經</a>》');
+</script>
