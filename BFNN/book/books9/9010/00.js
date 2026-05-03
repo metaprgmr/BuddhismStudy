@@ -22,7 +22,7 @@ SC.text = `
 【<c339>三會</c339>忉利天宮】　　<a href="?vol=16">卷第十六　　昇須彌山頂品　　　 第十三</a><br>
 （六品三卷）　　　　<a href="?vol=16&pin=p14">　　　　　　須彌頂上偈讚品　　 第十四</a> 　　　 <font>⑩</font><br>
 　　　　　　　　　　<a href="?vol=16&pin=p15">　　　　　　十住品　　　　　　 第十五</a>　　　　　<ail>Daśa-vyavasthāna</ail> 　<teal>　發心　治地　修行　生貴　具足方便 ↩</teal><br>
-　　　　　　　　　　<a href="?vol=17">卷第十七　　梵行品　　　　　　 第十六</a>　　　　　<ail style="padding-right:40px">Brahmacharya</ail>　<teal>正心　不退　童真　王子　灌頂</teal><br>
+　　　　　　　　　　<a href="?vol=17">卷第十七　　梵行品　　　　　　 第十六</a>　　　　　<ail style="padding-right:40px">Brahmacharya</ail>　<teal>正心　不退　童真　王子　灌頂</teal>　　 <a href="9010/Daśa-vyavasthāna.html">👀</a><br>
 　　　　　　　　　　<a href="?vol=17&pin=p12">　　　　　　初發心功德品　　　 第十七</a><br>
 　　　　　　　　　　<a href="?vol=18">卷第十八　　明法品　　　　　　 第十八</a>　　　　　<ail>Dharmāloka</ail><br>
 【<c339>四會</c339>夜摩天宮】　　<a href="?vol=19">卷第十九　　昇夜摩天宮品　　　 第十九</a><br>
@@ -67,7 +67,7 @@ SC.text = `
 　　　　　　　　　　<a href="?vol=50">卷第五十　　如來出現品　　　　 第三十七 之一</a>　　<ail>Tathāgatotpatti-saṃbhava-nirdeśa</ail><br>
 　　　　　　　　　　<a href="?vol=51">卷第五十一　〰〰〰〰〰　　　　 〰〰〰〰 之二</a><br>
 　　　　　　　　　　<a href="?vol=52">卷第五十二　〰〰〰〰〰　　　　 〰〰〰〰 之三</a> <green title="普賢菩薩">⑦</green><br>
-【<c339>九三會</c339>普光明殿】　<a href="?vol=53">卷第五十三　離世間品　　　　　 第三十八 之一</a>　　<ail>Lokottara</ail>　（<a href=9010/pin38qa.htm>二百問答</a>）<br>
+【<c339>九三會</c339>普光明殿】　<a href="?vol=53">卷第五十三　離世間品　　　　　 第三十八 之一</a>　　<ail>Lokottara</ail>　（<a href=9010/pin38qa.html>二百問答 👀</a>）<br>
 （一品七卷）　　　　<a href="?vol=54">卷第五十四　〰〰〰〰　　　　　 〰〰〰〰 之二</a><br>
 　　　　　　　　　　<a href="?vol=55">卷第五十五　〰〰〰〰　　　　　 〰〰〰〰 之三</a><br>
 　　　　　　　　　　<a href="?vol=56">卷第五十六　〰〰〰〰　　　　　 〰〰〰〰 之四</a><br>
