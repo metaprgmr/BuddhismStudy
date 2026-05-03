@@ -36,6 +36,7 @@ BODY {SCROLLBAR-FACE-COLOR: #09f; SCROLLBAR-HIGHLIGHT-COLOR: #09f; SCROLLBAR-SHA
 .endBar { text-align:center }
 hr.volsep { border: none; height: 1px; background: rgba(255,0,0,0.3); }
 
+.CBETA對校 { color:#a36 }
 .xinguo { background-color:#f33; color:yellow; font-size:16px; font-weight:normal; text-decoration:none }
 .xgtitle { color:teal }
 my   { }
@@ -101,6 +102,7 @@ label { font-weight:normal; color:purple }
 .inv { opacity:0 }
 inv { opacity:0 }
 dim { opacity:0.4 }
+.prologue { color:darkblue }
 cur { background-color:yellow; color:red; font-weight:bold }
 pt4 { font-size:4px } pt4:before { content:' ' }
 pt6 { font-size:6px } pt6:before { content:' ' }

@@ -1,7 +1,8 @@
 var dj = '《<XB>大經</XB>》';
 SC.volNum = 4;
 SC.subttl = '《佛說大乘無量壽莊嚴清淨平等覺經》是佛經嗎？';
-SC.footnotes = footnotes('《<a href="9078.htm">發大誓願</a>》 淨空法師 講');
+SC.footnotes = footnotes('《<a href="9077.htm">〈無量壽經〉夏王五譯之對比研究</a>》 信裹居士 研習',
+                         '《<a href="9078.htm">發大誓願</a>》 淨空法師 講');
 SC.text = `
 淨空法師傾力推廣的《佛說大乘無量壽莊嚴清淨平等覺經》夏蓮居居士會集本，成即大功德，不成則大敗筆，因為祂投入太多了。
 

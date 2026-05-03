@@ -3,8 +3,8 @@ function toEl(x) { return (typeof x=='string')?e(x):x; }
 function e(id) { return document.getElementById(id); }
 function renderText(id,t) { var el = e(id); el ? (el.innerHTML=t) : document.write(t); }
 function showTop(id) { var el=toEl(id); el && el.scrollIntoView(); }
+var zdigits = '〇一二三四五六七八九十';
 function zNumber(n) { // 0 to 999
-  const zdigits = '〇一二三四五六七八九十';
   if (typeof n == 'string') n = parseInt(n);
   if (n <= 10) return zdigits[n];
   if (n > 10 && n < 20) return '十' + zdigits[n-10];
@@ -21,6 +21,22 @@ function zNumber(n) { // 0 to 999
   while (ret.length > 1 && ret.startsWith('〇')) ret = ret.substring(1);
   while (ret.length > 1 && ret.endsWith('〇')) ret = rtrim(ret,1);
   return ret;
+}
+function znum(n) {
+  n = `${n}`;
+  var ret = '';
+  for (var i=0; i<n.length; ret += zdigits[n[i++]]);
+  return ret;
+}
+function unznum(n) {
+  if (typeof n != 'string') return n;
+  var ret = '';
+  for (var i=0; i<n.length; ++i) {
+    var d = n[i], idx = zdigits.indexOf(d);
+    if (idx < 0) return n; // give up
+    ret = `${ret}${idx}`;
+  }
+  return parseInt(ret);
 }
 function z10(n) { return n<=10 ? zNumber(n) : n; }
 function cilzn(n, left, right) { return `<cil>${left||'（'}${zNumber(n)}${right||'）'}</cil>`; }
@@ -178,7 +194,6 @@ class DocInfo {
     docInfo = this; // singleton
     this.defaultClass = 'TEXT';
     this.gathaClass = 'gatha';
-    this.zdigits = '〇一二三四五六七八九十';
     this.setMetaDelim('/');
     this.divClass = 'bookClean';
     this.volNumStart = 1;
@@ -308,8 +323,8 @@ class DocInfo {
     for (var i=1; i<=this.totalVols; ++i) {
       var lbl = i, hint = '';
       if (this.labels) lbl = this.labels[i-1];
+      else lbl = z10(i);
       if (this.hints) hint = ` title="${this.hints[i-1]}"`;
-      else if (i <= 10) lbl = this.zdigits[i]; // 漢字數字
       if (i == this.volNum) this.w(`&nbsp;<cur${hint}>${lbl}</cur>`);
       else this.w(`&nbsp;<a class="seriesnav" href="${fname(this.getIdAt(i))}"${hint}>${lbl}</a>`);
     }
@@ -332,7 +347,7 @@ class DocInfo {
     for (var i=this.volNumStart; i<=vnEnd; ++i) {
       var i1 = i - this.volNumStart + 1;
       if (this.navBreakAt && (i1 % this.navBreakAt == 1) && (i1 > 1)) this.w('<br>');
-      var lbl = (i<=10) ? this.zdigits[i] : i;
+      var lbl = z10(i);
       this.w('&nbsp;', (i == this.volNum) ? `<cur>${lbl}</cur>` : lnk(i, lbl));
     }
     if (this.volNum >= vnEnd) this.w('&nbsp;<inv>&raquo;</inv>');
@@ -377,7 +392,7 @@ class DocInfo {
       if (ln.endsWith('|')) ln = ln.substring(0, ln.length-1); // trailing | is just visual
       this.writeln(ln, i+1);
     }
-    return withEnd ? this.writeEnd() : this;
+    return withEnd ? this.writeEnd(this.links) : this;
   }
   writeLines(txt, buf) {
     if (!txt) return;
@@ -394,11 +409,17 @@ class DocInfo {
   }
   writeln(ln, lnnum) {
     var toHL, idx1, idx2;
-    if (ln[0] == '!') { // e.g. 9010/16.js
+    if (ln[0] == '!') { // e.g. 9010/16.js -- to be depreated, in favor of at the end
       idx1 = ln.indexOf('!', 2);
       if (idx1 < 0) throw `Expect a second !: ${ln}`;
       toHL = ln.substring(1,idx1);
       ln = ln.substring(idx1+1);
+    } else {
+      idx1 = ln.lastIndexOf('!!')
+      if (idx1 > 0) {
+        toHL = ln.substring(idx1+2).trim();
+        ln = rtrim(ln.substring(0,idx1));
+      }
     }
     var ln1 = ln && ln.trim(), lnId;
 
@@ -503,6 +524,7 @@ class DocInfo {
           if (myidx > 2)
             ln = `${ln.substring(myidx+1)}<sup class="paraname">${ln.substring(2,myidx).replaceAll(',',', ')}</sup>`;
         }
+        if (toHL) ln += '!!' + toHL;
         if (this.gathaText)
           this.gathaText += '\n' + ln;
         else
@@ -559,11 +581,13 @@ class DocInfo {
     if (ln1.startsWith('/gatha')) { // e.g. 0875
       this.inGatha = true;
       this.gathaStart = null;
-      idx1 = ln1.indexOf('!'); // set this.gathaStart. e.g. 9069
+      idx1 = ln1.indexOf('!'); // set this.gathaStart. e.g. 9069/01.js
       if (idx1 > 0) {
         idx2 = ln1.lastIndexOf('/');
-        if (idx2 > idx1)
-          this.gathaStart = parseInt(ln1.substring(idx1+1,idx2).trim());
+        if (idx2 > idx1) {
+          ln1 = ln1.substring(idx1+1,idx2).trim();
+          this.gathaStart = (ln1[0] == '!') ? 'NEVER' : unznum(ln1);
+        }
       }
       return lnId;
     }
@@ -731,10 +755,18 @@ class DocInfo {
       return ret;
     }
     var a = this.gathaText.split('\n'), len = a.length,
-        num = this.gathaStart || 1, needNum = this.gathaStart || (len > 5);
+        num = this.gathaStart || 1,
+        needNum = (this.gathaStart || (len > 10)) && (this.gathaStart != 'NEVER');
     for (var i=0; i<len; ++i) {
-      var ln = a[i];
-      var idx = ln.indexOf('|'), anno;
+      var ln = a[i], anno, toHL, idx;
+
+      idx = ln.lastIndexOf('!!')
+      if (idx > 0) {
+        toHL = ln.substring(idx+2).trim();
+        ln = rtrim(ln.substring(0,idx));
+      }
+
+      idx = ln.indexOf('|');
       if (idx > 0) {
         anno = ln.substring(idx+1).trim();
         ln = ln.substring(0, idx).trim();
@@ -750,7 +782,11 @@ class DocInfo {
           skipNum = true;
         }
         this.w(`<p class="TEXTL ${this.gathaClass}"><span class="gathanum">`,
-          (!skipNum && needNum) ? (num++) : '', '&nbsp;</span>', this.localProc(replaceSP(ln)));
+          (!skipNum && needNum) ? num : '', '</span>', this.localProc(replaceSP(ln), toHL));
+        if (!skipNum && needNum) {
+          if (isNaN(num)) needNum = false;
+          else  ++num;
+        }
         if (anno) this.w(sp3, `<span style="color:black; opacity:0.4">${anno}</span>`);
         this.w(`</p>`);
       }
@@ -854,7 +890,7 @@ function footnotes() {
   function c(v, center) {
     var ret = `<td style="${styl}"`;
     if (center) ret += ' align=center';
-    return `${ret}>${v}</td>`;
+    return `${ret} valign=top>${v}</td>`;
   }
   var len = arguments.length;
   if (len <= 0) return;
@@ -1243,9 +1279,9 @@ function write1472(n, body) {
       if (this.volNum <= 1) w('<inv>&laquo;</inv>');
       else w(`<a href="${this.getIdAt(this.volNum-1)}.htm">&laquo;</a>`);
       for (var i=1; i<=this.totalVols; ++i) {
-        var sutraVol = null, lbl = i;
+        var sutraVol = null, lbl;
         if (this.labels) lbl = this.labels[i-1];
-        else if (i <= 10) lbl = this.zdigits[i]; // 漢字數字
+        else lbl = z10(i);
         switch(i) {
         case  1: sutraVol = '經'; break;
         case  3: sutraVol = '二'; break;

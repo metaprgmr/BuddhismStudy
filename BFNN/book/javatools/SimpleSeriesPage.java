@@ -12,7 +12,7 @@ public class SimpleSeriesPage extends BfnnCommon {
   public static int     pageNumLen   = 2;
   public static String  jsFilePrefix = "";
   public static String  parenProc = null;
-  public static String  varName;
+  public static String  varName = "SC";
 
   public static void leave(String args) {
     final String msg =
@@ -22,7 +22,7 @@ public class SimpleSeriesPage extends BfnnCommon {
       "            -DpageNumLen=[int]      -- default: 2\n" +
       "            -DjsFilePrefix=[string] -- default: empty\n" +
       "            -Dparen = [ail|cil|dil|AIL|CIL|DIL|<any>]\n" +
-      "            -DvarName (string)      -- if none, simply write as-is\n" +
+      "            -DvarName (string)      -- default: SC (Almost never change)\n" +
       "            infile [volNum|outfile] -- varName is set, is volNum and required;\n" +
       "                                    -- otherwise, is outfile and optional.\n";
     err.println(msg);

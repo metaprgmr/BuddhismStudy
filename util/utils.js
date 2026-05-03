@@ -14,9 +14,9 @@ const FANGSONG_TI = 'FangSong, 仿宋体, STFangSong, 华文仿宋体';
 const A2Z = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const a2z = 'abcdefghijklmnopqrstuvwxyz';
 
-const zdigits = '〇一二三四五六七八九';
+var zdigits = '〇一二三四五六七八九',
+    znumeric = zdigits + '零十百千萬億兆';
 const Zdigits = '０１２３４５６７８９';
-const znumeric = zdigits + '零十百千萬億兆';
 function zNumber(n) { // 0 to 999
   if (typeof n == 'string') n = parseInt(n);
   if (n == 0) return zdigits[0];
@@ -39,6 +39,22 @@ function ZNumber(n) { // 0 to 999
     n = Math.floor(n/10);
   }
   return ret;
+}
+function znum(n) {
+  n = `${n}`;
+  var ret = '';
+  for (var i=0; i<n.length; ret += zdigits[n[i++]]);
+  return ret;
+}
+function unznum(n) {
+  if (typeof n != 'string') return n;
+  var ret = '';
+  for (var i=0; i<n.length; ++i) {
+    var d = n[i], idx = zdigits.indexOf(d);
+    if (idx < 0) return n; // give up
+    ret = `${ret}${idx}`;
+  }
+  return parseInt(ret);
 }
 function z10(n) { return n<=10 ? zNumber(n) : n; }
 function isZDigit(c) { return znumeric.indexOf(c) >= 0; }
@@ -313,8 +329,11 @@ function showTableData(data, tableExtra, sep, colfxn) {
   buf.w('</table>');
   return buf.render();
 }
-function rtrim(s, n) {
-  return !s ? s : ((s.length < n) ? '' : s.substring(0,s.length-n));
+function rtrim(s, n) { // if !n, trim the white spaces
+  if (n) return !s ? s : ((s.length < n) ? '' : s.substring(0,s.length-n));
+  var i;
+  for (i=s.length; i>0 && isWhite(s[i]); --i);
+  return (i == s.length) ? s : s.substring(0,i+1);
 }
 function trimFirstBlankLine(txt) {
   if (!txt) return txt;
@@ -420,7 +439,8 @@ function repeat(x, n) {
 function toW(n, w, c) {
   n = '' + n;
   if (!c) c = ' ';
-  while (n.length < w) n = c + n;
+  var cnt = w - n.length;
+  while (cnt--) n = c + n;
   return n;
 }
 function to4d(n,fill) { return toW(n, 4, fill||'0'); }
@@ -579,6 +599,15 @@ class Buffer {
   }
 
   wIfElse(cond, a, b) { return this.w(cond ? a : b); }
+
+  join(arr, sep) {
+    if (arr && arr.length) {
+      if (!sep) sep = '';
+      this.w(arr[0]);
+      for (var i=1; i<arr.length; ++i) this.w(sep, arr[i]);
+    }
+    return this;
+  }
 
   append(s) { this.bufList.push(s); } // for performance
 
