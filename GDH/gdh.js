@@ -1,4 +1,3 @@
-
 // crux
 var ypcolor, yptone = 'yptone'; // CSS class names, if any
 class YPInfo
@@ -375,12 +374,12 @@ class YPLine {
   ];
 
   var a =
-`一二三四五六七八九十
-jat1 ji6 saam1 sei3 ng5 luk6 cat1 baat3 gau2 sap6
-弗佛目犍連我時山中與王萬千俱通已達
-fat1 fat1 muk6 gin1 lin4 ngo5 si4 saan1 zung1 jyu5 wong4 maan6 cin1 keoi1 tung1 ji5 daat6
-名而上首阿難薩會曰大比丘迦
-ming4/meng2 ji4 soeng6 sau2 aa3 naan4 saat3 wui5 joek6 daai6 bei2 jau1 gaa1
+`一二三四五六七八九十百千萬億
+jat1 ji6 saam1 sei3 ng5 luk6 cat1 baat3 gau2 sap6 baak3 cin1 maan6 jik1
+弗佛目犍連我時山中與王俱通已達為
+fat1 fat1 muk6 gin1 lin4 ngo5 si4 saan1 zung1 jyu5 wong4 keoi1 tung1 ji5 daat6 wai6
+名而上首阿難薩會曰大比丘迦伽
+ming4/meng2 ji4 soeng6 sau2 aa3 naan4 saat3 wui5 joek6 daai6 bei2 jau1 gaa1 gaa1
 普文殊師彌勒皆來第解脫觀緣起威光述
 pou2 man4 syu4 si1 mei4 lak6 gaai1 loi4 dai6 gaai2 tyut3 gun1 jyun4 hei2 wai1 gwong1 seot6
 城耆闍崛切聖其舍利又有及賢劫集正士
@@ -389,8 +388,8 @@ sing4 kei4 dou1 gwat6 cit3 sing3 kei4 se3 lei6 jau6 jau5 kap6 jin4 gip3 zaap6 zi
 zyun1 ze2 giu1 can4 wai4 san1 waa4 zik6 seon3 jyun6 wai6 hoeng1 zoeng6 bou2 jing1 zyu6 zai3
 咸共遵修具足無量遊宣赫奕如融金聚在
 haam4 gung6 zeon1 sau1 geoi6 zuk1 mou4 loeng6 jau4 syun1 haak1 jik6 jyu4 jung4 gam1 zeui6 zoi6
-理福田貯功德藥救療升昇灌頂階授菩提記為
-lei5 fuk1 tin4 cyu5 gung1 dak1 joek6 gau3 liu4 sing1 sing1 gun3 ding2 gaai1 sau6 pou4 tai4 gei3 wai6
+理福田貯功德藥救療升昇灌頂階授菩提記
+lei5 fuk1 tin4 cyu5 gung1 dak1 joek6 gau3 liu4 sing1 sing1 gun3 ding2 gaai1 sau6 pou4 tai4 gei3
 教習相應熟邊善根護念剎譬幻異相實此
 gaau3 zaap6 soeng1/soeng3 jing3 suk6 bin1 sin6 gan1 wu6 nim6 caat3 pei3 waan6 ji6 soeng3 sat6 ci2
 遠超亦復是供養開導群身猶電裂見網纏縛
@@ -399,34 +398,34 @@ jyun5 ciu1 jik6 fau6 si6 gung1 joeng5 hoi1 dou6 kwan4 san1 jau4 din6 lit6 gin3 m
 kyun4 fong1 bin6 jap6 faat3 zong4/cong4 gau3 ging2 bei2 ngon6 se2 dau1 leot2/seot1 sing1 man4 pik1 zi1
 地降宮棄位出家苦行學道斯示現順世間故以
 dei6 hong4/gong3 gung1 hei3 wai6 ceot1 gaa1 fu2 hang4 hok6 dou6 si1 si6 jin6 seon6 sai3 gaan1 gu3 ji5
-定力伏魔怨得微妙成最天人歸仰請真際
-ding6 lik6 fuk6 mo1 jyun3 dak1 mei4 miu6 sing4 zeoi3 tin1 jan4 gwai1 joeng5 cing2 zan1 zai3
+定力伏魔怨得微妙成最天人歸仰請真際樂
+ding6 lik6 fuk6 mo1 jyun3 dak1 mei4 miu6 sing4 zeoi3 tin1 jan4 gwai1 joeng5 cing2 zan1 zai3 lok6/ngaau6/ngo3
 轉輪說乘壽莊嚴清淨平等覺經白調衆生
 zyun2 leon4 syut3 sing4 sau6 zong1 jim4 cing1 zing6 ping4 dang2 gok3/gaau3 ging1 baak6 diu6 zung3 sang1
-常音破煩惱壞諸欲塹洗濯垢污顯明所謂滅摩
-soeng4 jam1 po3 faan4 nou5 waai6 zyu1 juk6 cim3 sai2 zok6 gau3 wu1 hin2 ming4 so2 wai6 mit6 mo1
+常音破煩惱壞諸欲塹洗濯垢污顯明所謂滅摩康
+soeng4 jam1 po3 faan4 nou5 waai6 zyu1 juk6 cim3 sai2 zok6 gau3 wu1 hin2 ming4 so2 wai6 mit6 mo1 hong1
 辯才幢安之步於界作黎能性空陀羅尼悟門立智
 bin6 coi4 cong4 on1 zi1 bou6 jyu1 gaai3 zok3 lai4 nang4 sing3 hung1 to4 lo4 nei4 ng6 mun4 laap6 zi3
-思總持百昧深禪悉睹頃徧下度土隨化物意自過心
-si1 zung2 ci4 baak3 mui6 sam1 sim4 sik1 dou2 king2 pin3 haa5 dou6 tou2 ceoi4 faa3 mat6 ji3 zi6 gwo3 sam1
+思總持昧深禪悉睹頃徧下度土隨化物意自過心
+si1 zung2 ci4 mui6 sam1 sim4 sik1 dou2 king2 pin3 haa5 dou6 tou2 ceoi4 faa3 mat6 ji3 zi6 gwo3 sam1
 可己拯濟負荷獲女色梵興悲愍情演慈分別語言
 ho2 gei2 cing2 zai2 fu6 ho6 wok6 neoi5 sik1 faan4 hing1 bei1 man5 cing4 jin2 ci4 fan1 bit6 jyu5 jin4
-獄餓鬼禽獸蜎飛蠕動類聽察若證令歡喜憙稽禮
-juk6 ngo6 gwai2 kam4 sau3 jyun1 fei1 jyu4 dung6 leoi6 ting1 caat3 joek6 zing3 ling6 fun1 hei2 hei2 kai2 lai5
-須飲食衣服種場樹高殿樓池流補處除本諦勝
-seoi1 jam2 sik6 ji1 fuk6 zung2 coeng4 syu6 gou1 din6 lau4 ci4 lau4 bou2 cyu2 ceoi4 bun2 dai3 sing1
-合掌惡國麤不圓滿被弘誓鎧趣或永離繞匝樂康
-hap6 zoeng2 ok3 gwok3 cou1 bat1 jyun4 mun5 bei6 wang4 sai6 hoi2 ceoi3 waak6 wing5 lei4 jiu2 zaap3 lok6/ngaau6/ngo3 hong1
+獄餓鬼禽獸蜎飛蠕動類聽察若證令歡喜憙稽
+juk6 ngo6 gwai2 kam4 sau3 jyun1 fei1 jyu4 dung6 leoi6 ting1 caat3 joek6 zing3 ling6 fun1 hei2 hei2 kai2
+須飲食衣服種場樹高殿樓池流補處除本諦勝禮
+seoi1 jam2 sik6 ji1 fuk6 zung2 coeng4 syu6 gou1 din6 lau4 ci4 lau4 bou2 cyu2 ceoi4 bun2 dai3 sing1 lai5
+由合掌惡國麤不圓滿被弘誓鎧趣或永離繞匝
+jau4 hap6 zoeng2 ok3 gwok3 cou1 bat1 jyun4 mun5 bei6 wang4 sai6 hoi2 ceoi3 waak6 wing5 lei4 jiu2 zaap3
 取退爾從告偈頌建當雨珍震閉塞昔散然尅果冥
 ceoi2 teoi3 ji5 cung4 gou3 gai2 zung6 gin3 dong1 jyu5 zan1 zan3 bai3 sak1 sik1 saan2 jin4 hak1 gwo2 ming4
 厄倦譏他虛偽諂曲志必至戒忍辱精進落眷屬
 aak1 gyun6 gei1 taa1 heoi1 ngai6 cim2 kuk1 zi3 bit1 zi3 gaai3 jan2 juk6 zing1 zeon3 lok6 gyun3 suk6
 和顏愛勸諭策貪瞋癡想廓廣向專發雄子吼
 wo4 ngaan4 oi3 hyun3 jyu6 caak3 taam1 can1 ci1 soeng2 gwok3/kwok3 gwong2 hoeng3 zyun1 faat3 hung4 zi2 haau1
-號就長夜施主窮著恆東南西北維議業汝億同也雖
-hou4 zau6 zoeng2/coeng4 je6 si1 zyu2 kung4 zoek3/zoek6 hang4 dung1 naam4 sai1 bak1 wai4 ji5 jip6 jyu5 jik1 tung4 jaa5 seoi1
-由旬知耶小江海陵坑坎荊棘沙礫鐵圍遍照幹水晶
-jau4 ceon4 zi1 je4 siu2 gong1 hoi2 ling4 haang1 ham2 ging1 gik1 saa1 lik1 tit3 wai4 pin3 ziu3 gon3 seoi2 zing1
+號就長夜施主窮著恆東南西北維議業汝同
+hou4 zau6 zoeng2/coeng4 je6 si1 zyu2 kung4 zoek3/zoek6 hang4 dung1 naam4 sai1 bak1 wai4 ji5 jip6 jyu5 tung4
+旬知耶小江海陵坑坎荊棘沙礫鐵圍遍照幹水晶
+ceon4 zi1 je4 siu2 gong1 hoi2 ling4 haang1 ham2 ging1 gik1 saa1 lik1 tit3 wai4 pin3 ziu3 gon3 seoi2 zing1
 瓔珞雲鏁飾柱珠鈴鐸周條琥珀純多美玉瑪瑙莖枝
 jing1 lok3 wan4 so2 sik1 cyu5 zyu1 ling4 dok6 zau1 tiu4 fu2 paak3 seon4 do1 mei5 juk6 maa5 nou5 ging3 zi1
 各商風面貌形狀寧乎帝但因假設何況餘俗貧乞
@@ -437,8 +436,8 @@ tai2 caa1 zip3 duk6 fong2 jiu6 jau4 jyun5 haap3 zeon6 gik6 lai6 laan4 seon5 tong
 pei2 lau6 fan1 am3 fo2 jat6 jyut6 sing1 jyun4 wong4 zyu1 zi2 cing1 jip6 zaap6 lyun6 can4 lou4 cau2 lyut3
 受晝臨命終讀誦書寫稱讚勇猛前攝犯要容希
 sau6 zau3 lam4 ming6 zung1 duk6 zung6 syu1 se2 cing1 zaan3 jung5 maang5 cin4 sip3 faan6 jiu3 jung4 hei1
-狐疑早晚求餮慳惜怒嫉妒去憂顛倒即往數
-wu4 ji4 zou2 maan5 kau4 tit3 haan1 sek3 nou6 zat6 dou3 heoi3 jau1 din1 dou2 zik1 wong5 sou2
+狐疑早晚求餮慳惜怒嫉妒去憂顛倒即往數也雖
+wu4 ji4 zou2 maan5 kau4 tit3 haan1 sek3 nou6 zat6 dou3 heoi3 jau1 din1 dou2 zik1 wong5 sou2 jaa5 seoi1
 洞視徹肉眼簡擇義味礙厭琉璃內外障雷
 dung6 si6 cit3 juk6 ngaan5 gaan2 zaak6 ji6 mei6 ngoi6 jim3 lau4 lei4 noi6 ngoi6 zoeng3 leoi4
 歎未紛奉變胝那龍部放宿次覆蔭剛杵邪執
@@ -459,8 +458,8 @@ man4 toi1 ng4 baan1 wun4 sik1 oi1 gau2 geoi2 king4 sung1 fui3 leoi6 can1 sau4 ga
 tung3 huk6 duk6 bik1/baak1 hau5 zang1 fu3 gwai3 wing4 lou5 wu6 dai2 dat6 sik1 gaan3 hiu2
 反逆殃咎牽引殺戮強奪脅恚愚奢淫箭夾
 faan2 jik6 joeng1 gau3 hin1 jan5 saat3 luk6 koeng4 dyut6 hip3 wai6 jyu4 ce1 jam4 zin3 gaap3
-丈且了云互亡交亮仁代任伎伐休伽依侵
-zoeng6 ce2 liu5 wan4 wu6 mong4 gaau1 loeng6 jan4 doi6 jam6 gei6 fat6 jau1 gaa1 ji1 cam1
+丈且了云互亡交亮仁代任伎伐休依侵
+zoeng6 ce2 liu5 wan4 wu6 mong4 gaau1 loeng6 jan4 doi6 jam6 gei6 fat6 jau1 ji1 cam1
 保倉倚倫偏健偷債傷傾像僧儀償優
 bou2 cong1 ji2 leon4 pin1 gin6 tau1 zaai3 soeng1 king1 zoeng6 zang1 ji4 soeng4 jau1
 兄先免兩兵典冠冤冷凌凡凶刑剋副劇
@@ -637,10 +636,20 @@ cim1 him2 sung2 zok6 kiu4 seot6 fu6 tin5 nong5 mut6 ngaai4 pui3 gyun1 gwing2 mou
 fai1 gwing2 syun4 ceon4 ngan6 bai6 ting4 jeoi5 sin6 bei3 ngai6 sau3 pong5 hou4 lou5 ming4 gan1 jyu6
 瑿癰噬駭臻扇樵鑽燧稚射躡猗娛裙愧嚼謙坌
 ji1 jung1 sai6 haai5 zeon1 sin3 ciu4 zyun3 seoi6 zi6 se6 nip6 ji1 jyu4 kwan4 kwai3 zoek3 him1 ban6
-蹲踞稟嬾灑饌鋋輦匹弧矢衄罥隘屍唇喉吻
-deon1 geoi3 laan5 saa2 zaan6 sin4 lin5 pat1 wu4 ci2 nuk6 gyun3 zuk6 aai3 si1 seon4 hau4 man5
-紹洽舛軀橈嚚
-siu6 hap1 cyun2 keoi1 naau4 ngan4
+蹲踞稟嬾灑饌鋋輦匹弧矢衄罥隘屍唇喉吻縷
+deon1 geoi3 ban2 laan5 saa2 zaan6 sin4 lin5 pat1 wu4 ci2 nuk6 gyun3 aai3 si1 seon4 hau4 man5 lau5
+紹洽舛軀橈嚚環詖堞湍㲉束矯諠技軸霑贍
+siu6 hap1 cyun2 keoi1 naau4 ngan4 waan4 bei1 dip6 cyun2 kok3 cuk1 giu2 hyun1 gei6 zuk6 zim1 sim6
+嬈袤淤沃檻壑璫溥膚肺腎役酸鹹咀欬駿翼嫌
+jiu4 mau6 jyu2 juk1 laam6 kok3 dong1 pou2 fu1 fai3 san5 jik6 syun1 haam4 zeoi2 kat1 zeon3 jik6 jim4
+袨諧訣碪屠贖鬢螺聵銛脣髓傭阬罄庫恪萃
+jyun6 haai4 kyut3 zam1 ceoi4 suk6 ban3 lo4 kui2 cim1 seon4 seoi5 jung4 gong1 hing3 fu3 kok3 seoi6
+軒線扣繚匱壁噁恕激阜窟礬蕩職慍璽湑俾羯
+hin1 sin3 kau3 liu4 gwai6 bek3 ok3 syu3 gik1 fau6 fat1 faan4 dong6 zik1 wan3 ssaai2 seoi2 bei2 kit3
+溉泗諮嗟翱翔蘆潦稠簫羈繽奩篋梨戴鈿廁藝
+koi3 sei3 zi1 ze1 ngou4 coeng4 lou4 liu4 cau4 siu1 gei1 ban1 lim4 gip1 lei4 daai3 din6 ci3 ngai6
+貫嶷
+gun3 ji4
 `;
 
   init(ignoreLevels, a);

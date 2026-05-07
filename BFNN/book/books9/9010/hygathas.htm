@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=utf-8">
@@ -32,7 +33,7 @@ function writeGC() {
 
   // Write TOC
   for (i in keys) {
-    var o = gathaRepo[keys[i]];
+    var k = keys[i], o = gathaRepo[k];
     if (o.isCollection) {
       gcols.push(o);
       var name = o.name, idx = name.indexOf('品'),
@@ -45,12 +46,11 @@ function writeGC() {
   buf.w(COL_START, '\n');
   for (i=1; i<a.length; ++i) {
     var g = a[i], gname = g[1], j;
-    if (gname.indexOf('第二品 三頌') >= 0 ||
-        gname.indexOf('第十品 十菩薩偈') >= 0)
-      buf.w(COL_DIV30, '\n');
+//  if (gname.indexOf('第二品 三頌') >= 0 || gname.indexOf('第十品 十菩薩偈') >= 0)
+//    buf.w(COL_DIV30, '\n');
     buf.w('/L/');
-    var lim = i<=11 ? 0 : maxl-g[0];
-    for (j=0; j<lim; ++j) buf.w('　');
+//  var lim = i<=11 ? 0 : maxl-g[0];
+//  for (j=0; j<lim; ++j) buf.w('　');
     if (i == curGC)
       buf.w(gname);
     else

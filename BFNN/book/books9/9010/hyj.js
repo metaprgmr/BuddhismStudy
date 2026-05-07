@@ -1,6 +1,16 @@
+// s/——/──/
+
 var SAHA = 'Sahā';
 
-function simpleSeq(n, left, right) { return cilzn(n, left, right); }
+var _sectionNum = 1, _simpleNum = 1;
+function sectionSeq(n, left, right) {
+  if (n) _sectionNum = n;
+  return cilzn(_sectionNum++, left||'　【', right||'】');
+}
+function simpleSeq(n, left, right) {
+  if (n) _simpleNum = n;
+  return cilzn(_simpleNum++, left, right);
+}
 function statusName(num, name, type) { return `/TEXT030L/第${zNumber(num)}${type||'地'} <ail>（${name}）</ail>`; }
 
 class TenList { // TODO

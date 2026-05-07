@@ -50,10 +50,10 @@ SC.text = `
 　　　　　　　　　　<a href="?vol=38">卷第三十八　〰〰〰　　　　　　 〰〰〰〰 之五</a>　　　　　　　　　　　<teal>不動地　善慧地</teal><br>
 　　　　　　　　　　<a href="?vol=39">卷第三十九　〰〰〰　　　　　　 〰〰〰〰 之六</a>　　　　　　　　　　　<teal>法雲地</teal><br>
 【<c339>七會</c339><dim>三禪天</dim>】　　　　　　　　　<dim>十一地品</dim>　　　　 <cil>　 （梵文未來）</cil><br>
-【<c339>八再會</c339>重普光殿】　<a href="?vol=40">卷第四十　　十定品　　　　　　 第二十七 之一</a>　　 <ail>Daśa-samādhi</ail><br>
-（十一品十三卷）　　<a href="?vol=41">卷第四十一　〰〰〰　　　　　　 〰〰〰〰 之二</a><br>
-　　　　　　　　　　<a href="?vol=42">卷第四十二　〰〰〰　　　　　　 〰〰〰〰 之三</a><br>
-　　　　　　　　　　<a href="?vol=43">卷第四十三　〰〰〰　　　　　　 〰〰〰〰 之四</a><br>
+【<c339>八再會</c339>重普光殿】　<a href="?vol=40">卷第四十　　十定品　　　　　　 第二十七 之一</a>　　 <ail>Daśa-samādhi</ail>　　　　<teal>普光明三昧　妙光明三昧</teal><br>
+（十一品十三卷）　　<a href="?vol=41">卷第四十一　〰〰〰　　　　　　 〰〰〰〰 之二</a>　<small style="color:teal">次第遍往諸佛國土神通、　清淨深心行、　知過去莊嚴藏、　智光明藏、↩</small><br>
+　　　　　　　　　　<a href="?vol=42">卷第四十二　〰〰〰　　　　　　 〰〰〰〰 之三</a>　<teal>一切眾生差別身三昧　法界自在三昧　　<small>了知一切世界佛莊嚴</small>三昧</teal><br>
+　　　　　　　　　　<a href="?vol=43">卷第四十三　〰〰〰　　　　　　 〰〰〰〰 之四</a>　<teal>無礙輪三昧</teal><br>
 　　　　　　　　　　<a href="?vol=44">卷第四十四　十通品　　　　　　 第二十八</a><br>
 　　　　　　　　　　<a href="?vol=44">　　　　　　十忍品　　　　　　 第二十九</a><br>
 　　　　　　　　　　<a href="?vol=45">卷第四十五　阿僧祇品　　　　　 第三十</a><br>

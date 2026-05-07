@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>查字</title>
+<link rel="stylesheet" href="../util/article.css">
+<style>
+#stg1 td { font-size:30px; color:#33e }
+#stg1 td.yp { font-size:16px; color:#d36; background-color:white }
+#stg2 td { font-size:24px; color:#33e }
+#stg2 td.yp { font-size:14px; color:#d36 }
+</style>
+<script src="../util/utils.js"></script>
+<script src="../GDH/gdh.js"></script>
+</head>
+<body>
+
+<table width="100%" style="padding-bottom:20px">
+<tr>
+<td><a href="javascript:dui.reset()" title="清除" style="opacity:0.3">◎</a>&nbsp;<input type="text" onkeydown="keydowner(event)"></td>
+</tr>
+</table>
+<div id="stg1"></div>
+<div id="stg2"></div>
+</body></html>
+
+<script>
+const ZIS1LIM = 10, ZIS2LIM = 300, ZIS2W = 20;
+class DictUI {
+  constructor(el1id, el2id) {
+    this.el1id = el1id;
+    this.el2id = el2id;
+    this.zis1Changed = this.zis1 = localStorage.getItem('zis1') || '';
+    this.zis2Changed = this.zis2 = localStorage.getItem('zis2') || '';
+    this.unknown = {};
+  }
+  reset() {
+    this.zis1 = this.zis2 = '';
+    this.unknown = {};
+    this.zis1Changed = this.zis2Changed = true;
+    this.updateUI();
+  }
+  lookup(txt) {
+    var prev1 = this.zis1, prev2 = this.zis2;
+    txt = txt.trim();
+    for (var i=0; i<txt.length; ++i) {
+      var z = txt[i];
+      if (!isHanZi(z) || isPunc(z)) continue;
+      var idx = this.zis1.indexOf(z);
+      if (idx >= 0) this.zis1 = this.zis1.substring(0,idx) + this.zis1.substring(idx+1);
+      idx = this.zis2.indexOf(z);
+      if (idx >= 0) this.zis2 = this.zis2.substring(0,idx) + this.zis2.substring(idx+1);
+      this.zis1 = z + this.zis1;
+    }
+    if (this.zis1.length > ZIS1LIM) {
+      this.zis2 = this.zis1.substring(ZIS1LIM) + this.zis2;
+      this.zis1 = this.zis1.substring(0,ZIS1LIM);
+      if (this.zis2.length > ZIS2LIM) this.zis2 = this.zis2(0,ZIS2LIM);
+    }
+    this.zis1Changed = (prev1 != this.zis1);
+    this.zis2Changed = (prev2 != this.zis2);
+    console.log('[1]', this.zis1);
+    console.log('[2]', this.zis2);
+    this.updateUI();
+  }
+
+  updateUI() {
+    var buf, me = this;
+    function row(zis, main) {
+      buf.w('<tr>');
+      var i, len = zis.length;
+      for (i=0; i<zis.length; ++i) {
+        var z = zis[i], zinfo = dict.lookup(z);
+        if (!zinfo) {
+          if (isHanZi(z) && !isPunc(z)) me.unknown[z] = 1;
+        } else {
+          delete me.unknown[z];
+          buf.w('<td class="yp" align=center nowrap>', zinfo && zinfo.getAllYPs('<br>') || '', '</td>');
+        }
+      }
+      buf.wIf(main, '<td></td>')
+         .w('</tr><tr>');
+      for (i=0; i<len; ++i) {
+        if (dict.lookup(zis[i]))
+          buf.w('<td align=center>', zis[i], '</td>');
+      }
+      buf.wIf(main, '<td style="color:#d00">', Object.keys(me.unknown).join(''), '</td>')
+         .w('</tr>');
+    }
+    function refresh(main) {
+      var zis = main ? me.zis1 : me.zis2,
+          eid = main ? me.el1id : me.el2id,
+          pid = main ? 'zis1' : 'zis2';
+      localStorage.setItem(pid, zis);
+      if (!buf) buf = new Buffer();
+      buf.w('<table border=0 cellspacing=2 cellpadding=0 bgcolor="#eee" style="margin-bottom:10px">');
+      while (zis.length > 0) {
+        var z = zis.substr(0, Math.min(zis.length, ZIS2W));
+        row(z, main);
+        zis = (z.length < ZIS2W) ? '' : zis.substring(ZIS2W);
+      }
+      buf.w('</table>').render(eid);
+    }
+
+    if (this.zis1Changed) refresh(true);
+    if (this.zis2Changed) refresh(false);
+    this.zis1Changed = this.zis2Changed = false;
+  }
+
+} // end of DictUI.
+
+var dui = new DictUI('stg1', 'stg2');
+dui.updateUI();
+function keydowner(e) { if(e.key == 'Enter') { dui.lookup(e.target.value); e.target.value = ''; } }
+</script>
+

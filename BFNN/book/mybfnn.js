@@ -49,15 +49,6 @@ function trimLead0s(n) {
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
 }
-var _namedSeq = {};
-function seqNext(name, def) {
-  var i = _namedSeq[name];
-  if (typeof i == 'undefined')
-    i = (def === 0) ? 0 : (def || 1);
-  else ++i;
-  _namedSeq[name] = i;
-  return i;
-}
 var queryParams;
 function get(name) {
   if (!queryParams) { // singleton, instantiated on-demand
@@ -410,6 +401,7 @@ class DocInfo {
   writeln(ln, lnnum) {
     var toHL, idx1, idx2;
     if (ln[0] == '!') { // e.g. 9010/16.js -- to be depreated, in favor of at the end
+      console.log('TO BE DEPRECATED: use end-of-line style.', ln);
       idx1 = ln.indexOf('!', 2);
       if (idx1 < 0) throw `Expect a second !: ${ln}`;
       toHL = ln.substring(1,idx1);
@@ -581,7 +573,7 @@ class DocInfo {
     if (ln1.startsWith('/gatha')) { // e.g. 0875
       this.inGatha = true;
       this.gathaStart = null;
-      idx1 = ln1.indexOf('!'); // set this.gathaStart. e.g. 9069/01.js
+      idx1 = ln1.indexOf('!'); // set this.gathaStart. e.g. 9065/01.js
       if (idx1 > 0) {
         idx2 = ln1.lastIndexOf('/');
         if (idx2 > idx1) {

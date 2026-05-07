@@ -8,14 +8,17 @@ sup { font-size:14px }
 </style>
 <script>
 function item(title, srcname, prefix, suffix, urlExtra) {
+  var isJS = srcname.endsWith('.js');
   if (!prefix) prefix = '《';
   if (!suffix) suffix = '》';
   if (!urlExtra) urlExtra = '';
-  if (srcname.endsWith('.js')) srcname = 'gdhreader.html?s=content/' + srcname;
+  if (isJS) srcname = 'gdhreader.html?s=content/' + srcname;
 //var LEVEL = 'level=-1&first=6';
-  var LEVEL = 'level=1';
-  LEVEL = (srcname.indexOf('?') >= 0 ? '&' : '?') + LEVEL;
-  if (urlExtra) urlExtra = '&' + urlExtra;
+  var LEVEL = '';
+  if (isJS) {
+    LEVEL = (srcname.indexOf('?') >= 0 ? '&' : '?') + 'level=1';
+    if (urlExtra) urlExtra = '&' + urlExtra;
+  }
   document.write(`<li>${prefix}<a href="${srcname}${LEVEL}${urlExtra}">${title}${suffix}</li>`);
 }
 </script>
@@ -54,6 +57,7 @@ function item(title, srcname, prefix, suffix, urlExtra) {
   item('太上感應篇', 'tsgyp.js');
   item('道德經', 'ddj.html');
   item('粵拼字集', 'ypdict.html', '【', '】');
+  item('漢字讀音', '../Lang/dict.html', '【', '】');
 </script>
 </ul></td></tr>
 </table>

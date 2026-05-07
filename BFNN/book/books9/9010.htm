@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=utf-8">
@@ -24,9 +25,9 @@ new (class extends HYJContainer {
   }
 
   loadJS(vol) {
-    addjs(`9010/${to2d(vol||0)}.js`);
     if (vol >= 53)
       addjs(vol<60 ? "9010/deuxcents.js" : "9010/visits-53.js");
+    addjs(`9010/${to2d(vol||0)}.js`);
   }
 
   isReady() {
