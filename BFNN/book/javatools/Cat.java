@@ -97,6 +97,7 @@ public class Cat {
     boolean inHTML = false;
     boolean inBody = false;
     int idx, idx1;
+    out.println("<!DOCTYPE html>");
     while ((ln = br.readLine()) != null) {
       String ln0 = ln.trim();
       if (ln0.length() == 0) continue;

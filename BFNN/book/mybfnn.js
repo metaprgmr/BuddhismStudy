@@ -39,11 +39,15 @@ function unznum(n) {
   return parseInt(ret);
 }
 function z10(n) { return n<=10 ? zNumber(n) : n; }
-function cilzn(n, left, right) { return `<cil>${left||'（'}${zNumber(n)}${right||'）'}</cil>`; }
 function to2d(n) { for (n =''+n; n.length<2; n='0'+n); return n; }
 function to3d(n) { for (n =''+n; n.length<3; n='0'+n); return n; }
 function to4d(n) { for (n =''+n; n.length<4; n='0'+n); return n; }
 function repeat(x, n) { var r=''; for(var i=0; i<n; ++i) r+=x; return r; }
+function cilzn(n, left, right) { return `<cil>${left||'（'}${zNumber(n)}${right||'）'}</cil>`; }
+var simpleSeq = (() => {
+  var _simpleNum = 1;
+  return (n, left, right) => { if (n) _simpleNum = n; return cilzn(_simpleNum++, left, right); }
+})();
 function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);

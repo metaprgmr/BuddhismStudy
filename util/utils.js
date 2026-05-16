@@ -227,6 +227,7 @@ function addHeadEl(tag, attrs) {
   document.head.appendChild(el);
   return el;
 }
+function toClipboard(s) { navigator.clipboard.writeText(s); }
 function addjs() {
   for (var i in arguments) {
     var uri = (arguments[i] || '').trim();
@@ -1219,5 +1220,3 @@ class ResourceRepo {
     return ret;
   }
 }
-
-addStyleTag(getGlobal('xgStyles') || getGlobal('xgStyle'));

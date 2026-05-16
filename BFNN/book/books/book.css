@@ -156,13 +156,18 @@ subtitle  {margin:0cm; margin-bottom:.0001pt; font-size:20.0pt; font-family:標�
 .MANTRA   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:teal;}
 verse     { color:teal;}
 v         { color:teal;}
-quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:#000077;}
+.QUOTE    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:teal;}
+quote     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:normal; color:teal;}
 .bglightyellow { background-color:lightyellow }
 .COMPONENT{margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; font-weight:bold; color:teal;}
 .XIA1     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#939; }
 .XIA      {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#939; }
 .XIA::before { content:'✶ ' }
 XB       { font-family: KaiTi, "Kaiti TC", "楷体", STKaiti, "华文楷体"; font-weight:bold; background-color:#fea }
+NARRATE   {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#339;}
+.NARRATE  {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:24.0pt; color:#339;}
+narrate  {color:#339;}
+.narrate  {color:#339;}
 KEPAN     {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 .KEPAN    {margin:0cm; margin-bottom:.0001pt; font-size:12.0pt; font-family:細明體; text-indent:0.0pt; color:#339;}
 hrAdd { font-weight:normal; color:black; opacity:0.5; }

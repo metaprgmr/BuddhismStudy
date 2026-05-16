@@ -41,7 +41,7 @@ class DictUI {
     this.updateUI();
   }
   lookup(txt) {
-    var prev1 = this.zis1, prev2 = this.zis2;
+    var prev1 = this.zis1, prev2 = this.zis2, cur = '';
     txt = txt.trim();
     for (var i=0; i<txt.length; ++i) {
       var z = txt[i];
@@ -50,8 +50,9 @@ class DictUI {
       if (idx >= 0) this.zis1 = this.zis1.substring(0,idx) + this.zis1.substring(idx+1);
       idx = this.zis2.indexOf(z);
       if (idx >= 0) this.zis2 = this.zis2.substring(0,idx) + this.zis2.substring(idx+1);
-      this.zis1 = z + this.zis1;
+      cur += z;
     }
+    this.zis1 = cur + this.zis1;
     if (this.zis1.length > ZIS1LIM) {
       this.zis2 = this.zis1.substring(ZIS1LIM) + this.zis2;
       this.zis1 = this.zis1.substring(0,ZIS1LIM);
@@ -84,8 +85,13 @@ class DictUI {
         if (dict.lookup(zis[i]))
           buf.w('<td align=center>', zis[i], '</td>');
       }
-      buf.wIf(main, '<td style="color:#d00">', Object.keys(me.unknown).join(''), '</td>')
-         .w('</tr>');
+      if (main) {
+        var unk = Object.keys(me.unknown).join(''),
+            hint = '拷貝以貼入粵拼轉換字典';
+        if (unk.length > 0)
+          buf.w(`<td style="color:#c00">${unk}<button onclick="toYP('${unk}')">粵拼</button></td>`);
+      }
+      buf.w('</tr>');
     }
     function refresh(main) {
       var zis = main ? me.zis1 : me.zis2,
@@ -93,7 +99,7 @@ class DictUI {
           pid = main ? 'zis1' : 'zis2';
       localStorage.setItem(pid, zis);
       if (!buf) buf = new Buffer();
-      buf.w('<table border=0 cellspacing=2 cellpadding=0 bgcolor="#eee" style="margin-bottom:10px">');
+      buf.w('<table border=0 cellspacing=2 cellpadding=0 bgcolor="#eee" style="margin-bottom:10px; min-width:100px">');
       while (zis.length > 0) {
         var z = zis.substr(0, Math.min(zis.length, ZIS2W));
         row(z, main);
@@ -108,6 +114,11 @@ class DictUI {
   }
 
 } // end of DictUI.
+
+function toYP(txt) {
+  toClipboard(txt);
+  window.open('https://www.iamwawa.cn/yuepin.html', 'ypdict');
+}
 
 var dui = new DictUI('stg1', 'stg2');
 dui.updateUI();

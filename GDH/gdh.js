@@ -648,9 +648,22 @@ jyun6 haai4 kyut3 zam1 ceoi4 suk6 ban3 lo4 kui2 cim1 seon4 seoi5 jung4 gong1 hin
 hin1 sin3 kau3 liu4 gwai6 bek3 ok3 syu3 gik1 fau6 fat1 faan4 dong6 zik1 wan3 ssaai2 seoi2 bei2 kit3
 溉泗諮嗟翱翔蘆潦稠簫羈繽奩篋梨戴鈿廁藝
 koi3 sei3 zi1 ze1 ngou4 coeng4 lou4 liu4 cau4 siu1 gei1 ban1 lim4 gip1 lei4 daai3 din6 ci3 ngai6
-貫嶷
-gun3 ji4
-`;
+貫嶷厝屣駁邈顇刈糩糠粳䴵浦蜯璣捺洿僂
+gun3 ji4 cou3 saai2 bok3 miu5 seoi5 ngaai6 kui2 hong1 gang1 bing2 pou2 pong5 gei1 naat6 wu1 lau4
+頰懿祚黜闚抂糅晏厩駒陟薨㲲睒眴縵腨抆
+gaap3 ji3 zou6 zeot1 kwai1 kong4 jau2 aan3 gau3 keoi1 zik1 gwang1 dip6 sim2 seon1 maan6 syun6 man2
+揵沓娉擿樗蒱鑰肌腐瘠瘦糜嫈嫇卞鳧鸞冶偃
+kin4 daap6 ping1 tik1 syu1 pou4 joek6 gei1 fu6 zek3 sau3 mei4 jing1 ming4 bin6 fu4 lyun4 je5 jin2
+釧唼虺顦偱隣斛賒曖肘傑侈跣莠禾蠧磋掊悒髭
+cyun1 cip3 wai2 ciu4 seon1 leon4 huk6 se1 oi2 zaau2 git6 ci2 sin2 jau5 wo4 dou3 co1 pau2 jap1 zi1
+彫輿樟柟梓躄葆刖㱇厥昞愕彫輿樟柟梓躄
+diu1 jyu4 zoeng1 naam4 zi2 bik1 bou2 jyut6 sik1 gyut6 bing2 ngok6 diu1 jyu4 zoeng1 naam4 zi2 bik1
+葆刖㱇厥昞愕捔膩麁澁惙殞㘁鵠銏剳繇耑
+bou2 jyut6 sik1 gyut6 bing2 ngok6 gok3 nei6 cou1 saap3 zyut3 wan5 jik6 guk1 saan3 zaap3 jau4 dyun1
+虗竚匄釐墖縻旤僇膂勻曦漚髡彙汨涸迨眚詎
+heoi1 cyu5 koi3 hei1 taap3 mei4 wo6 luk6 leoi5 wan4 hei1 au1 kwan1 wui6 mik6 kok3 doi6 saang2 geoi6
+詮肇
+cyun4 siu6`;
 
   init(ignoreLevels, a);
 })();

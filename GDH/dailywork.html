@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html charset="utf-8">
+<html>
 <head>
 <meta charset="utf-8">
 <style>
@@ -24,7 +24,10 @@ li.sm  { font-size:15px }
 </head>
 <body bgcolor="#ffe680" style="margin:0px" title="佛修道場">
  <table cellpadding=0 cellspacing=0><tr>
- <td id=toc nowrap align=center valign=top><h2 id=lbl></h2><div id=prgm></div></td>
+ <td id=toc nowrap align=center valign=top>
+  <h2 id=lbl></h2>
+  <div id=prgm tabindex="0" onkeydown="keydowner(event)"></div>
+ </td>
  <td id=pic align=center></td>
  <td id=ifrm valign=top><iframe id=view name=view></iframe></td>
  </tr></table>
@@ -83,6 +86,18 @@ function openURL(url, img, imgw) {
   window.open(url, EXT);
 }
 function openLnk(eid, js, anchor, img, imgw) {
+  if (!js) {
+    js = dojo.images[eid];
+    img = js.img;
+    if (js) {
+      if (js.url) {
+        openURL(js.url, img);
+        return true;
+      }
+      anchor = js.anchor;
+      js = js.js;
+    }
+  }
   if (js) {
     var lnk;
     if (js.indexOf('/') < 0) {
@@ -104,13 +119,22 @@ function openLnk(eid, js, anchor, img, imgw) {
     el = e('pic');
     el && (el.innerHTML = im.toImgTag(img));
   }
-  if (lastEID) { el = e(lastEID); el && (el.style.border = 'none'); }
-  if (eid) { el = e(eid); el && (el.style.border = '2px red solid'); }
+  el = e(lastEID);
+  el && (el.style.border = 'none');
+  if (eid) {
+    el = e(eid);
+    if (!el) return false;
+    el.style.border = '2px red solid';
+  }
   lastEID = eid;
+  return true;
 }
 
 class DojoBuffer extends Buffer {
-  constructor(a, b, c) { super(a, b, c); }
+  constructor(a, b, c) {
+    super(a, b, c);
+    this.images = {}; // per eid
+  }
   wBeginning(lead) {
     return this.wIf(lead, lead)
                .w('<ol>')
@@ -135,19 +159,23 @@ class DojoBuffer extends Buffer {
   mainlnk (name, js, anchor, img)     { return this.lnk(name, js, anchor, img, true); }
   lnkS(name, js, anchor, img, isMain) { return this.lnk(name, js, anchor, img, isMain, true); }
   lnk (name, js, anchor, img, isMain, isSmall) {
+    var eid = ++curEID;
+    this.images[eid] = { img, js, anchor };
     img = !img ? '' : `, '${img}'`;
     js = !js ? 'null' : `'${js}'`;
     anchor = !anchor ? ', null' : `, '${anchor}'`;
-    var eid = '_' + (++curEID),
-        cls = isMain ? 'class="big"' : '',
+    var cls = isMain ? 'class="big"' : '',
         liCls = isSmall ? 'class=sm' : '',
-        atag = `<a href="javascript:openLnk('${eid}',${js}${anchor}${img})">`;
+        imguri = `${js}${anchor}${img}`,
+        atag = `<a href="javascript:openLnk('${eid}',${imguri})">`;
     return this.w(`<li ${liCls}><div id="${eid}" ${cls}>${atag}${name}</a></div></li>`);
   }
   xlnk(name, url, img) {
     img = !img ? '' : `, '${img}'`;
-    var atag = `<a href="javascript:openURL('${url}'${img})">`;
-    return this.w(`<li><div id="_${++curEID}" class="big">${atag}${name}</a></div></li>`);
+    var eid = ++curEID,
+        atag = `<a href="javascript:openURL('${url}'${img})">`;
+    this.images[eid] = { url, img };
+    return this.w(`<li><div id="${eid}" class="big">${atag}${name}</a></div></li>`);
   }
 
   StartSession(refresh) {
@@ -192,7 +220,7 @@ class DojoBuffer extends Buffer {
         .lnkS('◎地藏菩薩論念佛號◎', 'various.js', '_43', '南無地藏王菩薩1.jpg')
         .lnkS('◎淨明空誨法言師教◎', '../淨土宗/西方二聖開示/JK-teachings.html', 'jingyu', '慈悲看破自在念佛.jpg')
         .lnkS('◎印光大師文鈔精錄◎', '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.html', 'm=r', '慈悲看破自在念佛.jpg')
-        .lnkS('《南無阿彌陀佛歌讚》', '../images/南無阿彌陀佛_華藏淨宗學會.mp3', null, '南無阿彌陀佛.jpg')
+        .lnkS('《南無阿彌陀佛歌讚》', '../images/amtb4.mp3', null, '南無阿彌陀佛.jpg')
         .renderIt();
   }
 
@@ -273,6 +301,12 @@ class DojoBuffer extends Buffer {
   }
 
 } // end of DojoBuffer.
+
+function keydowner(e) {
+  e.preventDefault();
+  if(e.key == 'Space' || e.key == 'Enter')
+    openLnk(1+parseInt(lastEID));
+}
 
 loadNongLiYear(null, null, true);
 

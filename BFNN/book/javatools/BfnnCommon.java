@@ -182,6 +182,9 @@ public class BfnnCommon {
             doneBig5 = true;
             return line.substring(0, idx) + "utf-8" + line.substring(idx+4);
           }
+          idx = line.indexOf("utf-8");
+          if (idx > 0) // sometimes the page has already been converted.
+            doneBig5 = true;
         }
         if (line.startsWith("<link") && line.endsWith(".mso\">"))
           return null;

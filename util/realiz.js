@@ -458,16 +458,23 @@ function testRZ(input, verbose) {
   }
 }
 
+console.log(':::', process.argv.join(' '));
 var fn = process.argv[2];
 
-if (fn == 'test') {
+switch (fn) {
+case 'test':
   testRZ('那本天台三观书摆在讲台上。', true);
   testRZ('她戴了一只手表，正举手了望，只是不知看见了什么。', true);
   testRZ('台家引以说止观', true);
   testRZ('不空罥索神变真言经。', true);
-} else {
+  break;
+case '-f':
+  convertFile(process.argv[3]);
+  break;
+default:
   var args = [], len = process.argv.length;
   for (var i=2; i<len; ++i)
     args.push(process.argv[i]);
   convertFile.apply(null, args);
+  break;
 }
