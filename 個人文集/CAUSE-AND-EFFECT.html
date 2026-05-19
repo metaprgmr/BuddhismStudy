@@ -314,13 +314,13 @@ var book = `
 `;
 
 function display() {
-  var a = book.split('\n'), buf = new Buffer(), pgnum;
+  var a = book.split('\n'), buf = new Buffer(), pgnum, cnt = 0;
   buf.w('<ol>');
   for (var i in a) {
     var ln = a[i].trim();
     if (!ln) continue;
     if (ln[0] == '#') { pgnum = ln.substring(1); continue; }
-    buf.w('<li>', ln, `（第${pgnum}頁）</li>`);
+    buf.w(`<li><a name="${++cnt}"></a>${ln}（第${pgnum}頁）</li>`);
   }
   buf.w('</ol>');
   buf.render('stg');

@@ -33,9 +33,8 @@ const FULLTEXT = '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.ht
 </body></html>
 
 <script>
-var items = `
-
-#一、讚淨土超勝（共18條）
+var items =
+`#一、讚淨土超勝（共18條）
 
 1/　　:大矣哉，淨土法門之為教也！偏圓頓漸一切法，無不從此法界流；大小權實一切行，無不還歸此法界。
 2/　　:淨土者，高超、統攝一切禪教律。略則一言一句一偈一書包括無餘，廣則三藏十二部、五宗祖師妙義亦詮不盡。
@@ -385,10 +384,43 @@ var items = `
 `;
 
 var a = items.split('\n'),
-    buf = new Buffer('<table border=0 cellspacing=0>'),
+    buf = new Buffer(),
     yg333 = getGlobal('YG333') || {},
     lastType = '',
     em1cnt = 0, em2cnt = 0;
+
+// TOC
+(() => {
+function toA(i) {
+  var disp = (i<10) ? `<inv>00</inv>${i}` : (i<100) ? `<inv>0</inv>${i}` : i;
+  return `<a href="javascript:showTop('_${i}')">${disp}</a>`;
+}
+if (false) {
+  buf.w('<center><table cellspacing=0 cellpadding=0 bgcolor="#eee"><tr>');
+  for (var i=1; i<=333; ++i) {
+    buf.w(`<td align=right>${toA(i)}&nbsp;</td>`);
+    if (i % 30 == 0) buf.w('</tr><tr>');
+  }
+  buf.w('</tr></table></center><br>');
+} else {
+  buf.w('<center><table cellspacing=0 cellpadding=0 width="850px" bgcolor="#eee">');
+  var cur = 1;
+  for (var i in a) {
+    var ln = a[i].trim(), idx, idx1;
+    if (!ln || ln[0] != '#') continue;
+      idx = ln.indexOf('（共');     if (idx  < 0) throw `Missing （共: [${ln}]`;
+      idx1 = ln.indexOf('條', idx); if (idx1 < 0) throw `Missing 條: [${ln}]`;
+      idx1 = parseInt(ln.substring(idx+2, idx1));
+      buf.w(`<tr><td nowrap valign=top style="font-weight:bold">${ln.substring(1, idx)}</td><td>`);
+      for (var j=0; j<idx1; ++j)
+        buf.w(toA(cur++), ' ');
+      buf.w('</td></tr>');
+  }
+  buf.w('</table></center><br>');
+}
+})();
+
+buf.w('<table border=0 cellspacing=0>');
 if (!yg333['1']) yg333['1'] = 2; // to show as an example
 for (var i in a) {
   var ln = a[i].trim(), idx;
@@ -420,9 +452,10 @@ for (var i in a) {
       if (level) cls = `${cls} em${level}`.trim();
       if (anno) { anno = ` title="${anno}"`; num = `<i>${num}</i>`; }
       if (type.startsWith('〇〇')) type = type.substring(2);
-      buf.w(`<td class="type ${cls}" nowrap valign=top>${type.trim()}&nbsp;</td>`)
-         .w(`<td class="${cls}" align=right valign=top><a href="${FULLTEXT}#_${num}" target="extra">${num}.&nbsp;</a></td>`)
-         .w(`<td class="${cls}" valign=top${anno}>${txts[0]}</td>`);
+      buf.w(`<td class="type ${cls}" nowrap valign=top>${type.trim()}&nbsp;</td>`,
+            `<td class="${cls}" align=right valign=top id="_${num}">`,
+              `<a href="${FULLTEXT}#_${num}" target="extra">${num}.&nbsp;</a></td>`,
+            `<td class="${cls}" valign=top${anno}>${txts[0]}</td>`);
     }
     var row = ln.split(':');
   }

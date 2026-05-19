@@ -49,15 +49,16 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250821|經或會集本.html|夏集《無量壽》是佛經嗎？
 250321|與時俱進的提婆達多
 230516|略言不言而喻之事
-240210|對自己好一點
+260519|勸學佛
 250802|圍棋與人生.html|棋道•人道•佛道
+240210|對自己好一點
+250509|CAUSE-AND-EFFECT.html|因果
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
 230518|苦空無常之音.mp3|苦空無常之音
-250509|CAUSE-AND-EFFECT.html|因果
 230517|論飯桶，兼論素食
-231222|養生乎.html|養生，乎？
 231111|DuBist.html|Du Bist Was Du Isst
 xxxxxxxx
+231222|養生乎.html|養生，乎？
 250603|素質
 250629|北川致遠書社.html|【善知識】北川致遠書社
 250916|十句

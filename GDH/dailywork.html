@@ -207,7 +207,7 @@ class DojoBuffer extends Buffer {
         .lnk('南無極樂三聖', 'various.js', '_6', '極樂世界三聖.jpg')
         .mainlnk('《佛說阿彌陀經》', 'amtb.js', null, '極樂世界圖.png')
         .mainlnkS('阿彌陀佛四十八願', '../淨土宗/《無量壽經》/48.html', null, '極樂世界圖.png')
-        .lnkS('拔一切業障根本<br>得生淨土陀羅尼')
+        .lnkS('拔一切業障根本<br>得生淨土陀羅尼', 'various.js', '_7', '南無阿彌陀佛.jpg')
         .lnk('《阿彌陀佛頌》', 'various.js', '_7', '南無阿彌陀佛.jpg')
         .mainlnk('《發願文》', 'vow.js', null, '南無阿彌陀佛.jpg')
         .lnk('《無量壽佛讚》', 'various.js', '_8', '南無阿彌陀佛.jpg')
@@ -304,7 +304,7 @@ class DojoBuffer extends Buffer {
 
 function keydowner(e) {
   e.preventDefault();
-  if(e.key == 'Space' || e.key == 'Enter')
+  if ((e.key == ' ') || (e.key == 'Enter'))
     openLnk(1+parseInt(lastEID));
 }
 

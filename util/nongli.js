@@ -213,18 +213,18 @@ class NongLiYear {
     addHolyMemorial( 2, 21, '普賢菩薩聖誕');
     addHolyMemorial( 4,  4, '文殊菩薩聖誕');
     addHolyMemorial( 4,  8, '釋迦牟尼佛聖誕');
-    addHolyMemorial( 6,  3, '韋馱尊者聖誕');
+//  addHolyMemorial( 6,  3, '韋馱尊者聖誕');
     addHolyMemorial( 6, 19, '觀世音菩薩成道');
     addHolyMemorial( 6, 28, '淨空法師圓寂');
     addHolyMemorial( 7, 13, '大勢至菩薩聖誕');
     addHolyMemorial( 7, 15, '佛歡喜日');
-    addHolyMemorial( 7, 24, '龍樹菩薩聖誕');
+ // addHolyMemorial( 7, 24, '龍樹菩薩聖誕');
     addHolyMemorial( 7, -1, '地藏菩薩聖誕');
-    addHolyMemorial( 8,  4, '阿閦佛聖誕');
-    addHolyMemorial( 8, 22, '燃燈佛聖誕');
+ // addHolyMemorial( 8,  4, '阿閦佛聖誕');
+ // addHolyMemorial( 8, 22, '燃燈佛聖誕');
     addHolyMemorial( 9, 19, '觀世音菩薩出家');
-    addHolyMemorial( 9, -1, '藥師佛聖誕');
-    addHolyMemorial(10,  5, '達摩祖師聖誕');
+ // addHolyMemorial( 9, -1, '藥師佛聖誕');
+ // addHolyMemorial(10,  5, '達摩祖師聖誕');
     addHolyMemorial(11, 17, '阿彌陀佛聖誕');
     addHolyMemorial(12,  8, '釋迦牟尼佛成道');
   }
@@ -357,12 +357,16 @@ function showNongLiNian(nlyr, elid) {
           txt = e.substring(idx+1).trim();
           e = (idx===0) ? (cell.jieqi||zd) : e.substring(0, idx);
         }
-        if (e.length > 2) {
+        if (e.startsWith('獻血') || e.startsWith('献血')) {
+          e = '&nbsp;&nbsp;🩸&nbsp;&nbsp;';
+          cls = (cls + ' blood').trim();
+        }
+        else if (e.length > 2) {
           txt = `【${e}】${txt}`;
           e = e.substring(0,2);
+          cls = (cls + ' event').trim();
         }
-        //cls = (cls + ' event').trim();
-        //zd = `<font class="${cls}" title="${txt}">${e}</font>`;
+        zd = `<font class="${cls}" title="${txt}">${e}</font>`; // HERE
         zd = `<font class="${cls}"${todayTxt}>${zd}</font>`;
       } else if (jq) {
         zd = `<font class="${cls}"${todayTxt}>${jq}</font>`;

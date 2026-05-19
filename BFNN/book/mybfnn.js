@@ -48,6 +48,13 @@ var simpleSeq = (() => {
   var _simpleNum = 1;
   return (n, left, right) => { if (n) _simpleNum = n; return cilzn(_simpleNum++, left, right); }
 })();
+function isWhite(c) { return c && c.length && !c.trim().length; }
+function rtrim(s, n) { // if !n, trim the white spaces
+  if (n) return !s ? s : ((s.length < n) ? '' : s.substring(0,s.length-n));
+  var i;
+  for (i=s.length; i>0 && isWhite(s[i]); --i);
+  return (i == s.length) ? s : s.substring(0,i+1);
+}
 function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
@@ -66,6 +73,11 @@ function get(name) {
     }
   }
   return queryParams[name];
+}
+function sxName(n) { return 上下尊號(n); }
+function 上下尊號(n) {
+  if (!n || n.length < 2) return n;
+  return `<sup><small>上</small></sup>${n[0]}<sup><small>下</small></sup>${n.substr(1)}`;
 }
 function w() { for(var i in arguments) document.write(arguments[i]); }
 function e(id) { return document.getElementById(id) }
@@ -412,7 +424,7 @@ class DocInfo {
       ln = ln.substring(idx1+1);
     } else {
       idx1 = ln.lastIndexOf('!!')
-      if (idx1 > 0) {
+      if (idx1 > 0 && !ln.startsWith('/gatha')) {
         toHL = ln.substring(idx1+2).trim();
         ln = rtrim(ln.substring(0,idx1));
       }

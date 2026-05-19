@@ -7,6 +7,8 @@ a:visited{ color:blue }
 a:hover  { color:blue }
 a:focus  { color:blue }
 a:active { color:blue }
+h3 { color:brown }
+h4 { color:#373; margin-bottom:-5px }
 
 term  { color:brown }
 red   { color:red }
