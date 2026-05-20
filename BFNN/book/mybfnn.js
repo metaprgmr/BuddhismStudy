@@ -813,7 +813,8 @@ class DocInfo {
   }
 
   writeDBJJ(ttl, txt) { // 專為《大寶積經》
-    return this.setXG().setDepth(1).writeDoc(`<a href="../9050.htm">大寶積經卷</a>•${ttl}`, ttl, txt);
+    var t = `<a href="../9050.htm" style="color:inherit">大寶積經卷</a>•${ttl}`;
+    return this.setXG().setDepth(1).writeDoc(t, ttl, txt);
   }
 
   writeDoc(ttl) { // convenience method for writing the whole doc

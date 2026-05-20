@@ -10,6 +10,9 @@ a:active { color:blue }
 h3 { color:brown }
 h4 { color:#373; margin-bottom:-5px }
 
+qbang { vertical-align:-0.1em; margin-left:0.1em; letter-spacing:0.15em; }
+qbang::before { content:'?' }
+qbang::after  { content:'!' }
 term  { color:brown }
 red   { color:red }
 blue  { color:blue }
