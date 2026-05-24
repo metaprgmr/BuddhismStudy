@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+<script src="9065/base.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg">
+<div id="stg"></div>
+</body></html>
+
+<script>
+new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9065/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer(), me = this;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true).setBuffer(buf).setXG()
+            .reInit('9065', 26);
+        var ttl = '佛本生經', nvol = me.volNum;
+        if (!nvol)
+          this.writeStart(ttl)
+              .writeBody(me.text + '\n/VOLSEP/', true);
+        else {
+          var zn = zNumber(nvol);
+          this.volNum = nvol;
+          this.writeStart(`${ttl}|卷第${zn}`, `${ttl}卷${zn}`)
+              .writeBody(me.text + `\n/END/${ttl}卷第${zn}\n/VOLSEP/`, true);
+        }
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})();
+
+SC.show(get('vol'),get('loc')); // 卷
+</script>
