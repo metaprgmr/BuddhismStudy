@@ -16,21 +16,27 @@ bronze { opacity:1; color:#ff9800; text-shadow: 2px 2px 2px teal }
 <td id="left" valign=bottom></td>
 <td align=center id=stg></td>
 <script>
-var n = get('n') || 1, buf = new Buffer();
+var n = get('n') || 1, buf = new Buffer(), type;
 switch (n) {
 case 'sk':
   buf.w('<h1 style="color:gold">Namo Bhagavate <bronze>Śākyamunaye</bronze><br>',
         `Tathāgatāyārhate Samyaksaṃbuddhāya</h1><a href="javascript:ender('Clicked')">`,
-        '<img src="../images/釋迦牟尼佛.jpg" title="Click to be full screen." height="900px"></a>');
-  n = 0;
+        '<img src="../images/釋迦牟尼佛.jpg" title="Click to start." height="900px"></a>');
+  type = 'sk';
+  n = 4;
   break;
 case 'dz':
   buf.w(`<h1 style="color:gold">Nama'ria-<bronze>Kṣitigarbha</bronze><br>Bodhisattvāya Mahāsattvāya Mahā-Kāruṇikāya</h1>`,
         `<a href="javascript:ender('Clicked')">`,
         '<img src="../images/南無地藏王菩薩1.jpg" title="Click to be full screen." height="900px"></a>');
+  type = 'dz';
   n = 0;
   break;
+case 'a': n = 1;
 default:
+  type = 'a';
+  if (!n) n = 1;
+console.log('a', n);
   buf.w(`<a href="javascript:ender('Clicked')">`,
         `<img src="../images/南無阿彌陀佛.jpg" title="Click to start."></a>`);
   break;
@@ -39,8 +45,7 @@ buf.render('stg');
 </script>
 <td id="right" align=right valign=bottom></td>
 </tr></table>
-<!-- 全長：22'20"。共280聲佛號，平均4.5秒一聲。 -->
-<audio id="a" src="../images/阿彌陀佛四字四音輕快版22_19.mp3">
+<audio id="a">
 </script>
 </center></body></html>
 
@@ -48,7 +53,8 @@ buf.render('stg');
 var a=e('a'), started, cnt=0;
 a.addEventListener('ended', ender);
 
-function ender(e) {
+function ender(e) { // type: sk|dz|a
+console.log('b', cnt, n);
   if (e == 'Clicked') {
     if (started) {
       exitFullScreenMode();
@@ -60,6 +66,11 @@ function ender(e) {
     }
   }
   if (cnt < n) {
+    switch (type) {
+    case 'sk': a.src = '../images/Namo_Bhagavate_Sakyamunaye.mp3';  break;
+    case 'a':  a.src = '../images/阿彌陀佛四字四音輕快版22_19.mp3'; break;
+               // 全長：22'20"。共280聲佛號，平均4.5秒一聲。
+    }
     a.play();
     renderText('left', ++cnt);
     renderText('right', cnt);

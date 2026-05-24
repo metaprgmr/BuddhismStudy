@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+function myInPageStart(cur, id, prev) {
+  return inPageStart(cur, id, '<ail>（宋本元本宮本）</ail>'+prev);
+}
+
+new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9069/${vol||0}.js`); }
+
+  showPage() {
+    var buf = new Buffer(), me = this;
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true).setBuffer(buf).setXG()
+            .setPageLinks('《<a href="9067.htm">釋迦氏譜</a>》　')
+            .reInit('9069', 5);
+        this.volNum = me.volNum;
+        var ttl = '釋迦譜', nvol = me.volNum, zn = zNumber(nvol),
+            txt = `\n/TEXT030C/梁沙門釋僧祐撰\n\n${me.text}`;
+        this.writeStart(`${ttl}|卷第${zn}`, `${ttl}卷${zn}`)
+            .writeBody(txt + '\n/VOLSEP/', true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})()
+.show(get('vol'),get('loc')); // 卷
+</script>
