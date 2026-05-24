@@ -17,7 +17,7 @@
 
 <table width="100%" style="padding-bottom:20px">
 <tr>
-<td><a href="javascript:dui.reset()" title="清除" style="opacity:0.3">◎</a>&nbsp;<input type="text" onkeydown="keydowner(event)"></td>
+<td><a href="javascript:dui.reset()" title="清除" style="opacity:0.3">◎</a>&nbsp;<input id="input" type="text" onkeydown="keydowner(event)"> <a href="javascript:keydowner()">→</a></td>
 </tr>
 </table>
 <div id="stg1"></div>
@@ -76,7 +76,7 @@ class DictUI {
           if (isHanZi(z) && !isPunc(z)) me.unknown[z] = 1;
         } else {
           delete me.unknown[z];
-          buf.w('<td class="yp" align=center nowrap>', zinfo && zinfo.getAllYPs('<br>') || '', '</td>');
+          buf.w('<td class="yp" valign=bottom align=center nowrap>', zinfo && zinfo.getAllYPs('<br>') || '', '</td>');
         }
       }
       buf.wIf(main, '<td></td>')
@@ -122,6 +122,14 @@ function toYP(txt) {
 
 var dui = new DictUI('stg1', 'stg2');
 dui.updateUI();
-function keydowner(e) { if(e.key == 'Enter') { dui.lookup(e.target.value); e.target.value = ''; } }
+function keydowner(event) {
+  var el;
+  if (!event) el = e('input');
+  else if (event.key == 'Enter') el = event.target;
+  if(el) {
+    dui.lookup(el.value);
+    el.target.value = '';
+  }
+}
 </script>
 
