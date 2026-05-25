@@ -203,6 +203,7 @@ class DocInfo {
     this.gathaClass = 'gatha';
     this.setMetaDelim('/');
     this.divClass = 'bookClean';
+    this.endImageClass = 'endImage';
     this.volNumStart = 1;
     this.tocJS = 0;
     this.tips = {};
@@ -231,6 +232,7 @@ class DocInfo {
   }
   setDepth(d) { this.depth = d; return this; }
   setDivClass(c) { this.divClass = c; return this; }
+  setEndImageClass(c) { this.endImageClass = c; return this; }
   setPageLinks(lnks) { this.links = lnks; return this; }
   setVolNumStart(n) { this.volNumStart = n; return this; }
   setNavBreakAt(n) { this.navBreakAt = n; return this; }
@@ -302,7 +304,7 @@ class DocInfo {
       if ((links.indexOf('《') < 0) && (links.indexOf('【') < 0))
         links = `【${links}】`;
     }
-    var tag = '<div class=endImage' + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
+    var tag = `<div class=${this.endImageClass}` + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
               ' style="text-align:right"' +
               `>${links} 【<a href="${base}/index.html">經論選讀</a>】 【<a href="${base}/../index.html">返回主頁</a>】</div>`;
     this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
@@ -685,8 +687,8 @@ class DocInfo {
       cls = cls.substring(0, cls.length-1) + ' align=right';
     else if (cls.endsWith('-R'))
       cls = cls.substring(0, cls.length-2) + ' align=right';
-    if (cls.endsWith('align=right') && !ln.endsWith('　'))
-      ln += '　';
+//  if (cls.endsWith('align=right') && !ln.endsWith('　'))
+//    ln += '　';
     if (append)
       cls = `"${this.defaultClass} ${cls}"`;
     if (paraName)

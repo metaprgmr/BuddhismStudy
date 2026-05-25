@@ -27,6 +27,8 @@ blockquote.quote { color:teal; }
 ul { margin-left:-16.0pt; }
 a { text-decoration:none; }
 .bookClean { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1000px; border-right:1px solid lightgray; padding-right:10px }
+.book800 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 800px; border-right:1px solid lightgray; padding-right:10px }
+.book600 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 600px; border-right:1px solid lightgray; padding-right:10px }
 .book1100 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1100px; border-right:1px solid lightgray; padding-right:10px }
 .book1200 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1200px; border-right:1px solid lightgray; padding-right:10px }
 .book1300 { margin-right: 45px; margin-left: 75px; margin-top: 30px; clip: rect(); margin-bottom: 30px; width: 1300px; border-right:1px solid lightgray; padding-right:10px }
@@ -51,6 +53,8 @@ kpDone { color:#339 }
 .volend { color:brown; text-indent:0.0pt; margin:0cm; margin-bottom:.0001pt;  }
 .seriesnav { background:#cec }
 .endImage { width:1000px; height:30px; background-size:300px 30px; background-image:url('sign.gif'); background-repeat: no-repeat; text-align:center }
+.endImage800 { width:800px; height:30px; background-size:300px 30px; background-image:url('sign.gif'); background-repeat: no-repeat; text-align:center }
+.endImage600 { width:600px; height:30px; background-size:300px 30px; background-image:url('sign.gif'); background-repeat: no-repeat; text-align:center }
 .endImageXG { width:1000px; height:30px; background-size:300px 30px; background-image:url('../books9/signXG.gif'); background-repeat: no-repeat; text-align:center }
 .gathanum { float:left; color:black; opacity:0.6; font-size:10px; width:25pt; padding-top:3pt }
 .gatha { color:#038 }
