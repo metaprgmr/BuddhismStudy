@@ -31,7 +31,10 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 260123|DZJ-synopsis.html|《地藏菩薩本願經》梗概
 250523|《八識規矩頌》內容
 250530|淨界法師.html|【善知識】淨界法師
+250509|CAUSE-AND-EFFECT.html|因果
 #######
+260519|勸學佛
+260525|托福進修學校
 260107|百過歌
 260111|佛子根
 251107|念佛节奏.html|念佛节奏計算器
@@ -43,22 +46,20 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 250527|一即一切
 250625|淨空法師是對的
 250630|凡夫苦
-240605|毛虫
 #######
 240531|《無量壽經》三聖之考究
 250821|經或會集本.html|夏集《無量壽》是佛經嗎？
 250321|與時俱進的提婆達多
 230516|略言不言而喻之事
-260519|勸學佛
 250802|圍棋與人生.html|棋道•人道•佛道
 240210|對自己好一點
-250509|CAUSE-AND-EFFECT.html|因果
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
 230518|苦空無常之音.mp3|苦空無常之音
 230517|論飯桶，兼論素食
 231111|DuBist.html|Du Bist Was Du Isst
-xxxxxxxx
 231222|養生乎.html|養生，乎？
+240605|毛虫
+xxxxxxxx
 250603|素質
 250629|北川致遠書社.html|【善知識】北川致遠書社
 250916|十句

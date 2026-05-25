@@ -11,7 +11,7 @@ function showWLSJs(curname) {
     if (name == 'Xia') {
       lnk = '../util/reader.html?s=../淨土宗/《無量壽經》';
     } else {
-      lnk = '../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/' + name;
+      lnk = `../util/reader.html?t=../淨土宗/《無量壽經》/Original_Versions/${name}-trans`;
       if (name == 'Wang') lnk += '-trans';
       lnk += '.js';
     }
