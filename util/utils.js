@@ -431,12 +431,13 @@ function findFirst() {
   return (foundIdx > host.length) ? -1 : foundIdx;
 }
 
-function repeat(x, n) {
-  var ret = '';
-  for (var i=0; i<n; ++i) ret += x;
-  return ret;
+function toLen(n, w, c) {
+  n = '' + n;
+  if (!c) c = ' ';
+  var cnt = w - n.length;
+  while (cnt--) n += c;
+  return n;
 }
-
 function toW(n, w, c) {
   n = '' + n;
   if (!c) c = ' ';
@@ -447,6 +448,7 @@ function toW(n, w, c) {
 function to4d(n,fill) { return toW(n, 4, fill||'0'); }
 function to3d(n,fill) { return toW(n, 3, fill||'0'); }
 function to2d(n,fill) { return toW(n, 2, fill||'0'); }
+function repeat(x, n) { return toW('', n, x); }
 
 function yyyymmdd(d,sep) { sep = sep||''; return `${d.getFullYear()}${sep}${to2d(d.getMonth()+1)}${sep}${to2d(d.getDate())}`; }
 

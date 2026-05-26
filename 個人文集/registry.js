@@ -12,7 +12,7 @@ function endOfArticle(id) {
 <div align=center class="copyright"></div>
 </div>
 <div class="forprint" style="text-align:center"><hr>
-https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':''}
+https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 </div>`);
 }
 
@@ -44,7 +44,7 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 241113|浪費時間
 241114|人之將死.html|人之將死
 250527|一即一切
-250625|淨空法師是對的
+260526|海賢老和尚語錄
 250630|凡夫苦
 #######
 240531|《無量壽經》三聖之考究
@@ -60,6 +60,7 @@ https://metaprgmr.github.io/BuddhismStudy/article.html?id=${id}${invalidID?' *':
 231222|養生乎.html|養生，乎？
 240605|毛虫
 xxxxxxxx
+250625|淨空法師是對的
 250603|素質
 250629|北川致遠書社.html|【善知識】北川致遠書社
 250916|十句

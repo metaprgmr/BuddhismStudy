@@ -88,7 +88,10 @@ class 品 {
     if (this.name) buf.w('<td>', this.name, '</td><td>');
     else buf.w('<td colspan=2>');
     for (var i=0; i<this.stories.length; ++i) {
-      var n = this.firstNum + i, ndisp = toW(n, 3, '<inv>0</inv>');
+      var n = this.firstNum + i, ndisp;
+      if (n < 10)       ndisp = `<inv>00</inv>${n}`;
+      else if (n < 100) ndisp = `<inv>0</inv>${n}`;
+      else              ndisp = n;
       buf.w(`　<a href="?vol=${this.vol}&loc=s${to3d(n)}" title="${this.stories[i]}">${ndisp}</a>`);
     }
     buf.w('</td>');

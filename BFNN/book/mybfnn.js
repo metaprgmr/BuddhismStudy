@@ -38,11 +38,25 @@ function unznum(n) {
   }
   return parseInt(ret);
 }
+function toLen(n, w, c) {
+  n = '' + n; 
+  if (!c) c = ' ';
+  var cnt = w - n.length;
+  while (cnt--) n += c;
+  return n;
+}
+function toW(n, w, c) {
+  n = '' + n;
+  if (!c) c = ' ';
+  var cnt = w - n.length;
+  while (cnt--) n = c + n;
+  return n;
+}
 function z10(n) { return n<=10 ? zNumber(n) : n; }
-function to2d(n) { for (n =''+n; n.length<2; n='0'+n); return n; }
-function to3d(n) { for (n =''+n; n.length<3; n='0'+n); return n; }
-function to4d(n) { for (n =''+n; n.length<4; n='0'+n); return n; }
-function repeat(x, n) { var r=''; for(var i=0; i<n; ++i) r+=x; return r; }
+function to2d(n,fill) { return toW(n, 2, fill||'0'); }
+function to3d(n,fill) { return toW(n, 3, fill||'0'); }
+function to4d(n,fill) { return toW(n, 4, fill||'0'); }
+function repeat(x, n) { return toW('', n, x); }
 function cilzn(n, left, right) { return `<cil>${left||'（'}${zNumber(n)}${right||'）'}</cil>`; }
 var simpleSeq = (() => {
   var _simpleNum = 1;
