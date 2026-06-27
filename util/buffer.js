@@ -38,6 +38,12 @@ class Buffer {
 
   wrap(before, after) { return this.prepend(before).w(after); }
 
+  trimFirstNL() {
+    var first = this.bufList[0] || '';
+    if (first[0] == '\n') this.bufList[0] = first.substr(1);
+    return this;
+  }
+
   // renders to one or more elements,
   // or an object with a write() function.
   // returns the text, and clears internally.

@@ -1,8 +1,8 @@
-createGP('摩西十誡', CAT_外道)
-.setWidth(30)
-.setStyle(AIL + BOLD)
-.hasRightEdge()
-.setTree(`
+createGP('摩西十誡', CAT_外道, gp => {
+  gp.setWidth(30)
+    .setStyle(AIL + BOLD)
+    .hasRightEdge()
+    .setTree(`
 /b|摩西十誡/
 〇不可有別的神〇〇除了我以外，你不可有別的神
 〇不可製造偶像〇〇不可為自己雕刻偶像，也不可製造任何形象，不可跪拜事奉
@@ -14,8 +14,9 @@ createGP('摩西十誡', CAT_外道)
 〇不可偷盜
 〇不可作假見證〇〇不可作假見證陷害人
 〇不可貪戀〇〇〇〇不可貪戀人的房屋、妻子、僕婢、牛驢，並他一切所有的`)
-.T(20,1,'《出埃及記》20:2～17')
-.src = 'lit-misc.js';
+    .T(20,1,'《出埃及記》20:2～17')
+    .src = 'lit-misc.js';
+});
 
 class My中華傳統文化典籍分類Content extends MyContent {
   constructor(gp) { super(gp); }
@@ -47,11 +48,11 @@ class My中華傳統文化典籍分類Content extends MyContent {
   }
 }
 
-createGP('中華傳統文化典籍類別', CAT_中華)
-.setWidth(20)
-.setStyle(AIL + BOLD)
-.hasRightEdge()
-.setTree( // In-line with ZhongGuo-ZheXueShu-DianZiHua-JiHua's
+createGP('中華傳統文化典籍類別', CAT_中華, gp => {
+  gp.setWidth(20)
+    .setStyle(AIL + BOLD)
+    .hasRightEdge()
+    .setTree( // In-line with ZhongGuo-ZheXueShu-DianZiHua-JiHua's
 `/b2|中華傳統文化典籍類別//ail|（先秦至清）/
 〇/b|先秦兩漢/
 〇〇/b1|儒家/〰/see:儒家|26/
@@ -70,16 +71,15 @@ createGP('中華傳統文化典籍類別', CAT_中華)
 〇/b|隋唐/〰/see:隋唐|5/
 〇/b|宋明/〰/see:宋明|15/
 〇/b|清代/〰/see:清代|5/`)
-.run((gp) => {
-  gp.src = 'lit-misc.js';
+    .src = 'lit-misc.js';
   new My中華傳統文化典籍分類Content(gp);
 });
 
-createGP('中華傳統文化典籍', CAT_中華)
-.setWidth(26)
-.setStyle(AIL + BOLD)
-.hasRightEdge()
-.setTree( // In-line with ZhongGuo-ZheXueShu-DianZiHua-JiHua's
+createGP('中華傳統文化典籍', CAT_中華, gp => {
+  gp.setWidth(26)
+    .setStyle(AIL + BOLD)
+    .hasRightEdge()
+    .setTree( // In-line with ZhongGuo-ZheXueShu-DianZiHua-JiHua's
 `/b2|中華傳統文化典籍//ail|（先秦至清，《中國哲學書電子化計劃》已驗證者）/
 〇/b|先秦兩漢/
 〇〇/b1|儒家/
@@ -238,4 +238,5 @@ createGP('中華傳統文化典籍', CAT_中華)
 〇〇全唐詩
 〇〇康熙字典
 〇〇儒林外史`)
-.src = 'lit-misc.js';
+    .src = 'lit-misc.js';
+});

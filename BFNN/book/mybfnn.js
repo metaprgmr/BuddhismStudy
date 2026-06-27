@@ -1,9 +1,16 @@
 function getGlobal(name) { return window[name]; }
 function toEl(x) { return (typeof x=='string')?e(x):x; }
 function e(id) { return document.getElementById(id); }
+function showEl() { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='block'); } }
+function hideEl() { for (var i in arguments) { var el=toEl(arguments[i]); el && (el.style.display='none'); } }
+function enableEl(id, set)  { var el=toEl(id); el && (set ? el.removeAttribute('disabled') : el.setAttribute('disabled', '')); }
 function renderText(id,t) { var el = e(id); el ? (el.innerHTML=t) : document.write(t); }
 function showTop(id) { var el=toEl(id); el && el.scrollIntoView(); }
 var zdigits = '〇一二三四五六七八九十';
+function 上中下(n) {
+  switch (n) { case 1: return '上'; case 2: return '中'; case 3: return '下'; }
+  throw `上中下() only takes [1,2,3]: ${n}`;
+}
 function zNumber(n) { // 0 to 999
   if (typeof n == 'string') n = parseInt(n);
   if (n <= 10) return zdigits[n];
@@ -73,6 +80,14 @@ function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
+}
+function encodeBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  const binString = String.fromCodePoint(...bytes);
+  return btoa(binString);
+}
+function svg2img(svg, extra) {
+  return `<img src="data:image/svg+xml;base64,${encodeBase64(svg)}"${extra||''}>`;
 }
 var queryParams;
 function get(name) {
@@ -181,6 +196,20 @@ function simpleTOC(name, start, end, cur) {
       b.w('之', zNumber(num));
     else
       b.w(`<a href="?vol=${i}${pin}">之${zNumber(num)}</a>`);
+  }
+  return b.render();
+}
+
+function simpleTOCForNames(names, cur, withBrackets) { // cur: 1-based
+  var b = new Buffer('/TEXT030C/'), pin='';
+  for (var i=0; i<names.length; ++i) {
+    if (i>0) b.w('　　');
+    var disp = (cur == i+1) ? `<cur>${names[i]}</cur>`
+                            : `<a href="?vol=${i+1}">${names[i]}</a>`;
+    if (withBrackets)
+      b.w('【', disp, '】');
+    else
+      b.w(disp);
   }
   return b.render();
 }
@@ -320,7 +349,7 @@ class DocInfo {
     }
     var tag = `<div class=${this.endImageClass}` + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
               ' style="text-align:right"' +
-              `>${links} 【<a href="${base}/index.html">經論選讀</a>】 【<a href="${base}/../index.html">返回主頁</a>】</div>`;
+              `>${links} 【<a href="${base}/index.html">圖書館</a>】 【<a href="${base}/../index.html">總主頁</a>】</div>`;
     this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
            '<div class=noprint style="position:absolute; top:0; left:0; width:30px; height:15px;" onclick="flipPRIV()"></div>',
            '</body></html>');
@@ -447,6 +476,11 @@ class DocInfo {
     }
     var ln1 = ln && ln.trim(), lnId;
 
+    if (ln1.indexOf('<svg ') >= 0) { // e.g. 9151
+      this.w(ln1);
+      return lnId;
+    }
+
     if (ln[1] == 'H' && ln[2] == 'Y') {
       idx1 = ln.indexOf('/', 2);
       ln1 = ln.substring(1, idx1).split('=');
@@ -458,6 +492,8 @@ class DocInfo {
     }
 
     if (ln1[0] == '/') {
+      if (ln1[1] == '?') return; // local ad-hoc processing instruction; ignore. e.g. 1146.htm
+
       idx1 = ln1.indexOf('/', 1);
       idx2 = ln1.indexOf('|', 1);
       if ((idx2>1) && (idx2<idx1)) { // static line ID. e.g. 9023.htm
@@ -682,7 +718,7 @@ class DocInfo {
     if (cls.length > 1) {
       var anchors = cls[1].split(',');
       for (var k in anchors)
-        ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln}`;
+        ln = `<a name="${anchors[k]}" id="${anchors[k]}"></a>${ln||'&nbsp;'}`;
     }
     cls = cls[0] || '';
     switch (cls) {
@@ -944,8 +980,14 @@ function write0119(filenum, body) {
     { id:130, vol:4 }, { id: 35, vol:5 }, { id:131, vol:5 }, { id:132, vol:5 },
     { id:133, vol:5 }, { id:134, vol:6 }, { id:135, vol:6 }, { id:136, vol:6 },
     { id:137, vol:6 }, { id:138, vol:6 }, { id:139, vol:6 }, { id:140, vol:7 },
-    { id: 73, vol:7 }, { id:141, vol:7 }, { id:142, vol:7 }, { id:143, vol:7 },
-  ];
+    { id: 73, vol:7 }, { id:141, vol:7 }, { id:142, vol:7 }, { id:143, vol:7 } ];
+  var FA_HUA_PINS = [
+    '序品第一', '方便品第二', '譬喻品第三', '信解品第四', '藥草喻品第五', '授記品第六', '化城喻品第七',
+    '五百弟子受記品第八', '授學無學人記品第九', '法師品第十', '見寶塔品第十一', '提婆達多品第十二',
+    '勸持品第十三', '安樂行品第十四', '從地湧出品第十五', '如來壽量品第十六', '分別功德品第十七',
+    '隨喜功德品第十八', '法師功德品第十九', '常不輕菩薩品第二十', '如來神力品第二十一', '囑累品第二十二',
+    '藥王菩薩本事品第二十三', '妙音菩薩品第二十四', '觀世音菩薩普門品第二十五', '陀羅尼品第二十六',
+    '妙莊嚴王本事品第二十七', '普賢菩薩勸發品第二十八' ];
   return new (class extends DocInfo {
     constructor() {
       super();

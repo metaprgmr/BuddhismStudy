@@ -64,13 +64,13 @@ class MyRevelationContent extends MyContent {
 
 } // end of MyRevelationContent.
 
-createGP('啟示錄', CAT_外道)
-.setStyle(AIL + BOLD)
-.setNotGPSP('─')
-.setMarkNames(A2Z)
-.setWidth(50)
-.hasRightEdge()
-.setTree(`
+createGP('啟示錄', CAT_外道, gp => {
+  gp.setStyle(AIL + BOLD)
+    .setNotGPSP('─')
+    .setMarkNames(A2Z)
+    .setWidth(50)
+    .hasRightEdge()
+    .setTree(`
 /b|《啟示錄》/
 〇耶穌基督差遣使者曉諭他的僕人──約翰
 〇〇念預言的和又遵守的都有福，因為日期近了
@@ -230,7 +230,6 @@ createGP('啟示錄', CAT_外道)
 〇〇〇〇〇〇城內街道當中一道生命水的河，從神和羔羊的寶座流出來
 〇〇〇〇/b|預言結束/
 `)
-.run((gp) => {
   new MyRevelationContent(gp);
   gp.src = 'lit-Revelation.js';
 });

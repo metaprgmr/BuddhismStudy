@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>沙彌律儀</title>
+<link rel="stylesheet" href="../books/book.css">
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+<script src="9091/lectures.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var SC = new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9105/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9105, 12);
+        this.volNum = SC.volNum;
+        var ttl = '解脫道論', author = '阿羅漢優波底沙 梁言大光造<br>梁扶南三藏僧伽婆羅譯';
+        if (!this.volNum)
+          this.writeStart(ttl)
+              .writeBody(`\n/TEXT030C/${author}\n${SC.text}\n\n/VOLSEP/`, true);
+        else
+          this.writeStart(`${ttl}|（第${zNumber(this.volNum)}卷）`)
+              .writeBody(`\n/TEXT030C/${author}
+${SC.text}
+/VOLSEP/`, true);
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // SC
+
+SC.show(get('vol')); // 卷
+
+</script>

@@ -30,8 +30,14 @@ new (class extends SeriesContainer {
             fn = me.footnotes || '';
         if (fn) fn = `${fn}\n`;
         this.writeStart(`${ttl}||第${zvol}篇 ${me.subttl}`, '觀音菩薩與新時代之'+zvol)
-            .writeBody(`\n/TEXT030C/信裹居士 著於 丙午年觀世音菩薩聖誕\n\n${me.text}\n\n` +
-                       `/END/第${zvol}篇 ${me.subttl}\n${fn}/VOLSEP/`, true);
+            .writeBody(`
+/TEXT030C/信裹居士 著於 丙午年觀世音菩薩聖誕
+
+${simpleTOCForNames(['一、序　篇', '二、大士篇', '三、揭秘篇', '四、大經篇', '五、祖師篇'], this.volNum)}
+/VOLSEP/
+${me.text}
+
+/END/第${zvol}篇 ${me.subttl}\n${fn}/VOLSEP/`, true);
       }
     })(); // class extends DocInfo
     docInfo.buf.render('stg');
@@ -40,3 +46,4 @@ new (class extends SeriesContainer {
 })()
 .show(get('vol')); // 卷
 </script>
+

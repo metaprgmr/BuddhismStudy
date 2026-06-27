@@ -42,6 +42,7 @@ addFoTerms('pariṇāmanā',       '回向', '施向', '回施');
 addFoTerms('aśvaghoṣa',        '馬鳴');
 addFoTerms('Nāgārjuna',        '龍樹');
 addFoTerms('kumārajīva',       '鳩摩羅什');
+addFoTerms('Paramārtha',       '真諦');
 
 addFoTerms('catvāri saṃgraha-vastūni', '四攝法');
 addFoTerms('dāna-saṃgraha',            '布施摄');
@@ -49,6 +50,7 @@ addFoTerms('priya-vādita-saṃgraha',    '愛語摄');
 addFoTerms('artha-caryā-saṃgraha',     '利行摄');
 addFoTerms('samānārthat-saṃgraha',     '同事摄');
 
+addFoTerms('satyā',            '諦', '真諦');
 addFoTerms('ṣaḍ-pāramitā',     '六度', '六波羅蜜');
 
 addFoTerms('trikāya',          '三身');

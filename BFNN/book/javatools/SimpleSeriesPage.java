@@ -23,8 +23,7 @@ public class SimpleSeriesPage extends BfnnCommon {
       "            -DjsFilePrefix=[string] -- default: empty\n" +
       "            -Dparen = [ail|cil|dil|AIL|CIL|DIL|<any>]\n" +
       "            -DvarName (string)      -- default: SC (Almost never change)\n" +
-      "            infile [volNum|outfile] -- varName is set, is volNum and required;\n" +
-      "                                    -- otherwise, is outfile and optional.\n";
+      "            infile volNum [outfile] -- if outfile not present, constructed with volNum and pageNumLen.\n";
     err.println(msg);
     System.exit(0);
   }
@@ -44,16 +43,14 @@ public class SimpleSeriesPage extends BfnnCommon {
 
   public static void main(String[] args) throws Exception {
     readProperties();
-    if (args.length < 1 || (varName != null && args.length < 2))
+    if (args.length < 2)
       leave(String.join(" ", args));
 
-    int volNum = -1;
+    int volNum = Integer.parseInt(args[1]);
     String fname = null;
-    if (varName == null) {
-      if (args.length > 1)
-        fname = args[1];
+    if (args.length > 2) {
+      fname = args[2];
     } else {
-      volNum = Integer.parseInt(args[1]);
       fname = String.valueOf(volNum);
       while (fname.length() < pageNumLen) fname = "0" + fname;
       fname = jsFilePrefix + fname + ".js";

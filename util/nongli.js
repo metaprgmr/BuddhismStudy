@@ -361,7 +361,7 @@ function showNongLiNian(nlyr, elid) {
           e = '&nbsp;&nbsp;🩸&nbsp;&nbsp;';
           cls = (cls + ' blood').trim();
         }
-        else if (e.length > 2) {
+        else if (e.length >= 2) {
           txt = `【${e}】${txt}`;
           e = e.substring(0,2);
           cls = (cls + ' event').trim();

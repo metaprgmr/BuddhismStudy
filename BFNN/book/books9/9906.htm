@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<style>
+#dlg      { background-color:#ffe; padding-left:0px; padding-right:0px }
+#dlg header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }
+#dlgTitle { color:brown; border-bottom:1px solid brown; padding-left:10px }
+#dlgBody  { padding-left:10px; padding-right:10px }
+kp        { color:green; font-size:12px }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../../../util/gridperfect.js"></script>
+<script> gpRepo.setDialogId('dlg'); </script>
+<script src="../../../diagrams/JJFS-大乘起信論講記-verses.js"></script>
+<script src="../../../diagrams/JJFS-大乘起信論講記.js"></script>
+<script src="../../../diagrams/GTR-甘台榮老師.js"></script>
+<script src="../../../util/lit-digests.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+
+<script>
+const extlnx = '《<a href="9151.htm">淨界法師講記</a>》《<a href="9148.htm">法藏大師疏</a>》《<a href="../../../佛學基礎/《大乘起信論》/蕅益大師《大乘起信論裂網疏》.html">蕅益大師科判</a>》《<a href="../books2/1146.htm">大乘起信論</a>》';
+var txt, docttl = '起信論筆記';
+
+switch (get('m')) {
+case '_123': txt = text一心二門三大(); docttl = '起信論教理'; break;
+case '_5':   txt = text五分要旨(); docttl = '起信論要旨'; break;
+case 'kps':  createGP('《大乘起信論講記•科判》', CAT_經論, 大乘起信論講記Creator(true,true));
+             txt = text科判簡();
+             docttl = '起信論科判';
+             break;
+default:     createGP('《大乘起信論講記》', CAT_經論, 大乘起信論講記Creator(false,true));
+             txt = text科判筆記();
+             docttl = '起信論科判筆記';
+             break;
+}
+docInfo.setXG().writeStart('《大乘起信論講記》科判、筆記', docttl)
+               .writeBody(`
+/TEXT030C/馬鳴菩薩 作論<br>淨界法師 講解<br>信裹居士 筆記
+<div id="stg">${txt}</div>
+<div id="dlgPane"></div>`)
+               .writeEnd(extlnx);
+new MyDialog(800, 'dlg').render('dlgPane');
+
+function text一心二門三大() {
+  return `
+/C/【<a href="?m=">科判筆記</a>】《<cur>教理示意圖</cur>》《<a href="?m=_5">五分要旨</a>》
+
+/C:_123/<ail>內容主體源自甘台榮老師的講座。</ail>
+
+<center>${一心二門三大('#ffe').genSVG().render()}</center>
+`;
+}
+
+function text五分要旨() {
+  return `
+/C/【<a href="?m=">科判筆記</a>】《<a href="?m=_123">教理示意圖</a>》《<cur>五分要旨</cur>》
+
+/SECTION/大乘起信論梗概
+<html:diagram>大乘起信論五分</html:diagram>
+
+/SECTION/大乘起信論要旨
+<html:diagram>大乘起信論要旨</html:diagram>
+`;
+}
+
+function text科判簡() {
+  return `
+/C/【<a href="?m=">科判筆記</a>】《<a href="?m=_123">教理示意圖</a>》《<a href="?m=_5">五分要旨</a>》
+
+<html:diagram>《大乘起信論講記•科判》</html:diagram>
+`;
+}
+
+function text科判筆記() {
+  return `
+/C/　【<a href="?m=kps">僅科判</a>】《<a href="?m=_123">教理示意圖</a>》《<a href="?m=_5">五分要旨</a>》
+
+<html:diagram>《大乘起信論講記》</html:diagram>
+`;
+}
+
+</script>

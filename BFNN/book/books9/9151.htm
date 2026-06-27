@@ -3,20 +3,51 @@
 <meta http-equiv=Content-Type content="text/html; charset=utf-8">
 <title>大乘起信論講記</title>
 <link rel="stylesheet" href="../books/book.css">
+<style>
+#dlg        { background-color:#ffe; padding-left:0px; padding-right:0px }
+#dlg header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }
+#dlgTitle   { color:brown; border-bottom:1px solid brown; padding-left:10px }
+#dlgBody    { padding-left:10px; padding-right:10px }
+img { padding-left:15px; padding-bottom:15px; padding-right:10px }
+</style>
 <script src="../../../util/utils.js"></script>
 <script src="../../../util/gridperfect.js"></script>
-<script src="9151/diagrams.js"></script>
+<script> gpRepo.setDialogId('dlg'); </script>
+<script src="../../../diagrams/JJFS-大乘起信論講記.js"></script>
+<script src="../../../diagrams/JJFS-大乘起信論講記-verses.js"></script>
+<script src="9151/images.js"></script>
 <script src="../mybfnn.js"></script>
 </head>
 <body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
 <div id="stg"></div>
+<div id="dlgPane"></div>
 </body></html>
 
 <script>
-var QXL = new (class extends SeriesContainer {
+const A123 = '<a href="?vol=6&loc=_123">';
+
+new MyDialog(800, 'dlg').render('dlgPane');
+
+new (class extends SeriesContainer {
   constructor() { super(); }
 
-  loadJS(vol) { addjs(`9151/${to2d(vol||1)}.js`); }
+  loadJS(vol) {
+    vol |= 0;
+    switch (vol) {
+    case 0: this.volNum = 0; return true;
+    case 2:
+    case 3:
+      addjs("../../../util/lit-digests.js");
+    case 4:
+    case 5:
+      addjs('9151/diagrams.js');
+      break;
+    case 6:
+      addjs('../../../diagrams/GTR-甘台榮老師.js');
+      break;
+    }
+    addjs(`9151/${to2d(vol)}.js`);
+  }
 
   showPage() {
     var buf = new Buffer();
@@ -25,18 +56,40 @@ var QXL = new (class extends SeriesContainer {
         super();
         this.setVolumesInJS(true, true).setXG().setBuffer(buf)
             .setGathaClass('gathaV')
-            .reInit(9151, 34);
-        this.volNum = QXL.volNum;
-        this.writeStart(`大乘起信論講記|（第${zNumber(this.volNum)}集）`)
-            .writeBody(`\n/TEXT030C/淨界法師 講\n${QXL.text}\n\n/VOLSEP/`)
-            .writeEnd('《<a href="9150.htm">大乘起信論</a>》　' +
-                      '《<a href="../books2/1148.htm">大乘起信論裂網疏</a>》　');
+            .reInit(9151, 34)
+            .volNum = SC.volNum;
+        if (!this.volNum) { // TOC
+          var notes = get('notes');
+          createGP('《大乘起信論講記》',      CAT_經論, 大乘起信論講記Creator(false,true));
+          createGP('《大乘起信論講記•科判》', CAT_經論, 大乘起信論講記Creator(true,true));
+          this.writeStart(`大乘起信論講記`)
+              .writeBody(`
+/TEXT030C/馬鳴菩薩 作論
+/TEXT030C/淨界法師 南林精舍2004年啟講
+/TEXT030C/信裹居士 製圖
+/TEXT030C/截圖取自<a href="https://www.youtube.com/playlist?list=PLPM_W3SEIYsFMyAoumO-ybn4YKzRZVAFQ">同名YouTube系列</a>
+
+/C/${notes ? '　　' : ''}【<a href="?notes=${notes ? '' : '1'}">${notes ? '僅科判' : '科判與筆記'}</a>】《${A123}教理示意圖</a>》
+<html:diagram>《大乘起信論講記${notes?'':'•科判'}》</html:diagram>
+
+/VOLSEP/`);
+        } else
+          this.writeStart(`大乘起信論講記|（第${zNumber(this.volNum)}集）`)
+              .writeBody(`
+/TEXT030C/馬鳴菩薩 作論<br>淨界法師 講解
+${SC.text}
+
+/VOLSEP/`);
+        this.writeEnd('《大乘起信論》<a href="../books2/1146.htm">真諦</a>&nbsp;/&nbsp;<a href="9150.htm">實叉難陀</a>　' +
+                      '《<a href="../books9/9148.htm" title="法藏大師《大乘起信論義記》">義記</a>》' +
+                      '《<a href="../books2/1148.htm" title="蕅益大師《大乘起信論裂網疏》">裂網疏</a>》　');
       }
     })(); // class extends DocInfo
     buf.render('stg');
   }
-})(); // QXL
+})();
 
-QXL.show(get('vol')); // 卷
+var a = get('vol'), b = get('loc');
+SC.show(a,b);
 
 </script>

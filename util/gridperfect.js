@@ -1,3 +1,5 @@
+var showPriv = get('all');
+
 const AIL    = '.ail  { font-size:12px; opacity:0.8 }' +
                '.ailb { font-size:14px; opacity:0.8; stroke:brown }' +
                '.ailb1{ font-size:14px; opacity:0.8; stroke:green }' +
@@ -13,8 +15,28 @@ const BOLD   = '.b { stroke:brown }' +
                '.b3{ stroke:blue }' +
                '.hl{ fill:red }' +
                '.inv { opacity:0 }' +
+               '.h1  { font-size:28px; stroke:brown; font-weight:bold }' +
+               '.h2  { font-size:20px; stroke:brown; font-weight:bold }' +
+               '.h3  { font-size:16px; stroke:brown; font-weight:bold }' +
                '.mantra{ stroke:teal }' +
+               '.kp    { stroke:#333399 }' +
+               '.kp0   { stroke:teal }' +
                '.c339  { stroke:#333399 }' +
+               '.black { stroke:black }' +
+               '.white { stroke:white }' +
+               '.red   { stroke:red }' +
+               '.blue  { stroke:blue }' +
+               '.green { stroke:green }' +
+               '.gray  { stroke:gray }' +
+               '.teal  { stroke:teal }' +
+               '.brown { stroke:brown }' +
+               '.yellow { stroke:yellow }' +
+               '.pink   { stroke:pink }' +
+               '.violet { stroke:violet }' +
+               '.darkblue   { stroke:darkblue }' +
+               '.darkgreen  { stroke:darkgreen }' +
+               '.lightgreen { stroke:lightgreen }' +
+               '.lightgray  { stroke:lightgray }' +
                '.href  { cursor:pointer; text-decoration:underline; stroke:blue; }' +
                '.see   { cursor:pointer; text-decoration:underline }' +
                '.see-b { cursor:pointer; text-decoration:underline; stroke:brown }' +
@@ -25,20 +47,23 @@ const BOLD   = '.b { stroke:brown }' +
                '.see-mantra{ cursor:pointer; text-decoration:underline; stroke:teal }' +
                '.see-c339  { cursor:pointer; text-decoration:underline; stroke:#333399 }' +
                '';
-const CAT_基本 = '基本';
-const CAT_唯識 = '唯識';
-const CAT_大乘 = '大乘';
-const CAT_小乘 = '小乘';
+const CAT_基本 = '佛法基礎';
+const CAT_唯識 = '唯識論';
+const CAT_大乘 = '大乘佛法';
+const CAT_小乘 = '小乘佛法';
 const CAT_戒律 = '戒律';
 const CAT_經論 = '經論';
-const CAT_外道 = '外道';
-const CAT_中華 = '中華';
+const CAT_甘師 = '甘台榮師';
+const CAT_外道 = '宗教外道';
+const CAT_中華 = '中華文化';
 const CAT_ELSE = 'ELSE';
 const CAT_NONE = '　';
-const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_戒律,CAT_經論,CAT_中華,CAT_外道,CAT_ELSE,CAT_NONE];
+const catNames = [CAT_基本,CAT_唯識,CAT_大乘,CAT_小乘,CAT_戒律,CAT_經論,CAT_甘師,CAT_中華,CAT_外道,CAT_ELSE,CAT_NONE];
 
-const LINE='LINE', TEXT='TEXT', RECT='RECT', CIRCLE='CIRCLE',
-      RIGHTEDGE='R_EDGE', INCL='INCL';
+const LINE='LINE', TEXT='TEXT', RECT='rect', OVAL='ellipse', POINTER='PTR',
+      INCL='INCL';
+const DEFAULTTEXTCOLOR = 'defaultTextColor';
+const DEFAULTLINECOLOR = 'defaultLineColor';
 const SPLIT = '〰';
 
 // Named points (marks) are useful to abstract out diagrams.
@@ -48,11 +73,20 @@ const SPLIT = '〰';
 //   marks will collide with text.
 
 class GPInstBase {
-  constructor(type, gp, extra) { this.act = type; this.gridPerf = gp; this.extra = extra; }
-}
-
-class GPRightEdgeInst extends GPInstBase {
-  constructor(gp, color) { super(RIGHTEDGE, gp); this.color = color; }
+  constructor(type, gp, extra) { this.act = type; this.gridPerf = gp; this.extra = extra; this.order = 0; }
+  set(key,val) { this[key] = val; return this; }
+  setBefore() { this.order = -1; }
+  setAfter()  { this.order =  1; }
+  setFillStroke(f, s) { // for shapes
+    s = (s || f).split('\|');
+    this.set('fill', f).set('stroke', s[0]);
+    if (s[1]) return this.set('strokeWidth', s[1]);
+    return this;
+  }
+  toFillStrokeAttrs() { // for shapes
+    return ` fill="${this.fill||'white'}" stroke="${this.stroke||'white'}" stroke-width="${this.strokeWidth||1}"`;
+  }
+  render(buf, shiftX, shiftY) { throw `GPInstBase[${this.act}].render() is not implemented.`; }
 }
 
 class GPIncludeInst extends GPInstBase {
@@ -63,6 +97,9 @@ class GPIncludeInst extends GPInstBase {
     this.y = y;
     this.ignoreStyle = ignoreStyle;
   }
+  render(buf, shiftX, shiftY) {
+    console.log(`INFO: including [${this.diagram.name||''}] at (${this.x}, ${this.y}).`);
+  }
 }
 
 class GPLineInst extends GPInstBase {
@@ -71,9 +108,87 @@ class GPLineInst extends GPInstBase {
     this.from = from;
     this.to = to;
   }
+  render(buf, shiftX, shiftY) {
+    if (!this.isExec) return this.translateDirectives().render(buf, shiftX, shiftY);
+    var gp = this.gridPerf,
+        gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.from[0], this.from[1]),
+        extra = this.extra || '',
+        dx = shft && shft[0] || 0,
+        dy = shft && shft[1] || 0,
+        x = (shiftX + dx + this.from[0]) * gw + gh/2,
+        y = (shiftY + dy + this.from[1]) * gh;
+    if (!extra)
+      extra = `stroke="${gp.defaultLineColor || 'black'}" stroke-width="1px"`;
+    if (!this.to[2]) { // absolute; check its own shifting
+      shft = gp.getShifting(this.to[0], this.to[1]);
+      dx = shft && shft[0] || 0;
+      dy = shft && shft[1] || 0;
+    } // otherwise, it is relative, just shift with from
+    var x2 = (shiftX + dx + this.to[0]) * gw + gh/2,
+        y2 = (shiftY + dy + this.to[1]) * gh;
+    buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" ${extra}/>`);
+  }
+  translateDirectives() { // turn textual from/to into xy's
+    var gp = this.gridPerf, xy, ret = shallowClone(this); // don't change own values
+    ret.isExec = true;
+    if (typeof ret.from == 'string') { // otherwise, should be [x,y]
+      xy = gp.marks[ret.from];
+      if (!xy) throw `From-point not found: ${ret.from}`;
+      ret.from = xy;
+    }
+    if (typeof ret.to == 'string') { // otherwise, should be [x,y]
+      if (ret.to.startsWith('%')) {
+        var delta = parseFloat(ret.to.substring(2));
+        xy = [ret.from[0], ret.from[1]];
+        switch(ret.to[1]) {
+        case 'r': xy[0] += delta; xy[2] = true; break;
+        case 'l': xy[0] -= delta; xy[2] = true; break;
+        case 'd': xy[1] += delta; xy[2] = true; break;
+        case 'u': xy[1] -= delta; xy[2] = true; break;
+        }
+      } else {
+        xy = gp.marks[ret.to];
+        if (!xy) throw `To-point not found: ${ret.to}`;
+      }
+      ret.to = xy;
+    }
+    return ret;
+  }
+}
+
+class GPLineMeta extends GPLineInst {
+  constructor(gp, type, value) {
+    super(gp);
+    this.meta = type;
+    this.value = value;
+  }
+  render(buf, shiftX, shiftY) {
+    if (this.meta == DEFAULTLINECOLOR)
+      this.gridPerf.defaultLineColor = this.value;
+  }
+}
+
+class GPRightEdgeInst extends GPLineInst {
+  constructor(gp, color) { super(gp); this.color = color; this.isRightEdge = true; }
+  render(buf, shiftX, shiftY) {
+    var gp = this.gridPerf;
+    this.from  = [gp.width+0.25, 0];
+    this.to    = [gp.width+0.25, gp.height+1];
+    this.extra = ` style="stroke:${this.color||'lightgray'};stroke-width:1px"`;
+    super.render(buf, shiftX, shiftY);
+  }
+}
+
+class GPPointerInst extends GPInstBase {
+  constructor(gp, from, to, extra) {
+    super(POINTER, gp, extra);
+    this.from = from;
+    this.to = to;
+  }
 }
 
 class GPRectInst extends GPInstBase {
+  // Legitimate attributes: fill, stroke
   constructor(gp, x, y, width, height, extra) {
     super(RECT, gp, extra);
     this.x = x;
@@ -81,14 +196,40 @@ class GPRectInst extends GPInstBase {
     this.width = width;
     this.height = height;
   }
+  setRoundCorner(rx, ry) { this.rx = rx, this.ry = ry || rx; }
+  render(buf, shiftX, shiftY) {
+    var gp = this.gridPerf,
+        gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.x, this.y),
+        dx = shft && shft[0] || 0,
+        dy = shft && shft[1] || 0,
+        x = (shiftX + dx + this.x) * gw - gw/2,
+        y = (shiftY + dy + this.y) * gh,
+        rx = (this.rx || 0) * gw,
+        ry = (this.ry || 0) * gh,
+        extra = this.extra || this.toFillStrokeAttrs();
+    buf.w(`<rect x="${x}" y="${y}" rx="${rx}" ry="${ry}" width="${this.width*gw}" height="${this.height*gh}" ${extra}/>`);
+  }
 }
 
-class GPCircleInst extends GPInstBase {
-  constructor(gp, x, y, r, extra) {
-    super(CIRCLE, gp, extra);
+class GPOvalInst extends GPInstBase {
+  constructor(gp, x, y, rx, ry, extra) {
+    super(OVAL, gp, extra);
     this.x = x;
     this.y = y;
-    this.r = r;
+    this.rx = rx;
+    this.ry = ry;
+  }
+  render(buf, shiftX, shiftY) {
+    var gp = this.gridPerf,
+        gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.x, this.y),
+        dx = shft && shft[0] || 0,
+        dy = shft && shft[1] || 0,
+        x = (shiftX + dx + this.x) * gw - gw/2,
+        y = (shiftY + dy + this.y) * gh,
+        rx = this.rx * gw,
+        ry = this.ry * gh,
+        extra = this.extra || this.toFillStrokeAttrs();
+    buf.w(`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" ${extra}/>`);
   }
 }
 
@@ -97,35 +238,57 @@ class GPTextInst extends GPInstBase {
     super(TEXT, gp, extra);
     this.x = x;
     this.y = y;
-    if (txt) this.setText(txt,extra);
-    if (!this.text) this.text = '';
+    this.text = txt || '';
   }
   append(x) { this.text += x; return this; }
-  finishText() { this.setText(this.text); return this; }
   wrapTextInClass(cls) {
-    this.text = `<tspan class="${cls}">${this.text}</tspan>`;
+    //this.text = `<tspan class="${cls}">${this.text}</tspan>`;
+    this.wrapCls = cls;
     return this;
   }
-  setText(txt, extra) {
-    this.text = this._procText(txt);
-    if (extra) this.extra = extra;
-  }
-  _procText(s) { // turn 「/ail|你好/」 into 「<tspan class="ail">你好</tspan>」
-    if ((s.indexOf('</')>=0) || (s.indexOf('/>')>=0))
-      return s; // don't handle those with </tag> and <tag/>; leave as-is
-    var ret='', idx1=0, idx=s.indexOf('/');
-    if (idx < 0) return s;
+  setVertical() { this.isVertical = true; return this; }
+  setText(txt, extra) { this.text = txt; if (extra) this.extra = extra; }
+  realLen() { this._procText(); return this._realLen; }
+  _procText() { // turn 「/ail|你好/」 into 「<tspan class="ail">你好</tspan>」
+    if (this.tokens) return; // done already
+    var s = this.text;
+    this._realLen = 0;
+    if ((s.indexOf('</')>=0) || (s.indexOf('/>')>=0)) {
+      this._realLen = textRealLen(s.replace(/<[^>]*>/g,''));
+      this.tokens = [s]; // don't handle those with </tag> and <tag/>; leave as-is
+      return;
+    }
+    var idx=s.indexOf('/');
+    if (idx < 0) {
+      this._realLen = s.replace(/<[^>]*>/g,'').length;
+      this.tokens = [s];
+      return;
+    }
+    var ret='', idx1=0;
+    this.tokens = [];
     while (true) {
-      idx1 = s.indexOf('/', idx+1);
-      if (idx1 < 0) { ret += s; break; }
-      ret += s.substring(0, idx);
+      // -- use the following loop to handle ""
+      for (idx1=idx+1; idx1 < s.length; ++idx1) {
+        var c = s[idx1];
+        if (c == '"') { // skip the emclosed text
+          for (++idx1; idx1 < s.length && (s[idx1] != '"'); ++idx1);
+        }
+        if (c == '/') break;
+      }
+      if (idx1 <= idx+1) { ret += s; break; }
+      this.tokens.push(s.substring(0, idx));
+      this._realLen = idx;
       var a = s.substring(idx+1,idx1).split('|'),
-          first = a[0], txt = a[1], idx2 = first.indexOf(':'),
+          first = a[0], txt = a[1].replaceAll('〰','　'), idx2 = first.indexOf(':'),
           tscls = first, tsextra = '';
       if (idx2 > 0) {
-        var type = first.substring(0,idx2).trim();
+        var type = first.substring(0,idx2).trim(), tip = null;
         first = first.substring(idx2+1).trim();
-        if (type.startsWith('see')) { // popup
+        if (first[0] == '"' && first.endsWith('"'))
+          first = first.substring(1, first.length-1);
+        if (type == 'tip' || type == 'tooltip') { // tooltip
+          tip = first;
+        } else if (type.startsWith('see')) { // popup
           if (!gpRepo.canPopup()) {
             tscls = '';
             console.log('Cannot popup. ' + first);
@@ -136,7 +299,7 @@ class GPTextInst extends GPInstBase {
         } else if (type.startsWith('href')) { // external link
           // e.g. /href:https://www.yahoo.com/  -- open in this window
           //      /href@extra:https://www.yahoo.com/ -- open in window "extra"
-          //      /href:=達摩/ -- open in this window, if this.gridPerf.linkMap is set with the entry of 達摩.
+          //      /href:=達摩/ -- open in this window, if linkMap['達摩'] is set.
           var lm = this.gridPerf.linkMap,
               a = type.split('@'),
               tgt = (a.length > 1) ? a[1] : '_self';
@@ -152,25 +315,103 @@ class GPTextInst extends GPInstBase {
           console.log(msg);
         }
       }
-      ret += `<tspan class="${tscls}"${tsextra}>${txt}</tspan>`;
+      this.tokens.push([txt, `<tspan class="${tscls}"${tsextra}>`, tip]);
+      this._realLen += txt.length;
       s = s.substring(idx1+1);
       idx = s.indexOf('/');
-      if (idx < 0) { ret += s; break; }
+      if (idx < 0) {
+        this.tokens.push(s);
+        this._realLen += s.length;
+        break;
+      }
     }
-    return ret;
+  }
+
+  render(buf, shiftX, shiftY) {
+    this._procText();
+    var gp = this.gridPerf,
+        gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.x, this.y),
+        dx = shft && shft[0] || 0,
+        dy = shft && shft[1] || 0,
+        x = (shiftX + dx + this.x) * gw,
+        y = (shiftY + dy + this.y) * gh + gh/4,
+        extra = this.extra || '', tip;
+    if (!extra && gp.defaultTextColor)
+      extra = `stroke="${gp.defaultTextColor}"`;
+    if (!this.isVertical) {
+      buf.w(`<text x="${x}" y="${y}" ${extra}>`)
+         .wIf(this.wrapCls, `<tspan class="${this.wrapCls}">`);
+      for (var i in this.tokens) {
+        var t = this.tokens[i];
+        if (typeof t == 'string') buf.w(t);
+        else {
+          if (t[2]) // tooltip
+            tip = `<title>${t[2]}</title>`;
+          buf.w(t[1], tip||'', t[0], '</tspan>');
+        }
+      }
+      buf.wIf(this.wrapCls, '</tspan>')
+         .w('</text>');
+    } else { // vertical
+      for (var i in this.tokens) {
+        var t = this.tokens[i], tspan = '', _tspan = '';
+        tip = null;
+        if (typeof t != 'string') {
+          tspan = t[1];
+          _tspan = '</tspan>';
+          tip = `<title>${t[2]}</title>`;
+          t = t[0];
+        }
+        if (this.wrapCls) {
+          tspan = `<tspan class="${this.wrapCls}">${tspan}`;
+          _tspan += '</tspan>';
+        }
+        for (var k=0; k<t.length; ++k) {
+          buf.w(`<text x="${x}" y="${y}" ${extra}>`, tspan, tip||'', t[k], _tspan, '</text>');
+          y += gh;
+        }
+      }
+    }
   }
 
 } // end of GPTextInst.
 
+class GPTextMeta extends GPTextInst {
+  constructor(gp, type, value) {
+    super(gp);
+    this.meta = type;
+    this.value = value;
+  }
+  render(buf, shiftX, shiftY) {
+    if (this.meta == DEFAULTTEXTCOLOR)
+      this.gridPerf.defaultTextColor = this.value;
+  }
+}
+
+function textRealLen(s) { // counting the displayed char's
+  var idx = s.indexOf('/');
+  while (idx >= 0) {
+    var idx1 = s.indexOf('/', idx+2);
+    if (idx1 < 0) break;
+    var sub = s.substring(idx+1, idx1), end = s.substring(idx1+1);
+    s = s.substring(0, idx);
+    idx1 = sub.indexOf('|');
+    if (idx1 > 0) sub = sub.substring(idx1+1);
+    s += sub + end;
+    idx = s.indexOf('/');
+  }
+  return s.length;
+}
+
 class GridPerfect {
   constructor() {
+    this.program = null; // this indicates to call this.setup(this).
     this.gridW = 16;
     this.gridH = 22;
     this.fontSize = this.gridW;
     this.bgColor = undefined;
     this.markNames = '';
     this.styleBlock = null;
-    this.program = [];
     this.shiftings = {}; // x_y => [dx,dy]; only apply to starting points
     this.layout = []; // dummy
     this.width  = 0;
@@ -185,11 +426,15 @@ class GridPerfect {
 //  this.marks     = {}; // name => [x,y]; for runtime
 //  this.xyToMarks = {}; // x_y => name; for layout design view
 
-    var o = arguments[0], isCfg = (typeof o == 'object');
-    if (isCfg) Object.assign(this, o);
-
-    var layout = isCfg ? arguments[1] : o;
-    layout && this.setLayout(layout);
+    for (var i in arguments) {
+      var a = arguments[i];
+      if (a == null) continue;
+      switch (typeof a) {
+      case 'object': Object.assign(this, a); break;
+      case 'function': this.setup = a; break; // (gp) => {}
+      default: console.log(`In GP[${this.name||''}], ignored unknown init param: [${a}]. Expecting a function and/or an object.`);
+      }
+    }
   }
 
   setNotGPSP(s) {
@@ -201,6 +446,7 @@ class GridPerfect {
     return x && (this.SPs.indexOf(x) >= 0);
   }
   setWidth(w) { this.width = w; return this; }
+  setHeight(h) { this.height = h; return this; }
   getNamedText(id) { return this.namedTexts && this.namedTexts[id]; }
   setNamedText(id,txt) {
     if (id) {
@@ -209,10 +455,20 @@ class GridPerfect {
     }
     return this;
   }
-
-  run(f) { f(this); return this; } // Good practice for namespace cleanness.
+  setSutraText(id,txt) {
+    if (!id || !txt) return this;
+    var a = txt.split('\n'), b = [];
+    for (var i in a) {
+      var ln = a[i];
+      if (ln.startsWith('kp='))
+        ln = `<kp>${ln.substring(3).replaceAll(':','：')}</kp>`;
+      b.push(ln);
+    }
+    return this.setNamedText(id, b.join('<br>'));
+  }
 
   clone() {
+    this.checkProgram();
     var prgm = []; // deep copy
     for (var i in this.program) {
       var o = this.program[i], c = shallowClone(o);
@@ -240,11 +496,14 @@ class GridPerfect {
 
   setLayout(layout) {
     this.layout = trimFirstBlankLine(layout).split('\n');
-    this.height = this.layout.length;
+    this.height = Math.max(this.layout.length, this.height||0);
     if (!this.width) {
-      this.width = 0;
-      for (var i in this.layout)
-        this.width = Math.max(this.width, this.getLayoutLine(i).replace(/<[^>]*>/g,'').length+1);
+      this.width = 20;
+      for (var i in this.layout) {
+        var ln = this.getLayoutLine(i),
+            mylen = textRealLen(ln.replace(/<[^>]*>/g,''));
+        this.width = Math.max(this.width, mylen+1);
+      }
     }
     this._initLayout();
     return this;
@@ -260,7 +519,8 @@ class GridPerfect {
       var ln = n.name, idx = ln.indexOf(indent);
       if (idx > 0) {
         while (ln[idx] == indent) ++idx;
-        me.TC(n.x+idx, n.y, 'ail');
+        var delta = ln.length - textRealLen(ln);
+        me.TC(n.x + idx - delta, n.y, 'ail');
       }
       var num = n.numChildren();
       if (!num) return;
@@ -275,9 +535,7 @@ class GridPerfect {
     var ln = this.layout[i];
     if (!ln) return '';
     var idx = ln.indexOf('##');
-    if (idx<0) return ln;
-    for (--idx; (idx>0) && (ln[idx]==' '); --idx);
-    return ln.substring(0, idx+1);
+    return (idx<0) ? ln : rtrim(ln.substring(0, idx));
   }
 
   set(k,n) { this[k] = n; return this; }
@@ -285,7 +543,10 @@ class GridPerfect {
   setGridWidth(sz) { this.gridW = this.fontSize = sz; return this; }
   setGridHeight(sz) { this.gridH = sz; return this; }
   setShift(dx, dy) { this.shiftX = dx; this.shiftY = dy; return this; }
-  setMarkNames(names) { this.markNames = names; return this; } // before setLayout()
+  setMarkNames(names) { this.markNames = names; return this; }       // before setLayout()
+  setDefaultTextColor(c) { this.addInst(new GPTextMeta(this, DEFAULTTEXTCOLOR, c)); return this; }
+  setDefaultLineColor(c) { this.addInst(new GPLineMeta(this, DEFAULTLINECOLOR, c)); return this; }
+  setBGColor(c) { this.bgColor = c; return this; }
   defMark(name, x, y) {
     if (this.marks[name]) throw `Conflict of mark: ${name}.`;
     this.marks[name] = [x,y];
@@ -339,15 +600,28 @@ class GridPerfect {
     this.addInst(new GPIncludeInst(this, diagram, x, y, ignoreStyle));
     return this;
   }
-  addInst(inst) { this.program.push(inst); return this; }
-  hasRightEdge(color) { this.rightEdge = new GPRightEdgeInst(this, color); return this; }
+  toXY(pt) { // if pt is a string, treated as a mark
+    return (typeof pt == 'string') ? this.getMark(pt) : pt; // else, pt is assummed [x,y]
+  }
+  addInst(inst) { this.program.push(this.lastInst = inst); return this; }
+  addTextInst(x,y,txt,extra,vert)  {
+    var inst = new GPTextInst(this, x, y, txt, extra);
+    if (vert) inst.setVertical();
+    return this.addInst(inst);
+  }
+  updateLastInst(fxn) { fxn(this.lastInst); return this; }
+  hasRightEdge(color) { return this.addInst(new GPRightEdgeInst(this, color)); }
   line(f,t,e) { return this.L(f,t,e); }
   // [from] can be a string for a defined point, or an [x,y].
   // [to] can be like from, but can also take derivitives:
   // '%r9', '%l9', '%u9', '%d' for going right, left, up and down.
   L(from, to, extra) { this.addInst(new GPLineInst(this, from, to, extra)); return this; }
+  ptr(from, to, extra) { // TODO: impl; similar to line()
+    this.addInst(new GPPointerInst(this, from, to, extra));
+    return this;
+  }
   textClass(x,y,c) { return this.TC(x,y,c); }
-  TC(x, y, cls) {
+  TC(x, y, cls) { // to decorate a (horiz.) text, usu. plain in the layout
     for (var i in this.program) {
       var inst = this.program[i];
       if ((inst.act==TEXT) && (inst.x==x && (inst.y==y)))
@@ -355,15 +629,54 @@ class GridPerfect {
     }
     return this;
   }
-  circle(x,y,r,extra) { // TODO: impl
-    this.addInst(new GPCircleInst(this, x, y, r, extra));
+  rect(x,y,w,h,extra) {
+    this.addInst(new GPRectInst(this, x, y, w, h, extra));
     return this;
   }
-  rect(x,y,width,height,extra) { // TODO: impl
-    this.addInst(new GPRectInst(this, x, y, width, height, extra));
+  circle(x,y,r,extra) {
+    this.addInst(new GPOvalInst(this, x, y, r, r, extra));
+    return this;
+  }
+  oval(x,y,rx,ry,extra) {
+    this.addInst(new GPOvalInst(this, x, y, rx, ry, extra));
+    return this;
+  }
+  rectByCorners(ul,lr,extra) {
+    ul = this.toXY(ul);
+    lr = this.toXY(lr);
+    var x = ul[0], y = ul[1];
+    return this.rect(x, y, lr[0]-x+1, lr[1]-y, extra);
+  }
+  circleByCorners(ul,lr,extra) {
+    ul = this.toXY(ul);
+    lr = this.toXY(lr);
+    var x1 = ul[0], y1 = ul[1], x2 = lr[0], y2 = lr[1], r = Math.max((x2-x1+1)/2, (y2-y1+1)/2);
+    return this.circle((x1+x2)/2, (y1+y2)/2, r, extra);
+  }
+  ovalByCorners(ul,lr,extra) {
+    ul = this.toXY(ul);
+    lr = this.toXY(lr);
+    var x1 = ul[0], y1 = ul[1], x2 = lr[0], y2 = lr[1];
+    return this.oval((x1+x2)/2, (y1+y2)/2, (x2-x1+1)/2, (y2-y1+1)/2, extra);
+  }
+  bgRect(x,y,w,h,extra)          { this.rect(x,y,w,h,extra);          this.lastInst.setBefore(); return this; }
+  bgRectByCorners(ul,lr,extra)   { this.rectByCorners(ul,lr,extra);   this.lastInst.setBefore(); return this; }
+  bgCircle(x,y,r,extra)          { this.circle(x,y,r,extra);          this.lastInst.setBefore(); return this; }
+  bgCircleByCorners(ul,lr,extra) { this.circleByCorners(ul,lr,extra); this.lastInst.setBefore(); return this; }
+  bgOval(x,y,rx,ry,extra)        { this.oval(x,y,rx,ry,extra);        this.lastInst.setBefore(); return this; }
+  bgOvalByCorners(ul,lr,extra)   { this.ovalByCorners(ul,lr,extra);   this.lastInst.setBefore(); return this; }
+  blackboardByCorners(a, b) {
+    this.bgRectByCorners(a, b);
+    this.lastInst.setFillStroke('#16503B', 'gold|6').setRoundCorner(0.2);
+    return this;
+  }
+  whiteboardByCorners(a, b) {
+    this.bgRectByCorners(a, b);
+    this.lastInst.setFillStroke('#fafaff', 'gold|6').setRoundCorner(0.2);
     return this;
   }
   text(x,y,t,e) { return this.T(x,y,t,e); }
+  textAtMark(m,t,e) { m = this.toXY(m); return this.T(m[0],m[1],t,e); }
   T(x, y, txt, extra) {
     var replaced = false;
     for (var i in this.program) {
@@ -374,16 +687,11 @@ class GridPerfect {
       }
     }
     if (!replaced) // not found, set it
-      this.addInst(new GPTextInst(this, x, y, txt, extra));
+      this.addTextInst(x, y, txt, extra);
     return this;
   }
   vtext(x,y,t,e) { return this.VT(x,y,t,e); }
-  VT(x, y, txt, extra) {
-    var len = txt.length;
-    for (var i=0; i<len; ++i)
-      this.T(x, y+i, txt[i], extra);
-    return this;
-  }
+  VT(x, y, txt, extra) { this.addTextInst(x, y, txt, extra, true); return this; }
   removeText(x, y) {
     this.program = this.program.filter((a) => (a.act==TEXT) && (a.x==x) && (a.y==y));
     return this;
@@ -396,116 +704,114 @@ class GridPerfect {
     }
     return null;
   }
-  fanOut(xLeft, yTop, yBottom, numItems) { return this.FO(xLeft, yTop, yBottom, numItems); }
+  fanOut(xLeft, yTop, yBottom, numItems, noIn) { return this.FO(xLeft, yTop, yBottom, numItems, noIn); }
   FO(xLeft, yTop, yBottom, numItems, noIn) { // returns yMiddle. numItems can be [], for uneven branching
     if (!numItems) numItems = 2;
-    this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom])
-        .L([xLeft+0.5, yTop], "%r0.5")
-        .L([xLeft+0.5, yBottom], "%r0.5");
-    if (!noIn) this.L([xLeft+0.5, (yTop+yBottom)/2], "%l0.75")
+    var cfg;
+    if (noIn && (typeof noIn == 'object')) { cfg = noIn; noIn = cfg.noIn; }
+    if (!extra && cfg && cfg.lineColor)
+      extra = ` stroke="${cfg.lineColor}" stroke-width="1px"`;
+    var leftLen = cfg && cfg.leftLen || 0.75, rightLen = cfg && cfg.rightLen || 0.5, extra;
+
+    this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom], extra)
+        .L([xLeft+0.5, yTop], "%r0.5", extra)
+        .L([xLeft+0.5, yBottom], "%r0.5", extra);
+    if (!noIn) this.L([xLeft+0.5, (yTop+yBottom)/2], `%l${leftLen}`, extra)
     if (Array.isArray(numItems)) {
       for (var i=0; i<numItems.length; ++i)
-        this.L([xLeft+0.5, numItems[i]], "%r0.5");
+        this.L([xLeft+0.5, numItems[i]], `%r${rightLen}`, extra);
     }
     if (numItems > 2) {
       var dist = (yBottom-yTop) / (numItems-1);
       for (var i=1; i<numItems-1; ++i)
-        this.L([xLeft+0.5, yTop + dist * i], "%r0.5");
+        this.L([xLeft+0.5, yTop + dist * i], "%r0.5", extra);
     }
     return this;
   }
-  fanIn(xLeft, yTop, yBottom, numItems) { return this.FI(xLeft, yTop, yBottom, numItems); }
+  fanIn(xLeft, yTop, yBottom, numItems, noOut) { return this.FI(xLeft, yTop, yBottom, numItems, null, noOut); }
   GROUPL(xLeft, yTop, yBottom) { return this.FO(xLeft, yTop, yBottom, 2, true); }
   GROUPR(xLeft, yTop, yBottom) { return this.FI(xLeft, yTop, yBottom, 2, true); }
   FI(xLeft, yTop, yBottom, numItems, noOut) { // numItems can be [], for uneven branching
     if (!numItems) numItems = 2;
-    this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom])
-        .L([xLeft+0.5, yTop], "%l0.5")
-        .L([xLeft+0.5, yBottom], "%l0.5");
-    if (!noOut) this.L([xLeft+0.5, (yTop+yBottom)/2], "%r0.75")
+    var cfg;
+    if (noOut && (typeof noOut == 'object')) { cfg = noOut; noOut = cfg.noOut; }
+    if (!extra && cfg && cfg.lineColor)
+      extra = ` stroke="${cfg.lineColor}" stroke-width="1px"`;
+    var leftLen = cfg && cfg.leftLen || 0.75, rightLen = cfg && cfg.rightLen || 0.5, extra;
+
+    this.L([xLeft+0.5, yTop], [xLeft+0.5, yBottom], extra)
+        .L([xLeft+0.5, yTop], `%l${leftLen}`, extra)
+        .L([xLeft+0.5, yBottom], `%l${leftLen}`, extra);
+    if (!noOut) this.L([xLeft+0.5, (yTop+yBottom)/2], `%r${rightLen}`, extra)
     if (Array.isArray(numItems)) {
       for (var i=0; i<numItems.length; ++i)
-        this.L([xLeft+0.5, numItems[i]], "%l0.5");
+        this.L([xLeft+0.5, numItems[i]], `%l${leftLen}`, extra);
     }
     if (numItems > 2) {
       var dist = (yBottom-yTop) / (numItems-1);
       for (var i=1; i<numItems-1; ++i)
-        this.L([xLeft+0.5, yTop + dist * i], "%l0.5");
+        this.L([xLeft+0.5, yTop + dist * i], `%l${leftLen}`, extra);
     }
     return this;
   }
   _initLayout() {
-    this.program   = [];
     this.marks     = {}; // name => [x,y]; for runtime
     this.xyToMarks = {}; // x_y => name; for layout design view
     this.shiftings = {}; // x_y => [dx,dy]; only apply to starting points
 
     // Process declared texts in the layout (versus via T())
-    var i, j, curInst;
+    var i, j, curInst, curX, extra;
     for (var i=1; i<=this.height; ++i) {
-      var row = this.getLayoutLine(i-1);
-      for (var j=1; j<=row.length; ++j) {
+      var row = this.getLayoutLine(i-1), curX = 1, len = row.length;
+      for (var j=1; j<=len; ++j) {
         var c = row[j-1];
         if (this.isGPSP(c)) {
-          if (curInst) {
-            curInst.finishText();
+          if (curInst)
             curInst = null;
-          }
+          ++curX;
         } else if (this.isMark(c)) {
-          this.defMark(c, j, i);
+          this.defMark(c, curX, i);
+          ++curX;
         } else { // not GPSP nor mark
           if (c == SPLIT) c = '　';
-          if (!curInst)
-            this.addInst(curInst = new GPTextInst(this, j,i));
+          if (!curInst) this.addInst(curInst = new GPTextInst(this, curX, i, null, extra));
+
+          // for "<...>", leave curX
+          var inc = 1, tmp;
+          if (row[j-1] == '<') {
+            inc = 0;
+            tmp = c;
+            for (++j; (j<=len) && (row[j-1] != '>'); ++j)
+              tmp += row[j-1];
+            if (row[j-1] != '>') // no ending '>'?
+              throw `Bad <...> format in [${$row}]: missing ending '>'.`;
+            c = tmp + '>';
+          }
+          // handle "/...|text/"
+          else if (c == '/') {
+            tmp = c;
+            for (++j; (j<=len) && (row[j-1] != '/'); ++j)
+              tmp += row[j-1];
+            if (row[j-1] != '/') { // no ending '/'?
+              c = tmp;
+              inc = tmp.length; // leave it as-is
+            } else {
+              c = tmp + '/'; // the "/.../"
+              var idx = c.lastIndexOf('|');
+              if (idx < 0) throw `Bad /.../ format in [${row}]: missing '|'.`;
+              inc = c.length - idx - 2; // the effective text length
+            }
+          }
+          // TODO: handle "&...;"?
           curInst.append(c);
+          curX += inc;
         }
       }
-      if (curInst && curInst.text)
-        curInst.finishText();
       curInst = null;
     }
   }
 
   isMark(x) { var m = this.markNames; return m && (m.indexOf(x) >= 0); }
-
-  _compile() { // into instructions for SVG generation
-    const me = this;
-    function compileLine(inst) { // turn textual from/to into xy's
-      var ret = shallowClone(inst), xy;
-      if (typeof ret.from == 'string') { // otherwise, should be [x,y]
-        xy = me.marks[ret.from];
-        if (!xy) throw `From-point not found: ${ret.from}`;
-        ret.from = xy;
-      }
-      if (typeof ret.to == 'string') { // otherwise, should be [x,y]
-        if (ret.to.startsWith('%')) {
-          var delta = parseFloat(ret.to.substring(2));
-          xy = [ret.from[0], ret.from[1]];
-          switch(ret.to[1]) {
-          case 'r': xy[0] += delta; xy[2] = true; break;
-          case 'l': xy[0] -= delta; xy[2] = true; break;
-          case 'd': xy[1] += delta; xy[2] = true; break;
-          case 'u': xy[1] -= delta; xy[2] = true; break;
-          }
-        } else {
-          xy = me.marks[ret.to];
-          if (!xy) throw `To-point not found: ${ret.to}`;
-        }
-        ret.to = xy;
-      }
-      return ret;
-    }
-
-    var pgm = [];
-    for (var i in this.program) {
-      var inst = this.program[i];
-      switch(inst.act) {
-      case TEXT: pgm.push(inst); break;
-      case LINE: pgm.push(compileLine(inst)); break;
-      }
-    }
-    return pgm;
-  }
 
   layoutForDesign(buf) { // only cares about definitions, ignoring all actions
     if (!buf) buf = new Buffer();
@@ -539,7 +845,14 @@ class GridPerfect {
     return buf.w('</table>');
   }
 
+  checkProgram() {
+    if (this.program) return;
+    this.program = [];
+    this.setup && this.setup(this);
+  }
+
   genSVG(opt) { // executes definitions and actions
+    this.checkProgram();
     var buf;
     if (typeof opt == 'object')
       buf = opt;
@@ -564,11 +877,11 @@ class GridPerfect {
     buf.w(`<style>text { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:${this.fontSize} }</style>`);
     this.genInnerSVG(buf, 1, 1);
     buf.w('Sorry, your browser does not support inline SVG.</svg>');
-    //console.log(buf.text());
     return buf;
   }
 
   genInnerSVG(buf, origX, origY, ignoreStyle) {
+    this.checkProgram();
     // Included subparts:
     var shiftX = origX - 1, shiftY = origY - 1;
     for (var i in this.program) {
@@ -580,47 +893,25 @@ class GridPerfect {
     }
 
     // Myself:
+    function getProgramToRun(me) { // into instructions for SVG generation
+      var pgm = [], before = [], after = [];
+      for (var i in me.program) { // shapes go underneath texts and lines
+        var inst = me.program[i];
+        if (inst.order < 0)      before.push(inst);
+        else if (inst.order > 0) after.push(inst);
+        else                     pgm.push(inst);
+      }
+      return before.concat(pgm, after);
+    }
+
     shiftX += this.shiftX;
     shiftY += this.shiftY;
-    var pgm = this._compile(), gw = this.gridW, gh = this.gridH, hw = gw/2;
+    var pgm = getProgramToRun(this), gw = this.gridW, gh = this.gridH, hw = gw/2;
     if (!ignoreStyle && this.styleBlock)
       buf.w('<style>', this.styleBlock, '</style>');
-    if (this.rightEdge && (pgm[pgm.length-1] != this.rightEdge))
-      pgm.push(this.rightEdge);
     for (var i in pgm) {
-      var inst = pgm[i], x, y, x2, y2, dx, dy, shft, extra;
-      switch(inst.act) {
-      case RIGHTEDGE:
-        inst.from  = [this.width+0.25, 0];
-        inst.to    = [this.width+0.25, this.height+1];
-        inst.extra = ` style="stroke:${inst.color||'lightgray'};stroke-width:1px"`;
-        // fall through
-      case LINE:
-        shft = this.getShifting(inst.from[0], inst.from[1]);
-        dx = shft && shft[0] || 0;
-        dy = shft && shft[1] || 0;
-        x = (shiftX + dx + inst.from[0]) * gw + gh/2;
-        y = (shiftY + dy + inst.from[1]) * gh;
-        if (!inst.to[2]) { // absolute; check its own shifting
-          shft = this.getShifting(inst.to[0], inst.to[1]);
-          dx = shft && shft[0] || 0;
-          dy = shft && shft[1] || 0;
-        } // otherwise, it is relative, just shift with from
-        x2 = (shiftX + dx + inst.to[0])  * gw + gh/2;
-        y2 = (shiftY + dy + inst.to[1])  * gh;
-        extra = inst.extra || ' style="stroke:black;stroke-width:1px"';
-        buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" ${extra}/>`);
-        break;
-      case TEXT:
-        shft = this.getShifting(inst.x, inst.y);
-        dx = shft && shft[0] || 0;
-        dy = shft && shft[1] || 0;
-        x = (shiftX + dx + inst.x) * gw;
-        y = (shiftY + dy + inst.y) * gh + gh/4;
-        extra = inst.extra || '';
-        buf.w(`<text x="${x}" y="${y}" ${extra}>${inst.text}</text>`);
-        break;
-      }
+      var inst = pgm[i];
+      inst.render(buf, shiftX, shiftY);
     }
   }
 
@@ -635,6 +926,7 @@ class MyContent {
     this.setTexts();
   }
   setNamedText(id, txt) { this.gp.setNamedText(id, txt); }
+  setSutraText(id, txt) { this.gp.setSutraText(id, txt); }
   getNamedText(id, txt) { return this.gp.getNamedText(id, txt); }
   setTableData(id, data, tblExtra, sep) { this.setNamedText(id, showTableData(data, tblExtra, sep)); }
 
@@ -713,15 +1005,18 @@ var gpRepo = new (class extends ResourceRepo {
       }
     }
     var rsc = name && gpRepo.run(name, design);
-    if (rsc) {
+    if (!rsc) {
+      name = null;
+      localStorage.removeItem('cur');
+    } else {
       if (elid == 'STRING')
         return (typeof rsc == 'string') ? rsc : rsc.render(); // rsc is buffer
       if (typeof rsc == 'string')
         renderText(elid || this.elidStage || document, rsc);
       else // buffer
         rsc.wrap('<center>', '</center>').render(elid || this.elidStage || document);
-      this.showTOC(name, design);
     }
+    this.showTOC(name, design);
   }
   showTOC(cur, design) {
     if (cur)
@@ -736,6 +1031,7 @@ var gpRepo = new (class extends ResourceRepo {
     var categories = {}, nameSet = {};
     for (var i in gpRepo.all) {
       var item = gpRepo.all[i];
+      if (!showPriv && item.name[0] == '%') continue;
       if (nameSet[item.name]) continue;
       nameSet[item.name] = true; // avoid dups for aliased ones.
       var c = item.category || '其他';
@@ -751,7 +1047,7 @@ var gpRepo = new (class extends ResourceRepo {
       if (c.trim().length > 0) c += '：&nbsp;';
       buf.w(`<tr><td valign=top nowrap>${c}</td><td>`);
       for (var j=0; j<names.length; ++j) {
-        var n = names[j], rsc = gpRepo.get(n),
+        var n = names[j], rsc = gpRepo.get(n), isPriv = n[0] == '%',
             alias = rsc.alias && ('/' + rsc.alias.join('/')) || '',
             diagLnk = jslnk(`gpRepo.showDiagram('${n}')`, n+alias, rsc.gp.src),
             designLnk = '<sub>' + jslnk(`gpRepo.showDiagram('${n}',null,1)`, '🔍') + '</sub>';
@@ -759,6 +1055,8 @@ var gpRepo = new (class extends ResourceRepo {
         if (n == cur)
           buf.w(design ? `<u style="background-color:yellow">${diagLnk}</u>　`
                        : `<b style="color:red">${n}${alias}</b>${designLnk}`);
+        else if (isPriv)
+          buf.w('<span style="background-color:pink">', diagLnk, '</span>', designLnk, ' ');
         else
           buf.w(diagLnk, designLnk, ' ');
       }
@@ -785,15 +1083,20 @@ function cloneGP(name,newName) {
   return c;
 }
 
+function newGP(setupFxn, cfg) {
+  var ret = new GridPerfect(gpRepo.config, cfg, setupFxn);
+  if (!setupFxn) ret.checkProgram();
+  return ret;
+}
+
 function addGP(name, gp, category) {
   gp.name = name;
   gpRepo.add(new GridPerfectItem(name, gp).setCategory(category || CAT_NONE));
   return gp;
 }
 
-function createGP(name, category, cfg, extraCfg) {
-  var gp = new GridPerfect(cfg || gpRepo.config);
-  extraCfg && Object.assign(gp, extraCfg); // do at your own risk; be conservative!
+function createGP(name, category, setupFxn, cfg) {
+  var gp = new GridPerfect(gpRepo.config, cfg, setupFxn);
   addGP(name, gp, category);
   return gp;
 }
@@ -806,7 +1109,8 @@ function writeDialogCode(width, dlgId) {
 #${dlgId}        { background-color:#ffe; padding-left:0px; padding-right:0px }
 #${dlgId}Title   { color:brown; border-bottom:1px solid brown; padding-left:10px }
 #${dlgId}Body    { padding-left:10px; padding-right:10px }
-#${dlgId} header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }`);
+#${dlgId} header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }
+kp        { color:green; font-size:12px }`);
   document.write(`<dialog id="${dlgId}">
 <header>
   <table width="${width}px" cellspacing="0">

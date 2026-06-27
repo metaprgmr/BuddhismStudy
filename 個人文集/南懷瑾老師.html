@@ -1,0 +1,89 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>南懷瑾老師</title>
+<link rel="stylesheet" href="../util/article.css">
+<script src="../util/utils.js"></script>
+<script src="../util/yt.js"></script>
+<script src="../ytviewing.js"></script>
+<script src="registry.js"></script>
+</head>
+<body><center>
+
+<h1>【善知識】南懷瑾老師</h1>
+
+<div class="content">
+
+<center><table><tr><td valign=top width="400px" style="padding-right:30px">
+
+<p><img src="../images/portrait-南懷瑾-400.jpg"></p>
+
+<center>恭敬南懷瑾老師！感恩善知識<a href="javascript:clearListShow()">！</a></center>
+
+</td><td valign=top bgcolor="#eee" style="padding-right:10px">
+<div id="stg"></div>
+</td></tr></table></center>
+
+<div id="perlist"></div>
+
+<script> endOfArticle('260625'); </script>
+
+</center></body></html>
+
+<script>
+const PERSIST = 'curNHJList';
+var ytcoll = new YTCollection('南懷瑾教學資料').add(getLists());
+ytcoll.renderTOC('showMyList').render('stg');
+
+function clearListShow() {
+  localStorage.removeItem(PERSIST);
+  renderText('perlist', '');
+}
+function showMyList(i) {
+  if (i == null) i = localStorage.getItem(PERSIST);
+  if (i == null) return;
+  localStorage.setItem(PERSIST, i);
+  var buf = new Buffer('<center>');
+  ytcoll.renderList(i, buf)
+        .w('<hr color=lightgray></center>')
+        .render('perlist');
+}
+
+function getLists() {
+  var list = new YTList('禅密要法 白骨觀', 'st=PLmZYCBfudn_Vv7GtjvGjafZHpSCFVzOsl')
+  var data =
+`NnmA1IAT1PQ 51:32
+1xNcSpoeNjc 51:33
+-B7vRnweWUc 50:56
+DLPqzXi7VXo 51:24
+9ezj3GbTOQM 54:46
+oJv4BOEbPkQ 42:50
+lEubyAgPy0w 44:57
+t3qGknlwovg 53:38
+LKLwaGrRvwU 51:04
+gEdyFOgVf9w 57:35
+X3jAf0UAAxI 50:32
+tOPLq88rRcM 58:54
+qr54C-w7Iwk 49:07
+GI3P-LwaxMI 52:15
+15B8Z0oFTpg 51:29
+vgHMhya50Bw 42:24
+kDT1Pebu8D0 45:19
+p7AVLu2OwGI 50:24
+FqY3NPTSXwk 51:34
+zUKAtI3UfGc 51:54
+zD8GpdPzJB0 52:30
+JkZbTyJIfw8 55:34
+mPnstCE0NQg 48:27
+mCUJldHf__s 42:54
+F6BAoJ6J27I 57:10`.split('\n');
+
+  for (var i=0; i<data.length; ++i) {
+    var a = data[i].split(' ');
+    list.add(a[1], a[0], '禪密要法 白骨觀 ' + to2d(i+1))
+  }
+  return [ list ];
+}
+
+showMyList();
+</script>

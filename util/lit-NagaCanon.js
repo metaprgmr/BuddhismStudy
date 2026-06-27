@@ -108,12 +108,11 @@ class My乾隆大藏經Content extends MyContent {
   }
 }
 
-createGP('乾隆大藏經', CAT_基本)
-.setStyle(AIL + BOLD)
-.setNotGPSP('─')
-.setWidth(28)
-.hasRightEdge()
-.run((gp) => {
+createGP('乾隆大藏經', CAT_基本, gp => {
+  gp.setStyle(AIL + BOLD)
+    .setNotGPSP('─')
+    .setWidth(28)
+    .hasRightEdge()
+    .src = 'lit-NagaCanon.js';
   new My乾隆大藏經Content(gp);
-  gp.src = 'lit-NagaCanon.js';
 });

@@ -5,9 +5,9 @@
 (() => {
 const js = 'lit-digests.js';
 
-createGP('六祖惠能覺悟', CAT_大乘)
-.hasRightEdge()
-.setTree(`
+createGP('六祖惠能覺悟', CAT_大乘, gp => {
+  gp.hasRightEdge()
+    .setTree(`
 【惠能大彻大悟】
 〇一切萬法不離自性
 〇〇何期自性本自清淨
@@ -15,33 +15,36 @@ createGP('六祖惠能覺悟', CAT_大乘)
 〇〇何期自性本自具足
 〇〇何期自性本無動搖
 〇〇何期自性能生萬法`)
-.src = js;
+    .src = js;
+});
 
-createGP('大論立義分', CAT_經論)
-.setStyle(AIL + BOLD)
-.setWidth(16)
-.setLayout(`
+createGP('%大乘起信論%立義分', CAT_經論, gp => {
+  gp.setStyle(AIL + BOLD)
+    .setWidth(28)
+    .setLayout(`
 〇〇┌生滅門
+
 心〇┤〇〇〇〇┌體大/ail|（本自清淨；斷惡）/
 〇〇└真如門─┤相大/ail|（本自具足；修善）/
-〇〇〇〇〇〇〇└用大/ail|（能生萬法；度眾生）/
-〇`)
-.FO(2,1,3)   // 心
-.FO(7,2,4,3) // 真如門
-.T(7.25,1,'/ail|（業力薰習變現果報相）/')
-.T(3.25,4,'/ail|（本不生滅）/')
-.src = js;
+〇〇〇〇〇〇〇└用大/ail|（能生萬法；度眾生）/`)
+    .FO(2,1,4).XFT(1,3,0,-0.5)   // 心
+    .FO(7,3,5,3) // 真如門
+    .T(7.25,1,'/ail|（業力薰習所現果報相：執取「我相」）/')
+    .T(7.25,1.75,'/ail|（我相、人相、眾生相、壽者相的生滅）/')
+    .T(3.25,5,'/ail|（本不生滅）/')
+    .src = js;
+});
 
-createGP('大論修行信心分', CAT_經論)
-.setMarkNames('ABC')
-.setLayout(`
+createGP('%大乘起信論%修行信心分', CAT_經論, gp => {
+  gp.setMarkNames('ABC')
+    .setLayout(`
 〇〇〇〇〇〇〇〇〇〇┌〇施門
 〇〇〇〇信根本〇〇〇│〇戒門
 信門┤A信佛〇〇行門┤B忍門
 〇〇〇〇信法〇〇〇〇│〇進門
 〇〇〇〇信僧〇〇〇〇└〇止觀門〇┌止
 〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇└觀`)
-.run((gp) => {
+
   var A = gp.getMark('A'), B = gp.getMark('B'),
       ax = A[0], bx = B[0];
   gp.FO(ax-1,1.5,4.5,4)  // 信門
@@ -52,15 +55,16 @@ createGP('大論修行信心分', CAT_經論)
     .src = js;
 });
 
-createGP('大論解釋分', CAT_經論)
-.setMarkNames('ABC')
-.setLayout(`
+createGP('%大乘起信論%解釋分', CAT_經論, gp => {
+  gp.setMarkNames('ABC')
+    .setLayout(`
 〇A〇〇〇〇〇〇〇如實空
 顯〇〇心真如門〇〇如實不空
 示〇〇〇〇〇〇〇〇〇〇〇〇〇〇覺〇義
 正〇〇〇〇〇〇〇〇阿梨耶識〇〇不覺義
 義〇〇心生滅門〇〇〇〇〇〇〇〇依心意識轉
 〇〇〇〇〇〇〇〇〇即染還淨
+〇
 對
 治B〇我見〇〇人我見
 邪〇〇〇〇〇〇法我見
@@ -72,7 +76,7 @@ createGP('大論解釋分', CAT_經論)
 趣〇〇證發心者〇〇〇〇真心
 道〇〇菩薩發心相者〇〇方便心
 相〇〇〇〇〇〇〇〇〇〇業識心`)
-.run((gp) => {
+
   var A = gp.getMark('A'), B = gp.getMark('B'), C = gp.getMark('C');
 
   function 顯示正義() {
@@ -105,24 +109,23 @@ createGP('大論解釋分', CAT_經論)
   gp.src = js;
 });
 
-createGP('大乘起信論五分', CAT_經論)
-.setStyle(AIL + BOLD)
-.run((gp) => {
-  var cx=21, ay=3, by=5, cy=1, dy=11.5, ey=18.5;
-  gp.T(1,1,'/b|《大乘起信論》五分/')
+createGP('大乘起信論五分', CAT_經論, gp => {
+  gp.setStyle(AIL + BOLD);
+  var cx=23, ay=3, by=5, cy=1, dy=12.5, ey=19.5;
+  gp.T(1,1,'/b2|《大乘起信論》五分/')
     .T(1,ay,'/b1|一、因緣分/')
-    .T(1,by, '/b|二、立義分/')    .include(cloneGP('大論立義分'),1,by+1.3)
-    .T(cx,cy,'/b|三、解釋分/')    .include(cloneGP('大論解釋分'),cx,cy+1.3)
-    .T(1,dy, '/b|四、修行信心分/').include(cloneGP('大論修行信心分'),1,dy+1.3)
+    .T(1,by, '/b|二、立義分/')    .include(cloneGP('%大乘起信論%立義分'),1,by+1.3)
+    .T(cx,cy,'/b|三、解釋分/')    .include(cloneGP('%大乘起信論%解釋分'),cx,cy+1.3)
+    .T(1,dy, '/b|四、修行信心分/').include(cloneGP('%大乘起信論%修行信心分'),1,dy+1.3)
     .T(1,ey,'/b1|五、勸修利益分/')
     .src = js;
 });
 
-createGP('大乘起信論要旨', CAT_經論) // 1146
-.setStyle(AIL + BOLD)
-.hasRightEdge()
-.setWidth(42)
-.setTree(`
+createGP('大乘起信論要旨', CAT_經論, gp => { // 1146
+  gp.setStyle(AIL + BOLD)
+    .hasRightEdge()
+    .setWidth(42)
+    .setTree(`
 /b|《大乘起信論》/
 〇/b1|因緣分/
 〇〇因緣
@@ -351,12 +354,12 @@ createGP('大乘起信論要旨', CAT_經論) // 1146
 〇/b1|勸修利益分/
 〇〇若有眾生欲於如來甚深境界得生正信入大乘道，當持此論思量修習，究竟能至無上之道。
 〇〇若人受持此論觀察修行，若一日一夜，所有功德無量無邊不可得說。`)
-.src = js;
+    .src = js;
+});
 
-
-createGP('楞嚴經正宗分', CAT_經論) // 1067
-.setStyle(AIL + BOLD)
-.setLayout(`
+createGP('楞嚴經正宗分', CAT_經論, gp => { // 1067
+  gp.setStyle(AIL + BOLD)
+    .setLayout(`
 /b|《楞嚴經》/〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇┌迷悟緣起
 〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇┌正為內凡發心〇┤〇〇〇〇〇┌初悟空妄
 〇〇〇〇〇〇〇〇〇〇〇〇┌開佛知見令悟〇┤〇〇〇〇〇〇〇└悟心方便〇┤進悟幻有
@@ -368,17 +371,18 @@ createGP('楞嚴經正宗分', CAT_經論) // 1067
 正宗〇┤〇〇〇〇┌七趣業妄
 〇〇〇└兼說分〇┤
 〇〇〇〇〇〇〇〇└五陰禪魔`)
- .FO(3,6.5,10)
- .XFT(1,9,0,-0.75)          // 正宗
- .FO(8,5,8).XFT(5,7,0,-0.5) //   正說分
- .FO(12,3,7)                //     開示
- .FO(20,2,4)                //       開佛知見令悟	
- .FO(28,1,3)                //         正為內凡發心
- .FO(34,2,4,3)              //           悟心方便
- .FO(20,6,8)                //       示佛知見令入
- .FO(28,5,7)                //         正明因地修證
- .FO(34,6,8,3)              //           修入方便
- .FO(8,9,11)                //   兼說分
- .src = js;
+   .FO(3,6.5,10)
+   .XFT(1,9,0,-0.75)          // 正宗
+   .FO(8,5,8).XFT(5,7,0,-0.5) //   正說分
+   .FO(12,3,7)                //     開示
+   .FO(20,2,4)                //       開佛知見令悟	
+   .FO(28,1,3)                //         正為內凡發心
+   .FO(34,2,4,3)              //           悟心方便
+   .FO(20,6,8)                //       示佛知見令入
+   .FO(28,5,7)                //         正明因地修證
+   .FO(34,6,8,3)              //           修入方便
+   .FO(8,9,11)                //   兼說分
+   .src = js;
+});
 
 })();

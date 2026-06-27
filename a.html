@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -8,10 +9,28 @@
 <body>
 
 <script>
-var id = get('id'), info = articleInfo[id];
-console.log(id, info);
-if (!info) window.open('個人文集/index.html', '_self');
-else window.open(`個人文集/${info.uri}`, '_self');
+var id = get('id');
+if (id == 'all')
+  showAll();
+else {
+  var ai = articleInfo[id];
+  window.open(`個人文集/${ai && ai.uri || 'index.html'}`, '_self');
+}
+
+function showAll() {
+  var buf = new Buffer(), num = 1, all = Object.values(articleInfo);
+  all.sort((a,b) => a.id.localeCompare(b.id));
+  buf.w('<center><table cellspacing="0" cellpadding="0" border=0>');
+  for (var j=0; j<all.length; ++j) {
+    var info = all[j], id = info.id,
+        uri = `?id=${id}`, // info.uri,
+        styl = info.hidden ? ' style="background-color:#555;color:#eee"' : '';
+    buf.w(`<tr><td style="font-size:12px" align=right>${num++}.&nbsp;&nbsp;&nbsp;&nbsp;</td><td${styl}>${id}</td>`,
+          `<td>&nbsp;&nbsp;&nbsp;&nbsp;<a href="${uri}" title="${id}">${info.title}</a></td></tr>`);
+  }
+  buf.w('</table></center><hr>'); 
+  buf.render(document);
+}
 </script>
 
 </body></html>

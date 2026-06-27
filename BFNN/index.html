@@ -1,16 +1,15 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>般若文海選讀</title>
+<title>信德圖書館</title>
 <link rel="stylesheet" href="../util/article.css">
 <style>
-h3  { font-size:30px }
 sup { font-size:14px }
 code { color:blue }
 a { text-decoration:none }
 cur { color:red; background-color:yellow; font-weight:bold }
 dim { opacity:0.4 }
-darkgreen { color:darkgreen }
+.XD { font-size:24px; line-height:24px; color:#E33; font-weight:bold }
 .xgauth { color:brown }
 .sastra { background-color:#FF9 }
 .sutra { background-color:#FDD }
@@ -27,51 +26,54 @@ FF::before { content:"Firefox" }
 <script src="../env.js"></script>
 <script src="../util/utils.js"></script>
 <script src="bfnn-works.js"></script>
-<map name="makarte">
-  <area shape="rect" coords="0,0,5,20" href="javascript:showThem()">
-  <area shape="rect" coords="5,0,200,50" title="「般若文海」網站
-https://book.bfnn.org">
-</map>
 </head>
 <body style="background-color:#ced"><center>
-<div align=center>
-  <table border=0 cellspacing=0 cellpadding=0><tr>
-  <td colspan=2 align=center><img src="bfnn_title2.gif" width="200px" style="margin-top:0px" usemap="#makarte" align=left nowrap>
-<darkgreen>「般若文海」有大量可下載之佛經和文章資料，功德無量！感恩至深！<br>
-所收者已改為utf8編碼，常有合成字、錯字、句讀等補正。另時有新加。</darkgreen><br>
-<span style="opacity:0.5">（或問：網上資訊無量，何煩再造？<a href="javascript:showPorque()" style="background-color:lightgreen">見答於此</a>。）</span></td></tr>
-<tr><td width="200px" align=center valign=right style="font-size:28px"><a href="javascript:showList('全部內容')">選讀</a></td>
-  <td id="nav" align=center nowrap></td>
-  </tr></table>
-</div>
+<table border=0 cellspacing=0 cellpadding=0 style="margin-top:15px">
+<tr><td valign=top align=center style="padding-right:15px"><font class="XD">信德</font><br><a href="javascript:showList('全部內容')">圖書館</a>
+<br><a style="font-size:10px; opacity:0.5" href="javascript:showPorque()">簡介</a></td>
+<td id="nav" align=center valign=top nowrap></td></tr>
+<tr><td colspan=2 align=center style="padding-bottom:10px; font-size:8px; opacity:0.5"><a href="javascript:showThem()">. . .</a></td></tr></table>
+
 <div id="stg" align=center></div>
 <div class="copyright"></div>
 </center></body></html>
 
 <script>
-const topics = '所集佛經　金剛心經　楞嚴圓覺　大乘唯識　淨土法門　善書　增加內容|' +
-               '佛學基礎　地藏諸經　法華華嚴　戒律修行　人物人生　真偽　文字處理';
-const compositeTopics = {
+const categories = '所集佛經　金剛心經　楞嚴圓覺　大乘唯識　淨土法門　善書　增加內容|' +
+                   '佛學基礎　地藏諸經　法華華嚴　戒律修行　人物人生　其他　文字處理'; // 真偽
+const categoryDefs = {
   金剛心經: [ '心經', '金剛經' ],
   楞嚴圓覺: [ '楞嚴經', '圓覺經' ],
   大乘唯識: [ '摩訶衍', '唯識論' ],
   淨土法門: [ '淨土' ],
+  善書:     [ '善書', '道德經' ],
+  佛學基礎: [ '佛學基礎' ],
   地藏諸經: [ '地藏經', '占察經' ],
   法華華嚴: [ '法華經', '華嚴經' ],
   戒律修行: [ '戒律', '禪修', '理修' ],
-  人物人生: [ '人物', '人生' ]
+  人物人生: [ '人物', '近代人物', '人生', '故事' ]
 };
-function showNav(topic) {
-  var a = topics.split('|'), buf = new Buffer();
+var allMarkedTopics = {}; // for 其他 type
+(() => {
+  var vals = Object.values(categoryDefs);
+  for (var i in vals) {
+    var a = vals[i];
+    for (var j in a) allMarkedTopics[a[j]] = 1;
+  }
+})();
+
+function showNav(category) {
+  var a = categories.split('|'), buf = new Buffer();
   for (var i=0; i<a.length; ++i) {
     if (i>0) buf.w('<br>');
     var b = a[i].split('　');
     for (var j in b) {
-      var tpc = b[j], filler = tpc.endsWith('〇') ? '　' : '';
-      tpc = tpc.replace('〇','');
-      var pad = (tpc == '增加內容') || (tpc == '文字處理') ? '•' : '';
-      if (tpc == topic) b[j] = `${pad}<cur>${tpc}</cur>${filler}${pad}`;
-      else b[j] = `${pad}<a href="javascript:showList('${tpc}')">${tpc}</a>${filler}${pad}`;
+      var cat = b[j], filler = cat.endsWith('〇') ? '　' : '';
+      cat = cat.replace('〇','');
+      var isTech = (cat == '增加內容') || (cat == '文字處理'),
+          disp = `<a href="javascript:showList('${cat}')">${cat}</a>${filler}`;
+      if (cat == category) disp = `<cur>${cat}</cur>${filler}`;
+      b[j] = isTech ? `<span style="opacity:0.5">•${disp}•</span>` : disp;
     }
     buf.w(b.join('　'));
   }
@@ -130,7 +132,7 @@ function showThem() {
       ttl += note;
     }
     buf.w(`<tr${bgc}>`,
-          `<td nowrap>&nbsp;${d.topic||''}&nbsp;</td><td${styl}>&nbsp;${ankor}${d.id}</td>`,
+          `<td nowrap>&nbsp;${d.topic||''}&nbsp;</td><td${styl} title="${d.topic||''}">&nbsp;${ankor}${d.id}</td>`,
           `<td>${ttl}</td><td align=right nowrap>${d.maker||''}&nbsp;</td></tr>`);
     lastId = wk.idEnd || wk.id;
   }
@@ -142,43 +144,62 @@ const TOP = '<td bgcolor="#f8f8f8" valign=top style="border-top:2px solid gray; 
             '<table border=0 style="margin-left:10px; font-size:14px" cellspacing=0 cellpadding="2px">';
 const MID = '</table></td><!-- LEFT --><td>&nbsp;&nbsp;</td>' + TOP;
 
-function showList(topic) {
-  if (!topic) topic = localStorage.getItem('last') || '全部內容';
-  localStorage.setItem('last', topic);
-  showNav(topic);
-  switch (topic) {
+function showList(category) {
+  if (!category) category = localStorage.getItem('last') || '全部內容';
+  localStorage.setItem('last', category);
+  showNav(category);
+  switch (category) {
   case '全部內容': showAllArticles();    return;
   case '文字處理': showTextProcessing(); return;
   }
-  var isAdded = (topic == '增加內容'), topics = compositeTopics[topic],
-      lsts = [], lstMap;
-  if (!topics) {
-    lsts[0] = [];
-    if (topic) { lstMap = {}; lstMap[topic] = lsts[0]; }
+  var isAdded   = (category == '增加內容'),
+      allSutras = (category == '所集佛經'),
+      isElse    = (category == '其他'),
+      mycat = categoryDefs[category], lsts = [], lstMap = {};
+  if (!mycat) {
+    if (isElse) { // dynamically construct lstMap and lsts
+      for (var i in BFNN_WORKS) {
+        var wk = BFNN_WORKS[i], tpc = wk.topic || '（未分類）';
+        if (wk.isAvail() && !allMarkedTopics[tpc] && !lstMap[tpc]) {
+          var a = [];
+          lstMap[tpc] = a;
+          lsts.push(a);
+        }
+      }
+    } else { // for, say, 增加內容 and 所集佛經, or categories by itself (e.g. 佛學基礎)
+      lsts[0] = []; // just one homogeneous list
+      if (category) // for categories by itself; but nowadays is made explicit.
+        lstMap[category] = lsts[0];
+    }
   } else {
-    lstMap = {};
-    for (var i in topics) {
+    for (var i in mycat) {
       var a = [];
-      lstMap[topics[i]] = a;
+      lstMap[mycat[i]] = a;
       lsts.push(a);
     }
   }
+
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
     if (!wk.isAvail() && !wk.isToGet()) continue;
-    if (isAdded && wk.isAdded()) { lsts[0].push(wk); continue; }
-    if (topic == '所集佛經' && wk.isSutraOrSastra()) { lsts[0].push(wk); continue; }
+    if (isAdded && wk.isAdded() || allSutras && wk.isSutraOrSastra()) {
+      lsts[0].push(wk);
+      continue;
+    }
     var a = lstMap[wk.topic];
     a && a.push(wk);
   }
 
-  var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP);
-  for (var i in lsts) {
-    var l = lsts[i];
+  var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP), keys = Object.keys(lstMap);
+  for (var i in keys) {
+    var k = keys[i], l = lstMap[k];
+    if (k == '人物') k = '古代' + k;
+    if (keys.length > 1)
+      buf.w('<tr bgcolor="#ddd"><td colspan=3 style="color:red; font-weight:bold">', k, '</td></tr>');
     for (var j in l) l[j].render(buf);
   }
   buf.w('</table></td></tr></table>');
-  if (topic == '所集佛經') showSutraList(buf);
+  if (allSutras) showSutraList(buf);
   buf.w('<p style="font-size:5px">&nbsp;</p><hr width="1000px" color=gray>')
      .render('stg');
 }
@@ -279,9 +300,16 @@ function showPorque() {
   function R(txt,rub) { return `<ruby class="myruby">${txt}<rt>${rub}</rt></ruby>`; }
   showNav();
   renderText('stg',
-`<h4 style="font-size:25px; margin-bottom:5px">何以另集文本？</h4>
-<table border=1 bordercolor=red cellpadding="10px" bgcolor="white" width="800px"><tr><td>
-<p>　　或問：「如今網上資訊無量，何煩再造？豈無囤積狂之嫌耶？」</p>
+`<table border=1 bordercolor=red cellpadding="10px" bgcolor="white" width="800px"><tr><td>
+<h4 style="font-size:25px; margin-bottom:5px">信德圖書館簡介</h4>
+
+<p>「信德圖書館」起源於「<span title="其羅馬字名 BFNN 屬其故稱：「報佛恩網」">般若文海</span>」，內中富含大量可下載之佛經和文章資料，功德無量！感恩至深！初時，欲將文本編碼由Big5改為utf8，以便改正、重排，乃至標註、筆記等；參看下述更詳解釋。遂發現其文本內部極為冗餘，多諸無謂代碼；旋發力處理，得清淨文本框架。以此因緣，方便採集更多資料，增在9000部分，實則3000至9000均可。又不斷為文增加圖表、圖形、導讀、關聯等。（原般若文海內容實際僅採小部，蓋其體量浩大，且有部分文本出於Word，格式難變。）</p>
+
+<p>鑑於文海內容所選有限，而新加內容不斷擴展，即起意更之為圖書館，取名「信德」。名字來於「信為道源元功德母」。又德者得也；有信方可得，無信無有得故。若解為「信裹之得」，亦不為謬！</p>
+
+<h4 style="font-size:21px; color:black; margin-bottom:5px">網上資訊無量，何煩再造？</h4>
+
+<p>　　或問：網上資訊無量，何煩再造？豈無囤積狂之嫌耶？</p>
 <p>　　誠難排除囤積狂之嫌。然更有實由。當先明，在下乃是讀者，非惟匠人，故於內容之正確、美觀，頗為潔癖，（如<a href="../陀羅尼/楞嚴咒/Shurangama-mantra-信裹.html">楞嚴咒之處理</a>所示現。）所選錄之內容或已讀、或在讀、或將讀，幾無例外。於是衍生如下諸事：</p>
 <ol class=cjk>
 <li>公開內容多有瑕疵，或有意或無意。無意者，OCR出錯極為自然、又無人工勘誤，在在皆是，譬如「已/巳」「曰/日」「入/人」「士/土」等。又，古文無標點，有加句讀者並未理解，不乏謬誤或略欠貼切；甚或後加標點不甚合我意（如「、/，」之用）而欲改之，並無因果。所有內容歡迎下載；如此，無論外部世界天翻地覆若何，閣下終究還有一份私人拷貝，以資參比。</li>

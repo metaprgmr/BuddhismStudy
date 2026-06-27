@@ -663,7 +663,9 @@ bou2 jyut6 sik1 gyut6 bing2 ngok6 gok3 nei6 cou1 saap3 zyut3 wan5 jik6 guk1 saan
 虗竚匄釐墖縻旤僇膂勻曦漚髡彙汨涸迨眚詎
 heoi1 cyu5 koi3 hei1 taap3 mei4 wo6 luk6 leoi5 wan4 hei1 au1 kwan1 wui6 mik6 kok3 doi6 saang2 geoi6
 詮肇鷲貰閫揨勳姟疇瞢妬呪挍咨畀庠俅惕
-cyun4 siu6 zau6 sai3 kwan2 caang4 fan1 goi1 cau4 mung4 dou3 zau3 gaau3 zi1 bei2 coeng4 kau4 tik1`;
+cyun4 siu6 zau6 sai3 kwan2 caang4 fan1 goi1 cau4 mung4 dou3 zau3 gaau3 zi1 bei2 coeng4 kau4 tik1
+泝嚫瓠驎驥轡倏騃袞
+sou3 can3 wu6 leon4 kei3 bei3 suk1 ngoi4 gwan2`;
 
   init(ignoreLevels, a);
 })();

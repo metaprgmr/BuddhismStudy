@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>《八識規矩頌》內容</title>
+<link rel="stylesheet" href="../util/article.css">
+<style>
+#dlg      { background-color:#ffe; padding-left:0px; padding-right:0px }
+#dlg header { margin-top:-15px; margin-left:0px; margin-right:15px; margin-bottom:10px }
+#dlgTitle { color:brown; border-bottom:1px solid brown; padding-left:10px }
+#dlgBody  { padding-left:10px; padding-right:10px }
+</style>
+<script src="../env.js"></script>
+<script src="../util/utils.js"></script>
+<script src="../util/gridperfect.js"></script>
+<script>
+  gpRepo.setDialogId('dlg');
+  gpRepo.config = { bgColor:"#ffe" };
+</script>
+<script src="registry.js"></script>
+</head>
+<body><center>
+<h1>構思</h1>
+<div class="content">
+<div id="dlgPane"></div>
+
+<script>
+function scheme(gp) {
+  gp ||= newGP();
+  gp.setStyle(AIL + BOLD)
+    .setWidth(32)
+    .setTree(`
+/b1|信裹構思/〰
+!!
+〇/b2|誓成大願/
+!!
+〇/b|念佛修行/
+〇〇念佛
+〇〇〇靜心念佛〇（不著有，不著無）
+〇〇〇〇叫三佛
+〇〇〇〇觀想〇〇《往生論》觀門
+〇〇〇世事不拒〇（不著無，不著有）
+〇〇〇〇寫字、繪畫
+〇〇〇〇圍棋、俗務
+〇〇不念佛
+〇〇〇學經聽教
+〇〇〇讀經誦咒
+!!
+〇/b|日常精進/
+〇〇整日不睡；之後休息；週而復始
+〇〇〇或一日、二日、三日、四日、五日、六日、七日，
+!!〇〇或一七、二七、三七、四七、五七、六七、七七
+〇〇〇以食治瞌
+〇〇念佛專修〇（專念）
+〇〇〇或住或行
+〇〇〇坐常跏趺
+〇〇或為俗務〇（散念）
+〇〇〇行事徐緩
+〇〇〇佛號不斷
+〇〇善待汝身
+〇〇〇不修苦行
+〇〇〇儉居清食`);
+
+  return gp;
+}
+
+new MyDialog(800, 'dlg').render('dlgPane');
+var gp = scheme();
+gp.genSVG().wrap('<center>','</center>').render(document);
+
+endOfArticle('260613'); 
+</script>
+
+</center></body></html>

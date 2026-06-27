@@ -38,8 +38,11 @@ for (var i=0; i<lines.length; ++i) {
     
     if (!info || info.invalidID) alert(`Dup id: ${id}`);
     else {
-      var uri = testing ? `../article.html?id=${id}` : info.uri;
-      buf.w(`<a href="${uri}" title="${id}">${info.title}</a>`);
+      var uri = testing ? `../a.html?id=${id}` : info.uri, ttl = info.title;
+      if (ttl.startsWith('「一念相應一念佛」'))
+        buf.w(`<a href="../a.html?id=all">「</a><a href="${uri}" title="${id}">${ttl.substr(1)}</a>`);
+      else
+        buf.w(`<a href="${uri}" title="${id}">${ttl}</a>`);
     }
   }
   buf.w('</li>');

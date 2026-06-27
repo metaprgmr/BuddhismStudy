@@ -1,9 +1,9 @@
-createGP('三藏十二分教', CAT_基本)
-.setStyle(AIL + BOLD)
-.setNotGPSP('─')
-.setWidth(58)
-.hasRightEdge()
-.setTree(`
+createGP('三藏十二分教', CAT_基本, gp => {
+  gp.setStyle(AIL + BOLD)
+    .setNotGPSP('─')
+    .setWidth(58)
+    .hasRightEdge()
+    .setTree(`
 /b|三藏/、/b|十二分教/
 〇/b|三藏/〰tri-piṭaka
 〇〇經藏〰sūtra-piṭaka
@@ -21,8 +21,8 @@ createGP('三藏十二分教', CAT_基本)
 〇〇本生〰〰〰〰〰〰〰〰〰〰〰〰闍多伽〰〰/cil|（謂諸經中宣說過去所經生事）/
 〇〇方廣、方等〰〰〰〰〰〰〰〰〰毘佛略〰〰/cil|（謂諸經中廣說種種甚深法義）/
 〇〇稀法、未曾有〰〰〰〰〰〰〰〰阿浮達磨〰/cil|（謂諸經中說三寶等甚希有事）/
-〇〇論議、廣演〰〰〰〰〰〰〰〰〰優婆提舍〰/cil|（謂諸經中決判黑說、大說等教）/（九分教無）`)
-.run((gp) => {
+〇〇論議、廣演〰〰〰〰〰〰〰〰〰優婆提舍〰/cil|（謂諸經中決判黑說、大說等教）/（九分教無）`);
+
   var catStart = 7;
   gp.XFT(9, [catStart,'-',catStart+11], 0.25)
     .T(9, catStart,    'sūtra')
@@ -144,13 +144,13 @@ class My大正新脩大藏經Content extends MyContent {
 } // end of My大正新脩大藏經Content.
 
 
-createGP('大正新脩大藏經', CAT_基本)
-.setStyle(AIL + BOLD)
-.setNotGPSP('─')
-.setWidth(34)
-.hasRightEdge()
-.run((gp) => { new My大正新脩大藏經Content(gp); })
-.setTree(`
+createGP('大正新脩大藏經', CAT_基本, gp => {
+  gp.setStyle(AIL + BOLD)
+    .setNotGPSP('─')
+    .setWidth(34)
+    .hasRightEdge();
+  new My大正新脩大藏經Content(gp);
+  gp.setTree(`
 《/b|大正新脩大藏經/》，簡稱《大正藏》。（/see:wikipedia_page|維基百科/）
 〇譯典
 〇〇阿含部：/see:長阿含|長/，/see:中阿含|中/，/see:雜阿含|雜/，/see:增一阿含|增一/〰/cil|第1、2部，共151部經，460卷/
@@ -173,4 +173,5 @@ createGP('大正新脩大藏經', CAT_基本)
 〇〇/see:|事彙部/·/see:|外教部/·/see:|目錄部/〰〰/cil|第53、54、55部，共64部經/
 〇古逸部·疑似部〰〰〰〰〰〰〰/cil|第85部，共189部經/
 `)
-.src = 'lit-Tripitaka.js';
+  .src = 'lit-Tripitaka.js';
+});

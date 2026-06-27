@@ -1,4 +1,4 @@
-var DEBUG = ''; // 'border:1px solid red;';
+var SEMOY, DEBUG = ''; // 'border:1px solid red;';
 var isDebugging = false;
 const ON={}, OFF={};
 function dbg() {
@@ -25,10 +25,17 @@ function zNumber(n) { // 0 to 999
   var d100 = Math.floor(n / 100);
   var d10  = Math.floor((n-d100*100) / 10);
   var d1   = n - d100 * 100 - d10 * 10;
-  var ret = (d100 > 0 ? zdigits[d100] : '') + zdigits[d10] + zdigits[d1];
+  var ret = (d100 > 0 ? (zdigits[d100]+'百') : '') + zdigits[d10] + zdigits[d1];
   while (ret.length > 1 && ret.startsWith('〇')) ret = ret.substring(1);
-  while (ret.length > 1 && ret.endsWith('〇')) ret = rtrim(ret,1);
-  return ret;
+  switch(ret[ret.length-2]) {
+  case '十':
+  case '〇': break;
+  case '一': ret = ret.substring(0,ret.length-2) + '十' + ret[ret.length-1]; break;
+  default:   if (ret.length >= 2) ret = ret.substring(0,ret.length-1) + '十' + ret[ret.length-1]; break;
+  }
+  if (ret.endsWith('十〇')) ret = rtrim(ret,1);
+  if (ret.endsWith('百〇〇')) ret = rtrim(ret,2);
+  return ret.replace('二十','廿').replace('三十','卅');
 }
 function ZNumber(n) { // 0 to 999
   if (typeof n == 'string') n = parseInt(n);
@@ -333,7 +340,7 @@ function showTableData(data, tableExtra, sep, colfxn) {
 function rtrim(s, n) { // if !n, trim the white spaces
   if (n) return !s ? s : ((s.length < n) ? '' : s.substring(0,s.length-n));
   var i;
-  for (i=s.length; i>0 && isWhite(s[i]); --i);
+  for (i=s.length-1; i>0 && isWhite(s[i]); --i);
   return (i == s.length) ? s : s.substring(0,i+1);
 }
 function trimFirstBlankLine(txt) {
@@ -622,6 +629,12 @@ class Buffer {
   }
 
   wrap(before, after) { return this.prepend(before).w(after); }
+
+  trimFirstNL() {
+    var first = this.bufList[0] || '';
+    if (first[0] == '\n') this.bufList[0] = first.substr(1);
+    return this;
+  }
 
   // renders to one or more elements,
   // or an object with a write() function.
@@ -973,19 +986,22 @@ class Astral {
   forEach (fn) { for (var i=0; i<this.length; i++) fn(this.charAt(i), i); }
 }
 
+const diacritics = 'āáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜâêîôûçäëïöüĀĪŪṚṛṝḶḷṃṁḥṅñṇŚśṢṣṬṭḌḍ';
 const zpuncs = '，、；：。？！‧○';
 const zpuncs1L = '「『《（';
 const zpuncs1R = '」』》）—─…'; // '　' is punc?
 const zpuncs1 = zpuncs1L + zpuncs1R;
 const zpuncsAll = zpuncs + zpuncs1;
+const nonHZ = zpuncsAll + diacritics;
 const REGEX_ZH = /[\u3300-\u4dbf]|[\u4e00-\u9fff]|[\uf900-\ufaff]|[\ufe30-\ufe4f]|[\u20000-\u2a6df]|[\u2a700-\u2ceaf]|[\u2f800-\u2fa1f]/;
 function isPunc(z)  { return zpuncs.indexOf(z) >= 0; }
 function isPunc1L(z) { return zpuncs1L.indexOf(z) >= 0; }
 function isPunc1R(z) { return zpuncs1R.indexOf(z) >= 0; }
 function isPunc1(z) { return zpuncs1.indexOf(z) >= 0; }
-function isHanZi(x)       { return !isASCII(x) && REGEX_ZH.test(x) && (zpuncsAll.indexOf(x) < 0); }
-function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_ZH.test(x) && (zpuncs.indexOf(x) < 0); }
+function isHanZi(x) { return !isASCII(x) && REGEX_ZH.test(x) && (nonHZ.indexOf(x) < 0); }
+function isHanZiOrQuot(x) { return !isASCII(x) && REGEX_ZH.test(x) && (zpuncs.indexOf(x) < 0) && !isDiacritic(x); }
 function isASCII(str) { return /^[\x00-\xFF]*$/.test(str) }
+function isDiacritic(c) { return diacritics.indexOf(c) >= 0; }
 function isWhite(c) { return c && c.length && !c.trim().length; }
 function isDigit(c) {
   switch(c) {
@@ -998,6 +1014,28 @@ function trimLead0s(n) {
   if (typeof n != 'string') return n;
   for (var i=0; (i<n.length-1) && (n[i]=='0'); ++i);
   return (i==0) ? n : n.substring(i);
+}
+function encodeBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  const binString = String.fromCodePoint(...bytes);
+  return btoa(binString);
+}
+function svg2img(svg, extra) { 
+  return `<img src="data:image/svg+xml;base64,${encodeBase64(svg)}"${extra||''}>`;
+}
+function percentEmoji(percent, height, width, extra) {
+  if (!height) height = 12;
+  if (!width)  width  = height*2/3;
+  var percH  = height * percent, rects,
+      filled = `<rect x="0" y="${height-percH}" width="${width}" height="${percH}" fill="#777" stroke="black" />`;
+  if (percent >= 0.999)
+    rects = filled;
+  else {
+    rects = `<rect x="0" y="0" width="${width}" height="${height}" fill="white" stroke="black" />`;
+    if (percent > 0.001) rects += filled;
+  }
+  var svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+  return svg2img(svg, extra);
 }
 function getKeysOrdered(obj, cptr) {
   if (!obj) return null;
@@ -1159,7 +1197,7 @@ class MyDialog {
 #${dlgId}Title   { color:brown; border-bottom:1px solid brown; padding-left:10px }
 #${dlgId}Body    { padding-left:10px; padding-right:10px }
 #${dlgId} header { margin-top:-15px; margin-left:0px; margin-right:0px; margin-bottom:10px }`);
-    renderText(id, `<dialog id="${dlgId}">
+    renderText(id, `<dialog id="${dlgId}" onclick="closeEl('${dlgId}')">
 <header>
   <table width="${this.width}px" cellspacing="0">
     <tr><td id="${dlgId}Title"></td>
@@ -1210,7 +1248,7 @@ class ResourceRepo {
       _add(item.alias[i], item);
     return this;
   }
-  get(name) { return this.all[name]; }
+  get(name) { var r = this.all[name]; return (typeof r == 'function') ? r() : r; }
   run(name, opt) { var i = this.all[name]; return i && i.run(opt); }
   getAllItems(type) {
     var keys = Object.keys(this.all), ret = [];

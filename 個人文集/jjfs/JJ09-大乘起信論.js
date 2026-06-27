@@ -51,4 +51,4 @@ var list9 = new YTList('大乘起信論講解（完整僅語音版）', 'st=PLxz
   .add( '7:43', '1jTvauJi1L4', '大乘起信論42 【問答】')
 ;
 
-var list9b = [ '《大乘起信論講解》文字檔', 'link=../BFNN/book/books9/9910.htm' ];
+var list9b = [ '《大乘起信論講解》科判、筆記', 'link=../BFNN/book/books9/9151.htm' ];

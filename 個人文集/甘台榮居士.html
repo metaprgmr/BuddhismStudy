@@ -1,0 +1,63 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>甘台榮居士</title>
+<link rel="stylesheet" href="../util/article.css">
+<style>
+h3 { margin-bottom:0px }
+.vid { background-color:#9f9 }
+</style>
+<script src="../util/utils.js"></script>
+<script src="../util/yt.js"></script>
+<script src="../ytviewing.js"></script>
+<script src="gtrjs/gtr.js"></script>
+<script src="registry.js"></script>
+</head>
+<!-- 所列講課以<a href="https://www.youtube.com/playlist?list=PL4Cg-e87NiQ1iDr-JFRTXeS3D4OR6tlKM">2023年在洛杉磯淨宗學會之講座</a>為主體，隨緣增添。-->
+<body><center>
+
+<h1>【善知識】甘台榮居士</h1>
+
+<div class="content">
+
+<center><table><tr><td valign=top width="400px" style="padding-right:30px">
+<p>　　又欣遇大善知識，<u>甘台榮居士</u><a href="https://www.youtube.com/@livingthedharma">⇗</a>，現作居家女衆相。天賦異稟，佛學功力深厚，滿腹偈頌、信手拈來。表達音色清純，節奏明快，自成風格。中英雙語，皆母語程度。「阿彌陀佛」首字唸「沃」，略顯老派抑或師承。善用圖表，提綱挈領。說法圓融，通俗易懂，篇幅恰當。感恩善知識！</p>
+
+<p>　　甘老師全譜系涵蓋佛法要津，專弘淨土。以專題說明為主。大量介紹佛法中觀學派、唯識學派、如來藏學派各路精要，側重天台，廣泛涵蓋融會貫通，統而論之以為佛理。在此各依其要略作分類。信息浩瀚，逐步細化。</p>
+
+<p>　　大士慈悲為懷，欲令成就自在往生、念佛三昧，時代使然。如此，唯有禪淨雙修；了悟中道，修習止觀。何以故？若不明佛智，不了「心佛衆生，三無差別」，單純念佛極為困難，數據表明成就不易，更遑論自在往生。細言之，此禪乃是禪定修習，非禪宗法門。若無禪定，任何實質法門均不得入，譬如耳根圓通、都攝六根、般舟三昧等等。<a href="../淨土宗/西方二聖開示/JK-teachings.html?i=s9co_IwMYMM">淨空法師支持一心念佛</a>，一門深入，不假餘道，蓋下根人等禪修費時難成。然能一心念佛心無旁騖者，上上根器也，難得難聞。可見下根人身處兩難；能老實念佛，決定得利益。得禪定再加念佛，決定生西<a href="javascript:clearListShow()">。</a></p>
+
+</td><td valign=top bgcolor="#eee" style="padding-right:10px">
+<div id="stg"></div>
+</td></tr></table></center>
+
+<div id="perlist"></div>
+
+<div id="detail"></div>
+
+<p align="right">&mdash;丙午孟夏於(37.42, -122)</p>
+
+<script> endOfArticle('260609'); </script>
+
+</center></body></html>
+
+<script>
+const PERSIST = 'curGTRList';
+function clearListShow() {
+  localStorage.removeItem(PERSIST);
+  renderText('perlist', '');
+}
+function showMyList(i) {
+  if (i == null) i = localStorage.getItem(PERSIST);
+  if (i == null) return;
+  localStorage.setItem(PERSIST, i);
+  var buf = new Buffer('<center>');
+  ytcoll.renderList(i, buf)
+        .w('<hr color=lightgray></center>')
+        .render('perlist');
+}
+
+var ytcoll = new YTCollection('甘台榮居士教學資料').add(getLists());
+ytcoll.renderTOC('showMyList').render('stg');
+showMyList(cur);
+</script>
