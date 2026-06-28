@@ -1,6 +1,6 @@
 function getLists() {
   var vids = `
-#!淨土法門
+#!淨土修行
 171|24:22|BUmN4xX1QMA|淨土宗旨
  42|14:14|uwY7zg_QBh4|淨土的真相
  35|15:47|3rXkY1oJ9QE|唯心淨土
@@ -24,6 +24,7 @@ function getLists() {
  29|44:18|oIWMpv3bIzE|念佛止觀大意(下) => A | 138212330@
  47|18:27|H9X4RrTySmI|禪淨雙修         => A | 53934636@
 114|17:03|eqjjTy3WwmI|九心住           => B | 50213126@
+104|15:14|5yvqBiqVW4o|觀－明了的心     => B | 五停心觀
 
 #!《彌陀要解》
 152|40:50|lFn3Fc1iGwU|阿彌陀經要解大意 01－五重玄義（釋名，辨體）
@@ -74,6 +75,10 @@ function getLists() {
  97|16:25|8dWBLw822Mg|圓覺經
 125|16:49|z2X2MXE6l0A|妄盡還源觀
 113|14:22|yGSsjLxfk70|大乘起信論   => B
+147|28:22|7OXN2J0hGBM|覺醒的人生 1 => A
+148|28:02|605kzP2DoeY|覺醒的人生 2 => O
+146|29:20|5V-mUHjRZl0|覺醒的人生 3 => B
+145|31:49|O9PO5ge9F2g|覺醒的人生 4 => B
  11|32:39|g20qgdiIqpE|一心二門     => 134479405@ | B
  32|20:07|sb3UApAn0P0|證道歌
 187|25:34|r1z3FAr9DFk|妙法蓮華經觀世音菩薩普門品
@@ -89,13 +94,16 @@ function getLists() {
 ---|40:36|_AeiNC3C-Kw|天台小止觀（3）總序 (B)－止觀雙運
  20|27:03|ouVLKFBkH9c|摩訶止觀
 136|24:18|S4EXVYg9MgU|（別教）六即佛      => 六即佛_B.jpg
+ 99|17:58|xuP0-oXEo1U|生無生論（上）      => B | 54145208@
+100|16:53|c3ilEqSF07o|生無生論（下）      => B | 50761733@
 
 #!佛學概念
  49|16:37|Bg9qB_ntnt8|學觀音，做觀音
  41|18:45|oVVUbJLz49Q|學地藏，做地藏
  61|19:50|_-6ctVJSzQ0|學文殊，做文殊
-151|40:38|fOqi95vFJwg|佛學十四講表 第一講表 先明佛義（總說）
-167|37:25|WzenwLG2gIg|佛學十四講表 第七講表 宇宙器界概説
+151|40:38|fOqi95vFJwg|佛學十四講表-01 第一講表 先明佛義（總說）
+---|32:56|1wbZ-K-q3iY|佛學十四講表-02 第一講表 先明佛義（佛之釋義-智者）
+167|37:25|WzenwLG2gIg|佛學十四講表    第七講表 宇宙器界概説
  21|27:47|4fnfgcPFwfo|修學法要
  46|38:16|4xeQ5bfkzaw|普賢十願
  19|17:23|k3hdPBk1QlQ|悟四聖諦
@@ -160,17 +168,13 @@ function getLists() {
  95|16:57|nSU_ksKjnbc|心一境性
  96|15:41|bAYAnxX_Vkg|事事無礙
  98|18:11|zEkc4jD6-8g|相妄性真
- 99|17:58|xuP0-oXEo1U|生無生論（上）
-100|16:53|c3ilEqSF07o|生無生論（下）
 102|15:27|Plp5HjWlf-4|修行如調玄
-104|15:14|5yvqBiqVW4o|觀－明了的心
 105|18:35|yONLPd_DEjs|般若人生觀
 106|19:56|xYskwrsYTbM|轉煩惱成菩提
 107|17:41|f_aHmebZM5w|改變的大能～緣起法
 108|34:16|Y6J1PdwNJ-Y|菩薩的精神
 111|16:55|Mz3LyknB1f0|莫向外求
 112|18:48|9LNUmWm_4TE|熏習
-117|10:46|A-RsHaPN1Yc|中道
 118|16:41|J5nRSccTs4g|執著
 119|15:01|tPOoXWp9veU|弟子心不安
 122|17:34|p0nwTacb0l4|心寂三昧
@@ -216,6 +220,7 @@ function getLists() {
 132|20:34|8ismiFfenRI|知真本有（下)       => B
 ---|22:32|dySZvO52KBU|十牛圖              => 55485594@ | B
  83|16:54|IwNnRb-4mkU|聖賢之道            => B
+117|10:46|A-RsHaPN1Yc|中道                => B
 
 #!唯識相宗
  12|23:33|a-BfwgiAbNI|一切法無我          => B
@@ -238,13 +243,9 @@ function getLists() {
 #!道人生活
 120|16:03|pG1YqnVKWdU|改造生命
 121|15:52|c4bsy1Y5zz4|佛子行                  => B | 無著賢菩薩三十七偈
-147|28:22|7OXN2J0hGBM|覺醒的人生 1
-148|28:02|605kzP2DoeY|覺醒的人生 2
-146|29:20|5V-mUHjRZl0|覺醒的人生 3
-145|31:49|O9PO5ge9F2g|覺醒的人生 4
-142|14:15|U58NjNRFtmY|道人風範（一）毫釐心術  => 道人風範1_B.jpg
-141|16:43|2OWRx0EhyN4|道人風範（二）出格見地  => 道人風範2_B.jpg
-140|14:39|8uYqp84CkJc|道人風範（三）淡字法門  => 道人風範3_B.jpg
+142|14:15|U58NjNRFtmY|道人風範（一）毫釐心術  => 道人風範1_B.jpg | 39004929@
+141|16:43|2OWRx0EhyN4|道人風範（二）出格見地  => 道人風範2_B.jpg | 43530278@
+140|14:39|8uYqp84CkJc|道人風範（三）淡字法門  => 道人風範3_B.jpg | 38556788@
  67|11:12|b4PuiywCAh0|佛化家庭
  59|19:43|vGkpGmjkISM|生活中的一心三觀        => B
  66|19:35|s0irK_Pf0s0|面對困難
@@ -287,8 +288,8 @@ function getLists() {
       }
     }
     parseVideoInfo(seg) {
-      if (!SEMOY) return false;
       if (seg.endsWith('@')) {
+        if (!SEMOY) return true;
         this.addVideo(`${this.title} [${this.id}].mp4`, rtrim(seg,1));
         return true;
       }
@@ -298,7 +299,6 @@ function getLists() {
         sz = a[0].trim();
         seg = a[1].trim();
       }
-      if (seg == 'mp4') seg = `${this.title} [${this.id}].mp4`;
       this.addVideo(seg, sz);
       return true;
     }

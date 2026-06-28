@@ -24,9 +24,9 @@ class YTCollection {
   setTOCNoNumber(yes) { this.tocNoNumber = yes; return this; }
   renderTOC(fxnName, buf) {
     if (!buf) buf = new Buffer();
-    buf.w('<center><table style="margin-left:20px" border=0>',
+    buf.w('<center><table style="margin-left:20px" border=0 cellspacing=0>',
           `<h2 class="listheader">${this.title}</h2>`);
-    var totalD = 0, len = this.lists.length;
+    var totalD = 0, totalV = 0, len = this.lists.length, totalVols = 0;
     for (var i=0; i<len; ++i) {
       var lst = this.lists[i];
       buf.w(`<tr><td align=right>${this.tocNoNumber?'':((i+1)+'.')}&nbsp;</td>`);
@@ -37,18 +37,21 @@ class YTCollection {
           buf.w('<td colspan=3>', toATag(`<a href="javascript:${fxnName}(${i})">`, lst[0]), '</b></td></tr>');
       } else {
         totalD += lst.totalDur;
+        totalV += lst.getViewedDur();
         var a = lst.name.split('|'), more = '';
         if (a.length > 1) { more = a[1]; if (more == '@善知識') more = '@amtb'; }
         more = ` <ytauthor>${more}</ytauthor>`;
+        totalVols += lst.videos.length;
         buf.w('<td><b>', toATag(`<a href="javascript:${fxnName}(${i})">`, a[0]), more, '</b>',
               '&nbsp;&nbsp;&nbsp;</td>',
               `<td align="right"><code>${formatTime(lst.totalDur)}</code></td>`,
-              `<td align="right">&nbsp;&nbsp;&nbsp;${lst.videos.length}</td><td>集&nbsp;${lst.percentEmoji(12)}</td></tr>`);
+              `<td align="right">${lst.videos.length}</td><td>集&nbsp;${lst.percentEmoji(12)}</td></tr>`);
       }
     }
+    const topbar = ' style="border-top:1px solid black"';
     buf.w('<tr><td colspan="2">&nbsp;</td>',
-          `<td align="right" style="border-top:1px solid black"><code>${formatTime(totalD)}</code></td>`,
-          '<td colspan="2">&nbsp;</td></tr></table></center>');
+          `<td align="right"${topbar}><code>${formatTime(totalD)}</code></td>`,
+          `<td align="right"${topbar}>&nbsp;&nbsp;${totalVols}</td><td${topbar}>集&nbsp;${percentEmoji(totalV/totalD, 12)}</td></tr></table></center>`);
     return buf;
   }
 
@@ -120,14 +123,18 @@ class YTList {
     }
     return true;
   }
-  percentEmoji(h, w) {
+  getViewedDur() {
     var alldur = 0;
     for (var i=0; i<this.videos.length; ++i) {
       var v = this.videos[i];
       if (v.viewed || YTViewing[v.id]) alldur += v.timeSecs;
     }
+    return alldur;
+  }
+  percentEmoji(h, w) {
+    var alldur = this.getViewedDur();
     alldur /= this.totalDur;
-    return (alldur >= 0.999) ? '<small>✓</small>' : (alldur < 0.01 ? '' : percentEmoji(alldur, h, w, ` title="${(alldur*100).toFixed(0)}%"`));
+    return (alldur >= 0.999) ? '<small>✓</small>' : (alldur < 0.01 ? '' : percentEmoji(alldur, h, w));
   }
   addCaption(html) { this.videos.push(new Caption(html)); return this; }
   add(time, id, title, extra) {

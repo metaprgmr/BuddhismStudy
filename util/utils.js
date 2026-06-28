@@ -1035,7 +1035,7 @@ function percentEmoji(percent, height, width, extra) {
     if (percent > 0.001) rects += filled;
   }
   var svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
-  return svg2img(svg, extra);
+  return svg2img(svg, extra || ` title="${(percent*100).toFixed(0)}%"`);
 }
 function getKeysOrdered(obj, cptr) {
   if (!obj) return null;
