@@ -29,9 +29,8 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 250801|《宗鏡錄》摘要
 251007|圓音講義
 251013|大慧總問
-260205|YG333-synopsis.html|《印光大師文鈔菁華錄》梗概
+260205|YG333-synopsis.html|《印光文鈔菁華錄》梗概
 260123|DZJ-synopsis.html|《地藏菩薩本願經》梗概
-250523|《八識規矩頌》內容
 250509|CAUSE-AND-EFFECT.html|《因果》
 #######
 260519|勸學佛
@@ -39,7 +38,6 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 260107|百過歌
 260111|佛子根
 251107|念佛节奏.html|念佛节奏計算器
-260210|念佛訣竅
 250917|發露懺悔
 250515|廿字加卅字
 241113|浪費時間
@@ -47,6 +45,7 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 250527|一即一切
 260526|海賢老和尚語錄
 260613|構思
+260628|打坐歌
 #######
 240531|《無量壽經》三聖之考究
 250821|經或會集本.html|夏集《無量壽》是佛經嗎？
@@ -58,8 +57,8 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 230517|論飯桶，兼論素食
 231111|DuBist.html|Du Bist Was Du Isst
 231222|養生乎.html|養生，乎？
-250630|凡夫苦
 240605|毛虫
+250630|凡夫苦
 260524|有感
 xxxxxxxx
 250530|淨界法師.html|【善知識】淨界法師
@@ -70,6 +69,7 @@ xxxxxxxx
 250625|淨空法師是對的
 250603|素質
 250916|十句
+260210|念佛訣竅
 `.trim().split('\n');
 
   var hidden = false;
