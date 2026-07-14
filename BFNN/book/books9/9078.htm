@@ -10,22 +10,24 @@
 </body></html>
 
 <script>
-var ytids = [ 'R9IFyLkf35k', 'joMmb9sTkz8', 'hEsE1Vny-ZI', 'QvhF0F6kVzk', 'at_IAEzYHe0' ];
+// https://www.jingzong.org/video/list/54.html
+var ytids = 'R_7wH4bGUWs NBhxMfjbl50 fjbc9fXrDDM b5b4V29B8pI DnTYejQiW3g d_4b4Fbd9WE 8oZoKozSqx0 l5Ac7bRs6xE 20MMA3IHGNA iT3pcPDrs-M'.split(' ');
+var dates = '5 8 9 10 11 12 14 15 16 17'.split(' ');
 function origin(ep) { // episode, 1-based
-  return `《<a href="https://www.hwazan.org/videos/view/12?episode=${ep}">發大誓願（第一集）</a>》2015/4/${21+ep}　台灣華藏衛星電視台　檔名：02-043-000${ep}　<a href="https://www.youtube.com/watch?v=${ytids[ep-1]}"><img src="../../../images/youtube_social_icon_red.png" height="12px"></a>`;
+  return `《<a href="https://www.jingzong.org/videos/show/${8300+ep+(ep<5?-1:0)}.html">發大誓願（第${zNumber(ep)}集）</a>》2015/5/${dates[ep-1]}　淨宗學院　檔名：02-044-00${to2d(ep)}　<a href="https://www.youtube.com/watch?v=${ytids[ep-1]}"><img src="../../../images/youtube_social_icon_red.png" height="12px"></a>`;
 }
 
 new (class extends SeriesContainer {
   constructor() { super(); }
 
-  loadJS(vol) { addjs(`9078/${vol||1}.js`); }
+  loadJS(vol) { addjs(`9078/${to2d(vol||1)}.js`); }
 
   showPage() {
     var buf = new Buffer(), me = this;
     new (class extends DocInfo {
       constructor() {
         super();
-        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(9078, 5);
+        this.setVolumesInJS(false, true).setBuffer(buf).setXG().reInit(9078, 10);
         this.volNum = me.volNum;
         var ttl = '發大誓願', nvol = me.volNum, zvol=zNumber(nvol),
             txt = `\n/TEXT030C/淨空法師 講\n\n/BQKaiTi/${origin(nvol)}\n/VOLSEP/\n${me.text}`;

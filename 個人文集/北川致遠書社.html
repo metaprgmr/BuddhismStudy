@@ -128,14 +128,19 @@ var list7 = new YTList('7-禪修入門·實修', 'PLV7U7SMsXQUMxWLC1jCDUn-4usXaM
   .add('7:11',  'XJ3HXtZuDX8', '每天聽雨5分鐘，耳根禪洗滌焦慮和疲憊')
   .add('27:22', 'w4zbKjOcUEI', '5分鐘專業禪修，每天堅持，擺脫焦慮和疲憊', '毗盧七支坐｜長生酒｜呼吸｜心法｜實修');
 
+var list8 = new YTList('8-隨機', '')
+  .add('49:09', '0SrYeh-ck3g', '【凈土釋疑】你以為很精進，可能已往生無望了！100%往生凈土“避坑”攻略。')
+  .add('39:46', 'T_dHzjJVi_I', '【十大宗派】禪宗：瘋癲、搞怪、上廁所也能開悟的法門！')
+  .add('51:02', 'wJ6DrgpwBZE', '【十大宗派】天台宗 | 法華經 | 智者大師 | 國清寺')
+;
+
 var ytcoll = new YTCollection('《北川致遠書社》節目系列選集')
     .setTOCNoNumber(true)
-    .add(list1, list2, list3, list4, list5, list6, list7);
+    .add(list1, list2, list3, list4, list5, list6, list7, list8);
 ytcoll.renderTOC('showMyList').render('stg');
 
 function showMyList(i) {
-  var buf = new Buffer('<center>');
-  ytcoll.renderList(i, buf)
+  ytcoll.renderList(i, new Buffer('<center>'))
         .w('<hr color=lightgray></center>')
         .render('perlist');
 }

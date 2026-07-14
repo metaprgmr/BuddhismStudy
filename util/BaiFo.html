@@ -66,14 +66,18 @@ console.log('b', cnt, n);
     }
   }
   if (cnt < n) {
+    var disp = ++cnt;
     switch (type) {
-    case 'sk': a.src = '../images/Namo_Bhagavate_Sakyamunaye.mp3';  break;
-    case 'a':  a.src = '../images/阿彌陀佛四字四音輕快版22_19.mp3'; break;
-               // 全長：22'20"。共280聲佛號，平均4.5秒一聲。
+    case 'sk': a.src = '../images/Namo_Bhagavate_Sakyamunaye.mp3'; break;
+    case 'a':  a.src = '../images/阿彌陀佛四字四音輕快版22_19.mp3';
+               disp = `<span title="每輪共140拜，不計前奏（約四拜）">${disp}</span>`;
+               break;
+               // 全長：22'20"。平均約4.61秒一句佛號。單字52-bpm。
+               // 全部四字段共長1328秒，整288聲佛號；最初4聲在前奏中。
     }
     a.play();
-    renderText('left', ++cnt);
-    renderText('right', cnt);
+    renderText('left', disp);
+    renderText('right', disp);
   }
 }
 </script>

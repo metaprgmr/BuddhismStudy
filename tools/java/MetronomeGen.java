@@ -58,7 +58,7 @@ public class MetronomeGen {
     if (args.length < 4) { help(); System.exit(0); }
 
     String outFile = args[0];
-    int    bpm  = Integer.parseInt(args[1]);
+    double bpm  = Double.parseDouble(args[1]);
     String dur  = args[2]; // e.g. "30", "30s", "15m" or "15m_"
     String beat = args[3]; // e.g. "metrobeat.wav" or 440
     boolean endTaper = false;
@@ -85,7 +85,7 @@ public class MetronomeGen {
     createMetronome(outFile, bpm, durSecs, endTaper, beatOpt);
   }
 
-  public static void createMetronome(String outFile, int bpm, double durSecs, boolean endTaper, Object beat)
+  public static void createMetronome(String outFile, double bpm, double durSecs, boolean endTaper, Object beat)
                                     throws IOException, UnsupportedAudioFileException {
     SoundInfo si = null;
     if (beat instanceof String)
@@ -102,7 +102,7 @@ public class MetronomeGen {
     return ((i & 0x1) == 1) ? (i+1) : i;
   }
 
-  static void genMetronome(String outFile, SoundInfo si, int bpm, double durSecs, boolean endTaper)
+  static void genMetronome(String outFile, SoundInfo si, double bpm, double durSecs, boolean endTaper)
                           throws IOException
   {
     int beatlen = si.getDataSize();

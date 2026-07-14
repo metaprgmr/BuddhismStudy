@@ -176,6 +176,54 @@ function samskrt(iast, zi, sans) {
   if (!sans && i) iast = IAST(iast);
   return `<span class="samskrt" title="${iast}">${sans}</span>${zi||''}`;
 }
+const EN_NOUN = new (class EnglishNoun {
+  constructor() {
+    this.map = {
+      y:'ies', f:'ves', fe:'ves', x:'xes', s:'ses', sis:'ses', ex:'ice', eau:'eaux',
+
+      us:'i', to:'ti', cleus:'clei',
+      um:'a', rion:'ria', non:'na', ia:'ia',
+      la:'lae', bra:'brae', ta:'tae',
+
+      bison:'bison',    carp:'carp',      cod:'cod',     deer:'deer',   fish:'fish',
+      salmon:'salmon',  series:'series',  sheep:'sheep', species:'species',
+      squid:'squid',    swine:'swine',    trout:'trout',
+
+      child:'children', foot:'feet',   goose:'geese', louse:'lice',
+      man:'men',        moose:'moose', mouse:'mice',  opus:'opera', ox:'oxen',
+      tooth:'teeth',
+
+      chassis:'chassis', die:'dice', person:'people'
+    };
+    this.suffixes = Object.keys(this.map);
+    this.suffixes.sort((a,b) => b.length-a.length);
+  }
+  isVowel(c) { return 'aeiouAEIOU'.indexOf(c) >= 0; }
+  isConsonant(c) { return c && ('aeiouAEIOU'.indexOf(c) < 0); }
+  plural(sing) {
+    var irreg = this.map[sing];
+    if (irreg) return irreg;
+    for (var i in this.suffixes) {
+      var suffix = this.suffixes[i];
+      if (sing.endsWith(suffix)) {
+        irreg = this.map[suffix];
+        return (irreg == suffix) ? sing : (rtrim(sing, suffix.length) + irreg);
+      }
+    }
+    return sing + 's';
+  }
+  article(n, isLead) {
+    if (!n || !n.length) return '';
+    var c = n[0], isVS;
+    switch (c) {
+    case 'h': case 'H': isVS = this.isConsonant(n[3]) && (n.substr(1,2).toLowerCase() == 'on'); break;
+    case 'u': case 'U': isVS = this.isConsonant(n[2]); break;
+    default:            isVS = this.isVowel(c); break;
+    }
+    return `${isLead ? 'A' : 'a'}${isVS ? 'n' : ''} ${n}`;
+  }
+});
+function nouns(n, s, pl) { return (n==1) ? `1 ${s}` : `${n} ${pl || EN_NOUN.plural(s)}`; }
 
 var queryParams;
 function get(name) {
@@ -622,9 +670,19 @@ class Buffer {
   append(s) { this.bufList.push(s); } // for performance
 
   prepend() {
-    var ret = '';
-    for (var i in arguments) { var x = arguments[i]; x && (ret += x); }
-    if (ret) this.bufList.unshift(ret);
+    var ret = '', len = arguments.length;
+    for (var i=len-1; i>=0; --i) {
+      var a = arguments[i];
+      if (Array.isArray(a)) {
+        var len1 = a.length;
+        for (var j=len-1; j>=0; --j) {
+          var x = a[j];
+          x && this.bufList.unshift(x);
+        }
+      } else {
+        a && this.bufList.unshift(a);
+      }
+    }
     return this;
   }
 
@@ -723,7 +781,8 @@ function brItems(s) {
 }
 
 class Counter {
-  constructor() { this.counts = {}; this.second = {}; }
+  constructor() { this.reset(); }
+  reset() { this.counts = {}; this.second = {}; }
   add(n) { n=n||''; this.counts[n] = 1 + (this.counts[n] || 0); }
   add2nd(n) { n=n||''; this.second[n] = 1 + (this.second[n] || 0); }
   getCount(n) { return this.counts[n] || 0; }
@@ -1141,7 +1200,7 @@ function getYourName(yourTag, anyTag) {
 
 function isMe() { return getGlobal('MYNAME') == '信裹'; }
 
-function getGlobal(name) { return window[name]; }
+function getGlobal(name, def) { return window[name] || def; }
 
 function formatTime(tm, simple) {
   if (tm == 0) return '';

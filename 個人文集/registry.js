@@ -5,8 +5,9 @@ var articleInfo = {},
 function w() { for (var i in arguments) document.write(arguments[i]) }
 
 function endOfArticle(id) {
-  var info = articleInfo[id], invalidID = !info || info.invalidID,
-      returnLnk = info.returnToMain ? '<a href="../index.html">返回主頁</a>'
+  var info = articleInfo[id], invalidID = !info || info.invalidID;
+  if (!info) throw `endOfArticle(id:'${id}'): invalid id.`;
+  var returnLnk = info.returnToMain ? '<a href="../index.html">返回主頁</a>'
                                     : '<a href="index.html">返回《個人文集》目錄</a>';
   w(`
 <div class="noprint">
@@ -32,6 +33,7 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 260205|YG333-synopsis.html|《印光文鈔菁華錄》梗概
 260123|DZJ-synopsis.html|《地藏菩薩本願經》梗概
 250509|CAUSE-AND-EFFECT.html|《因果》
+260629|小乘大乘
 #######
 260519|勸學佛
 260525|托福進修學校
@@ -41,11 +43,11 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 250917|發露懺悔
 250515|廿字加卅字
 241113|浪費時間
+260210|念佛訣竅
 241114|人之將死.html|人之將死
 250527|一即一切
 260526|海賢老和尚語錄
 260613|構思
-260628|打坐歌
 #######
 240531|《無量壽經》三聖之考究
 250821|經或會集本.html|夏集《無量壽》是佛經嗎？
@@ -65,11 +67,12 @@ xxxxxxxx
 260609|甘台榮居士.html|【善知識】甘台榮居士
 260625|南懷瑾老師.html|【善知識】南懷瑾老師
 250629|北川致遠書社.html|【善知識】北川致遠書社
+260713|智慧的密码.html|【善知識】智慧的密码
 260221|一念相應一念佛.html|?「一念相應一念佛」
 250625|淨空法師是對的
 250603|素質
 250916|十句
-260210|念佛訣竅
+260628|打坐歌
 `.trim().split('\n');
 
   var hidden = false;

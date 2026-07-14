@@ -25,7 +25,7 @@ th { background-color:lightgray }
   function getBPM(target, hours) { return (target * 10000) / (hours * 60); }
 
   var ttl = '【根據目標次數計算最低念佛節奏（每分鐘次數）】',
-      calc = '<u>念佛次數 = bpm*60*小時數</u></caption>';
+      calc = '<u>念佛次數 = 念佛節奏*60*小時數</u></caption>';
   buf.w(`<center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
         '<tr><th aligth=right>目標次數：</th>');
   for (var i in targets) 
@@ -54,7 +54,7 @@ th { background-color:lightgray }
   var bpms = [ 60, 90, 100, 120, 130, 140, 150, 160, 170, 180, 190, 200 ];
   buf.w('<br><a name="metronome"></a>',
         `<center><table bgcolor=white cellspacing="3px"><caption>${ttl}　${calc}</caption>`,
-        '<tr><th align=right>BPM：</th>');
+        '<tr><th align=right>念佛節奏</th>');
   for (var i in bpms) {
     var bpm = bpms[i];
     if (bpm < 170) buf.w(`<th>${bpm}</th>`);
@@ -128,9 +128,9 @@ function playMetron(tune, bpm) {
   for (var i in bpms) {
     var bpm = bpms[i];
     if (bpm > 160)
-      buf.w('<tr><td bgcolor=lightgray>&nbsp;<red>', bpm, '</red>拍/分：</td>');
+      buf.w('<tr><td bgcolor=lightgray align=right>&nbsp;<red>', bpm, '</red>拍/分：</td>');
     else
-      buf.w('<tr><td bgcolor=lightgray>&nbsp;', bpm, '拍/分：</td>');
+      buf.w('<tr><td bgcolor=lightgray align=right>&nbsp;', bpm, '拍/分：</td>');
     for (var j in tunes) {
       var t = tunes[j];
       if (t == '板') t = '';

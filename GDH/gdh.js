@@ -208,9 +208,10 @@ class YPLine {
 
     // STEP 1, parse the line into this.line (pure text) and this.hints (annotations)
     this.hints = [];
-    var i, zi, len=ln.length, trueln='', ptr=0;
+    var i, zi, len=ln.length, trueln='', ptr=0, inSkip=false;
     for (i=0; i<len; ++i, ++ptr) {
       zi = ln[i];
+      if (zi == '@') { inSkip = !inSkip; --ptr; continue; }
       if (zi == '[') { // parse
         var j = ln.indexOf(']', i+1);
         if (j>i) { // found
@@ -220,6 +221,7 @@ class YPLine {
           if (tmp.length > 1) this.hints[ptr] = tmp[1];
         }
       }
+      if (inSkip) this.hints[ptr] = '!'; // not to do
       trueln += zi;
     }
     this.line = trueln;
@@ -234,6 +236,7 @@ class YPLine {
       ++this.totalText;
       if (y[i] == NOYP) ; // already decided; nothing to do
       else if (noyp[zi]) y[i] = NOYP; // optimize to save unnecessary future lookups
+      else if (this.hints[i] == '!') y[i] = NOYP;
       else {
         zinfo = lookuptool.lookup(zi, this.hints[i]);
         if (!zinfo || !zinfo.isVisible) {
@@ -288,7 +291,8 @@ class YPLine {
         // enhance: check before and after, to place long YPs atop 3 zis.
         if ((yp.length > 3) &&
             (disp.length > 0) && (disp[disp.length-1] != '>') && !isWhite(this.line[i-1]) &&
-            (i < len-1) && (typeof this.lineYPInfo[i+1] != 'object') && !isWhite(this.line[i+1])) {
+            (i < len-1) && (typeof this.lineYPInfo[i+1] != 'object') && !isWhite(this.line[i+1]) &&
+            (this.line[i+1] != '<')) {
           zi = disp[disp.length-1] + '<font ' + cls + '>' + zi + '</font>' + this.line[++i];
           zilen += 2;
           disp = disp.substring(0, disp.length-1);
@@ -664,8 +668,8 @@ bou2 jyut6 sik1 gyut6 bing2 ngok6 gok3 nei6 cou1 saap3 zyut3 wan5 jik6 guk1 saan
 heoi1 cyu5 koi3 hei1 taap3 mei4 wo6 luk6 leoi5 wan4 hei1 au1 kwan1 wui6 mik6 kok3 doi6 saang2 geoi6
 詮肇鷲貰閫揨勳姟疇瞢妬呪挍咨畀庠俅惕
 cyun4 siu6 zau6 sai3 kwan2 caang4 fan1 goi1 cau4 mung4 dou3 zau3 gaau3 zi1 bei2 coeng4 kau4 tik1
-泝嚫瓠驎驥轡倏騃袞
-sou3 can3 wu6 leon4 kei3 bei3 suk1 ngoi4 gwan2`;
+泝嚫瓠驎驥轡倏騃袞惚
+sou3 can3 wu6 leon4 kei3 bei3 suk1 ngoi4 gwan2 fat1`;
 
   init(ignoreLevels, a);
 })();

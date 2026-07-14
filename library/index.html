@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>信德圖書館</title>
+<link rel="stylesheet" href="../util/article.css">
+<style>
+sup { font-size:14px }
+code { color:blue }
+a { text-decoration:none }
+cur { color:red; background-color:yellow; font-weight:bold }
+dim { opacity:0.4 }
+.XD { font-size:24px; line-height:24px; color:#E33; font-weight:bold }
+xgauth  { color:brown }
+jkfs    { color:#e00; background-color:#ff9 } /* 淨空法師 */
+xltr    { color:#33f } /* 譯者 */
+gdd     { color:#e00 } /* 古大德 */
+jdd     { color:#090 } /* 近大德 */
+alt     { color:#e7e }
+.sastra { background-color:#FF9 }
+.sutra { background-color:#FDD }
+.orig  { background-color:#DFD }
+.extra { font-style:italic; color:brown }
+.todo  { background-color:pink }
+FOSSIL  { text-decoration:underline; text-decoration-style:double }
+WORKING { background-color:#ccc }
+FF { font-style:italic; color:red }
+FF::before { content:"Firefox" }
+.myruby { ruby-position:under; text-decoration:underline; text-decoration-color:red }
+.myadd { color:lightyellow; font-size:28px; text-align:center; padding-top:10px; padding-bottom:10px }
+</style>
+<script src="../env.js"></script>
+<script src="../util/utils.js"></script>
+<script> var BFNN_BOOK = "../BFNN/book/"; </script>
+<script src="../BFNN/bfnn-works.js"></script>
+<script src="index.js"></script>
+</head>
+<body style="background-color:#ced"><center>
+<table border=0 cellspacing=0 cellpadding=0 style="margin-top:15px">
+<tr><td valign=top align=center style="padding-right:15px"><font class="XD">信德</font><br><a href="javascript:showList('全部內容')">圖書館</a></td>
+<td id="nav" align=center valign=top nowrap colspan=2></td></tr>
+<tr><td>　<a style="font-size:12px; opacity:0.5" href="javascript:showPorque()">簡介</a></td>
+<td><a href="javascript:showThem()">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a></td>
+<td align=right><a href="javascript:showThem(true)">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a></td>
+</tr></table>
+
+<div id="stg" align=center></div>
+<div class="copyright"></div>
+</center></body></html>
+
+<script>
+showList();
+</script>

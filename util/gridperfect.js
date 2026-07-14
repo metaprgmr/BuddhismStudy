@@ -86,7 +86,7 @@ class GPInstBase {
   toFillStrokeAttrs() { // for shapes
     return ` fill="${this.fill||'white'}" stroke="${this.stroke||'white'}" stroke-width="${this.strokeWidth||1}"`;
   }
-  render(buf, shiftX, shiftY) { throw `GPInstBase[${this.act}].render() is not implemented.`; }
+  render(ws, shiftX, shiftY) { throw `GPInstBase[${this.act}].render() is not implemented.`; }
 }
 
 class GPIncludeInst extends GPInstBase {
@@ -97,7 +97,7 @@ class GPIncludeInst extends GPInstBase {
     this.y = y;
     this.ignoreStyle = ignoreStyle;
   }
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     console.log(`INFO: including [${this.diagram.name||''}] at (${this.x}, ${this.y}).`);
   }
 }
@@ -108,25 +108,26 @@ class GPLineInst extends GPInstBase {
     this.from = from;
     this.to = to;
   }
-  render(buf, shiftX, shiftY) {
-    if (!this.isExec) return this.translateDirectives().render(buf, shiftX, shiftY);
+  calcAB(shiftX, shiftY) {
+    if (!this.isExec)
+      return this.translateDirectives().calcAB(shiftX, shiftY);
     var gp = this.gridPerf,
         gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.from[0], this.from[1]),
-        extra = this.extra || '',
         dx = shft && shft[0] || 0,
         dy = shft && shft[1] || 0,
         x = (shiftX + dx + this.from[0]) * gw + gh/2,
         y = (shiftY + dy + this.from[1]) * gh;
-    if (!extra)
-      extra = `stroke="${gp.defaultLineColor || 'black'}" stroke-width="1px"`;
     if (!this.to[2]) { // absolute; check its own shifting
       shft = gp.getShifting(this.to[0], this.to[1]);
       dx = shft && shft[0] || 0;
       dy = shft && shft[1] || 0;
     } // otherwise, it is relative, just shift with from
-    var x2 = (shiftX + dx + this.to[0]) * gw + gh/2,
-        y2 = (shiftY + dy + this.to[1]) * gh;
-    buf.w(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" ${extra}/>`);
+    return [ x, y, (shiftX + dx + this.to[0]) * gw + gh/2, (shiftY + dy + this.to[1]) * gh ];
+  }
+  render(ws, shiftX, shiftY) {
+    var ab = this.calcAB(shiftX,shiftY), extra = this.extra || '';
+    if (!extra) extra = `stroke="${this.gridPerf.defaultLineColor || 'black'}" stroke-width="1px"`;
+    ws.w(`<line x1="${ab[0]}" y1="${ab[1]}" x2="${ab[2]}" y2="${ab[3]}" ${extra}/>`);
   }
   translateDirectives() { // turn textual from/to into xy's
     var gp = this.gridPerf, xy, ret = shallowClone(this); // don't change own values
@@ -162,7 +163,7 @@ class GPLineMeta extends GPLineInst {
     this.meta = type;
     this.value = value;
   }
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     if (this.meta == DEFAULTLINECOLOR)
       this.gridPerf.defaultLineColor = this.value;
   }
@@ -170,20 +171,37 @@ class GPLineMeta extends GPLineInst {
 
 class GPRightEdgeInst extends GPLineInst {
   constructor(gp, color) { super(gp); this.color = color; this.isRightEdge = true; }
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     var gp = this.gridPerf;
     this.from  = [gp.width+0.25, 0];
     this.to    = [gp.width+0.25, gp.height+1];
     this.extra = ` style="stroke:${this.color||'lightgray'};stroke-width:1px"`;
-    super.render(buf, shiftX, shiftY);
+    super.render(ws, shiftX, shiftY);
   }
 }
 
-class GPPointerInst extends GPInstBase {
+class GPPointerInst extends GPLineInst {
   constructor(gp, from, to, extra) {
-    super(POINTER, gp, extra);
-    this.from = from;
-    this.to = to;
+    super(gp, from, to, extra);
+    this.type = POINTER;
+    this.startType = null;  // start type can be: 'arrow', 'triangle', 'circle', 'square'
+    this.endType = 'arrow'; //   end type can be: 'arrow', 'triangle', 'circle', 'square'
+    if (typeof extra == 'object') {
+      this.color = extra.color;
+      this.extra = extra.extra;
+      this.startType = extra.startType;
+      this.endType = extra.endType || 'arrow';
+    }
+  }
+  render(ws, shiftX, shiftY) {
+    var gp = this.gridPerf, ab = this.calcAB(shiftX,shiftY), extra = this.extra || '';
+    if (!extra) extra = `stroke="${gp.defaultLineColor || 'black'}" stroke-width="1px"`;
+    var c = this.color || gp.defaultLineColor || 'black',
+        ms = ws.getLineMarker(true, this.startType, c),
+        me = ws.getLineMarker(false, this.endType, c);
+    if (ms) extra += ` marker-start="url(#${ms})"`;
+    if (me) extra += ` marker-end="url(#${me})"`;
+    ws.w(`<line x1="${ab[0]}" y1="${ab[1]}" x2="${ab[2]}" y2="${ab[3]}" ${extra}/>`); // the shaft
   }
 }
 
@@ -197,7 +215,7 @@ class GPRectInst extends GPInstBase {
     this.height = height;
   }
   setRoundCorner(rx, ry) { this.rx = rx, this.ry = ry || rx; }
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     var gp = this.gridPerf,
         gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.x, this.y),
         dx = shft && shft[0] || 0,
@@ -207,7 +225,7 @@ class GPRectInst extends GPInstBase {
         rx = (this.rx || 0) * gw,
         ry = (this.ry || 0) * gh,
         extra = this.extra || this.toFillStrokeAttrs();
-    buf.w(`<rect x="${x}" y="${y}" rx="${rx}" ry="${ry}" width="${this.width*gw}" height="${this.height*gh}" ${extra}/>`);
+    ws.w(`<rect x="${x}" y="${y}" rx="${rx}" ry="${ry}" width="${this.width*gw}" height="${this.height*gh}" ${extra}/>`);
   }
 }
 
@@ -219,7 +237,7 @@ class GPOvalInst extends GPInstBase {
     this.rx = rx;
     this.ry = ry;
   }
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     var gp = this.gridPerf,
         gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.x, this.y),
         dx = shft && shft[0] || 0,
@@ -229,7 +247,7 @@ class GPOvalInst extends GPInstBase {
         rx = this.rx * gw,
         ry = this.ry * gh,
         extra = this.extra || this.toFillStrokeAttrs();
-    buf.w(`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" ${extra}/>`);
+    ws.w(`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" ${extra}/>`);
   }
 }
 
@@ -327,7 +345,7 @@ class GPTextInst extends GPInstBase {
     }
   }
 
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     this._procText();
     var gp = this.gridPerf,
         gw = gp.gridW, gh = gp.gridH, shft = gp.getShifting(this.x, this.y),
@@ -339,18 +357,18 @@ class GPTextInst extends GPInstBase {
     if (!extra && gp.defaultTextColor)
       extra = `stroke="${gp.defaultTextColor}"`;
     if (!this.isVertical) {
-      buf.w(`<text x="${x}" y="${y}" ${extra}>`)
-         .wIf(this.wrapCls, `<tspan class="${this.wrapCls}">`);
+      ws.w(`<text x="${x}" y="${y}" ${extra}>`)
+        .wIf(this.wrapCls, `<tspan class="${this.wrapCls}">`);
       for (var i in this.tokens) {
         var t = this.tokens[i];
-        if (typeof t == 'string') buf.w(t);
+        if (typeof t == 'string') ws.w(t);
         else {
           if (t[2]) // tooltip
             tip = `<title>${t[2]}</title>`;
-          buf.w(t[1], tip||'', t[0], '</tspan>');
+          ws.w(t[1], tip||'', t[0], '</tspan>');
         }
       }
-      buf.wIf(this.wrapCls, '</tspan>')
+      ws.wIf(this.wrapCls, '</tspan>')
          .w('</text>');
     } else { // vertical
       for (var i in this.tokens) {
@@ -367,7 +385,7 @@ class GPTextInst extends GPInstBase {
           _tspan += '</tspan>';
         }
         for (var k=0; k<t.length; ++k) {
-          buf.w(`<text x="${x}" y="${y}" ${extra}>`, tspan, tip||'', t[k], _tspan, '</text>');
+          ws.w(`<text x="${x}" y="${y}" ${extra}>`, tspan, tip||'', t[k], _tspan, '</text>');
           y += gh;
         }
       }
@@ -382,7 +400,7 @@ class GPTextMeta extends GPTextInst {
     this.meta = type;
     this.value = value;
   }
-  render(buf, shiftX, shiftY) {
+  render(ws, shiftX, shiftY) {
     if (this.meta == DEFAULTTEXTCOLOR)
       this.gridPerf.defaultTextColor = this.value;
   }
@@ -401,6 +419,69 @@ function textRealLen(s) { // counting the displayed char's
     idx = s.indexOf('/');
   }
   return s.length;
+}
+
+class SVGWorkspace extends Buffer {
+  constructor(gp) {
+    super();
+    this.gp = gp;
+    this.styles = [];
+    this.markerDefs = {};
+    this.markerCnt = 0;
+
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg"';
+    if (gp.bgColor)
+      svg += ` style="background-color:${gp.bgColor}"`;
+    var gw = gp.gridW, gh = gp.gridH, w = gp.width+1, h = gp.height+1;
+    var includes = [];
+    for (var i in gp.program) {
+      var p = gp.program[i];
+      if (p.act == INCL) {
+        includes.push(p);
+        w = Math.max(w, p.x + p.diagram.width);
+        h = Math.max(h, p.y + p.diagram.height);
+      }
+    }
+    this.svgTag = `${svg} height="${h * gh}" width="${w * gw}">`;
+  }
+ 
+  getLineMarker(isStart, type, color) {
+    if (!type) return;
+    var n = isStart?'LS_':'LE_', k = `${n}${type}_${color}`, m = this.markerDefs[k];
+    if (m) return m.id;
+    var id = n + (++this.markerCnt), h = this.gp.gridH/2, w = this.gp.gridW/2;
+    if (!color) color = 'black';
+    if (type == 'arrow')
+      this.markerDefs[k] =
+`<marker id="${id}" markerWidth="${w}" markerHeight="${h}" refX="${isStart?0:w}" refY="${h/2}" orient="auto">
+<line x1="0" y1="0" x2="${w}" y2="${h/2}" stroke="${color}"/>
+<line x1="0" y1="${h}" x2="${w}" y2="${h/2}" stroke="${color}"/>
+</marker>`;
+    else
+      this.markerDefs[k] =
+`<marker id="${id}" markerWidth="${w}" markerHeight="${h}" refX="${isStart?0:w}" refY="${h/2}" orient="auto">
+<path d="M 0 0 L ${w} ${h/2} L 0 ${h} z" fill="${color}"/>
+</marker>`;
+    return id;
+  }
+
+  addStyle(st) { if (this.styles.indexOf(st) < 0) this.styles.push(st); }
+  finish() {
+    // prepend <defs>
+    this.prepend('</defs>');
+    var a = Object.values(this.markerDefs);
+    for (var i in a) this.prepend(a[i]);
+    this.prepend('<defs>');
+
+    // prepend <style>'s
+    a = this.styles;
+    for (var i=a.length-1; i>=0; --i) this.prepend(`<style>${a[i]}</style>`);
+
+    // prepend <svg>
+    this.prepend(this.svgTag);
+
+    return this.w('Sorry, your browser does not support inline SVG.</svg>');
+  } 
 }
 
 class GridPerfect {
@@ -616,7 +697,7 @@ class GridPerfect {
   // [to] can be like from, but can also take derivitives:
   // '%r9', '%l9', '%u9', '%d' for going right, left, up and down.
   L(from, to, extra) { this.addInst(new GPLineInst(this, from, to, extra)); return this; }
-  ptr(from, to, extra) { // TODO: impl; similar to line()
+  PTR(from, to, extra) {
     this.addInst(new GPPointerInst(this, from, to, extra));
     return this;
   }
@@ -813,36 +894,35 @@ class GridPerfect {
 
   isMark(x) { var m = this.markNames; return m && (m.indexOf(x) >= 0); }
 
-  layoutForDesign(buf) { // only cares about definitions, ignoring all actions
-    if (!buf) buf = new Buffer();
+  layoutForDesign(ws) { // only cares about definitions, ignoring all actions
     var i, j, s;
     // Get all defined points
 
     var xyst = ' style="border-bottom:1px solid black; border-right:1px solid black"';
     var bgc = this.bgColor ? ` bgcolor="${this.bgColor}"` : '';
-    buf.w(`<table border=0 cellpadding=0 cellspacing=0${bgc}>
-           <tr bgcolor="lightgray"><th align=right ${xyst}>X<br>Y&nbsp;&nbsp;</th>`);
+    ws.w(`<table border=0 cellpadding=0 cellspacing=0${bgc}>
+          <tr bgcolor="lightgray"><th align=right ${xyst}>X<br>Y&nbsp;&nbsp;</th>`);
     for (i=1; i<=this.width; ++i) {
       // the x-coord
       s = `${i}`;
-      buf.w('<th valign=bottom style="border-bottom:1px solid black">');
+      ws.w('<th valign=bottom style="border-bottom:1px solid black">');
       for (var j=0; j<s.length; ++j)
-        buf.wIf(j>0, '<br>').w(s[j]);
-      buf.w('</th>');
+        ws.wIf(j>0, '<br>').w(s[j]);
+      ws.w('</th>');
     }
-    buf.w('</tr>');
+    ws.w('</tr>');
     for (i=1; i<=this.height; ++i) {
-      buf.w('<tr><td align=right style="border-right:1px solid black; background-color:lightgray">&nbsp;',
-            i, '&nbsp;</td>');
+      ws.w('<tr><td align=right style="border-right:1px solid black; background-color:lightgray">&nbsp;',
+           i, '&nbsp;</td>');
       s = this.getLayoutLine(i-1);
       for (j=1; j<=s.length; ++j) {
         var cell = this.xyToMarks[`${j}_${i}`];
         if (cell) cell = `<mark>${cell}</mark>`; else cell = s[j-1];
-        buf.w(`<td align=center${this.isGPSP(cell) ? ' class=sp' : ''}>${cell}</td>`);
+        ws.w(`<td align=center${this.isGPSP(cell) ? ' class=sp' : ''}>${cell}</td>`);
       }
-      buf.w('</tr>');
+      ws.w('</tr>');
     }
-    return buf.w('</table>');
+    return ws.w('</table>');
   }
 
   checkProgram() {
@@ -853,34 +933,15 @@ class GridPerfect {
 
   genSVG(opt) { // executes definitions and actions
     this.checkProgram();
-    var buf;
-    if (typeof opt == 'object')
-      buf = opt;
-    else { // opt is not Buffer; treated as boolean
-      buf = new Buffer();
-      if (opt) return this.layoutForDesign(buf);
-    }
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg"';
-    if (this.bgColor)
-      svg += ` style="background-color:${this.bgColor}"`;
-    var gw = this.gridW, gh = this.gridH, w = this.width+1, h = this.height+1;
-    var includes = [];
-    for (var i in this.program) {
-      var p = this.program[i];
-      if (p.act == INCL) {
-        includes.push(p);
-        w = Math.max(w, p.x + p.diagram.width);
-        h = Math.max(h, p.y + p.diagram.height);
-      }
-    }
-    buf.w(`${svg} height="${h * gh}" width="${w * gw}">`);
-    buf.w(`<style>text { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:${this.fontSize} }</style>`);
-    this.genInnerSVG(buf, 1, 1);
-    buf.w('Sorry, your browser does not support inline SVG.</svg>');
-    return buf;
+    var ws = new SVGWorkspace(this);
+    if (opt) return this.layoutForDesign(ws);
+
+    ws.addStyle(`text { font-family: "FangSong", "仿宋", STFangsong, "华文仿宋"; font-size:${this.fontSize} }`);
+    this.genInnerSVG(ws, 1, 1);
+    return ws.finish();
   }
 
-  genInnerSVG(buf, origX, origY, ignoreStyle) {
+  genInnerSVG(ws, origX, origY, ignoreStyle) {
     this.checkProgram();
     // Included subparts:
     var shiftX = origX - 1, shiftY = origY - 1;
@@ -888,7 +949,7 @@ class GridPerfect {
       var p = this.program[i];
       if (p.act == INCL) {
         var x = shiftX + p.x, y = shiftY + p.y;
-        p.diagram.genInnerSVG(buf, x, y, p.ignoreStyle);
+        p.diagram.genInnerSVG(ws, x, y, p.ignoreStyle);
       }
     }
 
@@ -908,10 +969,10 @@ class GridPerfect {
     shiftY += this.shiftY;
     var pgm = getProgramToRun(this), gw = this.gridW, gh = this.gridH, hw = gw/2;
     if (!ignoreStyle && this.styleBlock)
-      buf.w('<style>', this.styleBlock, '</style>');
+      ws.addStyle(this.styleBlock);
     for (var i in pgm) {
       var inst = pgm[i];
-      inst.render(buf, shiftX, shiftY);
+      inst.render(ws, shiftX, shiftY);
     }
   }
 

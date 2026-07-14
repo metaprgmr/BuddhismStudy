@@ -349,7 +349,7 @@ class DocInfo {
     }
     var tag = `<div class=${this.endImageClass}` + (this.isXG ? 'XG' : ' title="本頁經信裹居士重新編碼、清理、補正"') +
               ' style="text-align:right"' +
-              `>${links} 【<a href="${base}/index.html">圖書館</a>】 【<a href="${base}/../index.html">總主頁</a>】</div>`;
+              `>${links} 【<a href="${base}/../library/index.html">圖書館</a>】 【<a href="${base}/../index.html">總主頁</a>】</div>`;
     this.w(this.isXG && this.endCenter ? `</td></tr><tr><td>${tag}</td></tr></table>` : tag,
            '<div class=noprint style="position:absolute; top:0; left:0; width:30px; height:15px;" onclick="flipPRIV()"></div>',
            '</body></html>');
@@ -1081,9 +1081,9 @@ function write0881(n, body) {
 
 // -- 大乘本生心地觀經講記 太虛大師 --
 function write0970(n, subttl, body) {
-  docInfo.reInit(970, 13, n)
+  docInfo.reInit(969, 13, n+1,  ['懸論','一','二','三','四','五','六','七','八','九','十','十一','十二','十三'])
          .writeStart(`大乘本生心地觀經講記||${subttl}`, `心地觀經講記${subttl}`)
-         .w(SP, '/TEXT030C/太虛大師講述<br>二十一年十二月在閩南佛學院')
+         .w(SP, '<p class=TEXT030C>太虛大師講述<br>二十一年十二月在閩南佛學院</p>')
          .writeBody(body)
          .writeEnd(n==0 ? null : '<a href="0969.htm">懸論</a>');
 }

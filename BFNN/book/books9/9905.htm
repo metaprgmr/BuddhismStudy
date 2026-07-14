@@ -34,7 +34,7 @@ function Yu() {
   return ret;
 }
 function rubyfy() {
-  var buf = new Buffer('<html>\n');
+  var buf = new Buffer(COL_START + '\n<html>\n');
   for (var k in arguments) {
     buf.w('　　');
     var txt = arguments[k];
@@ -48,7 +48,7 @@ function rubyfy() {
     }
     buf.w('<br>');
   }
-  return buf.w('\n</html>').render();
+  return buf.w('\n</html>\n' + COL_END).render();
 }
 
 function rb前五識頌() {
@@ -87,42 +87,30 @@ docInfo.setXG().writeDoc('《八識規矩頌》內容', '八識規矩頌', `
 /BQKaiTi/針對每一識的頌分為三個四句的小頌；每個小頌都涵蓋一定數量的主題。在此，將每一頌的各主題直接標註到頌文下，作為其講解的索引方便。
 
 /BQKaiTi/相關概念，主要亦採於《八識規矩頌》，補充來自《唯識三十頌講記》等。
-/VOLSEP/
 
-${COL_START}
-<a#a01>前五識頌</a>　　<a#a02>第六識頌</a>　　<a#a03>第七識頌</a>　　<a#a04>第八識頌</a>
-<a#a05>五位百法</a>　<a#a06>三自性</a>　<a#a07>因緣果</a>　<a#a08>種子</a>　<a#a09>修行位</a>　<a#a10>五蘊、十八界</a>　<a#a11>其他概念</a>
-${COL_END}
+/C/<a#a01>前五識頌</a>　<a#a02>第六識頌</a>　<a#a03>第七識頌</a>　<a#a04>第八識頌</a>　<a#a05>五位百法</a>　<a#a06>三自性</a>　<a#a07>因緣果</a>　<a#a08>種子</a>　<a#a09>修行位</a>　<a#a10>五蘊、十八界</a>　<a#a11>其他概念</a>
 /VOLSEP:a01/
 /SECTION/前五識頌
-
 ${rb前五識頌()}
-
 <html:diagram>前五識頌</html:diagram>
 
 詳解請參看${Yu(9)}。
 /VOLSEP:a02/
 /SECTION/第六識頌
-
 ${rb第六識頌()}
-
 <html:diagram>第六識頌</html:diagram>
 
 詳解請參看${Yu(10)}。
 /VOLSEP:a03/
 /SECTION/第七識頌
-
 ${rb第七識頌()}
-
 <html:diagram>第七識頌</html:diagram>
 
 詳解請參看${Yu(11)}。
 
 /VOLSEP:a04/
 /SECTION/第八識頌
-
 ${rb第八識頌()}
-
 <html:diagram>第八識頌</html:diagram>
 
 詳解請參看${Yu(12)}。

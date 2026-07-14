@@ -14,12 +14,22 @@ function toATag(atag, name) {
 }
 
 class YTCollection {
-  constructor(title) { this.title=title; this.lists=[]; }
+  constructor(title) { this.title=title; this.lists=[]; this.map={}; }
   add() {
     var lsts = arguments[0];
     if (!Array.isArray(lsts)) lsts = arguments;
-    for (var i in lsts) this.lists.push(lsts[i]);
+    for (var i in lsts) {
+      var l = lsts[i];
+      if (typeof l == 'string') l = new YTList(l);
+      this.lists.push(l);
+      this.map[l.name] = l;
+    }
     return this;
+  }
+  lastAdded() { return this.lists[this.lists.length-1]; }
+  getListByName(n, addIfNil) {
+    var ret = this.map[n];
+    return ret || this.add(new YTList(n)).lastAdded();
   }
   setTOCNoNumber(yes) { this.tocNoNumber = yes; return this; }
   renderTOC(fxnName, buf) {
@@ -176,7 +186,7 @@ class YTList {
     }
     if (knownDur == this.totalDur) knownDur = '　✓';
     else knownDur = !knownDur ? '' : `&nbsp;(<font class=viewed>${formatTime(knownDur)}）`;
-    buf.w('<tr><td></td><td colspan=2 align=right style="border-top:1px solid gray">總時長：&nbsp;<code>',
+    buf.w('<tr><td></td><td colspan=2 align=right nowrap style="border-top:1px solid gray">總時長：<code>',
           formatTime(this.totalDur), '</code></td><td style="border-top:1px solid gray"><code>',
           knownDur, '</code></td></tr></table>');
     return buf;
@@ -184,7 +194,7 @@ class YTList {
   renderVideoTextTD(buf, vidInfo) {
     var v = vidInfo, ttl = v.getTitleDisp(), idx = (v.titleLen <= 55) ? -1 : ttl.indexOf('|');
     if (idx > 0) ttl = ttl.substring(0,idx) + '<br>' + ttl.substring(idx);
-    buf.w(`<td style="padding-left:10px" nowrap>${ttl}`)
+    buf.w(`<td style="padding-left:10px">${ttl}`)
        .wIf(v.extra, `<br><span style="opacity:0.5">${v.extra}</span>`)
        .w('</td>');
   }

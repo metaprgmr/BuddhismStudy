@@ -1,0 +1,334 @@
+const categories = '佛學基礎　淨土法門　般若經典　楞嚴圓覺　法華華嚴　人物歷史　所集經論|' +
+                   '法語開示　理悟事修　大乘唯識　地藏諸經　其他種種　善書人生　後添內容';//文字處理
+const categoryDefs = {
+  般若經典: [ '心經', '金剛經', '般若' ],
+  楞嚴圓覺: [ '楞嚴經', '圓覺經' ],
+  大乘唯識: [ '摩訶衍', '如來藏', '唯識論' ],
+  淨土法門: [ '淨土' ],
+  善書人生: [ '人生', '故事', '善書', '道德經' ],
+  佛學基礎: [ '佛學基礎' ],
+  法語開示: [ '法語', '開示' ],
+  地藏諸經: [ '地藏經', '占察經' ],
+  法華華嚴: [ '法華經', '華嚴經' ],
+  理悟事修: [ '禪修', '理悟', '戒律' ],
+  人物歷史: [ '人物', '近代人物', '歷史', '法滅', '真偽' ]
+};
+var allMarkedTopics = {}; // for 其他 type
+(() => {
+  var vals = Object.values(categoryDefs);
+  for (var i in vals) {
+    var a = vals[i];
+    for (var j in a) allMarkedTopics[a[j]] = 1;
+  }
+})();
+
+function showNav(category) {
+  var a = categories.split('|'), buf = new Buffer();
+  for (var i=0; i<a.length; ++i) {
+    if (i>0) buf.w('<br>');
+    var b = a[i].split('　');
+    for (var j in b) {
+      var cat = b[j], filler = cat.endsWith('〇') ? '　' : '';
+      cat = cat.replace('〇','');
+      var isTech = (cat == '後添內容'),
+          disp = `<a href="javascript:showList('${cat}')">${cat}</a>${filler}`;
+      if (cat == category) disp = `<cur>${cat}</cur>${filler}`;
+      b[j] = isTech ? `<span style="opacity:0.3">${disp}</span>` : disp;
+    }
+    buf.w(b.join('　'));
+  }
+  buf.render('nav');
+}
+
+function showThem(alt) {
+  STATS.counter = new Counter();
+  showNav();
+  var ankorMap = {},
+      ankors = [ '200=166', 400, 600, '800=780', 1000, '1200=1197',
+                 1400, '1600=1598', 1800, '2000=1977', 2100,
+                 9000, 9050, 9100 ];
+      ankorMap = {};
+  for (var i=0; i<ankors.length; ++i) {
+    var v = ankors[i], ank;
+    if (typeof v == 'number')
+      ank = ankorMap[v] = '_s' + to4d(v);
+    else {
+      v = v.split('=');
+      ank = ankorMap[parseInt(v[1])] = '_s' + to4d(v[0]);
+      v = v[0];
+    }
+    ankors[i] = `<a href="#${ank}">${v}</a>`;
+  }
+  ankors[i] = `【<a href="javascript:showTextProcessing()">文字處理</a>】`;
+  function getAnkor(id) {
+    if (typeof id == 'string') id = parseInt(id.split('~')[0]);
+    return ankorMap[id] || '';
+  }
+  var TOP = '<tr><td colspan=4 align=center style="border-bottom:1px solid blue">';
+  if (!alt) {
+    TOP += '工作室：&nbsp; &nbsp; ' + ankors[0];
+    for (var i=1; i<ankors.length; TOP += '&nbsp; &nbsp; ' + ankors[i++]);
+  }
+  TOP += '</td></tr>';
+  var END = `<tr><td colspan=4 style="border-top:1px solid blue">&nbsp;</td></tr>`;
+  var buf = new Buffer(`<table border=0>`, TOP);
+  var lastId = 0;
+  for (var i in BFNN_WORKS) {
+    var wk = BFNN_WORKS[i];
+    var d = wk.getSimpleData(),
+        ankor = getAnkor(wk.id),
+        bgc = wk.isAvail() ? ' bgcolor="white"' : ' bgcolor="lightgray"',
+        styl = wk.isAvail() ? ` style="color:red"` : '',
+        note, ttl = wk.getTitleDisp();
+    if (ankor) ankor = `<a name="${ankor}"></a>`;
+    if (false && lastId < 2172)
+      for (var j=lastId+1; j<wk.id; ++j) 
+        buf.w(`<tr><td></td><td>&nbsp;<dim>${toW(j,4,'0')}</dim></td><td colspan=2></td></tr>`);
+    if (!alt && wk.id == 9000)
+      buf.w(`<tr><td colspan=4 bgcolor="#66a" class=myadd>（以上內容來自《般若文海》。以下內容為另加。）</td></tr>`);
+    note = !wk.note ? '' : `<dim>${wk.note}</dim>`;
+    if (!wk.isAvail()) {
+      var bfnn = getGlobal('MY_BFNN', 'https://book.bfnn.org');
+      if (wk.id > 9000) {
+        ttl += '　' + note;
+      }
+      else if (wk.isMulti()) {
+        ttl += note;
+        var len = wk.numOfParts();
+        for (j=0; j<len; ++j)
+          ttl += ` <a href="${bfnn}/${wk.getURI(j)}" target=ext>${j+1}</a>`;
+      }
+      else {
+        ttl = `<a href="${bfnn}/${wk.getURI()}" target=ext>${ttl}</a>　${note}`;
+      }
+    } else { // simple display
+      ttl += '　' + note;
+    }
+    var id = `${d.id}`, maker = annotateMakers(d.maker),
+        cls = wk.isToGet() ? ' class=todo' : '', topic = d.topic || '';
+    if (topic == '其他') topic = '';
+    if (STATS.lastIsAlt && !alt || !STATS.lastIsAlt && alt) continue;
+    if (id[0] > '2' && id[3] == '0') id = `<b style="background-color:#ffa; font-style:italic">${id}</b>`;
+    buf.w(`<tr${bgc}>`,
+          `<td nowrap>&nbsp;${topic}&nbsp;</td><td${styl}${cls} title="${d.topic||''}">&nbsp;${ankor}${id}</td>`,
+          `<td width="530px">${ttl}</td><td align=right nowrap>${maker}&nbsp;</td></tr>`);
+    lastId = wk.idEnd || wk.id;
+  }
+  buf.w(END, '</table>');
+  if (!alt) {
+    buf.w(`<p>${STATS.getMessage()}</p>`);
+    if (get('c')) {
+      var names = STATS.counter.getNamesByCount();
+      buf.w('<table>');
+      for (var i in names) {
+        var n = names[i];
+        buf.w('<tr><td>', n, ':</td><td align=right>', STATS.counter.getCount(n), '</td></tr>');
+      }
+      buf.w('</table>');
+    }
+    buf.w('<hr width="1000px">');
+  }
+  buf.render('stg');
+}
+
+const TOP = '<td bgcolor="#f8f8f8" valign=top style="border-top:2px solid gray; border-top:2px solid black; border-bottom:2px solid black" height="500px">' +
+            '<table border=0 style="margin-left:10px; font-size:14px" cellspacing=0 cellpadding="2px">';
+const MID = '</table></td><!-- LEFT --><td>&nbsp;&nbsp;</td>' + TOP;
+
+function showList(category) {
+  if (!category) category = localStorage.getItem('last') || '全部內容';
+  localStorage.setItem('last', category);
+  showNav(category);
+  switch (category) {
+  case '全部內容': showAllArticles(); return;
+  }
+  var isAdded   = (category == '後添內容'),
+      allSutras = (category == '所集經論'),
+      isElse    = (category == '其他種種'),
+      mycat = categoryDefs[category], lsts = [], lstMap = {},
+      cnt = 0, cntToGet = 0, cntToGet9 = 0;
+  if (!mycat) {
+    if (isElse) { // dynamically construct lstMap and lsts
+      for (var i in BFNN_WORKS) {
+        var wk = BFNN_WORKS[i], tpc = wk.topic;
+        if (wk.isAvail() && !allMarkedTopics[tpc] && !lstMap[tpc]) {
+          var a = [];
+          lstMap[tpc] = a;
+          lsts.push(a);
+        }
+      }
+    } else { // for, say, 後添內容 and 所集經論, or categories by itself (e.g. 佛學基礎)
+      lsts[0] = []; // just one homogeneous list
+      if (category) // for categories by itself; but nowadays is made explicit.
+        lstMap[category] = lsts[0];
+    }
+  } else {
+    for (var i in mycat) {
+      var a = [];
+      lstMap[mycat[i]] = a;
+      lsts.push(a);
+    }
+  }
+
+  for (var i in BFNN_WORKS) {
+    var wk = BFNN_WORKS[i];
+    if (!wk.isAvailOrGet()) continue;
+    if (isAdded && wk.isAdded() || allSutras && wk.isSutraOrSastra()) {
+      lsts[0].push(wk);
+      continue;
+    }
+    var a = lstMap[wk.topic];
+    a && a.push(wk);
+  }
+
+  var buf = new Buffer(`<table border=0 width="600"><tr>`, TOP), keys = Object.keys(lstMap);
+  if (isElse)
+    keys.sort((a,b) => {
+      if (a == '其他種種' || a == '經論') return 1;
+      if (b == '其他種種' || b == '經論') return -1;
+      return 0;
+    });
+  for (var i in keys) {
+    var k = keys[i], l = lstMap[k];
+    if (k == '人物') k = '古代' + k;
+    if (keys.length > 1)
+      buf.w('<tr bgcolor="#ddd"><td colspan=3 style="color:red; font-weight:bold">', k, '</td></tr>');
+    for (var j in l) {
+      var wk = l[j];
+      wk.render(buf);
+      if (wk.isToGet()) {
+        if (wk.isAdded()) ++cntToGet9; else ++cntToGet;
+      }
+      ++cnt;
+    }
+  }
+  buf.w('</table></td></tr></table>');
+  if (allSutras) showSutraList(buf);
+  if (!cntToGet) cntToGet = ''
+  else cntToGet = ` <i>${nouns(cntToGet, 'internal work')} yet to get.</i>`;
+  if (!cntToGet9) cntToGet9 = '';
+  else cntToGet9 = ` <i>${nouns(cntToGet9, 'external work')} yet to get.</i>`;
+  buf.w(`<p>total: ${cnt}.${cntToGet}${cntToGet9}</p><hr width="1000px" color=gray>`)
+     .render('stg');
+}
+
+function showSutraList(buf) {
+  var lsts = new ChoiceLists(), len = lsts.collectionCount();
+  buf.w('<p style="font-size:5px">&nbsp;</p>',
+        ' <center><table border=0 bgcolor="white"><tr><td valign=top>');
+  for (var i=0; i<len; ++i) {
+    lsts.renderList(buf, i);
+    if (i<len-1)
+      buf.w('</td><td valign=top style="border-left:1px solid gray; padding-left:5px">');
+  }
+  buf.w('</td></tr></table></center>');
+}
+
+function showAllArticles() {
+  var isLeft = true,
+      buf = new Buffer(`<table border=0 width="1200"><tr>`, TOP);
+  for (var i in BFNN_WORKS) {
+    var wk = BFNN_WORKS[i];
+    if (wk.isAvail()) {
+      if (isLeft && (wk.id >= 1500)) { isLeft = false; buf.w(MID); }
+      wk.render(buf);
+    }
+  }
+  buf.w('</table></td><!-- RIGHT --></tr>',
+        '<tr><td colspan=3><p>&nbsp;</p><hr color=gray></td></tr></table>')
+     .render('stg');
+}
+
+function showTextProcessing() {
+  var textproc =
+`<a name="toutf"></a>
+<h4 style="font-size:25px; margin-top:0px; margin-bottom:0px">文字處理操作</h4>
+<table border=1 bordercolor=red cellpadding="10px" bgcolor="white" style="margin-top:10px">
+<tr><td>
+<h4 style="color:blue; margin-bottom:-10px">最近的流程</h4>
+
+<p>　假如需要采纳一新的文章 https://book.bfnn.org/books/<i>9999</i>.htm，作如是操作：
+<ol>
+<li>在<FF></FF>中打开此文章，拷貝全部源代碼。</li>
+<!--
+<li><code>$bfnn; cd books; vi <i>9999</i>.htm</code>&nbsp;將源代碼貼入其中。勿作任何改動。</li>
+<li><code>$java -cp ../javatools BfnnCommon <i>9999</i>.htm &gt; alfa.htm</code></li>
+<li><code>$java -cp ../javatools -Dmode=writedoc Cat alfa.htm &gt; <i>9999</i>.htm</code></li>
+-->
+<li><code>$bfnn; cd books; vi alfa</code>&nbsp;將源代碼貼入其中。勿作任何改動。</li>
+<li><code>$java -cp ../javatools -Dmode=towritedoc Cat alfa &gt; <i>9999</i>.htm</code></li>
+<li>在<FF></FF>中打開<code><i>9999</i>.htm</code>檢驗；&nbsp;<code>$vi <i>9999</i>.htm</code>&nbsp;目視檢察。</li>
+</ol>
+</p>
+<hr>
+
+<h4 style="color:blue; margin-bottom:-10px">轉Big5為UTF8</h4>
+<p>　使用中遇到個別問題，儘量修正。比如：OCR識別錯誤，等等。Big5編碼，不如UTF-8方便。</p>
+<!-- 標點、句讀錯誤；多餘空格、缺失字符；目錄欠美觀；圖表錯位-->
+<p>　<b>The following works&mdash;<i>reliably!</i></b>&mdash;albeit a manual process.</p>
+<ol>
+<li>Make a backup copy of <code><i>9999</i>.htm</code>, say, into <code><i>9999</i>big5.htm</code>.<br>
+    Then <i>(1)</i> open <code><i>9999</i>.htm</code> in <FF></FF>,  <i>(2)</i> view source, and  <i>(3)</i> copy all.</li>
+<li>Open the original <code><i>9999</i>.htm</code> file in vim, replace the content from above, and modify as follows:
+<ol type="a">
+<li>Change <code>charset=utf-8</code> (from <code>Big5</code> or <code>big5</code>);</li>
+<li>Change <code>&lt;div class=book&gt;</code> into <code>&lt;div class=bookClean&gt;</code></li>
+<li>Look for a line that contains “<code>Begin of Hotrank Counter</code>”;<br>
+if present, remove all up to <code>&lt;/body></code>, and add this:<br>
+&nbsp;&nbsp;&nbsp;<code>&lt;div class=endImage title="UTF-8 encoded"&gt;&lt;/div&gt;</code></li>
+<li>Within vim, save the file with utf-8 encoding: &nbsp;&nbsp;<code>:w ++enc=utf-8 <i>9999</i>.htm</code><br>
+Better exit vim right away.</li>
+</ol>
+▸&nbsp;The <code>BfnnCommon</code> tool does the first three steps.<br>
+<ul>
+<li>Once text pasted, save with utf-8 in step (d), and run <code>BfnnCommon</code>, redirecting into a file.<br></li>
+<li>As it evolves, more are packed into <code>mybfnn.js</code>, so text processing is simplified.<br></li>
+<li>Alternatively, copy browser text and create a new page in the writeDoc mode;<br>
+if it is first cleansed via <code>BfnnCommon</code>, can use the <code>Cat</code> tool for this purpose.</li>
+</ul>
+</li></ol>
+
+<h4 style="color:blue; margin-bottom:-10px">增加新文</h4>
+<p>　若欲加新文於此，當加入books9/。參考books9/9004.htm之方法。</p>
+
+<h4 style="color:blue; margin-bottom:-5px">子目錄對應文章編號</h4>
+<pre>
+    BFNN/book/books/     0<i>xxx</i>.htm
+    BFNN/book/books2/    1<i>xxx</i>.htm
+    BFNN/book/books3/    2<i>xxx</i>.htm （2000~16.htm 因文章系列之故而處 book2/）
+    BFNN/book/books9/    <font class=extra>9xxx</font>.htm （不屬於「般若文海」的其他文章）
+</pre>
+
+</td></tr></table><p>&nbsp;</p><hr width="1000px" color=gray>`;
+
+  renderText('stg', textproc);
+}
+
+function showPorque() {
+  function R(txt,rub) { return `<ruby class="myruby">${txt}<rt>${rub}</rt></ruby>`; }
+  showNav();
+  renderText('stg',
+`<table border=1 bordercolor=red cellpadding="10px" bgcolor="white" width="800px"><tr><td>
+<h4 style="font-size:25px; margin-bottom:5px">信德圖書館簡介</h4>
+
+<p>「信德圖書館」起源於「<span title="其羅馬字名 BFNN 屬其故稱：「報佛恩網」">般若文海</span>」。「般若文海」大力弘揚淨土法門，以淨空法師為核心導師。富含大量可下載之佛經和文章資料，功德無量！感恩至深！</p>
+
+<p>初時，欲將文本編碼由Big5改為utf8，以便改正、重排，乃至標註、筆記等；參看下述更詳解釋。遂發現其文本內部極為冗餘，多諸無謂代碼；旋發力處理，得清淨文本框架。以此因緣，方便採集更多資料，增在9000部分，實則3000至9000均可。又不斷為文增加圖表、圖形、導讀、關聯等。（原般若文海內容實際僅採小部，蓋其體量浩大，且有部分文本出於Word，格式難變。）</p> 
+
+<p>鑑於文海內容所選有限，而新加內容不斷擴展，即起意更之為圖書館，取名「信德」。名字來於「信為道元功德母」。又德者得也；有信方可得，無信無有得故。若解為「信裹之得」，亦不為謬！</p>
+
+<h4 style="font-size:21px; color:black; margin-bottom:5px">網上資訊無量，何煩再造？</h4>
+
+<p>　　或問：網上資訊無量，何煩再造？豈無囤積狂之嫌耶？</p>
+<p>　　誠難排除囤積狂之嫌。然更有實由。當先明，在下乃是讀者，非惟匠人，故於內容之正確、美觀，頗為潔癖，（如<a href="../陀羅尼/楞嚴咒/Shurangama-mantra-信裹.html">楞嚴咒之處理</a>所示現。）所選錄之內容或已讀、或在讀、或將讀，幾無例外。於是衍生如下諸事：</p>
+<ol class=cjk>
+<li>公開內容多有瑕疵，或有意或無意。無意者，OCR出錯極為自然、又無人工勘誤，在在皆是，譬如「已/巳」「曰/日」「入/人」「士/土」等。又，古文無標點，有加句讀者並未理解，不乏謬誤或略欠貼切；甚或後加標點不甚合我意（如「、/，」之用）而欲改之，並無因果。所有內容歡迎下載；如此，無論外部世界天翻地覆若何，閣下終究還有一份私人拷貝，以資參比。</li>
+<li>諸多文本之輸入略有年代，其時生僻字等常無字符對應，權以複合表達式替代。現代漢字字符集持續改善，譬如Hanozono、Jimgo、乃至未來更新者，故清除難字複合表達式甚為迫切。</li>
+<li>既然古文無有標點，重新斷句則不非法。佛經常有大段排比或類似文句，重新編排，賞心悅目。</li>
+<li>古代文字終究人為，謬誤難免。雖高僧大德告誡勿得修改原文，經文時有明顯文字之謬無疑。<a href="https://cbeta.org/" title="Comprehensive Buddhist Electronic Text Archive Foundation" style="font-style:italic" target="extra">CBETA</a>作了相當多的勘誤，以紅字標示改動，十分妥貼。在此常接受其為正確版，不再贅示其改。</li>
+<li>尤為要者，文歸本地，即可任加注解、詮釋、筆記、難字${R('注音','zhùyīn')}，乃至重新排版（如目錄部分，鮮持原型）。原文註釋多以&lt;ail&gt;字體<ail>annotation-in-line</ail>標記；個人標註則用&lt;cil&gt;字體<cil>（comment-in-line）</cil>。<br>對於古大德的註解等，更加上了<verse>引用經文</verse>、<kepan>科判</kepan>、註解等不同文字風格，特別醒目。</li>
+<li>又，內容可抽象為數據（如佛學辭彙、史實<a href="../BFNN/book/books9/9070.htm">傳記</a>、<a href="../佛學基礎/《大佛頂首楞嚴經》/HaiRengKePan/HaiReng科判.html">科判</a>、<a href="../佛學基礎/《大佛頂首楞嚴經》/WangZhiPing/Wang.html">註解</a>等），構建<a href="../淨土宗/《無量壽經》/Jie.html">專用閱讀</a>、<a href="../BFNN/book/books/0592S.htm">檢索</a>等種種工具。</li>
+<li>文本處理看似幸苦，不同人等感受迥異。縱然巨論大作，或許久不閱讀，於過程中，因頻繁整理、乃至重新編排，得以了解大概，至少主要內容框架、體量，隨機規劃學習。雖未得其味，多少嗅其香。又類手撫經書、貝葉，雖未獲其實，不諦結善緣，其樂也乎！又以統一規範，得瀏覽、閱讀、檢索之便。</li>
+</ol>
+</td></tr></table><p>&nbsp;</p><hr width="1000px" color=gray>`);
+}

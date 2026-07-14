@@ -344,7 +344,12 @@ ${sectionTitle}         |夏:聞經獲益第四十八|
 
 function showC7(elid, full) {
   function aTH(type, uri, ttl, zis, vows) {
-    return `<th class=c339 bgcolor=lightgray>${type}</th><th nowrap align=center><a href="../books/0360${uri}">${ttl}</a><br>${zis}萬字<br>${vows}願</th>`;
+    var suffix = '譯';
+    if (ttl.endsWith('會集')) {
+      suffix = '會集';
+      ttl = rtrim(ttl,2);
+    }
+    return `<th class=c339 bgcolor=lightgray>${type}</th><th nowrap align=center><a href="../books/0360${uri}">${ttl}</a><dim><small>${suffix}</small></dim><br>${zis}萬字<br>${vows}願</th>`;
   }
   var buf = new Buffer(), len = c7.length, types = '夏王魏唐宋漢吳';
   buf.w('<center><table border=0 cellspacing=0 cellpadding="2px"><caption>七本內容精細對照</caption>',

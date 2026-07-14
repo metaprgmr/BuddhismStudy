@@ -28,7 +28,7 @@ const FULLTEXT = '../淨土宗/西方二聖開示/印光大師文鈔菁華錄.ht
 
 <div class="contentW">
 <div id="stg"></div>
-<script>endOfArticle('20260205');</script>
+<script>endOfArticle('260205');</script>
 </div>
 </body></html>
 
@@ -364,11 +364,11 @@ var items =
 315/居塵學道:欲靠食物滋養，食素人宜多吃麥。食麥之力，大於米力，不止數倍。（其他食物）
 #十、標應讀典籍　（共18條）
 316:無量壽經。十六觀經。二經法門廣大，諦理精微。末世鈍根誠難得益。求其文簡義豐詞約理富。
-317:阿彌陀經，澫益大師要解，理事各臻其極，為第一注解。縱令古佛重注此經，不高其上。
-318:古人欲令舉世咸修，故以阿彌陀經列為日課。蓮池疏鈔。澫益要解。幽溪法師圓中鈔。
+317:阿彌陀經，蕅益大師要解，理事各臻其極，為第一注解。縱令古佛重注此經，不高其上。
+318:古人欲令舉世咸修，故以阿彌陀經列為日課。蓮池疏鈔。蕅益要解。幽溪法師圓中鈔。
 319:華嚴經普賢行願品，以十大願王，導歸極樂。
 320:楞嚴經大勢至菩薩念佛圓通章，乃淨宗最上開示。只此一章，便可與淨土四經參而為五。
-321:淨土十要，乃澫益大師以金剛眼，於闡揚淨土諸書中，選其契理契機，至極無加者。
+321:淨土十要，乃蕅益大師以金剛眼，於闡揚淨土諸書中，選其契理契機，至極無加者。
 322:法苑珠林，詳談因果，理事並進。事跡報應，歷歷分明。
 323:龍舒淨土文，斷疑起信。為導引初機之第一奇書。若欲普利一切，不可不從此以入手。
 324:徑中徑又徑一書，採輯諸家要義，分門別類，令閱者方便直趣淨土壺奧。大利於初機人。
@@ -450,11 +450,12 @@ for (var i in a) {
         lastType = type.substring(0,2);
       }
       if (level) cls = `${cls} em${level}`.trim();
-      if (anno) { anno = ` title="${anno}"`; num = `<i>${num}</i>`; }
+      var numdisp = num;
+      if (anno) { anno = ` title="${anno}"`; numdisp = `<i>${num}</i>`; }
       if (type.startsWith('〇〇')) type = type.substring(2);
       buf.w(`<td class="type ${cls}" nowrap valign=top>${type.trim()}&nbsp;</td>`,
             `<td class="${cls}" align=right valign=top id="_${num}">`,
-              `<a href="${FULLTEXT}#_${num}" target="extra">${num}.&nbsp;</a></td>`,
+              `<a href="${FULLTEXT}#_${num}" target="extra">${numdisp}.&nbsp;</a></td>`,
             `<td class="${cls}" valign=top${anno}>${txts[0]}</td>`);
     }
     var row = ln.split(':');

@@ -89,6 +89,7 @@ function getLists() {
 ---|23:35|sy8LWCoGkmw|天台與淨土（2）四教四諦、十二因緣、六度
 ---|15:07|kRgjhjysZ00|天台與淨土（3）一心三觀
 ---|24:53|etWA7xA5J1M|天台與淨土（4）見思惑
+---|29:36|vF5LYdjzpkY|天台與淨土（5）四教－六即佛（終）
 169|52:08|9bWfYR15v8E|天台小止觀（1）十章簡介               => 天台小止觀1_A.jpg
 ---|27:33|wvVxl5YYnS0|天台小止觀（2）總序 (A)－天台四部止觀
 ---|40:36|_AeiNC3C-Kw|天台小止觀（3）總序 (B)－止觀雙運
@@ -127,7 +128,7 @@ function getLists() {
 ---|18:52|xmKd-Zi-tCY|悟性論
   2|15:52|fe6VbjGRa-w|一心三般若
   3|15:16|-vZ48hHpefE|一切事究竟堅固
-  4|15:55|97gDQU8GPNw|一心三止
+  4|15:55|97gDQU8GPNw|一心三止           => B | 43945902@
   6|19:10|AqGiY3dQZZI|一心歸命
  10|15:07|Bybwbv0B2rg|一心為宗
   8|28:07|QPq6bLZGBOw|三慈

@@ -30,11 +30,22 @@ class Buffer {
   append(s) { this.bufList.push(s); } // for performance
 
   prepend() {
-    var ret = '';
-    for (var i in arguments) { var x = arguments[i]; x && (ret += x); }
-    if (ret) this.bufList.unshift(ret);
+    var ret = '', len = arguments.length;
+    for (var i=len-1; i>=0; --i) { 
+      var a = arguments[i];
+      if (Array.isArray(a)) {
+        var len1 = a.length;
+        for (var j=len-1; j>=0; --j) {
+          var x = a[j];
+          x && this.bufList.unshift(x);
+        }
+      } else {
+        a && this.bufList.unshift(a);
+      }
+    }
     return this;
   }
+
 
   wrap(before, after) { return this.prepend(before).w(after); }
 

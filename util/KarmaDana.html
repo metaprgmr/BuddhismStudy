@@ -38,14 +38,15 @@ class MyUI {
   writeConfig(buf) { buf.render('cfg'); }
   getAudioEl() { return e('audiop'); }
   getAudio2El() { return e('audiop2'); }
+  rotateTune() {
+    if (this.curTone == 'A3') return this.curTone = 'A4';
+    if (this.curTone == 'A4') return this.curTone = '';
+    return this.curTone = 'A3';
+  }
   getTune() {
-    if (e('t_rotate').checked) {
-      if (this.curTone == 'A3') return this.curTone = 'A4';
-      if (this.curTone == 'A4') return this.curTone = '';
-      return this.curTone = 'A3';
-    }
-    if (e('t_A3').checked) return this.curTone = 'A3';
-    if (e('t_A4').checked) return this.curTone = 'A4';
+    if (e('t_rotate').checked) return this.roateTune();
+    if (e('t_A3').checked)     return this.curTone = 'A3';
+    if (e('t_A4').checked)     return this.curTone = 'A4';
     return this.curTone = '';
   }
 }
@@ -58,8 +59,6 @@ class Scheme {
     this.list = [];
   }
   setTotalDur(defaultBPM, hrs, mins) {
-    this.isNianFo = (defaultBPM < 20);
-    if (this.isNianFo) defaultBPM *= 4;
     var len = (hrs*60+(mins||0)) / this.clipDur;
     if (!defaultBPM) defaultBPM = 120;
     for (var i=0; i<len; ++i)
@@ -95,20 +94,22 @@ class Scheme {
       this.list.push(bpm);
     return this;
   }
+  playEnding(volume) {
+    var a = ui.getAudioEl(), uri = this.endingMP3();
+    if (a.src != uri) a.src = uri;
+    a.volume = volume || 0.5;
+    a.play();
+  }
   playBell(type, volume) {
-    var a = ui.getAudio2El(),
-        uri = this.bellMP3(type);
+    var a = ui.getAudio2El(), uri = this.bellMP3(type);
     if (a.src != uri) a.src = uri;
     a.volume = volume || 1.0;
     a.play();
   }
   setPlayerSrcAt(idx, start) {
     idx = this.toListIndex(idx);
+    if (idx < 0) return;
     var a = ui.getAudioEl();
-    if (idx < 0) {
-      this.playBell();
-      return;
-    }
     var bpm = this.list[idx],
         uri = bpm && this.getMP3(ui.getTune(), bpm) || '';
     if (a.src != uri) a.src = uri;
@@ -123,7 +124,8 @@ class Scheme {
     default: return `${base}/metron${tune}-${bpm}-5m_.mp3`;
     }
   }
-  bellMP3(type) { return `../images/鈴鼓${type=='short' ? '1' : ''}.mp3`; }
+  bellMP3(type) { return `../images/鈴鼓${type=='single' ? '1' : ''}.mp3`; }
+  endingMP3() { return `../images/nianfo-ending.mp3`; }
   timeDisp(mins) {
     var x = formatTime(mins*60, true);
     x = x ? x.substring(0, x.length-3) : '00';
@@ -142,52 +144,56 @@ class Scheme {
     this.curPlaying = 0;
     this.setPlayerSrcAt(0);
 
-    var buf = new Buffer(), isnf = this.isNianFo,
-        unit = isnf?'唸':'拍', XPM = isnf?'APM':'BPM';
+    var buf = new Buffer();
     buf.w('<table border=0 cellpadding=0 cellspacing="3px">',
-          `<tr><th></th><th>${XPM}</th><th>&nbsp;&nbsp;本輪${unit}數</th>`,
-          `<th>&nbsp;&nbsp;累計${unit}數</th><th>&nbsp;&nbsp;時間</th></tr>`);
+          `<tr><th></th><th>BPM</th><th>&nbsp;&nbsp;本輪拍數</th>`,
+          `<th>&nbsp;&nbsp;累計拍數</th><th>&nbsp;&nbsp;時間</th><th>&nbsp;&nbsp;累計佛號</th></tr>`);
     var len = this.list.length,
         cumuCnt = 0, cumuTime = 0;
     for (var i=0; i<len; ++i) {
-      var xpm = this.list[i];
-      if (isnf) xpm /= 4;
-      var cnt = xpm * 5;
+      var bpm = this.list[i];
+      var cnt = bpm * 5;
       cumuCnt += cnt;
-      var styl = ' style="color:green"';
-      if (xpm >= 170) styl = ' style="color:red"';
-      else if (xpm >= 160) styl = ' style="color:blue"';
+      var styl = ' style="color:green"',
+          cumuDisp = numberDisp(cumuCnt.toFixed(0)),
+          cumuFoDisp = numberDisp((cumuCnt/4).toFixed(0));
+      if (bpm >= 170) styl = ' style="color:red"';
+      else if (bpm >= 160) styl = ' style="color:blue"';
       buf.w(`<tr><td style="font-size:12px" align=right>${i+1}.&nbsp;</td>`,
-            `<td id="_xpm${i}" align=center${styl}>${xpm}</td>`,
-            `<td align=right style="opacity:0.4">${cnt}${unit}&nbsp;</td>`,
-            `<td id="_cumu${i}" style="opacity:0.4" align=right>${numberDisp(cumuCnt)}${unit}&nbsp;</td>`,
-            `<td align=right>${this.timeDisp(cumuTime)}</td></tr>`);
+            `<td id="_bpm${i}" align=center${styl}>${bpm.toFixed(0)}</td>`,
+            `<td align=right style="opacity:0.4">${cnt.toFixed(0)}拍&nbsp;</td>`,
+            `<td id="_cumu${i}" style="opacity:0.4" align=right>${cumuDisp}拍&nbsp;</td>`,
+            `<td align=right>${this.timeDisp(cumuTime)}</td>`,
+            `<td id="_cumuFo${i}" style="opacity:0.4" align=right>${cumuFoDisp}句&nbsp;</td></tr>`);
       cumuTime += 5;
     }
     buf.w('</table>');
     ui.writeStage(buf);
-    e('_xpm0').style.backgroundColor = 'yellow';
+    e('_bpm0').style.backgroundColor = 'yellow';
   }
   _audioEnd(event) {
     if (this.curPlaying < 0) return;
-    var el = this.curPlaying+1;
-    if (this.curPlaying > 0 && (el % 6)==0)
-      if (el % 12 == 0) this.playBell();
-      else this.playBell('short', 0.5);
+    var el;
     if (this.curPlaying < this.list.length-1) {
-      el = e(`_cumu${this.curPlaying}`);
-        if (this.curPlaying > 28) showTop(el);
+      el = e(`_cumuFo${this.curPlaying}`);
+      { if (this.curPlaying > 28) showTop(el);
         el.style.opacity = 1;
         el.style.color = 'green';
-      e(`_xpm${this.curPlaying}`).style.backgroundColor = '';
-      e(`_xpm${++this.curPlaying}`).style.backgroundColor = 'yellow';
+      }
+      e(`_bpm${this.curPlaying}`).style.backgroundColor = '';
+      e(`_bpm${++this.curPlaying}`).style.backgroundColor = 'yellow';
+      el = this.curPlaying+1;
+      if (el > 1 && el % 6 == 0)  // every 30 mins a reminding bell
+        this.playBell(el % 12 == 0 ? '' : 'single', 0.5);
     }
     else {
-      el = e(`_cumu${this.curPlaying}`);
-        el.style.opacity = 1;
+      el = e(`_cumuFo${this.curPlaying}`);
+      { el.style.opacity = 1;
         el.style.color = 'green';
-      e(`_xpm${this.curPlaying}`).style.backgroundColor = '';
+      }
+      e(`_bpm${this.curPlaying}`).style.backgroundColor = '';
       this.curPlaying = -1;
+      this.playEnding();
     }
     this.setPlayerSrcAt(this.curPlaying, true);
   }
@@ -220,17 +226,31 @@ class Agenda {
         opts.push(n);
       }
       buf.w('<br><br>課表：<br>',
-            `<select id="schemelst">${selectOptions(opts, opts[0])}</select>`);
+            `<select id="schemelst">${selectOptions(opts, opts[0])}</select>`,
+            '<br><br><button id="startIt">開始</button>');
     }
     ui.writeConfig(buf);
     e('schemelst').addEventListener('change', schemeChange);
+    e('startIt').addEventListener('click', startIt);
     this.startScheme(opts[0]);
     return this;
   }
 }
-function schemeChange(event) { agenda.startScheme(event.target.value); }
+function schemeChange(event) {
+  agenda.startScheme(event.target.value);
+  e('startIt').textContent = '開始';
+}
+function startIt(event) {
+  agenda.startScheme(e('schemelst').value);
+  ui.getAudioEl().play();
+  e('startIt').textContent = '重啟';
+}
 
 var agenda = new Agenda('stg', 'audiop')
+    .addScheme(new Scheme('一小時拜佛節奏')
+       .setTotalDur(52, 1))
+    .addScheme(new Scheme('半小時拜佛節奏')
+       .setTotalDur(52, 0, 30))
     .addScheme(new Scheme('四小時秒唸')
        .setTotalDur(60, 4))
     .addScheme(new Scheme('四小時二萬唸（90bpm）')
