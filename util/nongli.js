@@ -67,6 +67,35 @@ function toToken(a, b, c) {
   return `${a}${leap}${to2d(b)}${to2d(c)}`;
 }
 
+class NongLiDay {
+  constructor(year, yinMonth, yinDay, yinLeapMonth, zday, isUpavasa, cellY, cellX) {
+    this.yinToken = (yinLeapMonth ? 'yiN' : 'yin') + toToken(year, yinMonth, yinDay);
+    this.yx = cellY + '_' + cellX;
+    this.zday = zday;
+    this.yinMonth = yinMonth; // 1-based
+    this.yinLeapMonth = yinLeapMonth;
+    this.yinDay = yinDay;     // 1-based
+    this.isUpavasa = isUpavasa;
+  }
+  toDate() { return new Date(this.year, this.month, this.day+1); }
+  setYang(year, month, day, week, festival) { // y/m/d are all human numbers
+    this.year  = year;
+    this.month = month - 1;   // 0-based
+    this.day   = day - 1;     // 0-based
+    this.week  = week - 1;    // 0-based
+    this.iToken   = toToken(year, month, day);
+    this.festival = festival;
+    dayColl[this.iToken] = dayColl[this.yinToken] = dayColl[this.yx] = this;
+  }
+  isSameDate(d) { // d: a Date object
+    return this.year == d.getFullYear() && this.month == d.getMonth() && this.day == d.getDate()-1;
+  }
+  isUpavasaNotFull() { return (this.isUpavasa || this.聖賢日) && !this.isUpavasaFull(); }
+  isUpavasaFull() {
+    return this.yinDay == 8 || this.yinDay == 18 || endsWithAny(this.聖賢日, '涅槃', '圓寂');
+  }
+}
+
 class NongLiYear {
   constructor(year, firstDayYangLi, daysOfMonths, 節氣, events) {
     console.log('Adding NL Year', year);
@@ -125,16 +154,8 @@ class NongLiYear {
         if (!yinLeapMonth) ++yinMonth;
         var is30 = (this.daysOfMonths[j] == 30);
         if (i<29 || is30) {
-          var zhai = checkZhai(i, is30), nextZhai = checkZhai(i+1, is30),
-              o = { yinToken: (yinLeapMonth ? 'yiN' : 'yin') + toToken(this.year, yinMonth, i+1),
-                    yx:       i + '_' + j,
-                    zday,
-                    yinMonth,       // 1-based
-                    yinLeapMonth,
-                    yinDay: i+1,    // 1-based
-                    is齋日: checkZhai(i, is30)
-                  };
-          row.push(o);
+          var zhai = checkZhai(i, is30);
+          row.push(new NongLiDay(this.year, yinMonth, i+1, yinLeapMonth, zday, zhai, i, j));
         } else
           row.push({ zday:'' });
       }
@@ -143,13 +164,12 @@ class NongLiYear {
     // set international month/day/weekday
     var lastMonthDays = myMonths[monthCnt-1], me = cells[0][0];
 
-    var curYear  = me.year  = this.firstDay[0];
-    var curMonth = me.month = this.firstDay[1] - 1;
-    var curDay   = me.day   = this.firstDay[2] - 1;
-    var curWeek  = me.week  = this.firstDay[3] - 1;
-    me.iToken    = toToken(curYear, curMonth+1, curDay+1);
-    me.festival  = '春節';
-    dayColl[me.iToken] = dayColl[me.yinToken] = dayColl[me.yx] = me;
+    var curYear  = this.firstDay[0];
+    var curMonth = this.firstDay[1] - 1;
+    var curDay   = this.firstDay[2] - 1;
+    var curWeek  = this.firstDay[3] - 1;
+
+    me.setYang(curYear, curMonth+1, curDay+1, curWeek+1, '春節');
 
     for (j=0; j<monthCnt; ++j) {
       var daysThisMonth = myMonths[curMonth];
@@ -163,13 +183,7 @@ class NongLiYear {
           if (curMonth >= 12) { curMonth = 0; ++curYear; }
         }
         me = cells[i][j];
-        me.year  = curYear;
-        me.month = curMonth;
-        me.day   = curDay;
-        me.week  = curWeek;
-        me.iToken = toToken(curYear, curMonth+1, curDay+1);
-
-        dayColl[me.iToken] = dayColl[me.yinToken] = dayColl[me.yx] = me;
+        me.setYang(curYear, curMonth+1, curDay+1, curWeek+1);
       }
     }
 
@@ -203,29 +217,33 @@ class NongLiYear {
     addFestival(12, -1, '除夕');
 
     // 佛神聖誕日
-    function addHolyMemorial(m, d, e) { getDayInfo(thisYear, m, d, true).聖賢日 = e; }
+    function addHolyMemorial(m, d, e, sutra) {
+      var di = getDayInfo(thisYear, m, d, true);
+      di.聖賢日 = e;
+      sutra && (di.經典 = sutra);
+    }
     addHolyMemorial( 1,  1, '彌勒菩薩聖誕');
     addHolyMemorial( 2,  8, '釋迦牟尼佛出家');
-    addHolyMemorial( 2,  9, '六祖惠能聖誕');
+    addHolyMemorial( 2,  9, '六祖惠能聖誕',   '六祖壇經');
     addHolyMemorial( 2, 10, '淨空法師聖誕');
     addHolyMemorial( 2, 15, '釋迦牟尼佛涅槃');
-    addHolyMemorial( 2, 19, '觀世音菩薩聖誕');
+    addHolyMemorial( 2, 19, '觀世音菩薩聖誕', '觀世音菩薩菩門品');
     addHolyMemorial( 2, 21, '普賢菩薩聖誕');
     addHolyMemorial( 4,  4, '文殊菩薩聖誕');
     addHolyMemorial( 4,  8, '釋迦牟尼佛聖誕');
 //  addHolyMemorial( 6,  3, '韋馱尊者聖誕');
     addHolyMemorial( 6, 19, '觀世音菩薩成道');
     addHolyMemorial( 6, 28, '淨空法師圓寂');
-    addHolyMemorial( 7, 13, '大勢至菩薩聖誕');
+    addHolyMemorial( 7, 13, '大勢至菩薩聖誕', '大勢至菩薩圓通章');
     addHolyMemorial( 7, 15, '佛歡喜日');
- // addHolyMemorial( 7, 24, '龍樹菩薩聖誕');
-    addHolyMemorial( 7, -1, '地藏菩薩聖誕');
- // addHolyMemorial( 8,  4, '阿閦佛聖誕');
- // addHolyMemorial( 8, 22, '燃燈佛聖誕');
+    addHolyMemorial( 7, 24, '龍樹菩薩聖誕');
+    addHolyMemorial( 7, -1, '地藏菩薩聖誕',   '地藏菩薩本願經');
+    addHolyMemorial( 8,  4, '阿閦佛聖誕');
+//  addHolyMemorial( 8, 22, '燃燈佛聖誕');
     addHolyMemorial( 9, 19, '觀世音菩薩出家');
- // addHolyMemorial( 9, -1, '藥師佛聖誕');
- // addHolyMemorial(10,  5, '達摩祖師聖誕');
-    addHolyMemorial(11, 17, '阿彌陀佛聖誕');
+    addHolyMemorial( 9, -1, '藥師佛聖誕');
+//  addHolyMemorial(10,  5, '達摩祖師聖誕');
+    addHolyMemorial(11, 17, '阿彌陀佛聖誕',   '無量壽經');
     addHolyMemorial(12,  8, '釋迦牟尼佛成道');
   }
 
@@ -312,6 +330,8 @@ function loadNongLiYear(yr, events, loadAdj) {
 //
 // -- UI
 //
+var TODAY; // set during rendering
+
 function showNongLiNian(nlyr, elid) {
   document.title = `陰曆${nlyr}年`;
 
@@ -346,7 +366,8 @@ function showNongLiNian(nlyr, elid) {
       var txt = '', todayTxt = '',
           jq = cell.jieqi || (cell.iToken && (cell.day==0 && cell.month==0) && '元旦'),
           e = cell.event;
-      if (cell.year === today.getFullYear() && cell.month === today.getMonth() && cell.day === today.getDate()-1) {
+      if (cell.isSameDate(today)) {
+        TODAY = cell;
         cls += (cls + ' today').trim();
         todayTxt = ' title="今天"';
       }
@@ -357,11 +378,7 @@ function showNongLiNian(nlyr, elid) {
           txt = e.substring(idx+1).trim();
           e = (idx===0) ? (cell.jieqi||zd) : e.substring(0, idx);
         }
-        if (e.startsWith('獻血') || e.startsWith('献血')) {
-          e = '&nbsp;&nbsp;🩸&nbsp;&nbsp;';
-          cls = (cls + ' blood').trim();
-        }
-        else if (e.length >= 2) {
+        if (e.length >= 2) {
           txt = `【${e}】${txt}`;
           e = e.substring(0,2);
           cls = (cls + ' event').trim();
@@ -374,13 +391,15 @@ function showNongLiNian(nlyr, elid) {
         zd = `<font class="${cls}"${todayTxt}>${zd}</font>`;
       }
       var otheryr = cell.iToken.substring(0,4) != cell.yinToken.substring(3,7),
-          style = otheryr ? ' bgcolor="#dee";' : '',
-          cls = (cell.is齋日||cell.聖賢日) ? 'ZhaiRi' : 'idate',
-          cellCls = (cell.is齋日||cell.聖賢日) ? 'ZhaiRi' : '',
-          wd = nlconsts.iWdayNames[cell.week];
+          wd = nlconsts.iWdayNames[cell.week],
+          cls = cell.isUpavasaNotFull() ? 'ZhaiRi' : 'idate',
+          cellCls = '';
       switch (cell.yinMonth) {
       case 1: case 5: case 9: if (!cellCls.startsWith('ZhaiRi')) cellCls = 'ZhaiYue';
       }
+      if (cell.isUpavasaFull()) cellCls = 'FullZhaiRi';
+      else if (cell.isUpavasaNotFull()) cellCls = 'ZhaiRi';
+      if (otheryr) cellCls += ' nextyearBG';
       if (cell.iToken.substring(0,4) != cell.yinToken.substring(3,7)) cls += ' nextyear';
       if (wd === 'N' || wd === 'S') cls += ' weekend';
       wd = `${cell.month+1}-${cell.day+1}&nbsp;${wd}`;
@@ -407,12 +426,16 @@ function showNongLiNian(nlyr, elid) {
             }
         }
       }
-      buf.w(`<td nowrap align="left"${style} class="${cellCls}" title="${memorial||''}">&nbsp;`, zd,
+      buf.w(`<td nowrap align="left" class="${cellCls}" title="${memorial||''}">&nbsp;`, zd,
             ` <font class="${cls}" ${txt ? ' class=event':''} title="${memorial||txt||''}">${wd}</font></td>`);
     }
     buf.w('</tr>');
   }
   buf.w(`<tr><td colspan="${monthCnt}" class="borderT2 bodyLike">&nbsp;</td></tr></table>`);
+
+  function tlnk(opt) {
+    return mytasks ? `<a href="javascript:mytasks(${opt||''})" style="opacity:0.2">　●　</a>` : '　';
+  }
   buf.w(`<table bgcolor=white border=0><tr>
 <td rowspan=2 align=center class=winter><turn>冬至</turn><br>1215</td>
 <td class=arrow align=center>↗</td>
@@ -438,7 +461,7 @@ function showNongLiNian(nlyr, elid) {
 <td class=arrow valign=top>→</td>
 <td align=center class=summer>芒種<br>1147</td>
 <td class=arrow>↘</td>
-<td rowspan=2 align=center class=summer><turn>夏至</turn><br>1145</td></tr>
+<td rowspan=2 align=center class=summer>${tlnk(1)}<br><turn>夏至</turn><br>1145<br>${tlnk(2)}</td></tr>
 <tr><td class=arrow valign=top>↖</td>
 <td align=center class=winter>大雪<br>1212</td>
 <td class=arrow valign=top>←</td>
@@ -464,3 +487,5 @@ function showNongLiNian(nlyr, elid) {
 <td class=arrow valign=top>↙</td></tr></table>`);
   buf.render(elid);
 }
+
+var mytasks;

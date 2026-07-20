@@ -107,6 +107,10 @@ function HHMMSS2Secs(hms) {
   for (var i=0; i<len; i++) { ret += a[len-i-1] * f; f *= 60; }
   return ret;
 }
+function isPDT(date) {
+  const s = date.toString();
+  return  s.includes('Pacific Daylight Time') || s.includes('(PDT)');
+}
 
 var SAMSKRT_SCRIPT = 'Siddham'; // or 'Devaganari'
 function IAST(iast) {
@@ -437,6 +441,15 @@ function startsWith() {
     for (var i=1; i<len; ++i)
       if (host.startsWith(arguments[i])) return true;
   }
+  return false;
+}
+
+function endsWithAny() {
+  var len = arguments.length;
+  var s = arguments[0];
+  if (s)
+    for (var i=1; i<len; ++i)
+      if (s.endsWith(arguments[i])) return true;
   return false;
 }
 

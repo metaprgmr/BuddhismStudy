@@ -29,6 +29,7 @@
   medlite { color:blue }
   extra { font-style:italic }
   anno    { opacity:0.5 }
+  dim     { opacity:0.4 }
   doubt { color:red }
   digits { color:blue }
   fangshan { background-color:#f9f9ff }
@@ -55,6 +56,8 @@ function get(name){
    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
       return decodeURIComponent(name[1]);
 }
+function e(id) { return document.getElementById(id) }
+function showTop(id) { var el=e(id); el && el.scrollIntoView(); }
 
 console.log('?l=s    saṃskrit-only');
 console.log('?l=z    zhongwen-only');
@@ -152,3 +155,7 @@ function zCol(z, hasS, hasZ) {
 
 <p class="copyright"></p>
 </center></body></html>
+
+<script>
+var loc = get('loc'); loc && showTop('_s1');
+</script>

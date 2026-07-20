@@ -5,7 +5,6 @@
 <title>信裹居士學佛</title>
 <link rel="stylesheet" href="util/article.css">
 <script src="util/utils.js"></script>
-<script src="env-sample.js"></script>
 <script src="env.js"></script>
 <script>
 function extra() {
@@ -31,6 +30,10 @@ function extra() {
   }
   w('</td></tr></table>');
 }
+function calendarLink() {
+  var isJLR = new Date().getDay() == 0;
+  document.write(`《<a href="util/nongli.html">${isJLR?'<font style="background-color:lightyellow">戒律日</font>':'農曆年'}</a>》`);
+}
 </script>
 </head>
 <body><center>
@@ -48,14 +51,38 @@ if (isLoc) {
 </script>
 </h1>
 
-<h3 id="epithet" class="epithet"></h3>
+<div style="height:60px; align-content:center"><h3 id="epithet" class="epithet"></h3></div>
 <script>
-var epithets = [
-      ' &nbsp;無上甚深微妙法　百千萬劫難遭遇 <inv>*</inv><br>' +
-      ` &nbsp;我今見聞得受持　願解如來真實義 <dim><a href="javascript:renderText('epithet', epithets[1])">*</a></dim>`,
-      ' &nbsp;<font color="green">多讀大乘以廣其心　勤修觀行以銷其障 <inv>*</inv><br>' +
-      ` &nbsp;常求加被以開其慧　自在往生阿彌陀國</font> <dim><a href="javascript:renderText('epithet', epithets[0])">*</a></dim>` ];
-renderText('epithet', epithets[(Math.random() > 0.5) ? 0 : 1]);
+var nxtlnk = '<dim><a href="javascript:nextEpithet(1)">*</a></dim>',
+    epithets = [
+      ' &nbsp;<font class="epithet1">多讀大乘以廣其心‧勤修觀行以銷其障 <inv>*</inv><br>' +
+      ` &nbsp;常求加被以開其慧‧</font>自在往生阿彌陀國 ${nxtlnk}`,
+
+      ' &nbsp;<font class="epithet1">口 清清楚楚‧耳 明明白白 <inv>*</inv><br>' +
+      ` &nbsp;聲 勻勻淨淨‧意 綿綿密密</font> ${nxtlnk}`,
+
+      ' &nbsp;<font class="epithet1">有口若啞‧有耳若聾‧絕羣離俗‧其道乃崇 <inv>*</inv><br>' +
+      ` &nbsp;勿貴人知‧勿希天應‧恒一其心‧必堅必正</font> ${nxtlnk}`,
+
+      ` &nbsp;<font class="epithet1">不貪靜境‧不除妄想‧不求一心‧不希瑞應</font> ${nxtlnk}`,
+
+      ` &nbsp;<font class="epithet1">勤則不病‧不勤則病‧勿謂夙業‧其報甚近</font> ${nxtlnk}`
+];
+var curPick = (() => {
+                 var r = Math.random(), len = epithets.length;
+                 for (var i=len-1; i>=1; --i) if (r >= (i/len)) return i;
+                 return 0;
+              })();
+renderText('epithet', epithets[curPick]);
+var timer = setInterval(nextEpithet, 9000);
+function nextEpithet(opt) {
+  if (opt == 1 && timer) {
+    clearInterval(timer);
+    timer = setInterval(nextEpithet, 9000);
+  }
+  if (++curPick >= epithets.length) curPick = 0;
+  renderText('epithet', epithets[curPick]);
+}
 </script>
 
 <table border="0">
@@ -80,7 +107,7 @@ renderText('epithet', epithets[(Math.random() > 0.5) ? 0 : 1]);
 【<a href="library/index.html">圖書館</a>】<br>
 《<a href="util/repo-diagrams.html">圖形庫</a>》<br>
 《<a href="BFNN/book/books/0592S.htm">佛辭彙</a>》<br>
-《<a href="util/nongli.html">農曆年</a>》<br>
+<script>calendarLink()</script><br>
 【<a href="個人文集/善知識.html">善知識</a>】
 </td><td width="20px"></td><td valign=top bgcolor="#dde">
 【<a href="GDH/dailywork.html">直心道場</a>】<br>

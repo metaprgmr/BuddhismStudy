@@ -463,5 +463,7 @@ for (var i in a) {
   buf.w('</tr>');
 }
 buf.w('<tr><td colspan=3 class=end></td></tr></table>').render('stg');
+
+if (get('m') == 'r') showTop('_' + getRandomInt(1,333));
 </script>
 

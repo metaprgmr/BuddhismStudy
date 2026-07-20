@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <style>
 body { margin:0px; background-color:#d0d0d0 }
+a { text-decoration:none }
 turn { border:2px solid violet }
 .arrow { color:gray }
 .winter { color:#66f }
@@ -15,15 +16,15 @@ turn { border:2px solid violet }
 .monthBG { background-color:#FDFDFA }
 .borderT2 { border-top:2px solid #337 }
 .borderB1 { border-bottom:1px solid #337 }
-a { text-decoration:none }
 .jieqi { color:#3C3; font-weight:bold }
 .today { border:2px solid red; background-color:yellow }
 .event { background-color:#9ff; color:blue }
-.blood { background-color:#fff; color:blue }
 .traditional { color:red; font-weight:bold }
 .idate { font-size:14px }
 .nextyear { color:teal; font-style:italic }
+.nextyearBG { background-color:#cdd }
 .weekend  { color:red }
+.FullZhaiRi { font-size:14px; background-color:#AAF }
 .ZhaiRi   { font-size:14px; background-color:#DDF }
 .ZhaiRi1  { font-size:10px; background-color:#DDF }
 .ZhaiYue  { font-size:14px; background-color:#FEF }
@@ -34,12 +35,15 @@ inv { opacity:0 }
 red { color:red }
 </style>
 <title>農曆日曆</title>
+<script src="../env.js"></script>
+<script src="../xg--journal.js"></script>
 <script src="utils.js"></script>
 <script src="nongli.js"></script>
-<script src="../journal.js"></script>
+<script src="../xg--nongli.js"></script>
 </head>
 <body><center>
 <div id="stg"></div>
+<div id="notifier"></div>
 </center></body></html>
 
 <script>

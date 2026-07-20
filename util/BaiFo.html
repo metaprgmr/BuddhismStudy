@@ -30,13 +30,12 @@ case 'dz':
         `<a href="javascript:ender('Clicked')">`,
         '<img src="../images/南無地藏王菩薩1.jpg" title="Click to be full screen." height="900px"></a>');
   type = 'dz';
-  n = 0;
+  n = 4;
   break;
 case 'a': n = 1;
 default:
   type = 'a';
   if (!n) n = 1;
-console.log('a', n);
   buf.w(`<a href="javascript:ender('Clicked')">`,
         `<img src="../images/南無阿彌陀佛.jpg" title="Click to start."></a>`);
   break;
@@ -54,7 +53,6 @@ var a=e('a'), started, cnt=0;
 a.addEventListener('ended', ender);
 
 function ender(e) { // type: sk|dz|a
-console.log('b', cnt, n);
   if (e == 'Clicked') {
     if (started) {
       exitFullScreenMode();
@@ -74,6 +72,7 @@ console.log('b', cnt, n);
                break;
                // 全長：22'20"。平均約4.61秒一句佛號。單字52-bpm。
                // 全部四字段共長1328秒，整288聲佛號；最初4聲在前奏中。
+    case 'dz': a.src = '../images/南無地藏王菩薩聖號-7min.mp3'; break;
     }
     a.play();
     renderText('left', disp);

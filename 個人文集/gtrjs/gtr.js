@@ -240,6 +240,7 @@ function getLists() {
 185|27:51|A006o5otxzE|唯識三十頌（四）
 186|28:16|zyDe7o8gacY|唯識三十頌（五）
 ---|24:06|o5Z7t93B2eg|三界唯心，萬法唯識 => B
+---|27:32|KM62RdoRoW0|十七地 The Seventeen Stages of the Yogacarabhumi Sastra
 
 #!道人生活
 120|16:03|pG1YqnVKWdU|改造生命

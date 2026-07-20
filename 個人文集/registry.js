@@ -7,8 +7,11 @@ function w() { for (var i in arguments) document.write(arguments[i]) }
 function endOfArticle(id) {
   var info = articleInfo[id], invalidID = !info || info.invalidID;
   if (!info) throw `endOfArticle(id:'${id}'): invalid id.`;
-  var returnLnk = info.returnToMain ? '<a href="../index.html">返回主頁</a>'
-                                    : '<a href="index.html">返回《個人文集》目錄</a>';
+  var returnLnk;
+  if (info.returnToGoodTeachings) returnLnk = '<a href="善知識.html">返回《善知識》目錄</a>';
+  else                            returnLnk =  '<a href="index.html">返回《個人文集》目錄</a>';
+  if (!returnLnk) returnLnk = '<a href="../index.html">返回主頁</a>';
+  else returnLnk += '　　<a href="../index.html">返回主頁</a>';
   w(`
 <div class="noprint">
 <p>${returnLnk}</p><hr>
@@ -47,7 +50,7 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 241114|人之將死.html|人之將死
 250527|一即一切
 260526|海賢老和尚語錄
-260613|構思
+260719|拜佛與三觀
 #######
 240531|《無量壽經》三聖之考究
 250821|經或會集本.html|夏集《無量壽》是佛經嗎？
@@ -62,17 +65,19 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 240605|毛虫
 250630|凡夫苦
 260524|有感
-xxxxxxxx
+xxxxxxxxxxxxxxxx
 250530|淨界法師.html|【善知識】淨界法師
 260609|甘台榮居士.html|【善知識】甘台榮居士
 260625|南懷瑾老師.html|【善知識】南懷瑾老師
 250629|北川致遠書社.html|【善知識】北川致遠書社
 260713|智慧的密码.html|【善知識】智慧的密码
-260221|一念相應一念佛.html|?「一念相應一念佛」
+260221|一念相應一念佛.html|【善知識】「一念相應一念佛」
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 250625|淨空法師是對的
 250603|素質
 250916|十句
 260628|打坐歌
+260613|構思
 `.trim().split('\n');
 
   var hidden = false;
@@ -89,14 +94,7 @@ xxxxxxxx
         articleInfo[id] = obj = { id, hidden, uri:ln[1], title:ln[2] };
       else
         articleInfo[id] = obj = { id, hidden, uri:ln[1]+'.html', title:ln[1] };
-      if (obj.title) {
-        if (obj.title[0] == '?') {
-          obj.title = obj.title.substring(0, obj.title.length-1);
-          obj.returnToMain = true;
-        } else {
-          obj.returnToMain = obj.title.startsWith('【善知識】');
-        }
-      }
+      obj.returnToGoodTeachings = obj.title && obj.title.startsWith('【善知識】');
     }
   }
 })();
