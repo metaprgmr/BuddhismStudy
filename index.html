@@ -8,7 +8,8 @@
 <script src="env.js"></script>
 <script>
 function extra() {
-  var a = getGlobal('OTHERS'); if (!a) return;
+  var a = getGlobal('OTHERS');
+  if (!a) { w('&nbsp;'); return; }
   w('<table border=0><tr><td>');
   for (var i=0; i<a.length; i+=2) {
     var n = a[i], l = a[i+1], pref = '<br>';
