@@ -78,13 +78,14 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 250916|十句
 260628|打坐歌
 260613|構思
+szs|善知識
 `.trim().split('\n');
 
   var hidden = false;
   for (var i=0; i<lines.length; ++i) {
     var ln = lines[i].trim();
     if (ln.startsWith('xxxx')) hidden = true;
-    if (ln[0] != '2') continue;
+    if (ln[0] != '2' && !ln.startsWith('szs')) continue;
     var row = ln.split(MULTI_SEP);
     for (var j=0; j<row.length; ++j) {
       ln = row[j].split('|');
