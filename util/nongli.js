@@ -378,7 +378,11 @@ function showNongLiNian(nlyr, elid) {
           txt = e.substring(idx+1).trim();
           e = (idx===0) ? (cell.jieqi||zd) : e.substring(0, idx);
         }
-        if (e.length >= 2) {
+        if (e.startsWith('獻血') || e.startsWith('献血')) {
+          e = '&nbsp;&nbsp;🩸&nbsp;&nbsp;';
+          cls = (cls + ' blood').trim();
+        }
+        else if (e.length >= 2) {
           txt = `【${e}】${txt}`;
           e = e.substring(0,2);
           cls = (cls + ' event').trim();

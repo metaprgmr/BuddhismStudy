@@ -58,10 +58,10 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 230516|略言不言而喻之事
 250802|圍棋與人生.html|棋道•人道•佛道
 240210|對自己好一點
+260730|觀音娘娘頌
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
 230517|論飯桶，兼論素食
 231111|DuBist.html|Du Bist Was Du Isst
-231222|養生乎.html|養生，乎？
 240605|毛虫
 250630|凡夫苦
 260524|有感
@@ -73,6 +73,7 @@ xxxxxxxxxxxxxxxx
 260713|智慧的密码.html|【善知識】智慧的密码
 260221|一念相應一念佛.html|【善知識】「一念相應一念佛」
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+231222|養生乎.html|養生，乎？
 250625|淨空法師是對的
 250603|素質
 250916|十句

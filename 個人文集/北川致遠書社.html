@@ -14,9 +14,9 @@
 
 <div class="content">
 
-<p>　　這位<a href="https://www.youtube.com/@北川致遠書社" target="ext">北川先生</a>顯然其來有自，全譜系介紹佛法，以專題形式定點釋疑。言談直截了當，切入要害，不學究氣，不拖泥帶水。以滬人之縝密思維，觸類旁通，正論反證，頗有可看。語言時尚，不欠儒雅。
+<p>　　<a href="https://www.youtube.com/@北川致遠書社" target="ext">北川先生</a>，自述師從京都四明山一乘院的智廣阿闍梨。全譜系介紹佛法，以專題形式定點釋疑。言談直截了當，切入要害，不學究氣，不拖泥帶水。以滬人之縝密思維，觸類旁通，正論反證，頗有可看。語言時尚，不欠儒雅。
 
-<p>　　所列內容，隨時更新。完整內容，參看YouTube上的<a href="https://www.youtube.com/@北川致遠書社" target="ext">本尊</a>。</p>
+<p>　　所列內容，隨時更新。完整內容，參看YouTube上的<a href="https://www.youtube.com/@北川致遠書社" target="ext">本尊</a><a href="javascript:clearListShow()">。</a></p>
 
 <div id="stg"></div>
 <div id="perlist"></div>
@@ -143,10 +143,20 @@ var ytcoll = new YTCollection('《北川致遠書社》節目系列選集')
     .add(list1, list2, list3, list4, list5, list6, list7, list8, list9);
 ytcoll.renderTOC('showMyList').render('stg');
 
+const PERSIST = 'curBeiChuanList';
+function clearListShow() {
+  localStorage.removeItem(PERSIST);
+  renderText('perlist', '');
+}
 function showMyList(i) {
+  if (i == null) i = localStorage.getItem(PERSIST);
+  if (i == null) return;
+  localStorage.setItem(PERSIST, i);
   ytcoll.renderList(i, new Buffer('<center>'))
         .w('<hr color=lightgray></center>')
         .render('perlist');
 }
+
+showMyList();
 </script>
 
