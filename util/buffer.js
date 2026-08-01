@@ -1,3 +1,5 @@
+function e(id)    { return document.getElementById(id) }
+
 class Buffer {
   constructor() { this.bufList = Array.from(arguments); }
 

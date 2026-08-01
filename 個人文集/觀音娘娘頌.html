@@ -5,18 +5,30 @@
 <link rel="stylesheet" href="../util/article.css">
 <style>
 span { text-decoration: underline dotted red; }
+cur { font-size:24px; color:red; font-weight:bold; font-style:italic }
+.latin { font-style:italic }
+.anno  { font-size:12px }
 </style>
+<script src="../util/buffer.js"></script>
 <script src="registry.js"></script>
 </head>
 <body><center>
+<h1 style="margin-bottom:5px">觀音娘娘頌</h1>
 
-<h1>觀音娘娘頌</h1>
+<!-- i>“Santa Maria de la mer”</i -->
+<div class="content">
+<center>
+<div id="toc"></div>
+<hr style="color:red; margin-bottom:25px">
+<div id="stg"></div>
+<script> endOfArticle('260730'); </script>
+</center></body></html>
 
-<a title="Mireille Mathieu (youtube)" href="https://www.youtube.com/watch?v=Mhui0A804eQ&t=13"><img align=center src="files/santa-maria-de-la-mer.jpg" border=0><br>
-<i>“Santa Maria de la mer”</i></a>
+<script>
+var deLaMer = `
+<a title="Mireille Mathieu (youtube)" href="https://www.youtube.com/watch?v=Mhui0A804eQ&t=13"><img align=center src="files/santa-maria-de-la-mer.jpg" height="200" border=0></a><!-- full 452x235 -->
 
-<div class="content">&nbsp;
-<center><table border=0>
+<table border=0 style="margin-top:10px">
 <tr><td>
 La statue regarde la mer qui vagabonde<br>
 Sous le bleu du ciel sans hiver au bout du monde<br>
@@ -31,7 +43,7 @@ Aux prières des paysans qui lui demandent
 應答農人，向祂祈求：
 </td></tr>
 
-<tr><td style="font-style:italic; padding-left:16px">
+<tr><td class=latin style="padding-left:16px">
 Plein de pluie sur nos plaines, Santa Maria<br>
 Plein de blé sur nos terres<br>
 Dans nos maisons plein de fleurs<br>
@@ -46,7 +58,7 @@ D'un sourire au cœur
 <span title="賦予他們智慧">賦予他們光明</span>！
 </td></tr>
 
-<tr><td>
+<tr><td class=latin">
 La statue a des amoureux pleins de promesse<br>
 Et parfois je la prie des yeux quand tu me blesses<br>
 Et la mère qui porte l'enfant n'a qu'une histoire<br>
@@ -58,7 +70,7 @@ Et c'est celle de tous ces gens venus pour croire.
 衆人紛紛來朝拜，就為信靠這個
 </td></tr>
 
-<tr><td style="font-style:italic; padding-left:16px">
+<tr><td class=latin style="padding-left:16px">
 Plein de pluie sur nos plaines, Santa Maria<br>
 Plein de blé sur nos terres<br>
 Dans nos maisons plein de fleurs<br>
@@ -66,8 +78,75 @@ Protégez ceux que j'aime, Santa Maria<br>
 Donnez-leur la lumière<br>
 D'un sourire au cœur
 </td></tr>
-</table>
+</table>`;
+var SanctaMaria = `
+<p class=anno>Pietro Mascagni 曲（《鄉村騎士》間奏），Steven Mercurio 以拉丁禱告文填詞。<br>
+【<a href="https://youtu.be/selrkcvErG8?t=3" title="Sissel Kyrkjebø">女高音</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/XYe-tWBk7jI" title="Andrea Bocelli">男高音</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/K8YXU0ZuE_k" title="2017 G7 Opening Concert">管弦樂</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/k1IDfrdM1E0" title="André Rieu">管弦樂</a>】</p>
 
-<script> endOfArticle('260730'); </script>
+<table border=0 style="margin-top:10px">
+<tr><td class="latin">
+Ave Maria,<br>
+　gratia plena,<br>
+　Dominus tecum,<br>
+　benedicta, benedicta tu in mulieribus,<br>
+　et benedictus<br>
+　fructus ventris tui, Jesus.
+</td>
+<td width="20px" rowspan=3></td>
+<td>
+萬福瑪利亞，<br>
+　滿被聖寵者，<br>
+　主與妳同在。<br>
+讚頌妳，最受讚頌之女人！<br>
+亦讚頌<br>
+　妳腹中之果，耶穌！
+</td></tr>
 
-</center></body></html>
+<tr><td class="latin">
+Sancta Maria, Mater Dei,<br>
+　ora pro nobis peccatoribus,<br>
+　nunc et in hora mortis nostrae.<br>
+　Amen.
+</td><td>
+尊聖瑪利亞，上帝之母啊！<br>
+求妳為我等罪人禱告，<br>
+　從現在一直到命終。<br>
+阿們！
+</td></tr>
+
+<tr><td class="latin">
+Sancta Maria, Sancta Maria,<br>
+　ora pro nobis peccatoribus<br>
+　nunc et in hora mortis nostrae.<br>
+　Amen.
+</td><td>
+聖母啊！聖母！<br>
+求妳為我等罪人禱告，<br>
+　從現在一直到命終。<br>
+阿們！
+</td></tr>
+</table>`;
+
+var data = [
+  'Sancta Maria─Mascagni', SanctaMaria,
+  'Santa Maria de la mer', deLaMer
+];
+
+function show(idx) {
+  var buf = new Buffer();
+  for (var i=0; i<data.length/2; i++) {
+    if (i>0) buf.w('　　');
+    if (i == idx)
+      buf.w(`<cur>${data[i*2]}</cur>`);
+    else
+      buf.w(`<a href="javascript:show(${i})">${data[i*2]}</a>`);
+  }
+  buf.render('toc');
+  buf.w(data[idx*2+1]).render('stg');
+}
+
+show(1);
+</script>
