@@ -9,12 +9,26 @@
 <body>
 
 <script>
-var id = get('id');
-if (id == 'all')
+var id = get('id'), lib = get('lib') || get('b');
+if (lib)
+  showLib(lib);
+else if (id == 'all')
   showAll();
 else {
   var ai = articleInfo[id];
   window.open(`個人文集/${ai && ai.uri || 'index.html'}`, '_self');
+}
+
+function showLib(id) {
+  var vol = get('vol');
+  if (vol != null) vol = '?vol=' + vol; else vol = '';
+  var uri = 'BFNN/book/books';
+  switch (lib[0]) {
+  case '1': uri += '2'; break;
+  case '2': uri += '3'; break;
+  case '9': uri += '9'; break;
+  }
+  window.open(`${uri}/${id}.htm${vol}`, '_self');
 }
 
 function showAll() {
