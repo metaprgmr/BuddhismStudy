@@ -8,6 +8,7 @@ span { text-decoration: underline dotted red; }
 cur { font-size:24px; color:red; font-weight:bold; font-style:italic }
 .latin { font-style:italic }
 .anno  { font-size:12px }
+anno  { font-size:12px }
 </style>
 <script src="../util/buffer.js"></script>
 <script src="registry.js"></script>
@@ -28,7 +29,7 @@ cur { font-size:24px; color:red; font-weight:bold; font-style:italic }
 var deLaMer = `
 <a title="Mireille Mathieu (youtube)" href="https://www.youtube.com/watch?v=Mhui0A804eQ&t=13"><img align=center src="files/santa-maria-de-la-mer.jpg" height="200" border=0></a><!-- full 452x235 -->
 
-<table border=0 style="margin-top:10px">
+<table border=0 style="margin-top:20px">
 <tr><td>
 La statue regarde la mer qui vagabonde<br>
 Sous le bleu du ciel sans hiver au bout du monde<br>
@@ -79,12 +80,15 @@ Donnez-leur la lumière<br>
 D'un sourire au cœur
 </td></tr>
 </table>`;
-var SanctaMaria = `
+var Mascagni = `
 <p class=anno>Pietro Mascagni 曲（《鄉村騎士》間奏），Steven Mercurio 以拉丁禱告文填詞。<br>
 【<a href="https://youtu.be/selrkcvErG8?t=3" title="Sissel Kyrkjebø">女高音</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/ja5hQH9USIU" title="Aida Garifullina">女高音</a>
 &nbsp;•&nbsp;<a href="https://youtu.be/XYe-tWBk7jI" title="Andrea Bocelli">男高音</a>
-&nbsp;•&nbsp;<a href="https://youtu.be/K8YXU0ZuE_k" title="2017 G7 Opening Concert">管弦樂</a>
-&nbsp;•&nbsp;<a href="https://youtu.be/k1IDfrdM1E0" title="André Rieu">管弦樂</a>】</p>
+&nbsp;•&nbsp;<a href="https://youtu.be/K8YXU0ZuE_k" title="2017 G7 Opening Concert">交響</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/k1IDfrdM1E0" title="André Rieu">交響</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/-fDTjTzB0Gc" title="Lucca Philharmonic">交響</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/KFQ_QZDfQjw" title="HAUSER">弦樂</a>】</p>
 
 <table border=0 style="margin-top:10px">
 <tr><td class="latin">
@@ -130,23 +134,118 @@ Sancta Maria, Sancta Maria,<br>
 </td></tr>
 </table>`;
 
+var Schubert = `
+<table border=0 style="margin-top:-20px">
+<tr>
+<th nowrap>
+<b>Latin</b><br>
+<font class=anno>【<a href="https://youtu.be/SCwF6DGPCUc" title="Renée Fleming">女聲</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/ja5hQH9USIU" title="Aida Garifullina">女聲</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/XpYGgtrMTYs" title="Luciano Pavarotti">男聲</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/9Mk_IUj2ccs" title="Plácido Domingo">男聲</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/pwp1CH5R-w4" title="Andrea Bocelli">男聲</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/lfQkOIukZME" title="Boys Soprano & Countertenor">童合</a>
+&nbsp;•&nbsp;<a href="https://youtu.be/bgv_AHQN7Wg" title="HAUSER">弦樂</a>】</font>
+</th>
+<td rowspan=2 width="80px"></td>
+<th>
+<b>Deutsch</b><br>
+<font class=anno>【<a href="https://youtu.be/QxBTGS93zW0" title="Helene Fischer">女聲</a>】</font>
+</th>
+</tr>
+<tr><td class=latin valign=top>
+Ave Maria<br>
+Gratia plena<br>
+Maria, gratia plena<br>
+Maria, gratia plena<br>
+Ave, ave dominus<br>
+Dominus tecum<br>
+Benedicta tu in mulieribus<br>
+Et benedictus<br>
+Et benedictus fructus<br>
+Fructus ventris<br>
+Ventris tui, Jesus<br>
+Ave Maria<br>
+<br>
+Ave Maria<br>
+Mater Dei<br>
+Ora pro nobis peccatoribus<br>
+Ora, ora pro nobis<br>
+Ora, ora pro nobis, peccatoribus<br>
+Nunc et in hora mortis<br>
+In hora mortis nostrae<br>
+In hora mortis mortis nostrae<br>
+In hora mortis nostrae<br>
+Ave Maria
+</td>
+<td class=latin valign=top>
+Ave Maria<br>
+Heut' sind so viele ganz allein<br>
+Es gibt auf der Welt so viele Tränen<br>
+Und Nächte voller Einsamkeit<br>
+Und jeder wünscht sich einen<br>
+　Traum voller Zärtlichkeit<br>
+Und manchmal reichen ein paar Worte<br>
+Um nicht mehr so allein zu sein<br>
+Aus fremden Menschen werden Freunde<br>
+Und große Sorgen werden klein<br>
+Ave Maria<br>
+<br>
+Ave Maria<br>
+Weit ist die Reise durch die Nacht<br>
+Es gibt so viel Wege zu den Sternen<br>
+Und jeder sucht eine Hand die ihn hält<br>
+Vielleicht ist jemand so traurig wie Du<br>
+Komm und geh auf ihn zu<br>
+Verschließ' heut' Nacht nicht Deine Türe<br>
+Und öffne heut Dein Herz ganz weit<br>
+Und lass den andern Wärme spüren<br>
+In dieser kalten Weihnachtszeit<br>
+Ave Maria
+</td></tr>
+</table>`;
+
+var Caccini = `
+<table width="650px"><tr><td style="font-size:16px">
+<p><i>From Wikipedia</i></p>
+
+<p>"Ave Maria" is an aria composed by Vladimir Vavilov <anno>(May 5, 1925 - March 11, 1973)</anno> around 1970 and often misattributed to Italian composer Giulio Caccini. Vavilov published and recorded it himself in 1970 on the Melodiya label with the ascription "Anonymous".</p>
+
+<p>It is believed that organist Mark Shakhin, one of the performers on the original LP, first ascribed the work to Caccini after Vavilov's death, and gave the "newly-discovered" scores to other musicians. However, because Mark Shakhin died in 1970, predating Vladimir Vavilov's death, it is impossible that Shakhin was the one who disseminated the claim that this "Ave Maria" was Caccini's composition after Vavilov had died.</p>
+
+<p>The organist Oleg Yanchenko then made an arrangement of the aria for a recording by Irina Arkhipova in 1987, after which the piece came to be famous worldwide.</p>
+</td></tr></table>
+&nbsp;<br>
+
+<a href="https://youtu.be/iNaEpmNqeQY" title="Elīna Garanča">Elīna Garanča</a><br>
+<a href="https://youtu.be/wk7-hH-SBhM">Sumi Jo</a><br>
+<a href="https://youtu.be/iNaEpmNqeQY">Vásáry André</a><br>
+<a href="https://youtu.be/QvEQ8pw84mg">Inessa Galante</a><br>
+<a href="https://youtu.be/4mBJIbQHTHY">L'orchestre des concerts L'amoureux</a><br>
+<a href="https://youtu.be/B4s9GSivyMc">Festival Internacional de Órgano de Morelia</a><br>
+&nbsp;<br>
+&nbsp;
+`;
+
 var data = [
-  'Sancta Maria─Mascagni', SanctaMaria,
-  'Santa Maria de la mer', deLaMer
+  'Ave Maria─Schubert', Schubert,
+  'Ave Maria─Mascagni', Mascagni,
+  'Ave Maria─“Caccini”', Caccini,
+  'Santa Maria de la mer', deLaMer,
 ];
 
 function show(idx) {
   var buf = new Buffer();
   for (var i=0; i<data.length/2; i++) {
-    if (i>0) buf.w('　　');
+    if (i>0) buf.w('　');
     if (i == idx)
       buf.w(`<cur>${data[i*2]}</cur>`);
     else
-      buf.w(`<a href="javascript:show(${i})">${data[i*2]}</a>`);
+      buf.w(`<a href="javascript:show(${i})" style="font-size:14px; opacity:0.5">${data[i*2]}</a>`);
   }
   buf.render('toc');
   buf.w(data[idx*2+1]).render('stg');
 }
 
-show(1);
+show(3);
 </script>

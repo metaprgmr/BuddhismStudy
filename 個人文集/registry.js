@@ -52,13 +52,13 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 260526|海賢老和尚語錄
 260719|拜佛與三觀
 #######
+260730|觀音娘娘頌
 240531|《無量壽經》三聖之考究
 250821|經或會集本.html|夏集《無量壽》是佛經嗎？
 250321|與時俱進的提婆達多
 230516|略言不言而喻之事
 250802|圍棋與人生.html|棋道•人道•佛道
 240210|對自己好一點
-260730|觀音娘娘頌
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
 230517|論飯桶，兼論素食
 231111|DuBist.html|Du Bist Was Du Isst
