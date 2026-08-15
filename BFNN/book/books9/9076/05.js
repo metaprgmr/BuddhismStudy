@@ -26,40 +26,41 @@ SC.text = `
 ${COL_START}
 NAMO RATNA TRAYĀYA
 NAM’ĀRYĀ'VALOKITE-ŚVARĀYA
-bodhi-sattvāya mahā-sattvāya mahā-kāruṇikāya　
-oṃ sarva rabhaye ṣudhanadasya namas-kṛtvā
+BODHI-SATTVĀYA MAHĀ-SATTVĀYA
+MAHĀ-KĀRUṆIKĀYA　
 
+oṃ sarva rabhaye ṣudhanadasya namas-kṛtvā
 imaṃ āryā'valokite-śvara raṃdhāva
-namo nārakindi <i>hṝḥ</i> mahā-pāṭhāsya-me
+namo nārakindi <i>hṝḥ</i>
+mahā-pāṭhāsya-me
 sarvārtha-duḥ-śubhaṃ ājeyaṃ
-sarva sādhanāḥ mahā-sādhanāḥ
+sarva sādhanāḥ
+mahā-sādhanāḥ
 mahā-gharma bhā-dhāto
 
 tadyathā
 oṃ avaro-he loka-te karā-te e <i>hṝh</i>
-mahā bodhisattvaḥ
+mahā bodhi-sattvaḥ
 ${COL_DIV}
-
-
-sarva sarva māra-mārā
-mahe ma'hṛdayaṃ　
+sarva sarva māra-mārā mahe ma'hṛdayaṃ　
 kuru kuru kamaṃ
 dhuru dhuru bhājayate mahā-bhājayate
 dhara dhara dhṛnī-śvarāya
+
 cala cala mama bha-māra muktele
 ehi ehi
 śinā śinārṣāṃ varaḥ śalīḥ
 bhāṣa bhāṣāṃ varaḥ śayāḥ
 hulu hulu mārā hulu hulu <i>hṝḥ</i>
 sara sara siri siri suru suru
-bodhiya bodhiya bodhayabodhaya maitreyaḥ
+bodhiya bodhiya bodhayabodhaya
+maitreyaḥ
 ${COL_DIV}
-
-
 nārakindi dhṛṣnina pāya-mānā svāhā
 siddhāya svāhā
 mahā-siddhāya svāhā
 siddha-yoge-śvarāya svāhā
+
 nārakindi svāhā
 māranāra svāhā
 śilasam āmoghāya svāhā
