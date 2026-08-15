@@ -4,7 +4,7 @@ var articleInfo = {},
 
 function w() { for (var i in arguments) document.write(arguments[i]) }
 
-function endOfArticle(id) {
+function endOfArticle(id, moreLnks) {
   var info = articleInfo[id], invalidID = !info || info.invalidID;
   if (!info) throw `endOfArticle(id:'${id}'): invalid id.`;
   var returnLnk;
@@ -12,6 +12,7 @@ function endOfArticle(id) {
   else                            returnLnk =  '<a href="index.html">返回《個人文集》目錄</a>';
   if (!returnLnk) returnLnk = '<a href="../index.html">返回主頁</a>';
   else returnLnk += '　　<a href="../index.html">返回主頁</a>';
+  if (moreLnks) returnLnk = moreLnks + '　　' + returnLnk;
   w(`
 <div class="noprint">
 <p>${returnLnk}</p><hr>
@@ -25,7 +26,7 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 (() => {
   var jklb = 'JK-Learn-Buddhism-';
   lines = `
-240530|${jklb}認識佛教筆記.html|《認識佛教》筆記${MULTI_SEP}240608|${jklb}Review-Qs.html|復習
+240530|${jklb}認識佛教筆記.html|《認識佛教》筆記${MULTI_SEP}240608|${jklb}Review-Qs.html|等
 250328|WLSJs_various.html|《無量壽經》諸版對照
 260220|彌陀要解精要.html|《彌陀要解》精要
 250828|地藏菩薩大智開示
@@ -39,33 +40,35 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 260629|小乘大乘
 #######
 260519|勸學佛
-260525|托福進修學校
 260107|百過歌
 260111|佛子根
 251107|念佛节奏.html|念佛节奏計算器
 250917|發露懺悔
 250515|廿字加卅字
-241113|浪費時間
 260210|念佛訣竅
-241114|人之將死.html|人之將死
-250527|一即一切
 260526|海賢老和尚語錄
-260719|拜佛與三觀
 #######
 260730|觀音娘娘頌
 240531|《無量壽經》三聖之考究
-250821|經或會集本.html|夏集《無量壽》是佛經嗎？
+250821|經或會集本.html|夏蓮居會集本是佛經嗎？
+260813|陳曉旭事件解讀
 250321|與時俱進的提婆達多
 230516|略言不言而喻之事
 250802|圍棋與人生.html|棋道•人道•佛道
+#######
 240210|對自己好一點
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
-230517|論飯桶，兼論素食
-231111|DuBist.html|Du Bist Was Du Isst
+230517|論飯桶，兼論素食.html|論素食
+241113|浪費時間
+241114|人之將死
+250527|一即一切
 240605|毛虫
 250630|凡夫苦
 260524|有感
+260525|托福進修學校
+260719|拜佛與三觀
 xxxxxxxxxxxxxxxx
+231111|DuBist.html|Du Bist Was Du Isst
 250530|淨界法師.html|【善知識】淨界法師
 260609|甘台榮居士.html|【善知識】甘台榮居士
 260625|南懷瑾老師.html|【善知識】南懷瑾老師

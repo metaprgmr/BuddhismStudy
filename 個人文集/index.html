@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../util/article.css">
 <style>
 th { border-bottom:2px solid gray; font-size:24px }
-ol { font-size:20px; line-height:150% }
+ol { font-size:20px; line-height:1.4 }
 </style>
 <script src="../util/utils.js"></script>
 <script src="registry.js"></script>
@@ -19,13 +19,13 @@ ol { font-size:20px; line-height:150% }
 
 <script>
 var buf = new Buffer(), idx = 1, testing = get('test');
-buf.w('<center><table cellspacing="5px" cellpadding="0"><tr><th>佛法</th><th>修行</th><th>雜論</th></tr>');
-buf.w('<tr><td valign="top"><ol>');
+buf.w('<center><table cellspacing="5px" cellpadding="0"><tr><th>佛法</th><th>修行</th><th>雜論</th><th>隨想</th></tr>');
+buf.w('<tr><td valign="top" nowrap><ol>');
 for (var i=0; i<lines.length; ++i) {
   var ln = lines[i];
   if (ln.startsWith('xxxx')) break;
   if (ln.startsWith('####')) {
-    buf.w('</ol></td><td style="padding-left:30px" valign="top">',
+    buf.w('</ol></td><td style="padding-left:0px" valign="top" nowrap>',
           `<ol start="${idx}">`);
     continue;
   }
@@ -38,7 +38,8 @@ for (var i=0; i<lines.length; ++i) {
     
     if (!info || info.invalidID) alert(`Dup id: ${id}`);
     else {
-      var uri = testing ? `../a.html?id=${id}` : info.uri, ttl = info.title;
+      var uri = testing ? `../a.html?id=${id}` : info.uri,
+          ttl = info.title.replace('《','<small>《</small>').replace('》','<small>》</small>').replace('梗概','');
       if (ttl.startsWith('「一念相應一念佛」'))
         buf.w(`<a href="../a.html?id=all">「</a><a href="${uri}" title="${id}">${ttl.substr(1)}</a>`);
       else
