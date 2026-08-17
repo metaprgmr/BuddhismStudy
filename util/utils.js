@@ -1207,8 +1207,8 @@ function writingRedir(name, ttl, back) {
 function getYourName(yourTag, anyTag) {
   var ret = urlMyName || getGlobal('MYNAME');
   if (ret) return !yourTag ? ret : `<${yourTag}>${ret}</${yourTag}>`;
-  const help = "若要設定名字，有二法：\n1. 在env.js裡加: var MYNAME='張三';\n2. 在url上加?myname=張三";
-  return !anyTag ? '某甲' : `<${anyTag} title="${help}">某甲</${anyTag}>`;
+  const help = '若要設定名字，有二法：\n1. 在env.js裡加: var MYNAME="張三";\n2. 在url上加?myname=張三';
+  return !anyTag ? '某甲' : `<${anyTag} title='${help}'>某甲</${anyTag}>`;
 }
 
 function isMe() { return getGlobal('MYNAME') == '信裹'; }
