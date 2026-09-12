@@ -79,6 +79,7 @@ class NongLiDay {
   }
   toDate() { return new Date(this.year, this.month, this.day+1); }
   setYang(year, month, day, week, festival) { // y/m/d are all human numbers
+    this.numInMonth = Math.ceil(Math.max(0,day-7)/7) + 1;
     this.year  = year;
     this.month = month - 1;   // 0-based
     this.day   = day - 1;     // 0-based
@@ -86,6 +87,16 @@ class NongLiDay {
     this.iToken   = toToken(year, month, day);
     this.festival = festival;
     dayColl[this.iToken] = dayColl[this.yinToken] = dayColl[this.yx] = this;
+  }
+  isDSTStart() { return this.month == 2  && this.week == 6 && this.numInMonth == 2; }
+  isDSTEnd()   { return this.month == 10 && this.week == 6 && this.numInMonth == 1; }
+  setDST() { this.dst = true; }
+  compare(nld) { // nld: a NongLiDay; returns 1 if nld is earlier, 0 if equal, -1 if nld is later.
+    if (!nld) return 1;
+    if (this.year  > nld.year)  return 1; if (this.year  < nld.year)  return -1;
+    if (this.month > nld.month) return 1; if (this.month < nld.month) return -1;
+    if (this.day   > nld.day)   return 1; if (this.day   < nld.day)   return -1;
+    return 0;
   }
   isSameDate(d) { // d: a Date object
     return this.year == d.getFullYear() && this.month == d.getMonth() && this.day == d.getDate()-1;
@@ -140,7 +151,7 @@ class NongLiYear {
     }
 
     // all components are 1-based
-    var myMonths = Array.from(nlconsts.iMonths), monthCnt = this.daysOfMonths.length;
+    var myMonths = Array.from(nlconsts.iMonths), monthCnt = this.daysOfMonths.length, dstStart, dstEnd;
     if ((this.year % 4 === 0) && (this.year % 400 !== 0)) // international leap year
       myMonths[1] = 29;
 
@@ -184,6 +195,13 @@ class NongLiYear {
         }
         me = cells[i][j];
         me.setYang(curYear, curMonth+1, curDay+1, curWeek+1);
+        if (!dstStart && me.isDSTStart()) dstStart = me;
+        if (!dstEnd   && me.isDSTEnd())   dstEnd   = me;
+        if (dstStart) {
+          var cmp = me.compare(dstStart);
+          if ((cmp >= 0) && (!dstEnd || me.compare(dstEnd) < 0))
+            me.setDST();
+        }
       }
     }
 
@@ -363,12 +381,13 @@ function showNongLiNian(nlyr, elid) {
   for (i=0; i<30; ++i) {
     buf.w('<tr>');
     for (j=nlnMonth-1; j<monthCnt; ++j) {
-      var cell = dayColl[`${i}_${j}`], zd = cell && cell.festival, cls = zd ? 'traditional' : '';
+      var cell = dayColl[`${i}_${j}`], zd = cell && cell.festival, cls = zd ? 'traditional' : '',
+          clsDst = cell && cell.dst ? ' dst' : '';
       zd = zd || cell && cell.zday || '';
       if (zd === '') { buf.w('<td class="bodyLike"></td>'); continue; }
       var txt = '', todayTxt = '',
           jq = cell.jieqi || (cell.iToken && (cell.day==0 && cell.month==0) && '元旦'),
-          e = cell.event;
+          e = cell.event, isAction = e && (e[0] == '!');
       if (cell.isSameDate(today)) {
         TODAY = cell;
         cls += (cls + ' today').trim();
@@ -376,6 +395,10 @@ function showNongLiNian(nlyr, elid) {
       }
       if (jq) cls = (cls + ' jieqi').trim();
       if (e) {
+        if (isAction) {
+          e = e.substr(1);
+          cls = (cls + ' action').trim();
+        }
         var idx = e.indexOf(':'), txt = '';
         if (idx >= 0) {
           txt = e.substring(idx+1).trim();
@@ -388,18 +411,20 @@ function showNongLiNian(nlyr, elid) {
         else if (e.length >= 2) {
           txt = `【${e}】${txt}`;
           e = e.substring(0,2);
-          cls = (cls + ' event').trim();
+          if (isAction)
+            cls = cls + ' action';
+          else
+            cls = 'event ' + cls;
         }
-        zd = `<font class="${cls}" title="${txt}">${e}</font>`; // HERE
-        zd = `<font class="${cls}"${todayTxt}>${zd}</font>`;
+        zd = `<font class="${cls}" title="${txt}">${e}</font>`;
       } else if (jq) {
         zd = `<font class="${cls}"${todayTxt}>${jq}</font>`;
       } else if (cls) {
         zd = `<font class="${cls}"${todayTxt}>${zd}</font>`;
       }
+      cls = cell.isUpavasaNotFull() ? 'ZhaiRi' : 'idate';
       var otheryr = cell.iToken.substring(0,4) != cell.yinToken.substring(3,7),
           wd = nlconsts.iWdayNames[cell.week],
-          cls = cell.isUpavasaNotFull() ? 'ZhaiRi' : 'idate',
           cellCls = '';
       switch (cell.yinMonth) {
       case 1: case 5: case 9: if (!cellCls.startsWith('ZhaiRi')) cellCls = 'ZhaiYue';
@@ -433,8 +458,8 @@ function showNongLiNian(nlyr, elid) {
             }
         }
       }
-      buf.w(`<td nowrap align="left" class="${cellCls}" title="${memorial||''}">&nbsp;`, zd,
-            ` <font class="${cls}" ${txt ? ' class=event':''} title="${memorial||txt||''}">${wd}</font></td>`);
+      buf.w(`<td nowrap align="left" class="${cellCls}${clsDst}" title="${memorial||''}">&nbsp;${zd}`,
+            ` <font class="${cls}" title="${memorial||txt||''}">${wd}</font></td>`);
     }
     buf.w('</tr>');
   }
