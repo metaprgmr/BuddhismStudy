@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../util/article.css">
 <style>
 span { text-decoration: underline dotted red; }
-cur { font-size:24px; color:red; font-weight:bold; font-style:italic }
+cur { font-size:18px; color:red; font-weight:bold; font-style:italic }
 .latin { font-style:italic }
 .anno  { font-size:12px }
 anno  { font-size:12px }
@@ -14,7 +14,7 @@ anno  { font-size:12px }
 <script src="registry.js"></script>
 </head>
 <body><center>
-<h1 style="margin-bottom:5px">觀音娘娘頌</h1>
+<h1 style="margin-bottom:5px">觀音娘娘頌（西方版）</h1>
 
 <!-- i>“Santa Maria de la mer”</i -->
 <div class="content">
@@ -227,11 +227,42 @@ var Caccini = `
 &nbsp;
 `;
 
+var GregorianChant = `
+<a href="https://www.youtube.com/watch?v=IXz_SJeUzhw">Ave Maria: Sancta Mater — Catholic Hymn of Grace & Divine Light</a>
+<br>&nbsp;
+<table border=0 style="margin-top:10px">
+<tr>
+<td>
+<a href="files/Ave_Maria_Sancta_Mater-Catholic_Hymn_of_Grace_Divine_Light-Gregorian_Chant.jpg"><img align=center src="files/Ave_Maria_Sancta_Mater-Catholic_Hymn_of_Grace_Divine_Light-Gregorian_Chant.jpg" height="280" border=0></a>
+</td>
+<td width="15px"></td>
+<td class="latin" valign=top>
+Ave Maria,<br>
+　gratia plena,<br>
+　Dominus tecum,<br>
+　benedicta tu in mulieribus,<br>
+　et benedictus<br>
+　fructus ventris tui, Jesus.<br>
+<br>
+Sancta Maria, Mater Dei,<br>
+　ora pro nobis peccatoribus,<br>
+　nunc et in hora mortis nostrae.<br>
+　Amen.
+</td></tr>
+<tr><td colspan=3 align=center>&nbsp;<br>&nbsp;<br>
+<audio controls style="width:740px" src="files/Ave_Maria_Sancta_Mater-Catholic_Hymn_of_Grace_Divine_Light-Gregorian_Chant.mp3"></audio>
+</td></tr>
+</table>
+&nbsp;<br>
+&nbsp;
+`;
+
 var data = [
   'Ave Maria─Schubert', Schubert,
   'Ave Maria─Mascagni', Mascagni,
   'Ave Maria─“Caccini”', Caccini,
   'Santa Maria de la mer', deLaMer,
+  'Gregorian Chant', GregorianChant,
 ];
 
 function show(idx) {
@@ -247,5 +278,5 @@ function show(idx) {
   buf.w(data[idx*2+1]).render('stg');
 }
 
-show(3);
+show(4);
 </script>
