@@ -1,6 +1,7 @@
 var I20zi = '<img src="../../../images/真誠清淨平等正覺慈悲看破放下自在隨緣念佛.jpg" style="padding:19px 0px 39px 19px" align=right width=284>';
 SC.volNum = 2;
 SC.subttl = '淨空大師是觀世音菩薩再來';
+SC.footnotes = footnotes('《<a href="../../../個人文集/淨空法師永遠活在人間.html">淨空法師永遠活在人間</a>》')
 SC.text = `
 如前所述，淨空法師沒有可能性是凡人。祂是觀世音菩薩再來。我將擺出很多證據、證明，沒有問題。大士選擇在中國發生、入華夏族裔，說明了中國人的福報。
 

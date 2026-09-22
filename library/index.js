@@ -22,6 +22,8 @@ var allMarkedTopics = {}; // for 其他 type
   }
 })();
 
+var readyIDs = {};
+
 function showNav(category) {
   var a = categories.split('|'), buf = new Buffer();
   for (var i=0; i<a.length; ++i) {
@@ -173,6 +175,7 @@ function showList(category) {
   for (var i in BFNN_WORKS) {
     var wk = BFNN_WORKS[i];
     if (!wk.isAvailOrGet()) continue;
+    if (wk.isAvail()) readyIDs[`${wk.id}`] = true;
     if (isAdded && wk.isAdded() || allSutras && wk.isSutraOrSastra()) {
       lsts[0].push(wk);
       continue;
@@ -213,7 +216,7 @@ function showList(category) {
 }
 
 function showSutraList(buf) {
-  var lsts = new ChoiceLists(), len = lsts.collectionCount();
+  var lsts = new ChoiceLists(readyIDs), len = lsts.collectionCount();
   buf.w('<p style="font-size:5px">&nbsp;</p>',
         ' <center><table border=0 bgcolor="white"><tr><td valign=top>');
   for (var i=0; i<len; ++i) {

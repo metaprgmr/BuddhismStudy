@@ -26,6 +26,7 @@ nonverse { color:black }
 .nonverse { color:black }
 kepan { color:#339; font-weigth:normal }
 .kepan { color:#339; font-weigth:normal }
+.quotation { font-size:12.0pt; color:#006; margin-right:0px }
 anno { color:#008; font-size:10.0pt; font-weight:normal } /* annotation */
 .anno { color:#008; font-size:10.0pt; font-weight:normal } /* annotation */
 ail { color:#008; font-size:10.0pt; font-weight:normal } /* annotation in-line */

@@ -461,6 +461,11 @@ class DocInfo {
   }
   writeln(ln, lnnum) {
     var toHL, idx1, idx2;
+    if (ln.startsWith('/SEPSECTION')) { // e.g. 2161
+      this.w('<hr class=volsep>');
+      ln = '/' + ln.substr(4);
+    }
+
     if (ln[0] == '!') { // e.g. 9010/16.js -- to be depreated, in favor of at the end
       console.log('TO BE DEPRECATED: use end-of-line style.', ln);
       idx1 = ln.indexOf('!', 2);
