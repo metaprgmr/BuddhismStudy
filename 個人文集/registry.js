@@ -23,6 +23,19 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 </div>`);
 }
 
+function listArticles() {
+  var artIDs = Object.keys(articleInfo);
+  artIDs.sort();
+  var buf = new Buffer();
+  buf.w('<center><table>');
+  for (var i in artIDs) {
+    var ainfo = articleInfo[artIDs[i]], id = ainfo.id;
+    if (id.length == 6) id = id.substr(0,2) + '-' + id.substr(2,2) + '-' + id.substr(4);
+    buf.w(`<tr><td>${id}</td><td width="20px"></td><td><a href="${ainfo.uri}">${ainfo.title}</a></td></tr>`);
+  }
+  return buf.w('</table></center>');
+}
+
 (() => {
   var jklb = 'JK-Learn-Buddhism-';
   lines = `
@@ -56,7 +69,6 @@ https://metaprgmr.github.io/BuddhismStudy/a.html?id=${id}${invalidID?' *':''}
 250321|與時俱進的提婆達多
 230516|略言不言而喻之事
 250802|圍棋與人生.html|棋道•人道•佛道
-260921|世界佛教教皇
 #######
 240210|對自己好一點
 260209|Vimalakirti-Tang-Poems.html|維摩詰唐詩選
@@ -78,6 +90,7 @@ xxxxxxxxxxxxxxxx
 260713|智慧的密码.html|【善知識】智慧的密码
 260221|一念相應一念佛.html|【善知識】「一念相應一念佛」
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+260921|世界佛教教皇
 231222|養生乎.html|養生，乎？
 250625|淨空法師是對的
 250603|素質
