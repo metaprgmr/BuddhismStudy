@@ -3673,15 +3673,17 @@ new JKPSLesson('H6cRzByZ4_E', '無始無明',
 /*
 (https://www.youtube.com/watch?v=)
 淨空法師：
-eJwd6VmnR2A 法界怎麼講法？
 4jNr-TaWbIk 菩薩十種特殊的能力
 vztC64wRUis 阿彌陀佛四十八願的氣分
 qm6izcDa9Bw 你們的戒律好多條，我的戒律就一條
 BJR5eZT0cR8 戒律的精神
 F5hwN3G8_cg 了解忍力成就
 gQufoRZbxhw 起心動念想佛，佛就現前，想其他東西都是六道輪迴。
-F5hwN3G8_cg 了解忍力成就
+
+eJwd6VmnR2A 法界怎麼講法？
 NFrYRIY6DKo 怎樣判斷某部經不是偽經?
+bKaijIZqcHs 為何魔王波旬不怕果報？他的魔子孫來破壞佛法何用意？
+d0fXL1FMgRg 請魔王波旬做護法
 */
 
 // 〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇

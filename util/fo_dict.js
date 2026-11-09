@@ -99,6 +99,8 @@ addFoTerms('śūnyatā',          '舜若多', INT, '空性');
 addFoTerms('gāthā',            '伽他', '偈佗', '偈陀', '偈', INT, '偈頌');
 addFoTerms('āraṇya',           '阿練若', '阿蘭若', '阿蘭那', INT, '寂靜處', '無諍處', '叢林', '佛寺', '禪寺');
 
+addFoTerms('pāpman',           '波旬', '波俾掾', '波椽', '波鞞', '陂旬', '波俾', '播裨', '波卑夜', '波卑面', '波旬逾', '波䀏', INT, '第六天魔王', '六梵天主', '天魔主', '他化自在天主');
+
 addFoTerms('sukhāmatī',        '須摩提', '須阿提', '須呵摩提', '須呵摩持', INT, '西方極樂世界');
 addFoTerms('kāmadhātu',        INT, '慾界', 'Desire realm');
 addFoTerms('rūpadhātu',        INT, '色界', 'Form realm');

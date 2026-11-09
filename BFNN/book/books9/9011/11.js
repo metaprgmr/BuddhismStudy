@@ -1,6 +1,6 @@
 NJ.volNum = 11;
 NJ.text = `
-/TEXT339/聖行品第十九之一
+/SECTION/聖行品第十九之一
 
 爾時，佛告迦葉菩薩：
 

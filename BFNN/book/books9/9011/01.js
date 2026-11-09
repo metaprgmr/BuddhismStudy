@@ -1,7 +1,7 @@
 NJ.volNum = 1;
 NJ.text = `
 
-/TEXT339/序品第一
+/SECTION/序品第一
 
 如是我聞：
 

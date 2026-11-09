@@ -53,7 +53,7 @@ buf.w(`
 /TEXT030C/宋代沙門慧嚴等依泥洹經加之
 
 /VOLSEP/
-<center><table><tr><td>`);
+${COL_START}`);
 
 function volNumDisp(n) {
   var ret = `卷第${zNumber(n)}`;
@@ -72,7 +72,7 @@ for (var i=0; i<list.length; ++i) {
   buf.w(ln[0].replaceAll('〇', '　'), '</a>');
 }
 
-buf.w(`</td></tr></table></center>
+buf.w(`${COL_END}
 /VOLSEP/
 `);
 

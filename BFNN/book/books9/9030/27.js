@@ -1,6 +1,6 @@
 DJJ.volNum = 27;
 DJJ.text = `
-/TEXT339/無盡意菩薩品第十二之一
+/SECTION/無盡意菩薩品第十二之一
 
 如是我聞：
 
