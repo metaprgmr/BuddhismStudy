@@ -36,11 +36,14 @@ ail:after  { content:"❳ " }
 cil { color:#777; font-size:10.0pt; font-weight:normal } /* comment in-line */
 inv { opacity:0 }
 dim { opacity:0.3 }
-.announce500 { width:500px; padding:5px; border:1px blue solid; text-align:center; font-family: "FangSong", "仿宋", STFangsong, "华文仿宋" }
-.announce { width:750px; padding:5px; border:1px blue solid; text-align:center; font-family: "FangSong", "仿宋", STFangsong, "华文仿宋" }
+.announce500 { width:500px; padding:5px; border:1px blue solid; text-align:center; font-family:"FangSong","仿宋",STFangsong,"华文仿宋" }
+.announce { width:750px; padding:5px; border:1px blue solid; text-align:center; font-family:"FangSong","仿宋",STFangsong,"华文仿宋" }
 .content { border:0px red solid; width:750px; text-align:left; font-size:19px }
 .contentW { border:0px red solid; width:900px; text-align:left; font-size:19px }
 .contentW2 { border:0px red solid; width:1000px; text-align:left; font-size:19px }
+.contentFangSong { border:0px red solid; width:750px; text-align:left; font-size:19px; font-family:"FangSong","仿宋",STFangsong,"华文仿宋" }
+.contentFangSongW { border:0px red solid; width:900px; text-align:left; font-size:19px; font-family:"FangSong","仿宋",STFangsong,"华文仿宋" }
+.contentFangSongW2 { border:0px red solid; width:1000px; text-align:left; font-size:19px; font-family:"FangSong","仿宋",STFangsong,"华文仿宋" }
 .gatha   { text-align:center }
 ol.cjk   { list-style-type: cjk-ideographic; }
 

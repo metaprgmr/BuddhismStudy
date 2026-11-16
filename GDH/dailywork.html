@@ -140,10 +140,13 @@ class DojoBuffer extends Buffer {
   wBeginning(lead) {
     return this.wIf(lead, lead)
                .w('<ol>')
-               .lnk ('《香讚》',        'various.js', '_1', '爐香讚.png')
-               .lnk ('南無三寶',        'various.js', '_3', '三寶佛.png')
-               .lnk ('南無 釋迦牟尼佛', 'various.js', '_4', '釋迦牟尼佛.jpg')
-               .lnk ('《開經偈》',      'various.js', '_4', '釋迦牟尼佛.jpg');
+               .lnk ('《香讚》',        'various.js', '_1',  '爐香讚.png')
+               .lnk ('南無三寶',        'various.js', '_3',  '三寶佛.png')
+               .lnk ('南無 釋迦牟尼佛', 'various.js', '_4',  '釋迦牟尼佛.jpg')
+               .lnk ('《開經偈》',      'various.js', '_4',  '釋迦牟尼佛.jpg')
+               .lnk('《蓮池讚》',       'various.js', '_6',  '極樂世界圖.png')
+               .lnk('南無極樂三聖',     'various.js', '_6',  '極樂世界三聖.jpg');
+               .lnk('禮請護法天龍',     'various.js', '_72', '護法神靈.jpg');
   }
   w懺悔發願() {
     return this.lnk ('《普賢十願》',       'various.js', '_11', '普賢菩薩十大願.jpg')
@@ -210,8 +213,6 @@ class DojoBuffer extends Buffer {
 
   PureLandSession() {
     this.wBeginning()
-        .lnk('《蓮池讚》', 'various.js', '_6', '極樂世界圖.png')
-        .lnk('南無極樂三聖', 'various.js', '_6', '極樂世界三聖.jpg')
         .mainlnk('《佛說阿彌陀經》', 'amtb.js', null, '極樂世界圖.png')
         .mainlnkS('阿彌陀佛四十八願', '../淨土宗/《無量壽經》/48.html', null, '極樂世界圖.png')
         .lnkS('拔一切業障根本<br>得生淨土陀羅尼', 'various.js', '_7', '南無阿彌陀佛.jpg')
@@ -232,11 +233,8 @@ class DojoBuffer extends Buffer {
         .lnkS('《南無阿彌陀佛歌讚》', '../images/amtb4.mp3', null, '南無阿彌陀佛.jpg')
         .renderIt();
   }
-
   AmtbSession() {
     this.wBeginning('<p>&nbsp;</p>')
-        .lnk ('《蓮池讚》', 'various.js', '_6', '極樂世界圖.png')
-        .lnk ('南無 極樂三聖', 'various.js', '_6', '極樂世界三聖.jpg')
         .mainlnkS('《佛說大乘無量壽<br>莊嚴清淨平等覺經》', `wlsj.js&level=${LEVEL}&noaudio=1`, '_1', '極樂世界圖.png')
         .lnk ('拔一切業障根本<br>得生淨土陀羅尼')
         .lnk ('《阿彌陀佛頌》', 'various.js', '_7', '南無阿彌陀佛.jpg')

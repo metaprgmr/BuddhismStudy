@@ -75,7 +75,7 @@ var curPick = (() => {
                  return 0;
               })();
 renderText('epithet', epithets[curPick]);
-var timer = setInterval(nextEpithet, 9000);
+var timer = setInterval(nextEpithet, 12000);
 function nextEpithet(opt) {
   if (opt == 1 && timer) {
     clearInterval(timer);

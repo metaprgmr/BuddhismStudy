@@ -99,6 +99,12 @@ addFoTerms('śūnyatā',          '舜若多', INT, '空性');
 addFoTerms('gāthā',            '伽他', '偈佗', '偈陀', '偈', INT, '偈頌');
 addFoTerms('āraṇya',           '阿練若', '阿蘭若', '阿蘭那', INT, '寂靜處', '無諍處', '叢林', '佛寺', '禪寺');
 
+addFoTerms('māra',             '魔羅', '魔', INT, '障礙', '擾亂', '奪命者');
+addFoTerms('Kleśa-māra',       '煩惱魔');
+addFoTerms('skandha-māra',     '五陰魔', '五蘊魔');
+addFoTerms('mṛtyu-māra',       '死魔');
+addFoTerms('devaputra-māra',   '天魔');
+
 addFoTerms('pāpman',           '波旬', '波俾掾', '波椽', '波鞞', '陂旬', '波俾', '播裨', '波卑夜', '波卑面', '波旬逾', '波䀏', INT, '第六天魔王', '六梵天主', '天魔主', '他化自在天主');
 
 addFoTerms('sukhāmatī',        '須摩提', '須阿提', '須呵摩提', '須呵摩持', INT, '西方極樂世界');
