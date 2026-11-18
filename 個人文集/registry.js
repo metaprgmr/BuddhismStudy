@@ -51,6 +51,7 @@ function listArticles() {
 260123|DZJ-synopsis.html|《地藏菩薩本願經》梗概
 250509|CAUSE-AND-EFFECT.html|《因果》
 260629|小乘大乘
+261117|三細六粗
 #######
 260519|勸學佛
 260107|百過歌
@@ -60,7 +61,6 @@ function listArticles() {
 250515|廿字加卅字
 260210|念佛訣竅
 260526|海賢老和尚語錄
-261106|著境即魔分別無定.html|著境即魔，分別無定
 #######
 260730|觀音娘娘頌
 240531|《無量壽經》三聖之考究
@@ -93,6 +93,7 @@ xxxxxxxxxxxxxxxx
 260221|一念相應一念佛.html|【善知識】「一念相應一念佛」
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 260921|世界佛教教皇
+261106|著境即魔分別無定.html|著境即魔，分別無定
 231222|養生乎.html|養生，乎？
 250625|淨空法師是對的
 250603|素質
