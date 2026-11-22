@@ -227,6 +227,7 @@ function nextRow(w) {
 const COL_START = colStart(),
       COL_DIV   = colDiv(),
       COL_DIV1  = colDiv(1),
+      COL_DIV5  = colDiv(5),
       COL_DIV15 = colDiv(15),
       COL_DIV20 = colDiv(20),
       COL_DIV30 = colDiv(30),

@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>蓮花生大師本生傳</title>
+<link rel="stylesheet" href="../books/book.css">
+<style>
+u { text-decoration-color:red; text-decoration-style:dashed; color:#030 }
+sup { font-size:10px; color:black }
+.tocNum { font-size:12px }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+var lines = [
+  134, 124, 327, 66, 505, 191, 121, 248, 228, 112, 207, 109, 114, 81, 60, 118, 115, 77, 177, 310, 462, 115, 41, 60, 49, 62, 230, 103, 55, 230, 111, 246, 118, 177, 199, 107, 123, 159, 103, 237, 228, 214, 164, 58, 147, 126, 67, 157, 106, 123, 98, 187, 406, 94, 75, 40, 70, 110, 165, 164, 196, 203, 51, 64, 78, 65, 155, 80, 70, 75, 102, 99, 110, 66, 182, 175, 147, 97, 132, 111, 70, 117, 251, 256, 245, 423, 75, 135, 263, 124, 230, 381, 188, 142, 71, 219, 212, 110, 109, 190, 77, 243, 102, 364, 89, 616, 333, 139
+];
+--lines[3-1];  --lines[4-1];  --lines[20-1]; --lines[27-1]; --lines[33-1]; --lines[45-1];
+--lines[71-1]; --lines[72-1]; --lines[73-1]; --lines[74-1]; --lines[82-1]; --lines[102-1];
+
+new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`9116/${to3d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().setNavBreakAt(36).reInit(9116, 108);
+        this.volNum = SC.volNum,
+        this.volTitle = SC.volTitle;
+        this.volDisp = SC.volDisp || SC.volTitle;
+        var ttl = '蓮花生大師本生傳',
+            author = '翻譯：洛著嘉措、俄東瓦拉　　錄入：呷哩欏',
+            znum = zNumber(this.volNum),
+            chttl = `第${znum}章 ${this.volTitle}`,
+            chdsp = `第${znum}章 ${this.volDisp}`;
+        if (!this.volNum) {
+          this.writeStart(ttl + '||烏仗亞那語：如艾卡夏伽拉那<br>藏語：古如白瑪君乃吉結熱南塔')
+              .writeBody(`\n/TEXT030C/${author}\n${SC.text}\n\n/VOLSEP/`, true);
+          document.title = ttl;
+        } else {
+          this.writeStart(`${ttl}||${chttl}<sup>&nbsp;${lines[this.volNum-1]-4}</sup>`).writeBody(`\n/TEXT030C/${author}
+
+/SECTION/${chdsp}
+${SC.text}/END/${chttl}
+/VOLSEP/`, true);
+          document.title = `蓮 ${this.volNum}、${this.volTitle}`;
+        }
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // SC
+
+SC.show(get('vol')); // 章
+
+</script>

@@ -9,26 +9,64 @@
 <body>
 
 <script>
-var id = get('id'), lib = get('lib') || get('b');
-if (lib)
-  showLib(lib);
-else if (id == 'all')
-  showAll();
-else {
-  var ai = articleInfo[id];
-  window.open(`個人文集/${ai && ai.uri || 'index.html'}`, '_self');
-}
+function redir(uri) { window.open(uri, '_self'); }
+const siteMap = { // for static URLs
+  'tp':      '淨土宗/index.html',
+  'basics':  '佛學基礎/index.html',
+  'dharani': '陀羅尼/index.html',
+  'library': 'library/index.html',
+  'lib':     'library/index.html',
+  'diagrams':'util/repo-diagrams.html',
+  'diagram': 'util/repo-diagrams.html',
+  'szs':     '個人文集/善知識.html',
+  'writings':'個人文集/index.html',
+  'writing': '個人文集/index.html',
+  'essays':  '個人文集/index.html',
+  'dojo':    'GDH/dailywork.html',
+  'gdh':     'GDH/index.html',
+  'wlsj':    '淨土宗/《無量壽經》/index.html',
+  'jie':     '淨土宗/《無量壽經》/Jie.html',
+  'yg':      '淨土宗/西方二聖開示/印光大師文鈔菁華錄.html',
+  'jk':      '淨土宗/西方二聖開示/JK-teachings.html',
+  'jkfs':    '淨土宗/西方二聖開示/JK-teachings.html',
+  'jjfs':    '個人文集/淨界法師.html',
+  'gtr':     '個人文集/甘台榮居士.html',
+
+  'fo-dict': 'BFNN/book/books/0592S.htm',
+  'fodict':  'BFNN/book/books/0592S.htm',
+  'cal':     'util/nongli.html',
+  'nongli':  'util/nongli.html',
+  'dl':      'getcontent.html',
+  'download':'getcontent.html',
+  'home':    'index.html'
+};
+(() => {
+  var id = get('id'), lib, uri = siteMap[id];
+  if (uri) { redir(uri); return; }
+  if (id && id.length == 4) {
+    switch(id[0]) { case '0': case '1': case '2': case '9': lib = id; break; }
+  }
+  if (lib)
+    showLib(lib);
+  else if (id == 'all')
+    showAll();
+  else {
+    var ai = articleInfo[id];
+    redir(`個人文集/${ai && ai.uri || 'index.html'}`);
+  }
+})();
 
 function showLib(id) {
   var vol = get('vol');
   if (vol != null) vol = '?vol=' + vol; else vol = '';
   var uri = 'BFNN/book/books';
-  switch (lib[0]) {
+  switch (id[0]) {
+  case '0': break;
   case '1': uri += '2'; break;
   case '2': uri += '3'; break;
-  case '9': uri += '9'; break;
+  default:  uri += id[0]; break;
   }
-  window.open(`${uri}/${id}.htm${vol}`, '_self');
+  redir(`${uri}/${id}.htm${vol}`);
 }
 
 function showAll() {
