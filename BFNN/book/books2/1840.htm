@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../books/book.css">
+<style>
+u { text-decoration-color:red; text-decoration-style:dashed; color:#030 }
+sup { font-size:10px; color:black }
+.tocNum { font-size:12px }
+</style>
+<script src="../../../util/utils.js"></script>
+<script src="../mybfnn.js"></script>
+</head>
+<body link=blue vlink=purple background="../books/textbackground.jpg" class="Normal">
+<div id="stg"></div>
+</body></html>
+
+<script>
+// Original BFNN text organized all into 1840.htm and 1841.htm.
+// Now it is under 1840 alone, and 1841.htm is skipped.
+new (class extends SeriesContainer {
+  constructor() { super(); }
+
+  loadJS(vol) { addjs(`1840/${to2d(vol||0)}.js`); }
+
+  showPage() {
+    var buf = new Buffer();
+    new (class extends DocInfo {
+      constructor() {
+        super();
+        this.setVolumesInJS(true, true).setBuffer(buf).setXG().reInit(1840, 24);
+        this.volNum = SC.volNum,
+        this.volTitle = SC.volTitle;
+        var ttl = '菩提道次第廣論',
+            author = '宗喀巴大師造<br>法尊法師譯',
+            znum = zNumber(SC.volNum);
+        if (!this.volNum) {
+          this.writeStart(ttl)
+              .writeBody(`\n/TEXT030C/${author}\n${SC.text}\n\n/VOLSEP/`, true);
+          document.title = ttl;
+        } else {
+          this.writeStart(`${ttl}|第${znum}卷`).writeBody(`\n/TEXT030C/${author}
+
+/SECTION/第${znum}卷
+${SC.text}/END/第${znum}卷
+/VOLSEP/`, true);
+          document.title = `${ttl} ${this.volNum}`;
+        }
+      }
+    })(); // class extends DocInfo
+    buf.render('stg');
+  }
+})(); // SC
+
+SC.show(get('vol'));
+</script>
